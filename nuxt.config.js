@@ -57,10 +57,17 @@ export default {
   /*
    ** Build configuration
    */
+
+  srcDir: '',
+
   build: {
     /*
      ** You can extend webpack config here
      */
+    publicPath: '/blog/',
     extend(config, ctx) {}
+  },
+  generate: {
+    dir: 'dist/blog/'
   }
 }
