@@ -4,13 +4,15 @@
 // Changes here requires a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
 
+const siteMeta = require("./src/assets/constants/site-meta");
+
 const TailwindExtractor = content => {
   return content.match(/[\w-/:]+(?<!:)/g) || [];
 };
 
 module.exports = {
-  siteName: "Ljóss -  The Portal To A Nobody's Inner World",
-  siteDescription: "Ljóss - The portal to a nobody's inner world.",
+  siteName: siteMeta.siteName,
+  siteDescription: siteMeta.description,
   /*
     As using netlify proxing
     Had to move this to a sub folder

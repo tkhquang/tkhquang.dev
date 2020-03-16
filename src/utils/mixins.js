@@ -24,7 +24,7 @@ export default {
     generateMetaInfo(
       // Force chomp using comment
       title = siteMeta.title,
-      desc = siteMeta.siteName,
+      desc = siteMeta.description,
       image = `${this.baseUrl}${siteMeta.image}`,
       path = ""
     ) {
