@@ -1,0 +1,2 @@
+# Redirect to primary domain
+https://tkhquang-blog.netlify.com/blog/* https://tkhquang.dev/blog/:splat 301!
