@@ -11,6 +11,10 @@ const TailwindExtractor = content => {
 module.exports = {
   siteName: "Ljóss -  The Portal To A Nobody's Inner World",
   siteDescription: "Ljóss - The portal to a nobody's inner world.",
+  /*
+    As using netlify proxing
+    Had to move this to a sub folder
+  */
   outputDir: "dist/blog",
   pathPrefix: "/blog",
   plugins: [

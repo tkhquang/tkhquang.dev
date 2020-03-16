@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import mixins from "~/utils/mixins";
+
 import PostMeta from "~/components/PostMeta";
 import PostTags from "~/components/PostTags";
 import Bio from "~/components/Bio.vue";
@@ -42,16 +44,15 @@ export default {
     PostMeta,
     PostTags
   },
+  mixins: [mixins],
   metaInfo() {
-    return {
-      title: this.$page.post.title,
-      meta: [
-        {
-          name: "description",
-          content: this.$page.post.metadata.description
-        }
-      ]
-    };
+    return this.generateMetaInfo(
+      // Force chomp using comment
+      this.$page.post.title,
+      this.$page.post.metadata.description,
+      this.$page.post.metadata.hero.imgix_url,
+      this.$page.post.path
+    );
   }
 };
 </script>
@@ -62,6 +63,7 @@ export default {
       id
       title
       content
+      path
       prevPath
       nextPath
       nextTitle

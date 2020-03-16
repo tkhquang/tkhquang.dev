@@ -18,8 +18,31 @@
     </footer>
   </div>
 </template>
+
+<static-query>
+query {
+  settings: allCosmicjsSettings {
+    edges {
+      node {
+        metadata {
+          site_title,
+          site_heading,
+          homepage_hero {
+            imgix_url
+          },
+          author_bio,
+          author_name,
+          author_avatar{
+            imgix_url
+          },
+        }
+      }
+    }
+  }
+}
+</static-query>
+
 <script>
-import mixins from "../utils/mixins";
 import ToggleTheme from "~/components/ToggleTheme.vue";
 import Logo from "~/components/Logo.vue";
 
@@ -32,12 +55,16 @@ export default {
     ToggleTheme,
     Logo
   },
-  mixins: [mixins],
   props: {
     showLogo: {
       type: Boolean,
       default: true
     }
+  },
+  provide() {
+    return {
+      settings: this.$static.settings.edges[0].node
+    };
   }
 };
 </script>

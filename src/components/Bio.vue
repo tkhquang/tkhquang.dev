@@ -1,4 +1,4 @@
-<template>
+<template slot-scope="settings">
   <div class="author w-full flex-center flex-col mx-auto text-center">
     <g-image
       :alt="settings.metadata.author_name"
@@ -23,13 +23,15 @@
 <script>
 export default {
   props: {
-    settings: {
-      type: Object,
-      required: true
-    },
     showTitle: {
       type: Boolean,
       default: false
+    }
+  },
+  inject: {
+    settings: {
+      type: Object,
+      required: true
     }
   }
 };

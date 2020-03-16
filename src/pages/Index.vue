@@ -1,6 +1,6 @@
 <template>
-  <Layout :show-logo="false" :settings="$static.settings.edges[0].node">
-    <Bio :settings="$static.settings.edges[0].node" :show-title="false" />
+  <Layout :show-logo="false">
+    <Bio :show-title="false" />
     <PostCardGrid :posts="$page.posts" />
   </Layout>
 </template>
@@ -34,33 +34,10 @@
   }
 </page-query>
 
-<static-query>
-query {
-  settings: allCosmicjsSettings {
-    edges {
-      node {
-        metadata {
-          site_title,
-          site_heading,
-          homepage_hero {
-            imgix_url
-          },
-          author_bio,
-          author_name,
-          author_avatar{
-            imgix_url
-          },
-        }
-      }
-    }
-  }
-}
-</static-query>
-
 <script>
-import config from "@/assets/config";
+import mixins from "~/utils/mixins";
 
-import Bio from "../components/Bio";
+import Bio from "~/components/Bio";
 import PostCardGrid from "~/components/PostCardGrid.vue";
 
 export default {
@@ -68,8 +45,13 @@ export default {
     Bio,
     PostCardGrid
   },
+  mixins: [mixins],
   metaInfo() {
-    return config.generateMetaInfo("Home");
+    return this.generateMetaInfo(
+      // Force chomp using comment
+      "Home",
+      "Ljóss - The portal to a nobody's inner world"
+    );
   }
 };
 </script>

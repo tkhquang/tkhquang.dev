@@ -1,4 +1,9 @@
-const baseUrl = `${process.env.URL || process.env.GRIDSOME_URL}`;
+// const baseUrl = `${process.env.URL || process.env.GRIDSOME_URL}`;
+/*
+  As using netlify proxing
+  Had to include the path prefix
+*/
+const baseUrl = `${process.env.URL}/blog` || `${process.env.GRIDSOME_URL}`;
 
 const config = {
   generateMetaInfo(

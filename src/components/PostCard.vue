@@ -1,7 +1,7 @@
 <template>
   <div class="post-card content-box" :class="{ 'post-card--has-poster': true }">
     <div class="post-card__header">
-      <g-image alt="Cover image" :src="getCoverImage" />
+      <g-image alt="Cover image" :src="coverImage" />
     </div>
     <div class="post-card__content">
       <h2 class="post-card__title truncate" v-html="post.title" />
@@ -34,7 +34,7 @@ export default {
     }
   },
   computed: {
-    getCoverImage() {
+    coverImage() {
       /*
         Max width of container class is 1280px
         so here we make sure that
