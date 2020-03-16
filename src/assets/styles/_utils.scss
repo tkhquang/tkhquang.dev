@@ -1,0 +1,7 @@
+.space-bottom {
+	margin-bottom: var(--space);
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}

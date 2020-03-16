@@ -1,0 +1,37 @@
+/*
+Mobile first approach
+In sync with the
+default values of TailwindCSS
+*/
+@mixin Responsive($canvas) {
+  $XS: 480px; /* Custom added */
+  $SM: 640px;
+  $MD: 768px;
+  $LG: 1024px;
+  $XL: 1280px;
+  @if $canvas == XS {
+   @media only screen and (min-width: $XS) {
+     @content;
+   }
+  }
+  @else if $canvas == SM {
+   @media only screen and (min-width: $SM) {
+     @content;
+   }
+  }
+  @else if $canvas == MD {
+   @media only screen and (min-width: $MD) {
+     @content;
+   }
+  }
+  @else if $canvas == LG {
+    @media only screen and (min-width: $LG) {
+      @content;
+    }
+   }
+  @else if $canvas == XL {
+   @media only screen and (min-width: $XL) {
+     @content;
+   }
+  }
+}
