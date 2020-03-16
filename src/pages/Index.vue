@@ -49,8 +49,7 @@ export default {
   metaInfo() {
     return this.generateMetaInfo(
       // Force chomp using comment
-      "Home",
-      "Ljóss - The portal to a nobody's inner world"
+      "Home"
     );
   }
 };

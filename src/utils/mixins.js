@@ -1,3 +1,5 @@
+import siteMeta from "~/assets/constants/site-meta";
+
 export default {
   computed: {
     baseUrl() {
@@ -8,8 +10,8 @@ export default {
       */
 
       // Production
-      if (process.env.URL) {
-        return `${process.env.URL}${this.$url("/")}`;
+      if (process.env.SITE_URL) {
+        return `${process.env.SITE_URL}${this.$url("/")}`;
       }
       // Develop
       return `${process.env.GRIDSOME_URL}/`;
@@ -21,9 +23,9 @@ export default {
     },
     generateMetaInfo(
       // Force chomp using comment
-      title = "",
-      desc = "",
-      image = `${this.baseUrl}images/default.png`,
+      title = siteMeta.title,
+      desc = siteMeta.siteName,
+      image = `${this.baseUrl}${siteMeta.image}`,
       path = ""
     ) {
       return {
@@ -54,8 +56,8 @@ export default {
             name: "twitter:description",
             content: desc
           },
-          { name: "twitter:site", content: "@holy_quangtk" },
-          { name: "twitter:creator", content: "@holy_quangtk" },
+          { name: "twitter:site", content: siteMeta.twitter },
+          { name: "twitter:creator", content: siteMeta.twitter },
           {
             name: "twitter:image",
             content: image
