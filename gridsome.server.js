@@ -6,8 +6,8 @@
 // To restart press CTRL + C in terminal and run `gridsome develop`
 
 module.exports = function(api) {
-  // eslint-disable-next-line no-unused-vars
   api.loadSource(store => {
     // Use the Data store API here: https://gridsome.org/docs/data-store-api
+    store.addMetadata("key", "value");
   });
 };

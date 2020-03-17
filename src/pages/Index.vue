@@ -1,8 +1,8 @@
 <template>
-  <Layout :show-logo="false">
+  <div>
     <Bio :show-title="false" />
     <PostCardGrid :posts="$page.posts" />
-  </Layout>
+  </div>
 </template>
 
 <page-query>

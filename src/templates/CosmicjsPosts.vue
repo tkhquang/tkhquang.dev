@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <div>
     <div class="post-title">
       <h1 class="post-title__text">
         {{ $page.post.title }}
@@ -28,7 +28,7 @@
     </div>
 
     <Bio class="post-author" :settings="this.$page.settings.edges[0].node" />
-  </Layout>
+  </div>
 </template>
 
 <script>

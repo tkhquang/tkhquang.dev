@@ -6,9 +6,28 @@
 
 const siteMeta = require("./src/assets/constants/site-meta");
 
-const TailwindExtractor = content => {
-  return content.match(/[\w-/:]+(?<!:)/g) || [];
-};
+const purgecss = require("@fullhuman/postcss-purgecss")({
+  content: [
+    "./src/**/*.vue",
+    "./src/**/*.js",
+    "./src/**/*.jsx",
+    "./src/**/*.html",
+    "./src/**/*.pug",
+    "./src/**/*.md"
+  ],
+  whitelist: [
+    "body",
+    "html",
+    "img",
+    "a",
+    "g-image",
+    "g-image--lazy",
+    "g-image--loaded"
+  ],
+  defaultExtractor: content => {
+    return content.match(/[\w-/:]+(?<!:)/g) || [];
+  }
+});
 
 module.exports = {
   siteName: siteMeta.siteName,
@@ -19,6 +38,10 @@ module.exports = {
   */
   outputDir: "dist/blog",
   pathPrefix: "/blog",
+
+  // Add global metadata to the GraphQL schema.
+  metadata: {},
+
   plugins: [
     {
       use: require("./lib/gridsome-cosmicjs-source"),
@@ -40,29 +63,24 @@ module.exports = {
       options: {
         id: process.env.GA_TRACKING_ID
       }
-    },
-    {
-      use: "gridsome-plugin-tailwindcss"
-    },
-    {
-      use: "gridsome-plugin-purgecss",
-      options: {
-        content: [
-          "./src/**/*.vue",
-          "./src/**/*.js",
-          "./src/**/*.jsx",
-          "./src/**/*.md"
-        ],
-        extractor: TailwindExtractor,
-        extensions: ["vue", "js", "jsx", "md"]
-      }
     }
   ],
-  chainWebpack: config => {
-    config.module
-      .rule("postcss-loader")
-      .test(/.css$/)
-      .use(["tailwindcss", "autoprefixer"])
-      .loader("postcss-loader");
-  }
+  css: {
+    loaderOptions: {
+      postcss: {
+        // options here will be passed to postcss-loader
+        plugins: [
+          require("postcss-import"),
+          require("tailwindcss")("./tailwind.config.js"),
+          require("autoprefixer"),
+          ...(process.env.NODE_ENV === "production" ? [purgecss] : [])
+        ]
+      },
+      scss: {
+        // options here will be passed to sass-loader
+      }
+    }
+  },
+  host: "127.0.0.1",
+  port: 8080
 };
