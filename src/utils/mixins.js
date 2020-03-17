@@ -1,69 +1,109 @@
-import siteMeta from "~/assets/constants/site-meta";
-
 export default {
-  computed: {
-    baseUrl() {
-      // return `${process.env.URL || process.env.GRIDSOME_URL}`;
-      /*
-        As using netlify proxing
-        Had to include the path prefix
-      */
-
-      // Production
-      if (process.env.SITE_URL) {
-        return `${process.env.SITE_URL}${this.$url("/")}`;
-      }
-      // Develop
-      return `${process.env.GRIDSOME_URL}/`;
-    }
-  },
   methods: {
     stripSlashes(url) {
       return url.replace(/(https?:\/\/)|(\/)+/g, "$1$2");
     },
-    generateMetaInfo(
-      // Force chomp using comment
-      title = siteMeta.title,
-      desc = siteMeta.description,
-      image = `${this.baseUrl}${siteMeta.image}`,
-      path = ""
-    ) {
-      return {
-        title: title,
-        meta: [
+    generateMetaInfo(opts) {
+      const {
+        siteTitle,
+        // siteName,
+        siteDescription,
+        siteTwitter,
+        // siteOwner,
+        // prefixPath,
+        metaImageUrl = this.stripSlashes(
+          `${process.env.GRIDSOME_SITE_URL}/images/default.png`
+        ),
+        path = ""
+      } = opts;
+
+      let metaInfo = {
+        meta: []
+      };
+
+      if (siteTitle) {
+        metaInfo = {
+          ...metaInfo,
+          title: siteTitle,
+          meta: [
+            ...metaInfo.meta,
+            {
+              key: "og:title",
+              property: "og:title",
+              content: siteTitle
+            },
+            {
+              key: "twitter:title",
+              name: "twitter:title",
+              content: siteTitle
+            }
+          ]
+        };
+      }
+
+      if (siteDescription) {
+        metaInfo.meta = [
+          ...metaInfo.meta,
           {
             key: "description",
             name: "description",
-            content: desc
+            content: siteDescription
           },
-          { property: "og:type", content: "website" },
-          { property: "og:title", content: title },
           {
+            key: "og:description",
             property: "og:description",
-            content: desc
+            content: siteDescription
           },
           {
-            property: "og:url",
-            content: this.stripSlashes(`${this.baseUrl}${path}`)
-          },
-          {
-            property: "og:image",
-            content: image
-          },
-          { name: "twitter:card", content: "summary_large_image" },
-          { name: "twitter:title", content: title },
-          {
+            key: "twitter:description",
             name: "twitter:description",
-            content: desc
-          },
-          { name: "twitter:site", content: siteMeta.twitter },
-          { name: "twitter:creator", content: siteMeta.twitter },
-          {
-            name: "twitter:image",
-            content: image
+            content: siteDescription
           }
-        ]
-      };
+        ];
+      }
+
+      if (metaImageUrl) {
+        metaInfo.meta = [
+          ...metaInfo.meta,
+          {
+            key: "og:image",
+            property: "og:image",
+            content: metaImageUrl
+          },
+          {
+            key: "twitter:image",
+            name: "twitter:image",
+            content: metaImageUrl
+          }
+        ];
+      }
+
+      if (siteTwitter) {
+        metaInfo.meta = [
+          ...metaInfo.meta,
+          {
+            key: "twitter:site",
+            name: "twitter:site",
+            content: siteTwitter
+          },
+          {
+            key: "twitter:creator",
+            name: "twitter:creator",
+            content: siteTwitter
+          }
+        ];
+      }
+
+      metaInfo.meta = [
+        ...metaInfo.meta,
+        {
+          key: "og:url",
+          property: "og:url",
+          content: this.stripSlashes(`${process.env.GRIDSOME_SITE_URL}${path}`)
+        }
+      ];
+
+      return metaInfo;
     }
   }
 };

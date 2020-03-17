@@ -2,7 +2,8 @@
   "name": "tkhquang-blog",
   "private": true,
   "scripts": {
-    "build": "gridsome build",
+    "prebuild": "rm -rf dist && cp -rlf lib/gridsome node_modules/gridsome",
+    "build": "yarn prebuild && gridsome build",
     "dev": "gridsome develop",
     "explore": "gridsome explore"
   },

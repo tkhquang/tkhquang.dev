@@ -4,8 +4,6 @@
 // Changes here requires a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
 
-const siteMeta = require("./src/assets/constants/site-meta");
-
 const purgecss = require("@fullhuman/postcss-purgecss")({
   content: [
     "./src/**/*.vue",
@@ -30,17 +28,33 @@ const purgecss = require("@fullhuman/postcss-purgecss")({
 });
 
 module.exports = {
-  siteName: siteMeta.siteName,
-  siteDescription: siteMeta.description,
   /*
     As using netlify proxing
     Had to move this to a sub folder
   */
   outputDir: "dist/blog",
   pathPrefix: "/blog",
+  icon: "src/favicon.png",
 
   // Add global metadata to the GraphQL schema.
-  metadata: {},
+  siteName: "Ljóss - The Portal To A Nobody's Inner World",
+  siteDescription: "Ljóss - The portal to a nobody's inner world.",
+  titleTemplate: `%s | Ljóss - The Portal To A Nobody's Inner World`,
+  siteUrl:
+    process.env.NODE_ENV === "production"
+      ? `${process.env.GRIDSOME_SITE_URL}/blog`
+      : process.env.GRIDSOME_SITE_URL,
+  metadata: {
+    siteTitle: "Ljóss",
+    siteHeading: "The Portal To A Nobody's Inner World",
+    siteName: "Ljóss - The Portal To A Nobody's Inner World",
+    siteDescription: "Ljóss - The portal to a nobody's inner world.",
+    siteOwner: {
+      name: "Aleks",
+      description: `I don't ride horses, I ride unicorns.`
+    },
+    siteTwitter: "@holy_quangtk"
+  },
 
   plugins: [
     {

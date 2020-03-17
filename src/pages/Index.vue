@@ -47,10 +47,7 @@ export default {
   },
   mixins: [mixins],
   metaInfo() {
-    return this.generateMetaInfo(
-      // Force chomp using comment
-      "Home"
-    );
+    return this.generateMetaInfo({ siteTitle: "Home" });
   }
 };
 </script>

@@ -27,7 +27,7 @@
       <!-- Add comment widgets here -->
     </div>
 
-    <Bio class="post-author" :settings="this.$page.settings.edges[0].node" />
+    <Bio class="post-author" />
   </div>
 </template>
 
@@ -46,13 +46,20 @@ export default {
   },
   mixins: [mixins],
   metaInfo() {
-    return this.generateMetaInfo(
-      // Force chomp using comment
-      this.$page.post.title,
-      this.$page.post.metadata.description,
-      this.$page.post.metadata.hero.imgix_url,
-      this.$page.post.path
-    );
+    const {
+      title: siteTitle,
+      metadata: {
+        description: siteDescription,
+        hero: { imgix_url: metaImageUrl }
+      },
+      path
+    } = this.$page.post;
+    return this.generateMetaInfo({
+      siteTitle,
+      siteDescription,
+      metaImageUrl,
+      path
+    });
   }
 };
 </script>
@@ -81,24 +88,6 @@ export default {
           imgix_url
         }
         description
-      }
-    }
-    settings: allCosmicjsSettings {
-      edges {
-        node {
-          metadata {
-            site_title,
-            site_heading,
-            homepage_hero {
-              imgix_url
-            },
-            author_bio,
-            author_name,
-            author_avatar {
-              imgix_url
-            },
-          }
-        }
       }
     }
   }

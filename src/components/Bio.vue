@@ -1,8 +1,8 @@
 <template slot-scope="settings">
   <div class="author w-full flex-center flex-col mx-auto text-center">
     <g-image
-      :alt="settings.metadata.author_name"
-      :src="settings.metadata.author_avatar.imgix_url"
+      :alt="settings.siteOwner.name"
+      :src="ownerImage"
       class="author__image rounded-full mb-4"
       width="180"
       height="180"
@@ -10,23 +10,30 @@
     />
 
     <h1 v-if="showTitle" class="author__site-title text-2xl">
-      {{ settings.metadata.site_heading }}
+      {{ settings.siteOwner.description }}
     </h1>
 
     <div
       class="author__intro flex-center opacity-75"
-      v-html="settings.metadata.author_bio"
+      v-html="settings.siteOwner.description"
     />
   </div>
 </template>
 
 <script>
+import ownerImage from "~/assets/images/author.jpg";
+
 export default {
   props: {
     showTitle: {
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    return {
+      ownerImage
+    };
   },
   inject: {
     settings: {
