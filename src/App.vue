@@ -12,25 +12,16 @@ transitions.
 <static-query>
 query {
   metadata {
+    siteTitle
+    siteHeading
+    siteName
+    siteDescription
+    siteTwitter
     siteUrl
     pathPrefix
-  }
-  settings: allCosmicjsSettings {
-    edges {
-      node {
-        metadata {
-          site_title,
-          site_heading,
-          homepage_hero {
-            imgix_url
-          },
-          author_bio,
-          author_name,
-          author_avatar{
-            imgix_url
-          },
-        }
-      }
+    siteOwner {
+      name
+      description
     }
   }
 }
@@ -48,12 +39,11 @@ export default {
   mixins: [mixins],
   provide() {
     return {
-      settings: this.$static.settings.edges[0].node
+      settings: this.$static.metadata
     };
   },
   metaInfo() {
-    // const settings = this.$static.settings.edges[0].node;
-    return this.generateMetaInfo(undefined);
+    return this.generateMetaInfo(this.$static.metadata);
   }
 };
 </script>

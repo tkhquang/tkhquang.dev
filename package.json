@@ -2,7 +2,8 @@
   "name": "tkhquang-blog",
   "private": true,
   "scripts": {
-    "build": "gridsome build",
+    "prebuild": "rm -rf dist && cp -rlf lib/gridsome node_modules/gridsome",
+    "build": "yarn prebuild && gridsome build",
     "dev": "gridsome develop",
     "explore": "gridsome explore"
   },
@@ -11,6 +12,7 @@
     "axios": "^0.19.2",
     "gridsome": "^0.7.13",
     "lodash": "^4.17.15",
+    "particles.js": "^2.0.0",
     "tailwindcss": "^1.2.0",
     "typeface-merriweather": "^0.0.72",
     "typeface-montserrat": "^0.0.75"

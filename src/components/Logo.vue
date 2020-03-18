@@ -1,16 +1,19 @@
-<template>
+<template slot-scope="settings">
   <g-link class="logo" to="/">
-    <span class="logo__text"> &larr; {{ $static.metadata.siteName }} </span>
+    <span class="logo__text"> &larr; {{ settings.siteName }} </span>
   </g-link>
 </template>
 
-<static-query>
-query {
-  metadata {
-    siteName
+<script>
+export default {
+  inject: {
+    settings: {
+      type: Object,
+      required: true
+    }
   }
-}
-</static-query>
+};
+</script>
 
 <style lang="scss">
 .logo {

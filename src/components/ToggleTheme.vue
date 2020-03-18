@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import EventBus from "~/utils/EventBus";
+
 export default {
   data() {
     return {
@@ -61,6 +63,7 @@ export default {
       this.darkTheme = !this.darkTheme;
       // This is using a script that is added in index.html
       window.__setPreferredTheme(this.darkTheme ? "dark" : "light");
+      EventBus.$emit("toggleTheme", this.darkTheme ? "dark" : "light");
     }
   }
 };
