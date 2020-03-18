@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="banner"></div>
+    <ParticlesJS />
+    <div class="banner text-4xl">
+      {{ settings.siteTitle }}
+      <span role="image" name="Ljoss">✨</span>
+    </div>
     <header class="header">
       <div class="header__left">
         <Logo v-if="showLogo" />
@@ -22,6 +26,7 @@
 <script>
 import ToggleTheme from "~/components/ToggleTheme.vue";
 import Logo from "~/components/Logo.vue";
+import ParticlesJS from "~/components/ParticlesJS";
 
 // Import typefaces
 import "typeface-montserrat";
@@ -30,25 +35,38 @@ import "typeface-merriweather";
 export default {
   components: {
     ToggleTheme,
-    Logo
+    Logo,
+    ParticlesJS
   },
-  props: {
-    showLogo: {
-      type: Boolean,
-      default: true
+  computed: {
+    showLogo() {
+      return this.$route.path !== "/";
+    }
+  },
+  inject: {
+    settings: {
+      type: Object,
+      required: true
     }
   }
 };
 </script>
 <style lang="scss">
+#particles-js {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: calc(var(--header-height) * 2);
+  z-index: 1;
+}
+
 .banner {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: var(--header-height);
+  height: calc(var(--header-height) * 2);
   padding: 0 calc(var(--space) / 2);
-  background-color: var(--bg-color);
-  filter: brightness(80%);
+  background-color: transparent;
 }
 
 .header {
@@ -60,7 +78,6 @@ export default {
   top: 0;
   z-index: 10;
   background-color: var(--bg-color);
-  filter: brightness(80%);
   &__left,
   &__right {
     display: flex;
