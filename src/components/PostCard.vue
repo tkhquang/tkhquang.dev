@@ -101,6 +101,7 @@ export default {
   &__tags {
     z-index: 1;
     position: relative;
+    display: inline-block;
   }
 
   &__link {
