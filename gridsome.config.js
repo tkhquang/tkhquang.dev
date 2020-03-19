@@ -83,12 +83,6 @@ module.exports = {
       }
     },
     {
-      use: `gridsome-plugin-netlify-cms`,
-      options: {
-        publicPath: `/blog/admin`
-      }
-    },
-    {
       use: require("./lib/gridsome-cosmicjs-source"),
       options: {
         bucketSlug: process.env.COSMIC_BUCKET,
