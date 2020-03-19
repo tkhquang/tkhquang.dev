@@ -1,7 +1,7 @@
 backend:
   name: git-gateway
   branch: develop # Branch to update (optional; defaults to master)
-media_folder: "static/uploads/images" # Media files will be stored in the repo under static/images/uploads
+media_folder: "src/assets/uploads/images" # Media files will be stored in the repo under static/images/uploads
 public_folder: "/uploads/images" # The src attribute for uploaded media will begin with /images/uploads
 collections:
   - name: "posts" # Used in routes, e.g., /admin/collections/blog
@@ -12,12 +12,15 @@ collections:
     extension: 'md'
     fields: # The fields for each document, usually in front matter
       - {label: "Title", name: "title", widget: "string"}
-      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Created At", name: "created_at", widget: "datetime"}
+      - {label: "Updated At", name: "updated_at", widget: "datetime", required: false}
       - {label: "Published", name: "published", widget: "boolean", default: true}
       - label: "Tags"
         name: "tags"
         widget: "list"
-        field: {label: Name, name: name, widget: string, default: "tag"}
+        fields:
+          - {label: Title, name: title, widget: string, default: "Random"}
+          - {label: Path, name: path, widget: string, default: "random"}
       - {label: "Cover Image", name: "cover_image", widget: "image", required: false}
       - {label: "Description", name: "description", widget: "markdown"}
       - {label: "Body", name: "body", widget: "markdown"}

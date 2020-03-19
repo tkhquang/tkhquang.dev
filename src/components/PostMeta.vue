@@ -1,7 +1,7 @@
 <template>
   <div class="post-meta italic">
     <span>Posted on {{ post.created_at }}</span>
-    <span v-if="post.modified_at"> (Updated: {{ post.modified_at }})</span>
+    <span v-if="post.updated_at"> (Updated: {{ post.updated_at }})</span>
   </div>
 </template>
 

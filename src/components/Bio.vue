@@ -6,7 +6,7 @@
       class="author__image rounded-full mb-4"
       width="180"
       height="180"
-      blur="5"
+      blur="10"
     />
 
     <h1 v-if="showTitle" class="author__site-title text-2xl">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ownerImage from "~/assets/images/author.jpg";
+import ownerImage from "~/assets/uploads/images/author.jpg";
 
 export default {
   props: {

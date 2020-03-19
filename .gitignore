@@ -175,3 +175,6 @@ yarn-error.log
 
 src/.temp
 .env.*
+src/assets/uploads/temp/*
+!*/.gitkeep
+content/

@@ -1,11 +1,22 @@
 <template>
   <div class="post-card content-box" :class="{ 'post-card--has-poster': true }">
     <div class="post-card__header">
-      <g-image alt="Cover image" :src="coverImage" />
+      <g-image
+        alt="Cover image"
+        class="post-card__image"
+        :src="
+          require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${post.cover_image}`)
+        "
+        width="1280"
+        height="720"
+        quality="80"
+        fit="cover"
+        blur="10"
+      />
     </div>
     <div class="post-card__content">
       <h2 class="post-card__title" v-html="post.title" />
-      <p class="post-card__description" v-html="post.metadata.description" />
+      <p class="post-card__description" v-html="post.description" />
 
       <PostMeta class="post-card__meta" :post="post" />
 
@@ -33,18 +44,7 @@ export default {
       required: true
     }
   },
-  computed: {
-    coverImage() {
-      /*
-        Max width of container class is 1280px
-        so here we make sure that
-        it matches the width of the query image
-      */
-
-      const baseUrl = this.post.metadata.hero.imgix_url;
-      return `${baseUrl}?w=1280&h=720&q=80&fit=crop`;
-    }
-  }
+  methods: {}
 };
 </script>
 

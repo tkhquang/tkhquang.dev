@@ -14,13 +14,26 @@ const purgecss = require("@fullhuman/postcss-purgecss")({
     "./src/**/*.md"
   ],
   whitelist: [
-    "body",
+    // Force chomp
     "html",
-    "img",
-    "a",
-    "g-image",
-    "g-image--lazy",
-    "g-image--loaded"
+    "body"
+  ].concat(
+    require("purgecss-whitelister")([
+      // Force chomp
+      "./src/assets/styles/*.scss"
+    ])
+  ),
+  whitelistPatterns: [
+    // Force chomp
+    /^g-image*/,
+    /^gridsome*/,
+    /^language-*/,
+    /^line-numbers*/
+  ],
+  whitelistPatternsChildren: [
+    // Force chomp
+    /^gridsome*/,
+    /^command-line-prompt*/
   ],
   defaultExtractor: content => {
     return content.match(/[\w-/:]+(?<!:)/g) || [];
@@ -56,13 +69,41 @@ module.exports = {
     siteTwitter: "@holy_quangtk"
   },
 
+  templates: {
+    Posts: "/posts/:title"
+  },
+
   transformers: {
     //Add markdown support to all file-system sources
     remark: {
       externalLinksTarget: "_blank",
       externalLinksRel: ["nofollow", "noopener", "noreferrer"],
       anchorClassName: "icon icon-link",
-      plugins: ["@gridsome/remark-prismjs"]
+      plugins: [
+        [
+          "gridsome-plugin-remark-prismjs-all",
+          {
+            highlightClassName: "gridsome-highlight",
+            codeTitleClassName: "gridsome-code-title",
+            classPrefix: "language-",
+            aliases: {},
+            noInlineHighlight: false,
+            showLineNumbers: true,
+            languageExtensions: [],
+            prompt: {
+              user: `aleks`,
+              host: `dev`,
+              global: true
+            }
+          }
+        ],
+        [
+          "@noxify/gridsome-plugin-remark-image-download",
+          {
+            targetPath: "./src/assets/uploads/temp"
+          }
+        ]
+      ]
     }
   },
 
@@ -71,29 +112,16 @@ module.exports = {
       // Create posts from markdown files
       use: "@gridsome/source-filesystem",
       options: {
-        typeName: "Post",
+        typeName: "Posts",
         path: "content/posts/*.md",
+        route: "/:title",
+        coverField: "post_cover",
         refs: {
           // Creates a GraphQL collection from 'tags' in front-matter and adds a reference.
           tags: {
-            typeName: "Tag",
+            typeName: "Tags",
             create: true
           }
-        }
-      }
-    },
-    {
-      use: require("./lib/gridsome-cosmicjs-source"),
-      options: {
-        bucketSlug: process.env.COSMIC_BUCKET,
-        objectTypes: [
-          // Force chomp using comment
-          `posts`,
-          `settings`,
-          `tags`
-        ],
-        apiAccess: {
-          read_key: process.env.COSMIC_READ_KEY
         }
       }
     },

@@ -6,28 +6,22 @@
 </template>
 
 <page-query>
-  query IndexQuery {
-    posts: allCosmicjsPosts (sortBy: "date", order: DESC, limit: 7) {
+  query {
+    posts: allPosts(filter: { published: { eq: true }}, sortBy: "date", order: DESC, limit: 7) {
       edges {
         node {
-          metadata {
-            description
-            hero {
-              imgix_url
-            }
-            tags {
-              _id
-              title
-              metadata {
-                path
-              }
-            }
-          }
           id
-          slug
-          path
           title
-          created_at(format: "DD MMMM, YYYY")
+          created_at (format: "D. MMMM YYYY")
+          updated_at (format: "D. MMMM YYYY")
+          timeToRead
+          description
+          cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
+          path
+          tags {
+            id
+            title
+          }
         }
       }
     }

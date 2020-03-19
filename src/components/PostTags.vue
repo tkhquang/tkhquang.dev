@@ -1,10 +1,10 @@
 <template>
   <div class="post-tags">
     <g-link
-      v-for="tag in post.metadata.tags"
+      v-for="tag in post.tags"
       :key="tag.id"
       class="post-tags__link"
-      :to="tag.metadata.path"
+      :to="tag.path || '/'"
     >
       <span>#</span> {{ tag.title }}
     </g-link>

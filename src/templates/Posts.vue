@@ -10,9 +10,20 @@
 
     <div class="post content-box">
       <div class="post__header">
-        <g-image alt="Cover image" :src="coverImage" />
+        <g-image
+          alt="Cover image"
+          class="post-card__image"
+          :src="
+            require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${$page.post.cover_image}`)
+          "
+          width="1280"
+          height="720"
+          quality="80"
+          fit="cover"
+          blur="10"
+        />
       </div>
-      <div class="post__content" v-html="pageContent" />
+      <div class="post__content" v-html="$page.post.content" />
       <div class="post__footer">
         <PostTags :post="$page.post" />
       </div>
@@ -43,10 +54,8 @@ export default {
   metaInfo() {
     const {
       title: siteTitle,
-      metadata: {
-        description: siteDescription,
-        hero: { imgix_url: metaImageUrl }
-      },
+      description: siteDescription,
+      cover_image: metaImageUrl,
       path
     } = this.$page.post;
     return this.generateMetaInfo({
@@ -55,56 +64,27 @@ export default {
       metaImageUrl,
       path
     });
-  },
-  computed: {
-    pageContent() {
-      return (
-        this.$page.post.metadata.markdown_content || this.$page.post.content
-      );
-    },
-    coverImage() {
-      /*
-        Max width of container class is 1280px
-        so here we make sure that
-        it matches the width of the query image
-      */
-
-      const baseUrl = this.$page.post.metadata.hero.imgix_url;
-      return `${baseUrl}?w=1280&h=720&q=80&fit=crop`;
-    }
   }
 };
 </script>
 
 <page-query>
-  query postQuery($path: String!) {
-    post: cosmicjsPosts(path: $path) {
+query Posts ($path: String!) {
+  post: posts (path: $path) {
+    title
+    path
+    created_at (format: "DD MMMM YYYY")
+    updated_at (format: "DD MMMM YYYY")
+    timeToRead
+    tags {
       id
       title
-      content
-      path
-      prevPath
-      nextPath
-      nextTitle
-      prevTitle
-      created_at(format: "DD MMMM YYYY")
-      modified_at(format: "DD MMMM YYYY")
-      metadata {
-        tags {
-          _id
-          title
-          metadata {
-            path
-          }
-        }
-        hero {
-          imgix_url
-        }
-        description
-        markdown_content
-      }
     }
+    description
+    content
+    cover_image (width: 1280, height: 720, blur: 10, quality: 80)
   }
+}
 </page-query>
 
 <style lang="scss">
