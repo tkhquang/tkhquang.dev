@@ -7,7 +7,7 @@
 
 <page-query>
   query IndexQuery {
-    posts: allCosmicjsPosts (sortBy: "date", order: DESC, limit: 4) {
+    posts: allCosmicjsPosts (sortBy: "date", order: DESC, limit: 7) {
       edges {
         node {
           metadata {

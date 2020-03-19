@@ -1,5 +1,8 @@
 <template>
-  <div class="post-meta">Posted on {{ post.created_at }}.</div>
+  <div class="post-meta italic">
+    <span>Posted on {{ post.created_at }}</span>
+    <span v-if="post.modified_at"> (Updated: {{ post.modified_at }})</span>
+  </div>
 </template>
 
 <script>

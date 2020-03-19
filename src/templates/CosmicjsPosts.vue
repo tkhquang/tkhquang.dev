@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="post-title">
-      <h1 class="post-title__text">
+      <h1 class="post-title__text max-w-screen-md mx-auto">
         {{ $page.post.title }}
       </h1>
 
@@ -10,14 +10,9 @@
 
     <div class="post content-box">
       <div class="post__header">
-        <g-image
-          v-if="$page.post.metadata.hero.imgix_url"
-          alt="Cover image"
-          :src="$page.post.metadata.hero.imgix_url"
-        />
+        <g-image alt="Cover image" :src="coverImage" />
       </div>
-      <div class="post__content" v-html="$page.post.content" />
-
+      <div class="post__content" v-html="pageContent" />
       <div class="post__footer">
         <PostTags :post="$page.post" />
       </div>
@@ -60,6 +55,23 @@ export default {
       metaImageUrl,
       path
     });
+  },
+  computed: {
+    pageContent() {
+      return (
+        this.$page.post.metadata.markdown_content || this.$page.post.content
+      );
+    },
+    coverImage() {
+      /*
+        Max width of container class is 1280px
+        so here we make sure that
+        it matches the width of the query image
+      */
+
+      const baseUrl = this.$page.post.metadata.hero.imgix_url;
+      return `${baseUrl}?w=1280&h=720&q=80&fit=crop`;
+    }
   }
 };
 </script>
@@ -76,6 +88,7 @@ export default {
       nextTitle
       prevTitle
       created_at(format: "DD MMMM YYYY")
+      modified_at(format: "DD MMMM YYYY")
       metadata {
         tags {
           _id
@@ -88,12 +101,20 @@ export default {
           imgix_url
         }
         description
+        markdown_content
       }
     }
   }
 </page-query>
 
 <style lang="scss">
+.v-lazy-image {
+  filter: blur(10px);
+  transition: filter 0.7s;
+}
+.v-lazy-image-loaded {
+  filter: blur(0);
+}
 .post-title {
   padding: calc(var(--space) / 2) 0 calc(var(--space) / 2);
   text-align: center;

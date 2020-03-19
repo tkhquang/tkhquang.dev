@@ -8,7 +8,6 @@ https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javasc
 
 pre {
   padding: calc(var(--space) / 2);
-  font-size: .85em;
   background-color: var(--bg-code);
   margin-bottom: 2em;
   border: 1px solid var(--border-color);
@@ -100,8 +99,8 @@ pre[class*="language-"] {
 .token.url,
 .language-css .token.string,
 .style .token.string {
-	color: #9a6e3a;
-	background: hsla(0, 0%, 100%, .5);
+	color: var(--body-color);
+	background: var(--bg-color);
 }
 
 .token.atrule,
