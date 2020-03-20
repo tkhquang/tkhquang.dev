@@ -1,5 +1,32 @@
 export default {
   methods: {
+    async infiniteHandler(type, $state) {
+      console.log(type, $state);
+      try {
+        if (
+          this.$page[type].pageInfo.currentPage >
+          this.$page[type].pageInfo.totalPages
+        ) {
+          $state.complete();
+          return;
+        }
+        const results = await this.$fetch(
+          "/" + (this.$page[type].pageInfo.currentPage + 1)
+        );
+        if (results.data[type].edges.length > 0) {
+          this.$page[type].pageInfo.currentPage =
+            this.$page[type].pageInfo.currentPage + 1;
+          this.$page[type].edges = this.$page[type].edges.concat(
+            results.data[type].edges
+          );
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     stripSlashes(url) {
       return url.replace(/(https?:\/\/)|(\/)+/g, "$1$2");
     },

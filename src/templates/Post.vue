@@ -33,7 +33,7 @@
       <!-- Add comment widgets here -->
     </div>
 
-    <Bio class="post-author" />
+    <Bio class="post-author" :show-title="true" />
   </div>
 </template>
 
@@ -69,20 +69,17 @@ export default {
 </script>
 
 <page-query>
-query Posts ($path: String!) {
-  post: posts (path: $path) {
+query Post ($path: String!) {
+  post: post (path: $path) {
     title
     path
     created_at (format: "DD MMMM YYYY")
     updated_at (format: "DD MMMM YYYY")
     timeToRead
-    tags {
-      id
-      title
-    }
     description
     content
     cover_image (width: 1280, height: 720, blur: 10, quality: 80)
+    tags
   }
 }
 </page-query>

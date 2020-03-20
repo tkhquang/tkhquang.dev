@@ -20,9 +20,11 @@
     "netlify-cms": "^2.10.32",
     "particles.js": "^2.0.0",
     "prismjs": "^1.19.0",
+    "qs": "^6.9.1",
     "tailwindcss": "^1.2.0",
     "typeface-merriweather": "^0.0.72",
-    "typeface-montserrat": "^0.0.75"
+    "typeface-montserrat": "^0.0.75",
+    "vue-infinite-loading": "^2.4.5"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.0",

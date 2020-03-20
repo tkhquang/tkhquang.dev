@@ -28,7 +28,8 @@ const purgecss = require("@fullhuman/postcss-purgecss")({
     /^g-image*/,
     /^gridsome*/,
     /^language-*/,
-    /^line-numbers*/
+    /^line-numbers*/,
+    /^infinite-*/
   ],
   whitelistPatternsChildren: [
     // Force chomp
@@ -70,7 +71,8 @@ module.exports = {
   },
 
   templates: {
-    Posts: "/posts/:title"
+    Post: "/posts/:title",
+    Tag: "/tags/:path"
   },
 
   transformers: {
@@ -112,17 +114,22 @@ module.exports = {
       // Create posts from markdown files
       use: "@gridsome/source-filesystem",
       options: {
-        typeName: "Posts",
+        typeName: "Post",
         path: "content/posts/*.md",
-        route: "/:title",
-        coverField: "post_cover",
-        refs: {
-          // Creates a GraphQL collection from 'tags' in front-matter and adds a reference.
-          tags: {
-            typeName: "Tags",
-            create: true
-          }
-        }
+        coverField: "post_cover"
+
+        // Cannot use this as these are nested field
+        // refs: {
+        //   tags: "Tags"
+        // }
+      }
+    },
+    {
+      // Create tags from markdown files
+      use: "@gridsome/source-filesystem",
+      options: {
+        typeName: "Tag",
+        path: "content/tags/*.md"
       }
     },
     {

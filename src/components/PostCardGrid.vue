@@ -27,7 +27,7 @@ export default {
       if (!index) {
         return "col-span-2";
       }
-      return "col-span-2 md:col-span-1";
+      return "col-span-2"; // md:col-span-1
     }
   }
 };

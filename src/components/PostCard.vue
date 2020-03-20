@@ -43,54 +43,59 @@ export default {
       type: Object,
       required: true
     }
-  },
-  methods: {}
+  }
 };
 </script>
 
 <style lang="scss">
-.v-lazy-image {
-  filter: blur(10px);
-  transition: filter 0.7s;
-}
-.v-lazy-image-loaded {
-  filter: blur(0);
-}
 .post-card {
   /* Override default variables */
   --content-width: 100%;
   --space: 2rem;
 
-  &.content-box {
-    // The hightlighted Post (first post)
-    &:first-of-type {
-      --content-width: 100%;
-      --space: 3rem;
-      & .post-card {
-        &__description {
-          display: -webkit-box;
-          -webkit-line-clamp: 5;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      }
-    }
+  // &.content-box {
+  //   // The hightlighted Post (first post)
+  //   &:first-of-type {
+  //     --content-width: 100%;
+  //     --space: 3rem;
+  //     & .post-card {
+  //       &__description {
+  //         display: -webkit-box;
+  //         -webkit-line-clamp: 5;
+  //         -webkit-box-orient: vertical;
+  //         overflow: hidden;
+  //       }
+  //     }
+  //   }
 
-    // Other posts
-    &:not(:first-of-type) {
-      & .post-card {
-        &__title {
-          @apply truncate;
-        }
-        &__description {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
+  //   // Other posts
+  //   &:not(:first-of-type) {
+  //     & .post-card {
+  //       &__title {
+  //         @apply truncate;
+  //       }
+  //       &__description {
+  //         display: -webkit-box;
+  //         -webkit-line-clamp: 2;
+  //         -webkit-box-orient: vertical;
+  //         overflow: hidden;
+  //       }
+  //     }
+  //   }
+  // }
+
+  &.content-box {
+    --space: 3rem;
+    & .post-card {
+      &__description {
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
     }
   }
+
   position: relative;
 
   &__header {

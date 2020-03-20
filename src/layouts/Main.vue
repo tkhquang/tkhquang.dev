@@ -2,7 +2,7 @@
   <div>
     <ParticlesJS />
     <div class="banner text-4xl">
-      {{ settings.siteTitle }}
+      {{ " " || settings.siteTitle }}
     </div>
     <header class="header">
       <div class="header__left">
@@ -50,6 +50,7 @@ export default {
   }
 };
 </script>
+
 <style lang="scss">
 #particles-js {
   position: absolute;
