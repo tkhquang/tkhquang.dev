@@ -175,3 +175,12 @@ yarn-error.log
 
 src/.temp
 .env.*
+
+# # Ignore as the local files content are for testing purpose only
+# content/
+
+# Ignore files in folder
+src/assets/uploads/remote/*
+
+# But please keep the folder
+!src/assets/uploads/remote/.gitkeep

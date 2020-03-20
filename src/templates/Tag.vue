@@ -2,17 +2,19 @@
   <div>
     <Bio :show-title="true" />
     <FilterBar />
-    <PostCardGrid :posts="$page.allPosts" />
-    <Pager :info="$page.allPosts.pageInfo" class="hidden" />
+    <PostCardGrid :posts="$page.allPostsByTag" />
+    <Pager :info="$page.allPostsByTag.pageInfo" class="hidden" />
   </div>
 </template>
 
 <page-query>
-  query allPost ($page: Int) {
-    allPosts: allPost(filter: { published: { eq: true }}, sortBy: "date", order: DESC, limit: 1, perPage: 1, page: $page) @paginate {
+  query allPostsByTag ($page: Int, $slug: String!) {
+    allPostsByTag: allPost(filter: { published: { eq: true }, tags: { contains: [$slug] }}, sortBy: "date", order: DESC, limit: 1, perPage: 1, page: $page) @paginate {
       pageInfo {
         totalPages
-        currentPage
+        currentPage,
+        perPage,
+        totalItems
       }
       edges {
         node {

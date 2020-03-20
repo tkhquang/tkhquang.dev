@@ -10,7 +10,7 @@ transitions.
 </template>
 
 <static-query>
-query {
+query index {
   metadata {
     siteTitle
     siteHeading
@@ -22,6 +22,16 @@ query {
     siteOwner {
       name
       description
+    }
+  }
+  categories: allTag (sortBy: "title") {
+    edges {
+      node {
+        id
+        title
+        slug
+        path
+      }
     }
   }
 }
@@ -39,7 +49,8 @@ export default {
   mixins: [mixins],
   provide() {
     return {
-      settings: this.$static.metadata
+      settings: this.$static.metadata,
+      categories: this.$static.categories
     };
   },
   metaInfo() {

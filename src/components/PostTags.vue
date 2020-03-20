@@ -1,12 +1,12 @@
-<template>
+<template slot-scope="categories">
   <div class="post-tags">
     <g-link
-      v-for="tag in post.metadata.tags"
-      :key="tag.id"
+      v-for="slug in post.tags"
+      :key="slug"
       class="post-tags__link"
-      :to="tag.metadata.path"
+      :to="getTagPath(slug)"
     >
-      <span>#</span> {{ tag.title }}
+      <span>#</span> {{ getTagTitle(slug) }}
     </g-link>
   </div>
 </template>
@@ -17,6 +17,32 @@ export default {
     post: {
       type: Object,
       required: true
+    }
+  },
+  inject: {
+    categories: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    getTagTitle(slug) {
+      const tag = this.categories.edges.find(item => {
+        return item.node.slug === slug;
+      });
+      if (tag) {
+        return tag.node.title;
+      }
+      return slug;
+    },
+    getTagPath(slug) {
+      const tag = this.categories.edges.find(item => {
+        return item.node.slug === slug;
+      });
+      if (tag) {
+        return tag.node.path;
+      }
+      return slug;
     }
   }
 };

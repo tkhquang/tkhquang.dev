@@ -2,15 +2,18 @@
   <div class="author w-full flex-center flex-col mx-auto text-center">
     <g-image
       :alt="settings.siteOwner.name"
-      :src="ownerImage"
+      :src="
+        require(`!!assets-loader?width=180&height=180&fit=cover&blur=10!~/assets/uploads/images/author.jpg`)
+      "
       class="author__image rounded-full mb-4"
       width="180"
       height="180"
-      blur="5"
+      fit="cover"
+      blur="10"
     />
 
     <h1 v-if="showTitle" class="author__site-title text-2xl">
-      {{ settings.siteOwner.description }}
+      {{ settings.siteOwner.name }}
     </h1>
 
     <div
@@ -21,19 +24,12 @@
 </template>
 
 <script>
-import ownerImage from "~/assets/images/author.jpg";
-
 export default {
   props: {
     showTitle: {
       type: Boolean,
       default: false
     }
-  },
-  data() {
-    return {
-      ownerImage
-    };
   },
   inject: {
     settings: {

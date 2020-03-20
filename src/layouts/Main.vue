@@ -2,8 +2,7 @@
   <div>
     <ParticlesJS />
     <div class="banner text-4xl">
-      {{ settings.siteTitle }}
-      <span role="image" name="Ljoss">✨</span>
+      {{ " " || settings.siteTitle }}
     </div>
     <header class="header">
       <div class="header__left">
@@ -51,6 +50,7 @@ export default {
   }
 };
 </script>
+
 <style lang="scss">
 #particles-js {
   position: absolute;
@@ -77,7 +77,7 @@ export default {
   padding: 0 calc(var(--space) / 2);
   top: 0;
   z-index: 10;
-  background-color: var(--bg-color);
+  // background-color: var(--bg-color);
   &__left,
   &__right {
     display: flex;

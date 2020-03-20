@@ -1,11 +1,22 @@
 <template>
   <div class="post-card content-box" :class="{ 'post-card--has-poster': true }">
     <div class="post-card__header">
-      <g-image alt="Cover image" :src="coverImage" />
+      <g-image
+        alt="Cover image"
+        class="post-card__image"
+        :src="
+          require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${post.cover_image}`)
+        "
+        width="1280"
+        height="720"
+        quality="80"
+        fit="cover"
+        blur="10"
+      />
     </div>
     <div class="post-card__content">
-      <h2 class="post-card__title truncate" v-html="post.title" />
-      <p class="post-card__description" v-html="post.metadata.description" />
+      <h2 class="post-card__title" v-html="post.title" />
+      <p class="post-card__description" v-html="post.description" />
 
       <PostMeta class="post-card__meta" :post="post" />
 
@@ -32,18 +43,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  computed: {
-    coverImage() {
-      /*
-        Max width of container class is 1280px
-        so here we make sure that
-        it matches the width of the query image
-      */
-
-      const baseUrl = this.post.metadata.hero.imgix_url;
-      return `${baseUrl}?w=1280&h=720&q=80&fit=crop`;
-    }
   }
 };
 </script>
@@ -54,15 +53,49 @@ export default {
   --content-width: 100%;
   --space: 2rem;
 
-  &:first-of-type {
+  // &.content-box {
+  //   // The hightlighted Post (first post)
+  //   &:first-of-type {
+  //     --content-width: 100%;
+  //     --space: 3rem;
+  //     & .post-card {
+  //       &__description {
+  //         display: -webkit-box;
+  //         -webkit-line-clamp: 5;
+  //         -webkit-box-orient: vertical;
+  //         overflow: hidden;
+  //       }
+  //     }
+  //   }
+
+  //   // Other posts
+  //   &:not(:first-of-type) {
+  //     & .post-card {
+  //       &__title {
+  //         @apply truncate;
+  //       }
+  //       &__description {
+  //         display: -webkit-box;
+  //         -webkit-line-clamp: 2;
+  //         -webkit-box-orient: vertical;
+  //         overflow: hidden;
+  //       }
+  //     }
+  //   }
+  // }
+
+  &.content-box {
     --space: 3rem;
-    &__description {
-      display: -webkit-box;
-      -webkit-line-clamp: 5;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    & .post-card {
+      &__description {
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     }
   }
+
   position: relative;
 
   &__header {
@@ -89,13 +122,6 @@ export default {
   &:hover {
     transform: translateY(-5px);
     box-shadow: 1px 10px 30px 0 rgba(0, 0, 0, 0.1);
-  }
-
-  &__description {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
   }
 
   &__tags {
