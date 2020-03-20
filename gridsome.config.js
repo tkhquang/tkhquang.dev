@@ -100,7 +100,7 @@ module.exports = {
         [
           "@noxify/gridsome-plugin-remark-image-download",
           {
-            targetPath: "./src/assets/uploads/temp"
+            targetPath: "./src/assets/uploads/remote"
           }
         ]
       ]
