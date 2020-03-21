@@ -2,7 +2,7 @@
 
 echo "Starting prebuild process"
 
-USER_SET_BRANCH=develop
+USER_SET_BRANCH=$1
 
 DETECTED_BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 BRANCH="${USER_SET_BRANCH:-$DETECTED_BRANCH}"
