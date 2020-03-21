@@ -1,3 +1,6 @@
+// import InfiniteLoading from "vue-infinite-loading";
+import feather from "vue-icon";
+
 // Import main css
 import "~/assets/styles/index.scss";
 // import "prismjs/themes/prism-tomorrow.css";
@@ -10,6 +13,10 @@ import DefaultLayout from "~/layouts/Default.vue";
 // The Client API can be used here. Learn more: gridsome.org/docs/client-api
 // eslint-disable-next-line no-unused-vars
 export default function(Vue, { router, head, isClient }) {
+  // Vue.use(InfiniteLoading);
+
+  Vue.use(feather, "v-icon");
+
   // Set default layout as a global component
   Vue.component("Layout", DefaultLayout);
 }

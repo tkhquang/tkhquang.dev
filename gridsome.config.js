@@ -71,8 +71,18 @@ module.exports = {
   },
 
   templates: {
-    Post: "/posts/:title",
-    Tag: "/tags/:path"
+    Post: [
+      {
+        path: "/posts/:title",
+        component: "./src/templates/Post.vue"
+      }
+    ],
+    Tag: [
+      {
+        path: "/tags/:slug",
+        component: "./src/templates/Tag.vue"
+      }
+    ]
   },
 
   transformers: {
@@ -117,7 +127,6 @@ module.exports = {
         typeName: "Post",
         path: "content/posts/*.md",
         coverField: "post_cover"
-
         // Cannot use this as these are nested field
         // refs: {
         //   tags: "Tags"

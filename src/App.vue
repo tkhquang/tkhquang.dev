@@ -48,9 +48,20 @@ export default {
   },
   mixins: [mixins],
   provide() {
+    let tagsBySlug = {};
+    this.$static.categories.edges.forEach(
+      ({ node: { id, title, slug, path } }) => {
+        tagsBySlug[slug] = {
+          id,
+          slug,
+          title,
+          path
+        };
+      }
+    );
     return {
       settings: this.$static.metadata,
-      categories: this.$static.categories
+      categories: tagsBySlug
     };
   },
   metaInfo() {

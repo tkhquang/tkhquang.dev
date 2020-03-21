@@ -1,5 +1,5 @@
 <template slot-scope="categories">
-  <nav class="py-8 flex-center w-2/3 mx-auto">
+  <nav class="py-4 flex-center w-2/3 mx-auto" style="display: none;">
     <label for="category" class="font-bold w-1/4 text-right mr-4">
       Filter:
     </label>
@@ -11,12 +11,12 @@
       @change="onChange"
     >
       <option
-        v-for="c in allCategories"
-        :key="c.node.id"
+        v-for="categories in Object.values(allCategories)"
+        :key="categories.id"
         class=""
-        :value="c.node.path"
+        :value="categories.path"
       >
-        {{ c.node.title }}
+        {{ categories.title }}
       </option>
     </select>
   </nav>
@@ -26,7 +26,8 @@
 export default {
   data() {
     return {
-      selected: this.$route.path
+      // To be improved in the future, Bruteforce for now
+      selected: this.$route.path.replace(/\/\d+(\/|.*)$/, "/")
     };
   },
   inject: {
@@ -37,22 +38,20 @@ export default {
   },
   computed: {
     allCategories() {
-      const allCategories = [
-        {
-          node: {
-            id: null,
-            path: "/",
-            slug: "all-post",
-            title: "All Posts"
-          }
-        }
-      ];
-      return [...allCategories, ...this.categories.edges];
+      return {
+        all: {
+          id: null,
+          title: "All Posts",
+          slug: "all",
+          path: "/"
+        },
+        ...this.categories
+      };
     }
   },
   methods: {
     onChange() {
-      if (this.selected === "") {
+      if (this.selected === "all") {
         this.$router.push({ path: "/" });
       } else {
         this.$router.push({

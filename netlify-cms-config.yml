@@ -1,9 +1,9 @@
 backend:
   name: git-gateway
   repo: tkhquang/tkhquang-blog
-  branch: develop # Will be replaced during build with the current branch
-media_folder: "static/uploads/images" # Media files will be stored in the repo under static/images/uploads
-public_folder: "/uploads/images" # The src attribute for uploaded media will begin with /images/uploads
+  branch: NETLIFY_CMS_BRANCH # Will be replaced during build with the current branch
+media_folder: "src/assets/uploads/images"
+public_folder: "/uploads/images"
 collections:
   - name: "posts" # Used in routes, e.g., /admin/collections/blog
     label: "Posts" # Used in the UI

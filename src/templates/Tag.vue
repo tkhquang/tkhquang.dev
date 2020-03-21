@@ -1,20 +1,25 @@
 <template>
   <div>
     <Bio :show-title="true" />
+
     <FilterBar />
-    <PostCardGrid :posts="$page.allPostsByTag" />
-    <Pager :info="$page.allPostsByTag.pageInfo" class="hidden" />
+
+    <Pager :info="$page.allPostsByTag.pageInfo" class="paging-wrapper" />
+
+    <transition-group name="fade" tag="div" class="flex-center flex-col">
+      <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
+    </transition-group>
+
+    <Pager :info="$page.allPostsByTag.pageInfo" class="paging-wrapper" />
   </div>
 </template>
 
 <page-query>
   query allPostsByTag ($page: Int, $slug: String!) {
-    allPostsByTag: allPost(filter: { published: { eq: true }, tags: { contains: [$slug] }}, sortBy: "date", order: DESC, limit: 1, perPage: 1, page: $page) @paginate {
+    allPostsByTag: allPost(filter: { published: { eq: true }, tags: { contains: [$slug] }}, sortBy: "date", order: DESC, perPage: 5, page: $page) @paginate {
       pageInfo {
         totalPages
-        currentPage,
-        perPage,
-        totalItems
+        currentPage
       }
       edges {
         node {
@@ -39,19 +44,40 @@ import { Pager } from "gridsome";
 import mixins from "~/utils/mixins";
 
 import Bio from "~/components/Bio";
-import PostCardGrid from "~/components/PostCardGrid.vue";
+import PostCard from "~/components/PostCard.vue";
 import FilterBar from "~/components/FilterBar.vue";
 
 export default {
   components: {
     Bio,
-    PostCardGrid,
+    PostCard,
     FilterBar,
     Pager
   },
   mixins: [mixins],
+  data() {
+    return {
+      loadedPosts: [],
+      currentPage: 1
+    };
+  },
+  watch: {
+    $route() {
+      this.updatePageContent();
+    }
+  },
+  created() {
+    this.updatePageContent();
+  },
   metaInfo() {
     return this.generateMetaInfo({ siteTitle: "Home" });
+  },
+  methods: {
+    updatePageContent() {
+      this.loadedPosts = [];
+      this.loadedPosts.push(...this.$page.allPostsByTag.edges);
+      this.currentPage = this.$page.allPostsByTag.pageInfo.currentPage;
+    }
   }
 };
 </script>

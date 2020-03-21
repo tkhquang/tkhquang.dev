@@ -1,5 +1,5 @@
 <template>
-  <div id="particles-js"></div>
+  <div id="particles-js" class="theme-bg"></div>
 </template>
 
 <script>
@@ -157,9 +157,7 @@ export default {
     onToggleTheme(theme) {
       const currentTheme = config.THEMES[theme];
 
-      if (!global.pJSDom) {
-        this.initParticlesJS();
-      }
+      this.checkParticles();
 
       this.$nextTick(() => {
         const pJS = global.pJSDom[0].pJS;
@@ -172,12 +170,26 @@ export default {
         }
       });
     },
+    checkParticles() {
+      if (process.isClient) {
+        if (!global.pJSDom) {
+          this.initParticlesJS();
+          return;
+        }
+
+        if (global.pJSDom.length > 1) {
+          global.pJSDom.splice(1);
+        }
+      }
+    },
     initParticlesJS() {
       if (process.isClient) {
         require("particles.js");
 
         this.$nextTick(() => {
           global.particlesJS("particles-js", this.particleConfig);
+
+          this.checkParticles();
           const pJS = global.pJSDom[0].pJS;
 
           // Limit the particles number for maintaining performance
