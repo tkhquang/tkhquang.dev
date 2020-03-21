@@ -4,9 +4,9 @@
       v-for="slug in post.tags"
       :key="slug"
       class="post-tags__link"
-      :to="getTagPath(slug)"
+      :to="categories[slug].path"
     >
-      <span>#</span> {{ getTagTitle(slug) }}
+      <span>#</span> {{ categories[slug].title }}
     </g-link>
   </div>
 </template>
@@ -23,26 +23,6 @@ export default {
     categories: {
       type: Object,
       required: true
-    }
-  },
-  methods: {
-    getTagTitle(slug) {
-      const tag = this.categories.edges.find(item => {
-        return item.node.slug === slug;
-      });
-      if (tag) {
-        return tag.node.title;
-      }
-      return slug;
-    },
-    getTagPath(slug) {
-      const tag = this.categories.edges.find(item => {
-        return item.node.slug === slug;
-      });
-      if (tag) {
-        return tag.node.path;
-      }
-      return slug;
     }
   }
 };

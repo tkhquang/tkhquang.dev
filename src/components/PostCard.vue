@@ -1,5 +1,5 @@
 <template>
-  <div class="post-card content-box" :class="{ 'post-card--has-poster': true }">
+  <div class="post-card content-box">
     <div class="post-card__header">
       <g-image
         alt="Cover image"
@@ -15,7 +15,7 @@
       />
     </div>
     <div class="post-card__content">
-      <h2 class="post-card__title" v-html="post.title" />
+      <h3 class="post-card__title" v-html="post.title" />
       <p class="post-card__description" v-html="post.description" />
 
       <PostMeta class="post-card__meta" :post="post" />
@@ -50,8 +50,8 @@ export default {
 <style lang="scss">
 .post-card {
   /* Override default variables */
-  --content-width: 100%;
-  --space: 2rem;
+  // --content-width: 100%;
+  // --space: 2rem;
 
   // &.content-box {
   //   // The hightlighted Post (first post)
@@ -85,11 +85,12 @@ export default {
   // }
 
   &.content-box {
-    --space: 3rem;
+    --space: 2rem;
+    margin: var(--space) 0;
     & .post-card {
       &__description {
         display: -webkit-box;
-        -webkit-line-clamp: 5;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }

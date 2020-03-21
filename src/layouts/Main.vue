@@ -4,11 +4,12 @@
     <div class="banner text-4xl">
       {{ " " || settings.siteTitle }}
     </div>
+    <div id="indicator" :style="`width: ${indicator}%`"></div>
+
     <header class="header">
       <div class="header__left">
-        <Logo v-if="showLogo" />
+        <Logo :show-logo="showLogo" :fab="fab" @click.native="toTop" />
       </div>
-
       <div class="header__right">
         <ToggleTheme />
       </div>
@@ -16,6 +17,15 @@
     <main class="main-container container">
       <slot />
     </main>
+    <div
+      v-show="fab"
+      class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-5"
+      title="Scroll To Top"
+      @scroll="onScroll"
+      @click="toTop"
+    >
+      <v-icon name="arrow-up-circle"></v-icon>
+    </div>
     <footer class="text-center py-4">
       Copyright © {{ new Date().getFullYear() }} - Aleks Quang Trinh
     </footer>
@@ -37,6 +47,10 @@ export default {
     Logo,
     ParticlesJS
   },
+  data: () => ({
+    fab: false,
+    indicator: 0
+  }),
   computed: {
     showLogo() {
       return this.$route.path !== "/";
@@ -46,6 +60,35 @@ export default {
     settings: {
       type: Object,
       required: true
+    }
+  },
+  created() {
+    if (process.isClient) {
+      global.addEventListener("scroll", this.onScroll);
+    }
+  },
+  destroyed() {
+    if (process.isClient) {
+      global.removeEventListener("scroll", this.onScroll);
+    }
+  },
+  methods: {
+    onScroll(e) {
+      if (process.isClient) {
+        const top = global.pageYOffset || e.target.scrollTop || 0;
+        this.fab = top > 60;
+
+        const scrollPos = global.scrollY;
+        const winHeight = global.innerHeight;
+        const docHeight = global.document.documentElement.scrollHeight;
+        const perc = (100 * scrollPos) / (docHeight - winHeight);
+        this.indicator = perc;
+      }
+    },
+    toTop() {
+      if (process.isClient) {
+        global.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
   }
 };
@@ -58,6 +101,15 @@ export default {
   width: 100%;
   height: calc(var(--header-height) * 2);
   z-index: 1;
+}
+
+#indicator {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 5px;
+  background-color: rgb(68, 98, 180);
+  z-index: 999;
 }
 
 .banner {
