@@ -16,7 +16,7 @@
 
 <page-query>
   query allPostsByTag ($page: Int, $slug: String!) {
-    allPostsByTag: allPost(filter: { tags: { contains: [$slug] }}, sortBy: "date", order: DESC, perPage: 5, page: $page) @paginate {
+    allPostsByTag: allPost(filter: { published: { eq: true }, tags: { contains: [$slug] }}, sortBy: "date", order: DESC, perPage: 5, page: $page) @paginate {
       pageInfo {
         totalPages
         currentPage

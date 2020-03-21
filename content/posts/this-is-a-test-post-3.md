@@ -2,7 +2,7 @@
 title: This is a test post 3
 created_at: 2020-03-19T15:25:15.680Z
 updated_at: 2020-03-19T15:25:15.680Z
-published: false
+published: true
 tags:
   - tech
 cover_image: /uploads/images/default.jpg
