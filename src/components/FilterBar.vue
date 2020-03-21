@@ -1,5 +1,5 @@
 <template slot-scope="categories">
-  <nav class="py-4 flex-center w-2/3 mx-auto">
+  <nav class="py-4 flex-center w-2/3 mx-auto" style="display: none;">
     <label for="category" class="font-bold w-1/4 text-right mr-4">
       Filter:
     </label>
