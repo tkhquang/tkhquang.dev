@@ -176,12 +176,6 @@ yarn-error.log
 src/.temp
 .env.*
 
-# Ignore as the local files content are for testing purpose only
-content/*
-
-# Only keep one hidden post
-!content/posts/hidden.md
-
 # Ignore files in folder
 src/assets/uploads/remote/*
 
