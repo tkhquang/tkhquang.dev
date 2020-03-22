@@ -85,16 +85,12 @@ export default {
   //   }
   // }
 
-  &.content-box {
-    margin: calc(var(--space) / 2) auto;
-    & .post-card {
-      &__description {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-    }
+  margin: calc(var(--space) / 2) auto;
+  &__description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   position: relative;

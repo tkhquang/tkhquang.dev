@@ -128,6 +128,7 @@ module.exports = {
         path: "content/posts/*.md",
         coverField: "post_cover",
         refs: {
+          category: "Category",
           tags: {
             typeName: "Tag",
             create: true
