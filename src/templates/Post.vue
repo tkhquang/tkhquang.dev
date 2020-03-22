@@ -11,6 +11,7 @@
     <div class="post content-box">
       <div class="post__header">
         <g-image
+          v-if="$page.post.cover_image"
           alt="Cover image"
           class="post-card__image"
           :src="

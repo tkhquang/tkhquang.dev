@@ -82,7 +82,7 @@ export default {
         const winHeight = global.innerHeight;
         const docHeight = global.document.documentElement.scrollHeight;
         const perc = (100 * scrollPos) / (docHeight - winHeight);
-        this.indicator = perc;
+        this.indicator = Math.floor(perc);
       }
     },
     toTop() {
@@ -110,6 +110,7 @@ export default {
   height: 5px;
   background-color: rgb(68, 98, 180);
   z-index: 999;
+  transition: width 200ms linear;
 }
 
 .banner {

@@ -2,6 +2,7 @@
   <div class="post-card content-box">
     <div class="post-card__header">
       <g-image
+        v-if="post.cover_image"
         alt="Cover image"
         class="post-card__image"
         :src="
