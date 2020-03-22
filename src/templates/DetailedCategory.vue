@@ -44,7 +44,7 @@
 <script>
 import { Pager } from "gridsome";
 
-import mixins from "~/utils/mixins";
+import seo from "~/utils/mixins/seo.js";
 
 import Bio from "~/components/Bio";
 import PostCard from "~/components/PostCard.vue";
@@ -57,7 +57,7 @@ export default {
     FilterBar,
     Pager
   },
-  mixins: [mixins],
+  mixins: [seo],
   data() {
     return {
       loadedPosts: [],

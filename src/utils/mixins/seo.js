@@ -1,4 +1,15 @@
 export default {
+  computed: {
+    siteUrl() {
+      const envUrl = process.env.GRIDSOME_SITE_URL;
+
+      if (!envUrl) {
+        return "";
+      }
+
+      return process.isProduction ? `${envUrl}/blog` : envUrl;
+    }
+  },
   methods: {
     stripSlashes(url) {
       return url.replace(/(https?:\/\/)|(\/)+/g, "$1$2");
@@ -61,9 +72,7 @@ export default {
       }
 
       if (metaImageUrl) {
-        const coverImage = this.stripSlashes(
-          `${process.env.GRIDSOME_SITE_URL}/${metaImageUrl}`
-        );
+        const coverImage = this.stripSlashes(`${this.siteUrl}/${metaImageUrl}`);
         metaInfo.meta = [
           ...metaInfo.meta,
           {
@@ -100,7 +109,7 @@ export default {
         {
           key: "og:url",
           property: "og:url",
-          content: this.stripSlashes(`${process.env.GRIDSOME_SITE_URL}${path}`)
+          content: this.stripSlashes(`${this.siteUrl}${path}`)
         }
       ];
 

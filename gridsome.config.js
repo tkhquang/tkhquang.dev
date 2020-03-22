@@ -82,6 +82,12 @@ module.exports = {
         path: "/categories/:slug",
         component: "./src/templates/DetailedCategory.vue"
       }
+    ],
+    Tag: [
+      {
+        path: "/tags/:title",
+        component: "./src/templates/DetailedTag.vue"
+      }
     ]
   },
 

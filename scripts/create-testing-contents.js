@@ -48,7 +48,7 @@ const tags = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulu
 const coverImages = [null, "/uploads/images/default.jpg"];
 
 const categories = [
-  "Enginering",
+  "Engineering",
   "The Inner Crisis",
   "Story of My Life",
   "Other"

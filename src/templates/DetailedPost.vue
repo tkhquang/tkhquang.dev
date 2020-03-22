@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import mixins from "~/utils/mixins";
+import seo from "~/utils/mixins/seo.js";
 
 import PostMeta from "~/components/PostMeta";
 import PostTags from "~/components/PostTags";
@@ -51,7 +51,7 @@ export default {
     PostMeta,
     PostTags
   },
-  mixins: [mixins],
+  mixins: [seo],
   metaInfo() {
     const {
       title: siteTitle,

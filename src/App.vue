@@ -38,7 +38,7 @@ query index {
 </static-query>
 
 <script>
-import mixins from "~/utils/mixins";
+import seo from "~/utils/mixins/seo.js";
 
 import MainLayout from "~/layouts/Main.vue";
 
@@ -46,7 +46,7 @@ export default {
   components: {
     MainLayout
   },
-  mixins: [mixins],
+  mixins: [seo],
   provide() {
     let tagsBySlug = {};
     this.$static.categories.edges.forEach(
