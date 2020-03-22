@@ -74,13 +74,16 @@ query Post ($path: String!) {
   post: post (path: $path) {
     title
     path
-    created_at (format: "DD MMMM YYYY")
-    updated_at (format: "DD MMMM YYYY")
+    created_at
+    updated_at
     timeToRead
     description
     content
     cover_image (width: 1280, height: 720, blur: 10, quality: 80)
-    tags
+    tags {
+      id
+      title
+    }
   }
 }
 </page-query>

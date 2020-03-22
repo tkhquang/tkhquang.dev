@@ -2,34 +2,39 @@ backend:
   name: git-gateway
   repo: tkhquang/tkhquang-blog
   branch: develop # Will be replaced during build with the current branch
-media_folder: "static/uploads/images" # Media files will be stored in the repo under static/images/uploads
-public_folder: "/uploads/images" # The src attribute for uploaded media will begin with /images/uploads
+media_folder: "/uploads/images"
+public_folder: "/uploads/images"
 collections:
-  - name: "posts" # Used in routes, e.g., /admin/collections/blog
-    label: "Posts" # Used in the UI
-    folder: "content/posts" # The path to the folder where the documents are stored
-    create: true # Allow users to create new documents in this collection
-    slug: "{{slug}}" # Filename template, e.g., YYYY-MM-DD-title.md
+  - name: "posts"
+    label: "Posts"
+    folder: "content/posts"
+    create: true
+    slug: "{{slug}}"
     extension: 'md'
-    fields: # The fields for each document, usually in front matter
+    fields:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Created At", name: "created_at", widget: "datetime"}
-      - {label: "Updated At", name: "updated_at", widget: "datetime", required: false, default: null}
+      - {label: "Updated At", name: "updated_at", widget: "datetime", required: false, default: ""}
       - {label: "Published", name: "published", widget: "boolean", default: true}
-      - label: "Post Tags"
-        name: "tags"
+      - label: "Category"
+        name: "category"
         widget: "relation"
-        collection: "tags"
+        collection: "categories"
         searchFields: ["title", "slug"]
         valueField: "slug"
-        displayFields: ["title", "slug"]
-        multiple: true
+        displayFields: ["title"]
+        multiple: false
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        allow_add: true
+        default: ["Random"]
       - {label: "Cover Image", name: "cover_image", widget: "image", required: false}
       - {label: "Description", name: "description", widget: "markdown"}
       - {label: "Body", name: "body", widget: "markdown"}
-  - name: "tags"
-    label: "Tags"
-    folder: "content/tags"
+  - name: "categories"
+    label: "Categories"
+    folder: "content/categories"
     create: true
     slug: "{{slug}}"
     extension: 'md'
@@ -37,4 +42,3 @@ collections:
     fields:
       - {label: "title", name: "title", widget: "string"}
       - {label: "Slug", name: "slug", widget: "string"}
-      - {label: "path", name: "path", widget: "string"}

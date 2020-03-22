@@ -24,7 +24,7 @@ query index {
       description
     }
   }
-  categories: allTag (sortBy: "title") {
+  categories: allCategory (sortBy: "title") {
     edges {
       node {
         id

@@ -2,8 +2,6 @@
   <div>
     <Bio :show-title="true" />
 
-    <FilterBar />
-
     <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
 
     <transition-group name="fade" tag="div" class="flex-center flex-col">
@@ -36,13 +34,16 @@
         node {
           id
           title
-          created_at (format: "D. MMMM YYYY")
-          updated_at (format: "D. MMMM YYYY")
+          created_at
+          updated_at
           timeToRead
           description
           cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
           path
-          tags # [slug]
+          tags {
+            id
+            title
+          }
         }
       }
     }
@@ -56,13 +57,11 @@ import mixins from "~/utils/mixins";
 
 import Bio from "~/components/Bio";
 import PostCard from "~/components/PostCard.vue";
-import FilterBar from "~/components/FilterBar.vue";
 
 export default {
   components: {
     Bio,
     PostCard,
-    FilterBar,
     Pager
   },
   mixins: [mixins],

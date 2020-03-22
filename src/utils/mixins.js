@@ -11,9 +11,7 @@ export default {
         siteTwitter,
         // siteOwner,
         // prefixPath,
-        metaImageUrl = this.stripSlashes(
-          `${process.env.GRIDSOME_SITE_URL}/images/default.jpg`
-        ),
+        metaImageUrl = `/uploads/images/default.jpg`,
         path = ""
       } = opts;
 
@@ -63,17 +61,20 @@ export default {
       }
 
       if (metaImageUrl) {
+        const coverImage = this.stripSlashes(
+          `${process.env.GRIDSOME_SITE_URL}/${metaImageUrl}`
+        );
         metaInfo.meta = [
           ...metaInfo.meta,
           {
             key: "og:image",
             property: "og:image",
-            content: metaImageUrl
+            content: coverImage
           },
           {
             key: "twitter:image",
             name: "twitter:image",
-            content: metaImageUrl
+            content: coverImage
           }
         ];
       }

@@ -1,10 +1,10 @@
 ---
 title: Hidden
-created_at: 2020-03-19T15:25:15.680Z
-updated_at: 2020-03-19T15:25:15.680Z
+created_at: 2020-03-22T17:21:12.457Z
+updated_at: ""
 published: false 
-tags: 
-  - hidden
+tags: ["hidden"]
+category: other
 cover_image: /uploads/images/default.jpg
 description: This is a test post and it is hidden
 ---

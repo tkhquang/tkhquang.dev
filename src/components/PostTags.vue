@@ -1,12 +1,12 @@
 <template slot-scope="categories">
   <div class="post-tags">
     <g-link
-      v-for="slug in post.tags"
-      :key="slug"
+      v-for="tag in post.tags"
+      :key="tag.id"
       class="post-tags__link"
-      :to="categories[slug].path"
+      :to="tag.title"
     >
-      <span>#</span> {{ categories[slug].title }}
+      <span>#</span> {{ tag.title }}
     </g-link>
   </div>
 </template>
@@ -15,12 +15,6 @@
 export default {
   props: {
     post: {
-      type: Object,
-      required: true
-    }
-  },
-  inject: {
-    categories: {
       type: Object,
       required: true
     }

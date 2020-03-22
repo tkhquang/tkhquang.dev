@@ -86,12 +86,11 @@ export default {
   // }
 
   &.content-box {
-    --space: 2rem;
-    margin: var(--space) 0;
+    margin: calc(var(--space) / 2) auto;
     & .post-card {
       &__description {
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }

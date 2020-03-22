@@ -74,13 +74,13 @@ module.exports = {
     Post: [
       {
         path: "/posts/:title",
-        component: "./src/templates/Post.vue"
+        component: "./src/templates/DetailedPost.vue"
       }
     ],
-    Tag: [
+    Category: [
       {
-        path: "/tags/:slug",
-        component: "./src/templates/Tag.vue"
+        path: "/categories/:slug",
+        component: "./src/templates/DetailedCategory.vue"
       }
     ]
   },
@@ -126,19 +126,21 @@ module.exports = {
       options: {
         typeName: "Post",
         path: "content/posts/*.md",
-        coverField: "post_cover"
-        // Cannot use this as these are nested field
-        // refs: {
-        //   tags: "Tags"
-        // }
+        coverField: "post_cover",
+        refs: {
+          tags: {
+            typeName: "Tag",
+            create: true
+          }
+        }
       }
     },
     {
       // Create tags from markdown files
       use: "@gridsome/source-filesystem",
       options: {
-        typeName: "Tag",
-        path: "content/tags/*.md"
+        typeName: "Category",
+        path: "content/categories/*.md"
       }
     },
     {

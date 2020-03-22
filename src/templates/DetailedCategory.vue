@@ -4,19 +4,19 @@
 
     <FilterBar />
 
-    <Pager :info="$page.allPostsByTag.pageInfo" class="paging-wrapper" />
+    <Pager :info="$page.allPostsByCategory.pageInfo" class="paging-wrapper" />
 
     <transition-group name="fade" tag="div" class="flex-center flex-col">
       <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
     </transition-group>
 
-    <Pager :info="$page.allPostsByTag.pageInfo" class="paging-wrapper" />
+    <Pager :info="$page.allPostsByCategory.pageInfo" class="paging-wrapper" />
   </div>
 </template>
 
 <page-query>
-  query allPostsByTag ($page: Int, $slug: String!) {
-    allPostsByTag: allPost(filter: { published: { eq: true }, tags: { contains: [$slug] }}, sortBy: "date", order: DESC, perPage: 5, page: $page) @paginate {
+  query allPostsByCategory ($page: Int, $slug: String!) {
+    allPostsByCategory: allPost(filter: { published: { eq: true }, category: { eq: $slug }}, sortBy: "date", order: DESC, perPage: 5, page: $page) @paginate {
       pageInfo {
         totalPages
         currentPage
@@ -25,13 +25,16 @@
         node {
           id
           title
-          created_at (format: "D. MMMM YYYY")
-          updated_at (format: "D. MMMM YYYY")
+          created_at
+          updated_at
           timeToRead
           description
           cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
           path
-          tags # [slug]
+          tags {
+            id
+            title
+          }
         }
       }
     }
@@ -75,8 +78,8 @@ export default {
   methods: {
     updatePageContent() {
       this.loadedPosts = [];
-      this.loadedPosts.push(...this.$page.allPostsByTag.edges);
-      this.currentPage = this.$page.allPostsByTag.pageInfo.currentPage;
+      this.loadedPosts.push(...this.$page.allPostsByCategory.edges);
+      this.currentPage = this.$page.allPostsByCategory.pageInfo.currentPage;
     }
   }
 };
