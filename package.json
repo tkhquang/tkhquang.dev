@@ -4,7 +4,7 @@
   "scripts": {
     "prebuild": "chmod +x ./prebuild.sh && ./prebuild.sh",
     "fix:gridsome": "cp -rR lib/gridsome/app node_modules/gridsome",
-    "build": "yarn fix:gridsome && gridsome build",
+    "build": "yarn prebuild $HEAD && yarn fix:gridsome && gridsome build",
     "dev": "gridsome develop",
     "explore": "gridsome explore"
   },
