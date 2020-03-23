@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Bio :show-title="true" />
+    <Author :show-title="true" />
 
     <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
 
@@ -56,12 +56,12 @@ import { Pager } from "gridsome";
 
 import seo from "~/utils/mixins/seo.js";
 
-import Bio from "~/components/Bio";
+import Author from "~/components/Author";
 import PostCard from "~/components/PostCard.vue";
 
 export default {
   components: {
-    Bio,
+    Author,
     PostCard,
     Pager
   },

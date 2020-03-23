@@ -12,6 +12,9 @@ export default {
   },
   methods: {
     stripSlashes(url) {
+      if (!url) {
+        return "";
+      }
       return url.replace(/(https?:\/\/)|(\/)+/g, "$1$2");
     },
     generateMetaInfo(opts) {

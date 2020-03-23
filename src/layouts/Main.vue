@@ -1,12 +1,13 @@
-<template>
+<template slot-scope="cssVars">
   <div>
-    <ParticlesJS />
-    <div class="banner text-4xl">
-      {{ " " || settings.siteTitle }}
-    </div>
     <div id="indicator" :style="`width: ${indicator}%`"></div>
 
-    <header class="header">
+    <ParticlesJS />
+    <!-- <div class="banner text-4xl">
+      {{ " " || settings.siteTitle }}
+    </div> -->
+
+    <header class="header" :class="{ 'header--is-scrolled': fab }">
       <div class="header__left">
         <Logo :show-logo="showLogo" :fab="fab" @click.native="toTop" />
       </div>
@@ -60,6 +61,10 @@ export default {
     settings: {
       type: Object,
       required: true
+    },
+    cssVars: {
+      type: Object,
+      default: () => ({})
     }
   },
   created() {
@@ -76,7 +81,7 @@ export default {
     onScroll(e) {
       if (process.isClient) {
         const top = global.pageYOffset || e.target.scrollTop || 0;
-        this.fab = top > 60;
+        this.fab = top > parseInt(this.cssVars["header-height"]) * 2;
 
         const scrollPos = global.scrollY;
         const winHeight = global.innerHeight;
@@ -100,20 +105,20 @@ export default {
 
 <style lang="scss">
 #particles-js {
-  position: absolute;
-  top: 0;
+  position: relative;
   width: 100%;
   height: calc(var(--header-height) * 2);
+  background-color: rgba($color: #000000, $alpha: 0.3);
   z-index: 1;
 }
 
 #indicator {
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   height: 5px;
   background-color: rgb(68, 98, 180);
-  z-index: 999;
+  z-index: 20;
 }
 
 .banner {
@@ -130,10 +135,19 @@ export default {
   justify-content: space-between;
   align-items: center;
   min-height: var(--header-height);
-  padding: 0 calc(var(--space) / 2);
+  padding: 5px calc(var(--space) / 2) 0;
   top: 0;
   z-index: 10;
-  // background-color: var(--bg-color);
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(
+    to bottom,
+    rgba($color: #000000, $alpha: 0.3),
+    transparent
+  );
+
+  &--is-scrolled {
+    background-color: rgba($color: #000000, $alpha: 0.3);
+  }
   &__left,
   &__right {
     display: flex;

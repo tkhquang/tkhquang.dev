@@ -12,6 +12,12 @@ module.exports = {
     "color-no-invalid-hex": true,
     "declaration-block-trailing-semicolon": null,
     "no-descending-specificity": null,
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        ignorePseudoElements: ["v-deep"]
+      }
+    ],
     "scss/at-rule-no-unknown": [
       true,
       {

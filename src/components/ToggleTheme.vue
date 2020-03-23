@@ -56,11 +56,14 @@ export default {
     };
   },
   mounted() {
-    if (window.__theme == "light") this.darkTheme = false;
+    if (window.__theme == "light") {
+      this.darkTheme = false;
+    }
   },
   methods: {
     toggleTheme() {
       this.darkTheme = !this.darkTheme;
+
       // This is using a script that is added in index.html
       window.__setPreferredTheme(this.darkTheme ? "dark" : "light");
       EventBus.$emit("toggleTheme", this.darkTheme ? "dark" : "light");

@@ -29,7 +29,8 @@ const purgecss = require("@fullhuman/postcss-purgecss")({
     /^gridsome*/,
     /^language-*/,
     /^line-numbers*/,
-    /^infinite-*/
+    /^infinite-*/,
+    /^v-icon*/
   ],
   whitelistPatternsChildren: [
     // Force chomp

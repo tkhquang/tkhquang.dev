@@ -59,9 +59,30 @@ export default {
         };
       }
     );
+    // Get variables from root
+    const cssVar = (name, value) => {
+      if (process.isClient) {
+        if (name.substr(0, 2) !== "--") {
+          name = "--" + name;
+        }
+
+        if (value) {
+          global.document.documentElement.style.setProperty(name, value);
+        }
+
+        return {
+          [name.replace(/^--/, "")]: global
+            .getComputedStyle(global.document.documentElement)
+            .getPropertyValue(name)
+        };
+      }
+    };
     return {
       settings: this.$static.metadata,
-      categories: tagsBySlug
+      categories: tagsBySlug,
+      cssVars: {
+        ...cssVar("--header-height")
+      }
     };
   },
   metaInfo() {
@@ -84,5 +105,10 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
+}
+
+.v-icon,
+.custom-icon {
+  @apply w-10 h-10;
 }
 </style>

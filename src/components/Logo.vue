@@ -73,7 +73,7 @@ export default {
   }
 
   &:hover span,
-  &:focus span,
+  // &:focus span,
   &.scroll span {
     transform: rotateX(90deg) translateY(-22px);
     &::before {

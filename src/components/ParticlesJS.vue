@@ -9,7 +9,7 @@ const config = {
   DEFAULT_CONFIG: {
     particles: {
       number: {
-        value: 200,
+        value: 100,
         density: {
           enable: true,
           value_area: 400
@@ -62,7 +62,7 @@ const config = {
       },
       move: {
         enable: true,
-        speed: 2,
+        speed: 1.5,
         direction: "none",
         random: false,
         straight: false,
@@ -179,6 +179,7 @@ export default {
 
         if (global.pJSDom.length > 1) {
           global.pJSDom.splice(1);
+          global.pJSDom[0].pJS.fn.particlesRefresh();
         }
       }
     },

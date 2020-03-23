@@ -31,27 +31,41 @@
     </div>
 
     <div class="post-comments">
-      <!-- Add comment widgets here -->
+      <div class="commentbox" />
     </div>
 
-    <Bio class="post-author" :show-title="true" />
+    <Author class="post-author" :show-title="true" />
   </div>
 </template>
 
 <script>
+import commentBox from "commentbox.io";
+
 import seo from "~/utils/mixins/seo.js";
 
 import PostMeta from "~/components/PostMeta";
 import PostTags from "~/components/PostTags";
-import Bio from "~/components/Bio.vue";
+import Author from "~/components/Author.vue";
 
 export default {
   components: {
-    Bio,
+    Author,
     PostMeta,
     PostTags
   },
   mixins: [seo],
+  mounted() {
+    this.removeCommentBox = commentBox(
+      `${process.env.GRIDSOME_COMMENTBOX_PROJECT_ID}`,
+      {
+        textColor: "white",
+        subtextColor: "#dddddd"
+      }
+    );
+  },
+  beforeDestroy() {
+    this.removeCommentBox();
+  },
   metaInfo() {
     const {
       title: siteTitle,
@@ -140,7 +154,8 @@ query Post ($path: String!) {
 }
 
 .post-comments {
-  padding: calc(var(--space) / 2);
+  margin: var(--space) auto;
+  max-width: var(--content-width);
 
   &:empty {
     display: none;
