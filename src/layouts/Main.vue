@@ -1,5 +1,5 @@
 <template slot-scope="cssVars">
-  <div>
+  <div class="flex flex-col min-h-screen">
     <div id="indicator" :style="`width: ${indicator}%`"></div>
 
     <ParticlesJS />
@@ -27,7 +27,7 @@
     >
       <v-icon name="arrow-up-circle"></v-icon>
     </div>
-    <footer class="text-center py-4">
+    <footer class="footer text-center py-4 mt-auto">
       Copyright © {{ new Date().getFullYear() }} - Aleks Quang Trinh
     </footer>
   </div>

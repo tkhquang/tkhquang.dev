@@ -4,6 +4,9 @@
 
     <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
 
+    <h1 v-if="!loadedPosts.length" class="w-full flex-center">
+      Sorry, there's nothing here :(
+    </h1>
     <transition-group name="fade" tag="div" class="flex-center flex-col">
       <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
     </transition-group>
