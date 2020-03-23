@@ -1,7 +1,8 @@
 // Used to wrap content inside a nice box.
 .content-box {
 	background-color: var(--bg-content-color);
-	width: var(--content-width);
+  max-width: 100%;
+  width: var(--content-width);
 	margin: 0 auto;
 	padding: var(--space);
   border-radius: var(--radius);

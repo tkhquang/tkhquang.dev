@@ -50,41 +50,6 @@ export default {
 
 <style lang="scss">
 .post-card {
-  /* Override default variables */
-  // --content-width: 100%;
-  // --space: 2rem;
-
-  // &.content-box {
-  //   // The hightlighted Post (first post)
-  //   &:first-of-type {
-  //     --content-width: 100%;
-  //     --space: 3rem;
-  //     & .post-card {
-  //       &__description {
-  //         display: -webkit-box;
-  //         -webkit-line-clamp: 5;
-  //         -webkit-box-orient: vertical;
-  //         overflow: hidden;
-  //       }
-  //     }
-  //   }
-
-  //   // Other posts
-  //   &:not(:first-of-type) {
-  //     & .post-card {
-  //       &__title {
-  //         @apply truncate;
-  //       }
-  //       &__description {
-  //         display: -webkit-box;
-  //         -webkit-line-clamp: 2;
-  //         -webkit-box-orient: vertical;
-  //         overflow: hidden;
-  //       }
-  //     }
-  //   }
-  // }
-
   margin: calc(var(--space) / 2) auto;
   &__description {
     display: -webkit-box;

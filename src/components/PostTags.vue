@@ -4,7 +4,7 @@
       v-for="tag in post.tags"
       :key="tag.id"
       class="post-tags__link"
-      :to="tag.title"
+      :to="tag.path"
     >
       <span>#</span> {{ tag.title }}
     </g-link>

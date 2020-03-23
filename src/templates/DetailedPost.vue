@@ -83,6 +83,7 @@ query Post ($path: String!) {
     tags {
       id
       title
+      path
     }
   }
 }

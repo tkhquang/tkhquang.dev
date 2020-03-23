@@ -43,6 +43,7 @@
               tags {
                 id
                 title
+                path
               }
             }
           }
