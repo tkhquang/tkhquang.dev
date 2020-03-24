@@ -2,33 +2,41 @@
   <div class="flex flex-col min-h-screen">
     <div id="indicator" :style="`width: ${indicator}%`"></div>
 
-    <ParticlesJS />
-    <!-- <div class="banner text-4xl">
-      {{ " " || settings.siteTitle }}
-    </div> -->
+    <div class="banner relative">
+      <ParticlesJS class="" />
+    </div>
 
-    <header class="header" :class="{ 'header--is-scrolled': fab }">
+    <header
+      class="header container mx-auto"
+      :class="{ 'header--is-scrolled': fab }"
+    >
       <div class="header__left">
         <Logo :show-logo="showLogo" :fab="fab" @click.native="toTop" />
+        <ToggleTheme class="ml-4" />
       </div>
-      <div class="header__right">
-        <ToggleTheme />
-      </div>
+      <div class="header__right"></div>
     </header>
-    <main class="main-container container">
+    <main class="main-container">
       <slot />
     </main>
     <div
       v-show="fab"
-      class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-5"
+      class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-10"
       title="Scroll To Top"
       @scroll="onScroll"
       @click="toTop"
     >
       <v-icon name="arrow-up-circle"></v-icon>
     </div>
-    <footer class="footer text-center py-4 mt-auto">
-      Copyright © {{ new Date().getFullYear() }} - Aleks Quang Trinh
+    <footer class="footer text-center py-4 mt-auto flex-center">
+      Copyright © {{ new Date().getFullYear() }}&nbsp;-&nbsp;<a
+        href="https://github.com/tkhquang"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center"
+      >
+        Aleks Quang Trinh&nbsp;<v-icon name="github" class="w-4 h-4"></v-icon
+      ></a>
     </footer>
   </div>
 </template>
@@ -108,8 +116,7 @@ export default {
   position: relative;
   width: 100%;
   height: calc(var(--header-height) * 2);
-  background-color: rgba($color: #000000, $alpha: 0.3);
-  z-index: 1;
+  background-color: transparent;
 }
 
 #indicator {
@@ -131,6 +138,8 @@ export default {
 }
 
 .header {
+  position: sticky;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -139,24 +148,15 @@ export default {
   top: 0;
   z-index: 10;
   transition: all 0.3s ease-in-out;
-  background: linear-gradient(
-    to bottom,
-    rgba($color: #000000, $alpha: 0.3),
-    transparent
-  );
+  background-color: transparent;
 
   &--is-scrolled {
-    background-color: rgba($color: #000000, $alpha: 0.3);
+    background-color: transparent;
   }
   &__left,
   &__right {
     display: flex;
     align-items: center;
-  }
-  @media screen and (min-width: 800px) {
-    /* Make header sticky for large screens */
-    position: sticky;
-    width: 100%;
   }
 }
 

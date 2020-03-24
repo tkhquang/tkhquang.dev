@@ -81,7 +81,10 @@ export default {
       settings: this.$static.metadata,
       categories: tagsBySlug,
       cssVars: {
-        ...cssVar("--header-height")
+        ...cssVar("--header-height"),
+        ...cssVar("--bg-color"),
+        ...cssVar("--body-color"),
+        ...cssVar("--title-color")
       }
     };
   },
@@ -105,10 +108,5 @@ export default {
 .fade-enter,
 .fade-leave-active {
   opacity: 0;
-}
-
-.v-icon,
-.custom-icon {
-  @apply w-10 h-10;
 }
 </style>

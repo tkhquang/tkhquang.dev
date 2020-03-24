@@ -1,5 +1,5 @@
 <template>
-  <div id="particles-js" class="theme-bg"></div>
+  <div id="particles-js"></div>
 </template>
 
 <script>
@@ -9,10 +9,10 @@ const config = {
   DEFAULT_CONFIG: {
     particles: {
       number: {
-        value: 100,
+        value: 80,
         density: {
           enable: true,
-          value_area: 400
+          value_area: 120
         }
       },
       color: {
@@ -84,7 +84,7 @@ const config = {
         },
         onclick: {
           enable: true,
-          mode: "push"
+          mode: "repulse"
         },
         resize: true
       },
@@ -103,7 +103,7 @@ const config = {
           speed: 3
         },
         repulse: {
-          distance: 200,
+          distance: 120,
           duration: 0.4
         },
         push: {
@@ -116,7 +116,7 @@ const config = {
     },
     retina_detect: true
   },
-  MAX_PARTICLES: 80,
+  MAX_PARTICLES: 60,
   THEMES: {
     dark: {
       color: "#FFFFFF",
@@ -185,6 +185,11 @@ export default {
     },
     initParticlesJS() {
       if (process.isClient) {
+        if (global.particlesJS) {
+          this.checkParticles();
+          return;
+        }
+
         require("particles.js");
 
         this.$nextTick(() => {

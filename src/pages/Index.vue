@@ -1,19 +1,30 @@
 <template>
-  <div>
-    <Author :show-title="true" />
+  <div
+    class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-screen-xl"
+  >
+    <div class="flex flex-wrap">
+      <div class="main-panel w-full lg:w-3/4">
+        <!-- <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" /> -->
 
-    <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
+        <h1 v-if="!loadedPosts.length" class="w-full flex-center">
+          Sorry, there's nothing here :(
+        </h1>
+        <h1
+          class="text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto"
+        >
+          Latest Posts
+        </h1>
+        <transition-group name="fade" tag="div" class="flex-center flex-col">
+          <PostCard
+            v-for="{ node } of loadedPosts"
+            :key="node.id"
+            :post="node"
+          />
+        </transition-group>
 
-    <h1 v-if="!loadedPosts.length" class="w-full flex-center">
-      Sorry, there's nothing here :(
-    </h1>
-    <transition-group name="fade" tag="div" class="flex-center flex-col">
-      <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
-    </transition-group>
+        <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
 
-    <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
-
-    <!-- <ClientOnly>
+        <!-- <ClientOnly>
       <infinite-loading spinner="spiral" @infinite="infiniteHandler">
         <div slot="no-more">
           You've scrolled through all the posts ;)
@@ -23,6 +34,9 @@
         </div>
       </infinite-loading>
     </ClientOnly> -->
+      </div>
+      <SideBar />
+    </div>
   </div>
 </template>
 
@@ -59,13 +73,13 @@ import { Pager } from "gridsome";
 
 import seo from "~/utils/mixins/seo.js";
 
-import Author from "~/components/Author";
 import PostCard from "~/components/PostCard.vue";
+import SideBar from "~/components/SideBar.vue";
 
 export default {
   components: {
-    Author,
     PostCard,
+    SideBar,
     Pager
   },
   mixins: [seo],

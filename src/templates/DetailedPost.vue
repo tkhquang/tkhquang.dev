@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container mx-auto px-8">
     <div class="post-title">
       <h1 class="post-title__text max-w-screen-md mx-auto">
         {{ $page.post.title }}
@@ -8,12 +8,12 @@
       <PostMeta :post="$page.post" />
     </div>
 
-    <div class="post content-box">
+    <div class="post">
       <div class="post__header">
         <g-image
           v-if="$page.post.cover_image"
           alt="Cover image"
-          class="post-card__image"
+          class="article__image"
           :src="
             require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${$page.post.cover_image}`)
           "
@@ -30,11 +30,11 @@
       </div>
     </div>
 
+    <Author class="post-author" :show-title="true" />
+
     <div class="post-comments">
       <div class="commentbox" />
     </div>
-
-    <Author class="post-author" :show-title="true" />
   </div>
 </template>
 
@@ -104,65 +104,5 @@ query Post ($path: String!) {
 </page-query>
 
 <style lang="scss">
-.v-lazy-image {
-  filter: blur(10px);
-  transition: filter 0.7s;
-}
-.v-lazy-image-loaded {
-  filter: blur(0);
-}
-.post-title {
-  padding: calc(var(--space) / 2) 0 calc(var(--space) / 2);
-  text-align: center;
-}
-
-.post {
-  &__header {
-    width: calc(100% + var(--space) * 2);
-    margin-left: calc(var(--space) * -1);
-    margin-top: calc(var(--space) * -1);
-    margin-bottom: calc(var(--space) / 2);
-    overflow: hidden;
-    border-radius: var(--radius) var(--radius) 0 0;
-
-    img {
-      width: 100%;
-    }
-
-    &:empty {
-      display: none;
-    }
-  }
-
-  &__content {
-    h2:first-child {
-      margin-top: 0;
-    }
-
-    p:first-of-type {
-      font-size: 1.2em;
-      color: var(--title-color);
-    }
-
-    img {
-      width: calc(100% + var(--space) * 2);
-      margin-left: calc(var(--space) * -1);
-      display: block;
-      max-width: none;
-    }
-  }
-}
-
-.post-comments {
-  margin: var(--space) auto;
-  max-width: var(--content-width);
-
-  &:empty {
-    display: none;
-  }
-}
-
-.post-author {
-  margin-top: calc(var(--space) / 2);
-}
+@import "~/assets/styles/_typography";
 </style>

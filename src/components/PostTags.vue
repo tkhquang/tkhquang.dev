@@ -1,9 +1,9 @@
 <template slot-scope="categories">
-  <div class="post-tags">
+  <div class="article-tags">
     <g-link
       v-for="tag in post.tags"
       :key="tag.id"
-      class="post-tags__link"
+      class="article-tags__link"
       :to="tag.path"
     >
       <span>#</span> {{ tag.title }}
@@ -23,7 +23,7 @@ export default {
 </script>
 
 <style lang="scss">
-.post-tags {
+.article-tags {
   margin: 1em 0 0;
 
   &__link {
