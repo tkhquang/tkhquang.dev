@@ -3,8 +3,31 @@ module.exports = {
   important: false,
   separator: ":",
   theme: {
+    extend: {
+      // Adds a new breakpoint in addition to the default breakpoints
+      screens: {
+        xs: "480px"
+      },
+      colors: {
+        theme: {
+          primary: "var(--primary)",
+          secondary: "var(--secondary)",
+          surface: "var(--surface)",
+          background: "var(--background)",
+          error: "var(--error)",
+          link: "var(--link)",
+          accent: "var(--accent)",
+          border: "var(--border)",
+          code: "var(--code)"
+        }
+      },
+      spacing: {
+        "4px": "4px",
+        "5px": "5px"
+      }
+    },
     screens: {
-      xs: "480px", // Custom added
+      xs: "480px",
       sm: "640px",
       md: "768px",
       lg: "1024px",
@@ -232,6 +255,7 @@ module.exports = {
     },
     fontFamily: {
       sans: [
+        "Montserrat", // Custom added
         "system-ui",
         "-apple-system",
         "BlinkMacSystemFont",
@@ -246,7 +270,14 @@ module.exports = {
         '"Segoe UI Symbol"',
         '"Noto Color Emoji"'
       ],
-      serif: ["Georgia", "Cambria", '"Times New Roman"', "Times", "serif"],
+      serif: [
+        "Merriweather", // Custom added
+        "Georgia",
+        "Cambria",
+        '"Times New Roman"',
+        "Times",
+        "serif"
+      ],
       mono: [
         "Menlo",
         "Monaco",

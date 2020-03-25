@@ -7,7 +7,7 @@
       id="category"
       v-model="selected"
       name="category"
-      class="theme-color bg-blue-900 h-10 w-3/4"
+      class="bg-blue-900 h-10 w-3/4"
       @change="onChange"
     >
       <option

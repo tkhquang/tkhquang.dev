@@ -159,16 +159,14 @@ export default {
 
       this.checkParticles();
 
-      this.$nextTick(() => {
-        const pJS = global.pJSDom[0].pJS;
-        if (pJS) {
-          pJS.particles.color.value = currentTheme.color;
-          pJS.particles.line_linked.color = currentTheme.color;
-          pJS.particles.shape.stroke.color = currentTheme.bgColor;
+      const pJS = global.pJSDom[0].pJS;
+      if (pJS) {
+        pJS.particles.color.value = currentTheme.color;
+        pJS.particles.line_linked.color = currentTheme.color;
+        pJS.particles.shape.stroke.color = currentTheme.bgColor;
 
-          pJS.fn.particlesRefresh();
-        }
-      });
+        pJS.fn.particlesRefresh();
+      }
     },
     checkParticles() {
       if (process.isClient) {

@@ -16,6 +16,6 @@ export default {
 
 <style lang="scss">
 .side-bar {
-  --content-width: 100%;
+  // Placholder
 }
 </style>

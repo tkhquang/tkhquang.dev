@@ -72,8 +72,9 @@ export default {
 
         return {
           [name.replace(/^--/, "")]: global
-            .getComputedStyle(global.document.documentElement)
+            .getComputedStyle(global.document.body)
             .getPropertyValue(name)
+            .trim()
         };
       }
     };
@@ -82,9 +83,7 @@ export default {
       categories: tagsBySlug,
       cssVars: {
         ...cssVar("--header-height"),
-        ...cssVar("--bg-color"),
-        ...cssVar("--body-color"),
-        ...cssVar("--title-color")
+        ...cssVar("--background")
       }
     };
   },

@@ -3,6 +3,7 @@ Mobile first approach
 In sync with the
 default values of TailwindCSS
 */
+
 @mixin Responsive($canvas) {
   $XS: 480px; /* Custom added */
   $SM: 640px;

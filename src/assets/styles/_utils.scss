@@ -1,25 +1,5 @@
-.space-bottom {
-	margin-bottom: var(--space);
-}
-
 .flex-center {
   @apply flex justify-center items-center;
-}
-
-.theme-color {
-  color: var(--title-color);
-}
-
-.theme-bg {
-  background-color: var(--bg-color);
-}
-
-.theme-color-revert {
-  color: var(--bg-color);
-}
-
-.theme-bg-revert {
-  background-color: var(--title-color);
 }
 
 .paging-wrapper {

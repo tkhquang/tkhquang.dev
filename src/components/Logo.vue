@@ -37,7 +37,6 @@ export default {
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: var(--body-color) !important;
 
   &__image {
     vertical-align: middle;

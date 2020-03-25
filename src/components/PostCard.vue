@@ -1,9 +1,9 @@
 <template>
-  <article class="article border-b border-teal-800 py-8 lg:w-4/5 w-full">
+  <article class="article border-b py-8 lg:w-4/5 w-full">
     <PostMeta class="article__meta" :post="post" />
 
     <h2
-      class="article__title text-3xl leading-8 font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-10"
+      class="article__title text-3xl leading-8 font-bold tracking-tight sm:text-4xl sm:leading-10 my-4"
     >
       <g-link class="article__link" :to="post.path">
         <span v-html="post.title"></span>
@@ -29,7 +29,7 @@
     </g-link>
 
     <p
-      class="article__description mt-3 text-lg leading-7 text-gray-500"
+      class="article__description mt-3 text-lg leading-7"
       v-html="post.description"
     />
 

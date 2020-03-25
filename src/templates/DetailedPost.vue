@@ -1,41 +1,37 @@
 <template>
-  <div class="container mx-auto px-8">
-    <div class="post-title">
-      <h1 class="post-title__text max-w-screen-md mx-auto">
-        {{ $page.post.title }}
-      </h1>
-
-      <PostMeta :post="$page.post" />
+  <article class="article container mx-auto p-8 lg:w-4/5 w-full">
+    <h1
+      class="article__title lg:text-5xl text-3xl font-semibold tracking-tight w-full lg:w-4/5 text-center mx-auto"
+    >
+      {{ $page.post.title }}
+    </h1>
+    <PostMeta class="article__meta" :post="$page.post" />
+    <figure>
+      <g-image
+        v-if="$page.post.cover_image"
+        alt="Cover image"
+        class="article__image"
+        :src="
+          require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${$page.post.cover_image}`)
+        "
+        width="1280"
+        height="720"
+        quality="80"
+        fit="cover"
+        blur="10"
+      />
+    </figure>
+    <div class="article__content" v-html="$page.post.content" />
+    <div class="article__footer">
+      <PostTags :post="$page.post" />
     </div>
 
-    <div class="post">
-      <div class="post__header">
-        <g-image
-          v-if="$page.post.cover_image"
-          alt="Cover image"
-          class="article__image"
-          :src="
-            require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${$page.post.cover_image}`)
-          "
-          width="1280"
-          height="720"
-          quality="80"
-          fit="cover"
-          blur="10"
-        />
-      </div>
-      <div class="post__content" v-html="$page.post.content" />
-      <div class="post__footer">
-        <PostTags :post="$page.post" />
-      </div>
-    </div>
+    <Author class="article-author" :show-title="true" />
 
-    <Author class="post-author" :show-title="true" />
-
-    <div class="post-comments">
+    <div class="article-comments">
       <div class="commentbox" />
     </div>
-  </div>
+  </article>
 </template>
 
 <script>

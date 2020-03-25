@@ -1,29 +1,32 @@
-// Default
 
-* {
-	box-sizing: border-box;
-	-webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+*,
+*::before,
+*::after {
+  @apply box-border border-theme-border;
+}
+
+html, body {
+  @apply p-0 m-0;
+}
+
+html {
+  @apply text-sm;
+  @media screen and (min-width: 640px) {
+    @apply text-base;
+  }
 }
 
 body {
- 	background-color: var(--bg-color);
- 	color: var(--body-color);
- 	transition: color .6s, background-color .6s;
- 	font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  margin:0;
-  padding:0;
-  line-height: 1.5;
+  @apply font-sans antialiased leading-6 transition duration-500 bg-theme-background text-theme-primary;
 }
 
 a:not(.button) {
-	color: var(--link-color);
- 	transition: opacity .2s;
+  @apply transition-opacity duration-200 text-theme-link;
 	&:hover {
-		opacity: .8;
+    @apply opacity-75;
 	}
 }
 
 img {
-	max-width: 100%;
+  @apply max-w-full;
 }

@@ -1,11 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400, 600');
-
-html {
-  font-size: var(--base-font-size);
-}
-
 body {
-  font-family: 'Poppins', sans-serif;
   font-weight: 400;
   line-height: 1.45;
 }
@@ -18,7 +11,6 @@ h1, h2, h3, h4, h5 {
   transition: color .6s;
   color: var(--title-color);
   margin: 2.75rem 0 1rem;
-  font-family: 'Poppins', sans-serif;
   font-weight: 600;
   line-height: 1.15;
 }
@@ -44,7 +36,7 @@ strong {
 }
 
 blockquote {
-  border-left: 4px solid var(--border-color);
+  border-left: 4px solid var(--border);
   padding-left: calc(var(--space) / 2);
   color: var(--title-color);
 }

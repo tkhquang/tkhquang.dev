@@ -1,13 +1,17 @@
 <template slot-scope="cssVars">
   <div class="flex flex-col min-h-screen">
-    <div id="indicator" :style="`width: ${indicator}%`"></div>
+    <div
+      id="indicator"
+      class="fixed inset-0 h-5px bg-theme-accent z-20"
+      :style="`width: ${indicator}%`"
+    ></div>
 
-    <div class="banner relative">
-      <ParticlesJS class="" />
+    <div class="banner relative flex-center px-12">
+      <ParticlesJS class="w-full" />
     </div>
 
     <header
-      class="header container mx-auto"
+      class="header container mx-auto flex sticky inset-0 w-full justify-between items-center pt-5px z-50 transition-all duration-300 ease-in-out bg-transparent"
       :class="{ 'header--is-scrolled': fab }"
     >
       <div class="header__left">
@@ -93,7 +97,7 @@ export default {
 
         const scrollPos = global.scrollY;
         const winHeight = global.innerHeight;
-        const docHeight = global.document.documentElement.scrollHeight;
+        const docHeight = global.document.body.scrollHeight;
         const perc = (100 * scrollPos) / (docHeight - winHeight);
         if (perc > 100) {
           this.indicator = 100;
@@ -113,46 +117,16 @@ export default {
 
 <style lang="scss">
 #particles-js {
-  position: relative;
-  width: 100%;
   height: calc(var(--header-height) * 2);
-  background-color: transparent;
-}
-
-#indicator {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 5px;
-  background-color: rgb(68, 98, 180);
-  z-index: 20;
-}
-
-.banner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(var(--header-height) * 2);
-  padding: 0 calc(var(--space) / 2);
-  background-color: transparent;
 }
 
 .header {
-  position: sticky;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   min-height: var(--header-height);
-  padding: 5px calc(var(--space) / 2) 0;
-  top: 0;
-  z-index: 10;
-  transition: all 0.3s ease-in-out;
-  background-color: transparent;
 
   &--is-scrolled {
     background-color: transparent;
   }
+
   &__left,
   &__right {
     display: flex;
