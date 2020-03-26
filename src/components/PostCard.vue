@@ -1,21 +1,21 @@
 <template>
-  <article class="article border-b py-8 lg:w-4/5 w-full">
-    <PostMeta class="article__meta" :post="post" />
+  <li class="news-feed__list-item border-b py-8 lg:w-4/5 w-full">
+    <PostMeta class="news-feed__list-item__meta" :post="post" />
 
     <h2
-      class="article__title text-3xl leading-8 font-bold tracking-tight sm:text-4xl sm:leading-10 my-4"
+      class="news-feed__list-item__title text-3xl leading-8 font-bold tracking-tight sm:text-4xl sm:leading-10 my-4"
     >
-      <g-link class="article__link" :to="post.path">
-        <span v-html="post.title"></span>
+      <g-link class="news-feed__list-item__link" :to="post.path">
+        {{ post.title }}
       </g-link>
     </h2>
 
-    <g-link class="article__link" :to="post.path">
-      <figure>
+    <figure v-if="post.cover_image">
+      <g-link class="news-feed__list-item__link" :to="post.path">
         <g-image
-          v-if="post.cover_image"
           alt="Cover image"
-          class="article__image shadow-lg mb-4 rounded mt-2"
+          class="news-feed__list-item__image shadow-lg mb-4 rounded
+        mt-2"
           :src="
             require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${post.cover_image}`)
           "
@@ -25,16 +25,17 @@
           fit="cover"
           blur="10"
         />
-      </figure>
-    </g-link>
+      </g-link>
+      <figcaption></figcaption>
+    </figure>
 
     <p
-      class="article__description mt-3 text-lg leading-7"
+      class="news-feed__list-item__description mt-3 text-lg leading-7"
       v-html="post.description"
     />
 
-    <PostTags class="article__tags" :post="post" />
-  </article>
+    <PostTags class="news-feed__list-item__tags" :post="post" />
+  </li>
 </template>
 
 <script>
@@ -56,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss">
-.article {
+.news-feed__list-item {
   &__description {
     display: -webkit-box;
     -webkit-line-clamp: 3;

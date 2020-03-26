@@ -1,42 +1,39 @@
 <template>
   <div
-    class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-screen-xl"
+    class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
-    <div class="flex flex-wrap">
-      <div class="main-panel w-full lg:w-3/4">
-        <!-- <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" /> -->
+    <section class="news-feed w-full lg:w-3/4">
+      <h1 v-if="!loadedPosts.length" class="w-full flex-center">
+        Sorry, there's nothing here :(
+      </h1>
+      <h1
+        v-else
+        class="text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto"
+      >
+        Latest Posts
+      </h1>
+      <transition-group
+        name="fade"
+        tag="ul"
+        class="news-feed__list flex-center flex-col"
+      >
+        <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
+      </transition-group>
 
-        <h1 v-if="!loadedPosts.length" class="w-full flex-center">
-          Sorry, there's nothing here :(
-        </h1>
-        <h1
-          class="text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto"
-        >
-          Latest Posts
-        </h1>
-        <transition-group name="fade" tag="div" class="flex-center flex-col">
-          <PostCard
-            v-for="{ node } of loadedPosts"
-            :key="node.id"
-            :post="node"
-          />
-        </transition-group>
+      <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
 
-        <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
-
-        <!-- <ClientOnly>
-      <infinite-loading spinner="spiral" @infinite="infiniteHandler">
-        <div slot="no-more">
-          You've scrolled through all the posts ;)
-        </div>
-        <div slot="no-results">
-          Sorry, no posts yet :(
-        </div>
-      </infinite-loading>
-    </ClientOnly> -->
-      </div>
-      <SideBar />
-    </div>
+      <!-- <ClientOnly>
+          <infinite-loading spinner="spiral" @infinite="infiniteHandler">
+            <div slot="no-more">
+              You've scrolled through all the posts ;)
+            </div>
+            <div slot="no-results">
+              Sorry, no posts yet :(
+            </div>
+          </infinite-loading>
+        </ClientOnly> -->
+    </section>
+    <SideBar />
   </div>
 </template>
 

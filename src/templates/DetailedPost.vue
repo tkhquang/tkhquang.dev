@@ -99,6 +99,10 @@ query Post ($path: String!) {
 }
 </page-query>
 
-<style lang="scss">
-@import "~/assets/styles/_typography";
+<style lang="scss" scoped>
+@import "~/assets/styles/_mixins";
+
+/deep/ .article__content {
+  @include typography;
+}
 </style>

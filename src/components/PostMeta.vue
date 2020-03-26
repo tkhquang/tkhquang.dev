@@ -1,14 +1,17 @@
 <template>
   <div
-    class="article-meta text-red-700 uppercase font-semibold text-md tracking-wider opacity-75"
+    class="text-red-700 uppercase font-semibold text-md tracking-wider opacity-75"
   >
-    <span>
-      <time :datetime="post.created_at">{{ dates.created_at }}</time>
-    </span>
-    <span v-if="dates.updated_at">
-      (Updated: <time :datetime="post.updated_at">{{ dates.updated_at }}</time
-      >)</span
-    >
+    <time :datetime="post.created_at">
+      {{ dates.created_at }}
+    </time>
+    <template v-if="dates.updated_at">
+      (Updated:
+      <time :datetime="post.updated_at">
+        {{ dates.updated_at }}
+      </time>
+      )
+    </template>
   </div>
 </template>
 
