@@ -66,7 +66,7 @@ module.exports = {
     siteDescription: "Ljóss - The portal to a nobody's inner world.",
     siteOwner: {
       name: "Aleks",
-      description: `I don't ride horses, I ride unicorns.`
+      description: `<i>Hello there, I'm Aleks, a Software Engineer  living and working in Ho Chi Minh City, Vietnam. I like helping founders add value to society through technology, I love open source and micro startups.</i>`
     },
     siteTwitter: "@holy_quangtk"
   },
@@ -175,5 +175,11 @@ module.exports = {
     }
   },
   host: "127.0.0.1",
-  port: 8080
+  port: 8080,
+  chainWebpack: config => {
+    config.resolve.alias.set(
+      "@/assets/uploads/images",
+      "@/assets/uploads/images"
+    );
+  }
 };

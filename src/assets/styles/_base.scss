@@ -21,10 +21,7 @@ body {
 }
 
 a:not(.button) {
-  @apply transition-opacity duration-200 text-theme-link;
-	&:hover {
-    @apply opacity-75;
-	}
+  @apply transition-all duration-200 text-theme-link;
 }
 
 img {

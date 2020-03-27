@@ -59,34 +59,13 @@ export default {
         };
       }
     );
-    // Get variables from root
-    const cssVar = (name, value) => {
-      if (process.isClient) {
-        if (name.substr(0, 2) !== "--") {
-          name = "--" + name;
-        }
 
-        if (value) {
-          global.document.documentElement.style.setProperty(name, value);
-        }
-
-        return {
-          [name.replace(/^--/, "")]: global
-            .getComputedStyle(global.document.body)
-            .getPropertyValue(name)
-            .trim()
-        };
-      }
-    };
     return {
       settings: this.$static.metadata,
-      categories: tagsBySlug,
-      cssVars: {
-        ...cssVar("--header-height"),
-        ...cssVar("--background")
-      }
+      categories: tagsBySlug
     };
   },
+
   metaInfo() {
     return this.generateMetaInfo(this.$static.metadata);
   }

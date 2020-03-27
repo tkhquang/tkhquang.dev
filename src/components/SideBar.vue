@@ -1,12 +1,15 @@
 <template>
-  <aside class="w-full lg:w-1/4 mt-8 lg:mt-4 relative">
-    <Author :show-title="true" />
-    <section class="widget-tags"></section>
-  </aside>
+  <section class="sidebar w-full lg:w-1/4 mt-8 lg:mt-4 relative">
+    <div class="shadow-md p-8">
+      <Author :show-title="true" />
+      <section class="widget-tags"></section>
+    </div>
+  </section>
 </template>
 
 <script>
 import Author from "~/components/Author";
+
 export default {
   components: {
     Author

@@ -1,16 +1,16 @@
 <template>
-  <article class="article container mx-auto p-8 lg:w-4/5 w-full">
+  <article class="article container mx-auto lg:w-4/5 w-full">
     <h1
-      class="article__title lg:text-5xl text-3xl font-semibold tracking-tight w-full lg:w-4/5 text-center mx-auto"
+      class="article__title lg:text-5xl text-3xl font-semibold tracking-tight w-full lg:w-4/5 my-12"
     >
       {{ $page.post.title }}
     </h1>
-    <PostMeta class="article__meta" :post="$page.post" />
+    <PostMeta class="article__meta mb-4" :post="$page.post" />
     <figure>
       <g-image
         v-if="$page.post.cover_image"
         alt="Cover image"
-        class="article__image"
+        class="article__image my-4"
         :src="
           require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${$page.post.cover_image}`)
         "
@@ -26,7 +26,10 @@
       <PostTags :post="$page.post" />
     </div>
 
-    <Author class="article-author" :show-title="true" />
+    <Author
+      class="article-author my-12 mx-2 md:mx-6 lg:mx-12"
+      :show-title="true"
+    />
 
     <div class="article-comments">
       <div class="commentbox" />

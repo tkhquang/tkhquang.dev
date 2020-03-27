@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative max-w-xl mx-auto px-4 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
+    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
     <section class="news-feed w-full lg:w-3/4">
       <h1 v-if="!loadedPosts.length" class="w-full flex-center">
@@ -20,7 +20,7 @@
         <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
       </transition-group>
 
-      <Pager :info="$page.allPosts.pageInfo" class="paging-wrapper" />
+      <Pager :info="$page.allPosts.pageInfo" class="pagination-wrapper" />
 
       <!-- <ClientOnly>
           <infinite-loading spinner="spiral" @infinite="infiniteHandler">

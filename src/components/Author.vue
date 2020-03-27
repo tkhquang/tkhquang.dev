@@ -1,23 +1,21 @@
 <template slot-scope="settings">
-  <div class="author w-full flex-center flex-col mx-auto text-center">
+  <div class="author flex-center flex-col text-center">
     <g-image
       :alt="settings.siteOwner.name"
-      :src="
-        require(`!!assets-loader?width=180&height=180&fit=cover&blur=10!~/assets/uploads/images/author.jpg`)
-      "
-      class="author__image rounded-full mb-4"
+      :src="imageUrl"
+      class="author__image rounded-full mb-4 shadow-2xl"
       width="180"
       height="180"
       fit="cover"
       blur="10"
     />
 
-    <h1 v-if="showTitle" class="author__site-title text-2xl">
+    <h1 v-if="showTitle" class="author__site-title text-2xl font-bold mb-4">
       {{ settings.siteOwner.name }}
     </h1>
 
     <div
-      class="author__intro flex-center opacity-75"
+      class="author__intro text-left opacity-75"
       v-html="settings.siteOwner.description"
     />
   </div>
@@ -36,25 +34,11 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    imageUrl() {
+      return require(`!!assets-loader?width=150&height=150&fit=cover&blur=10!~/assets/uploads/images/author.jpg`);
+    }
   }
 };
 </script>
-
-<style lang="scss">
-.author {
-  max-width: 500px;
-  padding: calc(var(--space) / 2) 0;
-
-  &__image {
-    width: 90px;
-    height: 90px;
-  }
-
-  &__links {
-    /* -mt-2 */
-    a {
-      /* mx-2 my-0 */
-    }
-  }
-}
-</style>

@@ -1,24 +1,30 @@
-<template slot-scope="cssVars">
+<template>
   <div class="flex flex-col min-h-screen">
     <div
       id="indicator"
-      class="fixed inset-0 h-5px bg-theme-accent z-20"
+      class="fixed inset-0 h-5px bg-theme-accent z-50"
       :style="`width: ${indicator}%`"
     ></div>
 
-    <div class="banner relative flex-center px-12">
+    <div
+      v-if="!showLogo"
+      class="banner relative flex-center px-12  bg-theme-background border-b"
+    >
       <ParticlesJS class="w-full" />
     </div>
 
     <header
-      class="header container mx-auto flex sticky inset-0 w-full justify-between items-center pt-5px z-50 transition-all duration-300 ease-in-out bg-transparent"
+      class="header flex-center sticky inset-0 w-full px-4 sm:px-6 lg:px-8 pt-5px z-40 transition-all duration-300 ease-in-out bg-theme-background border-b"
       :class="{ 'header--is-scrolled': fab }"
     >
-      <div class="header__left">
-        <Logo :show-logo="showLogo" :fab="fab" @click.native="toTop" />
-        <ToggleTheme class="ml-4" />
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="header__left">
+          <Logo :show-logo="showLogo" :fab="fab" @click.native="toTop" />
+        </div>
+        <div class="header__right">
+          <ToggleTheme class="ml-4" />
+        </div>
       </div>
-      <div class="header__right"></div>
     </header>
     <main class="main-container">
       <slot />
@@ -46,6 +52,8 @@
 </template>
 
 <script>
+import cssVars from "~/utils/mixins/cssVars.js";
+
 import ToggleTheme from "~/components/ToggleTheme.vue";
 import Logo from "~/components/Logo.vue";
 import ParticlesJS from "~/components/ParticlesJS";
@@ -60,35 +68,39 @@ export default {
     Logo,
     ParticlesJS
   },
+
+  mixins: [cssVars],
+
   data: () => ({
     fab: false,
     indicator: 0
   }),
+
   computed: {
     showLogo() {
       return this.$route.path !== "/";
     }
   },
+
   inject: {
     settings: {
       type: Object,
       required: true
-    },
-    cssVars: {
-      type: Object,
-      default: () => ({})
     }
   },
+
   created() {
     if (process.isClient) {
       global.addEventListener("scroll", this.onScroll);
     }
   },
+
   destroyed() {
     if (process.isClient) {
       global.removeEventListener("scroll", this.onScroll);
     }
   },
+
   methods: {
     onScroll(e) {
       if (process.isClient) {
@@ -124,7 +136,7 @@ export default {
   min-height: var(--header-height);
 
   &--is-scrolled {
-    background-color: transparent;
+    //
   }
 
   &__left,

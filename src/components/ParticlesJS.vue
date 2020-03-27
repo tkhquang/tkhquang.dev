@@ -3,16 +3,17 @@
 </template>
 
 <script>
-import EventBus from "~/utils/EventBus";
+import cssVars from "~/utils/mixins/cssVars.js";
 
 const config = {
   DEFAULT_CONFIG: {
     particles: {
       number: {
-        value: 80,
+        value: 40,
+        limit: 60,
         density: {
           enable: true,
-          value_area: 120
+          area: 120
         }
       },
       color: {
@@ -25,7 +26,7 @@ const config = {
           color: "#111111"
         },
         polygon: {
-          nb_sides: 5
+          sides: 5
         },
         image: {
           src: "img/github.svg",
@@ -36,24 +37,24 @@ const config = {
       opacity: {
         value: 0.5,
         random: false,
-        anim: {
+        animation: {
           enable: false,
           speed: 1,
-          opacity_min: 0.1,
+          minimumValue: 0.1,
           sync: false
         }
       },
       size: {
         value: 3,
         random: true,
-        anim: {
+        animation: {
           enable: false,
           speed: 40,
-          size_min: 0.1,
+          minimumValue: 0.1,
           sync: false
         }
       },
-      line_linked: {
+      lineLinked: {
         enable: true,
         distance: 150,
         color: "#FFFFFF",
@@ -66,32 +67,34 @@ const config = {
         direction: "none",
         random: false,
         straight: false,
-        out_mode: "bounce",
-        bounce: true,
+        outMode: "out",
+        collisions: true,
         attract: {
           enable: false,
-          rotateX: 600,
-          rotateY: 1200
+          rotate: {
+            x: 600,
+            y: 1200
+          }
         }
       }
     },
     interactivity: {
-      detect_on: "canvas",
+      detectsOn: "canvas",
       events: {
-        onhover: {
+        onHover: {
           enable: true,
           mode: "grab"
         },
-        onclick: {
+        onClick: {
           enable: true,
-          mode: "repulse"
+          mode: "push"
         },
         resize: true
       },
       modes: {
         grab: {
           distance: 140,
-          line_linked: {
+          lineLinked: {
             opacity: 1
           }
         },
@@ -107,123 +110,67 @@ const config = {
           duration: 0.4
         },
         push: {
-          particles_nb: 2
+          quantity: 2
         },
         remove: {
-          particles_nb: 2
+          quantity: 2
         }
       }
     },
-    retina_detect: true
+    detectsRetina: true
   },
-  MAX_PARTICLES: 60,
-  THEMES: {
-    dark: {
-      color: "#FFFFFF",
-      bgColor: "#111111"
-    },
-    light: {
-      color: "#111111",
-      bgColor: "#FFFFFF"
-    }
-  }
+  MAX_PARTICLES: 60
 };
 
 export default {
   name: "ParticleJS",
 
-  computed: {
-    particleConfig() {
-      const particleConfig = config.DEFAULT_CONFIG;
+  mixins: [cssVars],
 
-      if (window.__theme) {
-        const currentTheme = config.THEMES[window.__theme];
+  watch: {
+    cssVars: {
+      handler(newCssVars) {
+        if (!newCssVars.primary || !newCssVars.accent) {
+          return;
+        }
 
-        particleConfig.particles.color.value = currentTheme.color;
-        particleConfig.particles.line_linked.color = currentTheme.color;
-        particleConfig.particles.shape.stroke.color = currentTheme.bgColor;
-      }
-
-      return particleConfig;
+        this.setParticleColors(newCssVars);
+      },
+      deep: true,
+      immediate: true
     }
   },
+
   mounted() {
     this.initParticlesJS();
-
-    EventBus.$on("toggleTheme", this.onToggleTheme);
   },
 
   methods: {
-    onToggleTheme(theme) {
-      const currentTheme = config.THEMES[theme];
-
-      this.checkParticles();
-
-      const pJS = global.pJSDom[0].pJS;
-      if (pJS) {
-        pJS.particles.color.value = currentTheme.color;
-        pJS.particles.line_linked.color = currentTheme.color;
-        pJS.particles.shape.stroke.color = currentTheme.bgColor;
-
-        pJS.fn.particlesRefresh();
+    setParticleColors(colors) {
+      if (!global.tsParticles) {
+        return;
       }
-    },
-    checkParticles() {
-      if (process.isClient) {
-        if (!global.pJSDom) {
-          this.initParticlesJS();
-          return;
-        }
 
-        if (global.pJSDom.length > 1) {
-          global.pJSDom.splice(1);
-          global.pJSDom[0].pJS.fn.particlesRefresh();
-        }
+      const particles = global.tsParticles.domItem(0);
+
+      if (!particles) {
+        return;
       }
+
+      const options = particles.options;
+
+      options.particles.color.value = colors.primary;
+      options.particles.lineLinked.color = colors.accent;
+      options.particles.shape.stroke.color = colors.primary;
+
+      particles.refresh();
     },
+
     initParticlesJS() {
       if (process.isClient) {
-        if (global.particlesJS) {
-          this.checkParticles();
-          return;
-        }
+        require("tsparticles");
 
-        require("particles.js");
-
-        this.$nextTick(() => {
-          global.particlesJS("particles-js", this.particleConfig);
-
-          this.checkParticles();
-          const pJS = global.pJSDom[0].pJS;
-
-          // Limit the particles number for maintaining performance
-          pJS.fn.modes.pushParticles = function(nb, pos) {
-            pJS.tmp.pushing = true;
-
-            if (pJS.particles.array.length < +config.MAX_PARTICLES) {
-              for (var i = 0; i < nb; i++) {
-                pJS.particles.array.push(
-                  new pJS.fn.particle(
-                    pJS.particles.color,
-                    pJS.particles.opacity.value,
-                    {
-                      x: pos ? pos.pos_x : Math.random() * pJS.canvas.w,
-                      y: pos ? pos.pos_y : Math.random() * pJS.canvas.h
-                    }
-                  )
-                );
-                if (i == nb - 1) {
-                  if (!pJS.particles.move.enable) {
-                    pJS.fn.particlesDraw();
-                  }
-                  pJS.tmp.pushing = false;
-                }
-              }
-              return;
-            }
-            pJS.particles.array.splice(0, +config.MAX_PARTICLES / 2);
-          };
-        });
+        global.tsParticles.load("particles-js", config.DEFAULT_CONFIG);
       }
     }
   }
