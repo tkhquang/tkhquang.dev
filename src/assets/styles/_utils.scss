@@ -2,10 +2,30 @@
   @apply flex justify-center items-center;
 }
 
+.heading {
+  @apply leading-8 font-bold tracking-tight text-theme-primary;
+}
+
+.primary {
+  @apply text-theme-on-primary bg-theme-primary;
+}
+
+.secondary {
+  @apply text-theme-on-secondary bg-theme-secondary;
+}
+
+.background {
+  @apply text-theme-on-background bg-theme-background;
+}
+
+.surface {
+  @apply text-theme-on-surface bg-theme-surface;
+}
+
 .pagination-wrapper {
   @apply w-full inline-flex justify-center items-center pl-0 py-12 rounded-sm;
   & > a {
-    @apply relative flex cursor-pointer float-left px-4 py-2 leading-6 no-underline bg-theme-background text-theme-primary border;
+    @apply relative flex cursor-pointer float-left px-4 py-2 leading-6 no-underline background border;
     &:first-of-type {
       @apply rounded-l;
     }
@@ -14,12 +34,12 @@
     }
     &:hover,
     &:focus {
-      @apply z-10 bg-theme-surface;
+      @apply z-10 secondary;
     }
     &.active,
     &.active:hover,
     &.active:focus {
-      @apply z-20 bg-theme-primary text-theme-background cursor-default outline-none;
+      @apply z-20 primary cursor-default outline-none;
     }
     &.disabled,
     &.disabled:hover,

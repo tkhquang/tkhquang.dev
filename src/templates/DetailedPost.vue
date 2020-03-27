@@ -1,7 +1,7 @@
 <template>
   <article class="article container mx-auto lg:w-4/5 w-full">
     <h1
-      class="article__title lg:text-5xl text-3xl font-semibold tracking-tight w-full lg:w-4/5 my-12"
+      class="article__title heading lg:text-5xl text-3xl w-full lg:w-4/5 my-12"
     >
       {{ $page.post.title }}
     </h1>
@@ -22,9 +22,11 @@
       />
     </figure>
     <div class="article__content" v-html="$page.post.content" />
-    <div class="article__footer">
+    <div class="article__footer mb-12">
       <PostTags :post="$page.post" />
     </div>
+
+    <hr />
 
     <Author
       class="article-author my-12 mx-2 md:mx-6 lg:mx-12"

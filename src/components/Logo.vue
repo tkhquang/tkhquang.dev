@@ -1,7 +1,11 @@
 <template slot-scope="settings">
-  <g-link class="logo flip-animate" :class="fab && 'scroll'" to="/">
+  <g-link
+    class="logo flip-animate font-extrabold uppercase"
+    :class="fab && 'scroll'"
+    to="/"
+  >
     <template v-if="showLogo">
-      <v-icon name="arrow-left-circle" class="w-5 h-5"></v-icon> &nbsp;Back
+      <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon> &nbsp;Back
       to&nbsp;
     </template>
     <span class="logo__text" data-hover="Ljóss">

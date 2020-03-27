@@ -2,7 +2,7 @@
 *,
 *::before,
 *::after {
-  @apply box-border border-theme-border;
+  @apply box-border border-theme-primary;
 }
 
 html, body {
@@ -17,11 +17,11 @@ html {
 }
 
 body {
-  @apply font-sans antialiased leading-6 transition duration-500 bg-theme-background text-theme-primary;
+  @apply font-sans antialiased leading-6 transition duration-500 bg-theme-background text-theme-on-background;
 }
 
 a:not(.button) {
-  @apply transition-all duration-200 text-theme-link;
+  @apply transition-all duration-200;
 }
 
 img {

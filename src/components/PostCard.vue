@@ -3,7 +3,7 @@
     <PostMeta class="news-feed__list-item__meta" :post="post" />
 
     <h2
-      class="news-feed__list-item__title text-3xl leading-8 font-bold tracking-tight sm:text-4xl sm:leading-10 my-4"
+      class="news-feed__list-item__title heading text-3xl sm:text-4xl sm:leading-10 my-4 hover:opacity-75"
     >
       <g-link class="news-feed__list-item__link" :to="post.path">
         {{ post.title }}
@@ -56,7 +56,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .news-feed__list-item {
   &__description {
     display: -webkit-box;

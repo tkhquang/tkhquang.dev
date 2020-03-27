@@ -23,10 +23,14 @@ export default {
     setCssVariables() {
       this.cssVars = {
         ...this.getCssVariable("--header-height"),
-        ...this.getCssVariable("--background"),
-        ...this.getCssVariable("--accent"),
         ...this.getCssVariable("--primary"),
-        ...this.getCssVariable("--secondary")
+        ...this.getCssVariable("--secondary"),
+        ...this.getCssVariable("--background"),
+        ...this.getCssVariable("--surface"),
+        ...this.getCssVariable("--on-primary"),
+        ...this.getCssVariable("--on-secondary"),
+        ...this.getCssVariable("--on-background"),
+        ...this.getCssVariable("--on-surface")
       };
     },
 

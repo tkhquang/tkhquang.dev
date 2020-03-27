@@ -11,13 +11,13 @@ module.exports = {
       colors: {
         theme: {
           primary: "var(--primary)",
+          "on-primary": "var(--on-primary)",
           secondary: "var(--secondary)",
+          "on-secondary": "var(--on-secondary)",
           surface: "var(--surface)",
+          "on-surface": "var(--on-surface)",
           background: "var(--background)",
-          error: "var(--error)",
-          link: "var(--link)",
-          accent: "var(--accent)",
-          border: "var(--border)",
+          "on-background": "var(--on-background)",
           code: "var(--code)"
         }
       },

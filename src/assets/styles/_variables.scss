@@ -8,15 +8,20 @@
 @mixin color-variables($theme) {
   $list:
     "primary",
+    "on-primary",
     "secondary",
+    "on-secondary",
     "surface",
+    "on-surface",
     "background",
-    "error",
-    "link",
-    "accent";
-  @for $i from 1 through length($list) {
-    --#{nth($list, $i)}: var(--#{nth($list, $i)}-#{$theme});
+    "on-background"
+  ;
+  @each $var in $list {
+    --#{$var}: var(--#{$var}-#{$theme});
   }
+  // @for $i from 1 through length($list) {
+  //   --#{nth($list, $i)}: var(--#{nth($list, $i)}-#{$theme});
+  // }
 }
 
 :root {
@@ -24,38 +29,46 @@
     Base variables
     Won't be used directly in any case
   */
-  --primary-light: #2a4365;
-  --primary-dark: #e2e8f0;
 
-  --secondary-light: rgb(163, 196, 235);
-  --secondary-dark: rgb(22, 73, 133);
+  --red-hue: 360;
+  --blue-hue: 240;
+  --green-hue: 120;
 
-  --surface-light: rgb(22, 73, 133);
-  --surface-dark: rgb(22, 73, 133);
+  --main-hue : 220;
 
-  --background-light: #ffffff;
-  --background-dark: #18283f;
+  // Light Theme
+  --background-light: hsl(var(--main-hue), 50%, 95%);
+  --on-background-light: hsl(var(--main-hue), 50%, 30%);
 
-  --error-light: #ff0000;
-  --error-dark: #ff0000;
+  --primary-light: hsl(var(--main-hue), 50%, 50%);
+  --on-primary-light: hsl(var(--main-hue), 50%, 90%);
 
-  --link-light: #{lighten(#2a4365, 10%)};
-  --link-dark: #{darken(#e2e8f0, 10%)};
+  --secondary-light: hsl(var(--main-hue), 93%, 88%);
+  --on-secondary-light: hsl(var(--main-hue), 50%, 30%);
 
-  --accent-light: #0851b6;
-  --accent-dark: #0851b6;
+  --surface-light: hsl(var(--main-hue), 50%, 90%);
+  --on-surface-light: hsl(var(--main-hue), 50%, 30%);
+
+  // Dark Theme
+  --background-dark: hsl(var(--main-hue), 50%, 20%);
+  --on-background-dark: hsl(var(--main-hue), 50%, 80%);
+
+  --primary-dark: hsl(var(--main-hue), 50%, 70%);
+  --on-primary-dark: hsl(var(--main-hue), 50%, 10%);
+
+  --secondary-dark: hsl(var(--main-hue), 50%, 30%);
+  --on-secondary-dark: hsl(var(--main-hue), 20%, 85%);
+
+  --surface-dark: hsl(var(--main-hue), 50%, 25%);
+  --on-surface-dark: hsl(var(--main-hue), 50%, 85%);
 }
 
 body {
   @include color-variables("dark");
-
   &[data-theme="light"] {
     @include color-variables("light");
   }
 
-  --border: var(--accent);
-
   --code: rgba(0, 0, 0, .3);
-
   --header-height: 60px;
 }

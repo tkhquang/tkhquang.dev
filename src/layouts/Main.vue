@@ -2,19 +2,19 @@
   <div class="flex flex-col min-h-screen">
     <div
       id="indicator"
-      class="fixed inset-0 h-5px bg-theme-accent z-50"
+      class="fixed inset-0 h-5px z-50 primary"
       :style="`width: ${indicator}%`"
     ></div>
 
     <div
       v-if="!showLogo"
-      class="banner relative flex-center px-12  bg-theme-background border-b"
+      class="banner relative flex-center px-12 background border-b"
     >
       <ParticlesJS class="w-full" />
     </div>
 
     <header
-      class="header flex-center sticky inset-0 w-full px-4 sm:px-6 lg:px-8 pt-5px z-40 transition-all duration-300 ease-in-out bg-theme-background border-b"
+      class="header flex-center sticky inset-0 w-full px-4 sm:px-6 lg:px-8 pt-5px border-b z-40 transition-all duration-300 ease-in-out background"
       :class="{ 'header--is-scrolled': fab }"
     >
       <div class="container mx-auto flex justify-between items-center">
@@ -91,7 +91,7 @@ export default {
 
   created() {
     if (process.isClient) {
-      global.addEventListener("scroll", this.onScroll);
+      global.addEventListener("scroll", this.onScroll, { passive: true });
     }
   },
 
@@ -127,7 +127,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #particles-js {
   height: calc(var(--header-height) * 2);
 }
@@ -144,9 +144,5 @@ export default {
     display: flex;
     align-items: center;
   }
-}
-
-.nav__link {
-  margin-left: 20px;
 }
 </style>

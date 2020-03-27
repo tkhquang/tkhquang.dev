@@ -17,7 +17,7 @@ $functionColor: #DD4A68;
 $regexColor: #ee9900;
 
 pre {
-  @apply p-12 mb-8 shadow-inner border-4 bg-theme-code border border-theme-border;
+  @apply p-12 mb-8 shadow-inner border-4 bg-theme-code border;
 }
 
 code {

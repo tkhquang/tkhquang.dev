@@ -2,7 +2,7 @@
   <button
     role="button"
     aria-label="Toggle dark/light"
-    class="toggle-theme"
+    class="toggle-theme bg-transparent border-none cursor-pointer hover:opacity-75 focus:outline-none"
     @click.prevent="toggleTheme"
   >
     <svg
@@ -71,17 +71,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.toggle-theme {
-  background-color: transparent;
-  border: 0;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-  &:focus {
-    outline: none;
-  }
-}
-</style>

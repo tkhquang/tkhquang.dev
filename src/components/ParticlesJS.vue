@@ -4,6 +4,7 @@
 
 <script>
 import cssVars from "~/utils/mixins/cssVars.js";
+import * as helpers from "~/utils/helpers";
 
 const config = {
   DEFAULT_CONFIG: {
@@ -130,7 +131,7 @@ export default {
   watch: {
     cssVars: {
       handler(newCssVars) {
-        if (!newCssVars.primary || !newCssVars.accent) {
+        if (!newCssVars["on-surface"] || !newCssVars.surface) {
           return;
         }
 
@@ -151,6 +152,11 @@ export default {
         return;
       }
 
+      const currentTheme = {
+        primary: helpers.hslStringToHex(colors.primary),
+        surface: helpers.hslStringToHex(colors.surface)
+      };
+
       const particles = global.tsParticles.domItem(0);
 
       if (!particles) {
@@ -159,9 +165,9 @@ export default {
 
       const options = particles.options;
 
-      options.particles.color.value = colors.primary;
-      options.particles.lineLinked.color = colors.accent;
-      options.particles.shape.stroke.color = colors.primary;
+      options.particles.color.value = currentTheme.primary;
+      options.particles.lineLinked.color = currentTheme.primary;
+      options.particles.shape.stroke.color = currentTheme.surface;
 
       particles.refresh();
     },
@@ -176,7 +182,3 @@ export default {
   }
 };
 </script>
-
-<style>
-/* style goes here */
-</style>
