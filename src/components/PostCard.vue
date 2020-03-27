@@ -30,7 +30,7 @@
     </figure>
 
     <p
-      class="news-feed__list-item__description mt-3 text-lg leading-7"
+      class="news-feed__list-item__description v-html mt-3 text-lg leading-7"
       v-html="post.description"
     />
 

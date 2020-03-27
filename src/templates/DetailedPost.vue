@@ -21,7 +21,7 @@
         blur="10"
       />
     </figure>
-    <div class="article__content" v-html="$page.post.content" />
+    <div class="article__content v-html" v-html="$page.post.content" />
     <div class="article__footer mb-12">
       <PostTags :post="$page.post" />
     </div>
@@ -107,7 +107,7 @@ query Post ($path: String!) {
 <style lang="scss" scoped>
 @import "~/assets/styles/_mixins";
 
-/deep/ .article__content {
+.article /deep/ .v-html {
   @include typography;
 }
 </style>

@@ -175,11 +175,5 @@ module.exports = {
     }
   },
   host: "127.0.0.1",
-  port: 8080,
-  chainWebpack: config => {
-    config.resolve.alias.set(
-      "@/assets/uploads/images",
-      "@/assets/uploads/images"
-    );
-  }
+  port: 8080
 };

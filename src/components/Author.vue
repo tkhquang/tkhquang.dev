@@ -15,7 +15,7 @@
     </h1>
 
     <div
-      class="author__intro text-left opacity-75"
+      class="author__intro v-html text-left opacity-75"
       v-html="settings.siteOwner.description"
     />
   </div>
