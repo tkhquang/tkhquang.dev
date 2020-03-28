@@ -3,22 +3,38 @@
     class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
     <section class="news-feed w-full lg:w-3/4">
-      <h1 v-if="!loadedPosts.length" class="w-full flex-center">
+      <h1
+        v-if="!loadedPosts.length"
+        class="w-full flex-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 mt-6"
+      >
         Sorry, there's nothing here :(
       </h1>
-      <h1
-        v-else
-        class="text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto"
-      >
-        Latest Posts
-      </h1>
-      <transition-group
-        name="fade"
-        tag="ul"
-        class="news-feed__list flex-center flex-col"
-      >
-        <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
-      </transition-group>
+
+      <template v-else>
+        <h1
+          class="text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto"
+        >
+          Latest Posts
+        </h1>
+        <transition-group
+          name="fade"
+          tag="ul"
+          class="news-feed__list flex-center flex-col"
+        >
+          <PostCard
+            v-for="{ node } of loadedPosts"
+            :key="node.id"
+            :post="node"
+          />
+        </transition-group>
+
+        <h1
+          v-if="$page.allPosts.pageInfo.isLast"
+          class="w-full flex-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto mt-6"
+        >
+          End of Results
+        </h1>
+      </template>
 
       <Pager :info="$page.allPosts.pageInfo" class="pagination-wrapper" />
 
@@ -43,6 +59,7 @@
       pageInfo {
         totalPages
         currentPage
+        isLast
       }
       edges {
         node {

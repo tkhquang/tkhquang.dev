@@ -1,13 +1,13 @@
 <template slot-scope="categories">
-  <nav class="py-4 flex-center w-2/3 mx-auto">
-    <label for="category" class="font-bold w-1/4 text-right mr-4">
+  <nav class="py-4 flex items-center mx-auto lg:w-4/5">
+    <label for="category" class="font-bold text-left mr-4 uppercase">
       Filter:
     </label>
     <select
       id="category"
       v-model="selected"
       name="category"
-      class="bg-blue-900 h-10 w-3/4"
+      class="bg-blue-900 h-10 px-4 outline-none"
       @change="onChange"
     >
       <option
@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       // To be improved in the future, Bruteforce for now
-      selected: this.$route.path.replace(/\/\d+(\/|.*)$/, "/")
+      selected: this.$route.path.replace(/(\/\d+(\/|.*)|\/?)$/, "/")
     };
   },
   inject: {
@@ -64,5 +64,8 @@ export default {
 </script>
 
 <style lang="scss">
+select:focus {
+  outline-color: transparent;
+}
 // Styles
 </style>

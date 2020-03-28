@@ -20,10 +20,6 @@
   }
 }
 
-// @each $name, $color in $colors {
-//   --#{$name}: #{$color};
-// }
-
 :root {
   /*
     Base variables
@@ -81,6 +77,6 @@ body {
     @include color-variables("light");
   }
 
-  --code: rgba(0, 0, 0, .3);
+  --code: rgba(0, 0, 0, 0.1);
   --header-height: 60px;
 }

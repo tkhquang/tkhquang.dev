@@ -1,16 +1,48 @@
 <template>
-  <div>
-    <Author :show-title="true" />
+  <div
+    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
+  >
+    <section class="news-feed w-full lg:w-3/4">
+      <FilterBar />
+      <h1
+        v-if="!loadedPosts.length"
+        class="w-full flex-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 mt-6"
+      >
+        Sorry, there's nothing here :(
+      </h1>
 
-    <FilterBar />
+      <template v-else>
+        <h1
+          class="text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto"
+        >
+          Latest Posts
+        </h1>
+        <transition-group
+          name="fade"
+          tag="ul"
+          class="news-feed__list flex-center flex-col"
+        >
+          <PostCard
+            v-for="{ node } of loadedPosts"
+            :key="node.id"
+            :post="node"
+          />
+        </transition-group>
 
-    <Pager :info="$page.allPostsByCategory.pageInfo" class="paging-wrapper" />
+        <h1
+          v-if="$page.allPostsByCategory.pageInfo.isLast"
+          class="w-full flex-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5 mx-auto mt-6"
+        >
+          End of Results
+        </h1>
+      </template>
 
-    <transition-group name="fade" tag="div" class="flex-center flex-col">
-      <PostCard v-for="{ node } of loadedPosts" :key="node.id" :post="node" />
-    </transition-group>
-
-    <Pager :info="$page.allPostsByCategory.pageInfo" class="paging-wrapper" />
+      <Pager
+        :info="$page.allPostsByCategory.pageInfo"
+        class="pagination-wrapper"
+      />
+    </section>
+    <SideBar />
   </div>
 </template>
 
@@ -19,7 +51,8 @@
     allPostsByCategory: allPost(filter: { published: { eq: true }, category: { eq: $slug }}, sortBy: "date", order: DESC, perPage: 5, page: $page) @paginate {
       pageInfo {
         totalPages
-        currentPage
+        currentPage,
+        isLast
       }
       edges {
         node {
@@ -46,13 +79,13 @@ import { Pager } from "gridsome";
 
 import seo from "~/utils/mixins/seo.js";
 
-import Author from "~/components/Author";
+import SideBar from "~/components/SideBar";
 import PostCard from "~/components/PostCard.vue";
 import FilterBar from "~/components/FilterBar.vue";
 
 export default {
   components: {
-    Author,
+    SideBar,
     PostCard,
     FilterBar,
     Pager
