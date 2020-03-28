@@ -11,8 +11,13 @@ export default {
     this.observer = new MutationObserver(this.setCssVariables);
     this.observer.observe(global.document.body, {
       attributes: true,
-      attributeFilter: ["data-theme"]
+      attributeFilter: ["data-theme", "style"]
     });
+
+    // const mediaQuery = global.matchMedia("(min-width:640px)");
+    // mediaQuery.onchange = () => {
+    //   this.setCssVariables();
+    // };
   },
 
   beforeDestroy() {

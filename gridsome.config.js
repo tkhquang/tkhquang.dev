@@ -66,7 +66,7 @@ module.exports = {
     siteDescription: "Ljóss - The portal to a nobody's inner world.",
     siteOwner: {
       name: "Aleks",
-      description: `<i>Hello there, I'm Aleks, a Software Engineer  living and working in Ho Chi Minh City, Vietnam. I like helping founders add value to society through technology, I love open source and micro startups.</i>`
+      description: `<i>Hello there, I'm Aleks, a Software Engineer  living and working in Ho Chi Minh City, Vietnam. I like helping founders add value to society through technology, I love open-source products and micro startups.</i>`
     },
     siteTwitter: "@holy_quangtk"
   },

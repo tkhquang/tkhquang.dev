@@ -3,7 +3,7 @@
     <g-image
       :alt="settings.siteOwner.name"
       :src="imageUrl"
-      class="author__image rounded-full mb-4 shadow-2xl"
+      class="author__image rounded-full mb-4 shadow-lg"
       width="180"
       height="180"
       fit="cover"

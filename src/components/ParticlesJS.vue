@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { isEmpty } from "lodash";
+
 import cssVars from "~/utils/mixins/cssVars.js";
 
 const config = {
@@ -130,11 +132,7 @@ export default {
   watch: {
     cssVars: {
       handler(newCssVars) {
-        if (
-          !newCssVars.primary ||
-          !newCssVars.surface ||
-          !newCssVars["tone-1"]
-        ) {
+        if (isEmpty(newCssVars)) {
           return;
         }
 
@@ -168,12 +166,6 @@ export default {
         return;
       }
 
-      const currentTheme = {
-        "tone-1": colors["tone-1"],
-        primary: colors.primary,
-        surface: colors.surface
-      };
-
       const particles = global.tsParticles.domItem(0);
 
       if (!particles) {
@@ -182,9 +174,9 @@ export default {
 
       const options = particles.options;
 
-      options.particles.color.value = currentTheme["tone-1"];
-      options.particles.lineLinked.color = currentTheme.primary;
-      options.particles.shape.stroke.color = currentTheme.surface;
+      options.particles.color.value = colors["on-background"];
+      options.particles.lineLinked.color = colors["tone-1"];
+      options.particles.shape.stroke.color = colors.surface;
 
       particles.refresh();
     },
@@ -192,6 +184,7 @@ export default {
     initParticlesJS() {
       if (process.isClient) {
         require("tsparticles");
+        require("pathseg");
 
         global.tsParticles.load("particles-js", config.DEFAULT_CONFIG);
       }

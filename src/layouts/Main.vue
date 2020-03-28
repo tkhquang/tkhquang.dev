@@ -1,52 +1,55 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <div
-      id="indicator"
-      class="fixed inset-0 h-5px z-50 primary"
-      :style="`width: ${indicator}%`"
-    ></div>
-
-    <div
-      v-if="!showLogo"
-      class="banner relative flex-center px-12 background border-b"
-    >
+    <div v-if="isHomePage" class="banner relative flex-center px-12 background">
       <ParticlesJS class="w-full" />
     </div>
 
+    <div
+      v-if="/^\/posts\/.*/.test($route.path)"
+      id="indicator"
+      class="fixed left-0 h-5px z-50 primary"
+      :style="`width: ${indicator}%`"
+    />
+
     <header
-      class="header flex-center sticky inset-0 w-full px-4 sm:px-6 lg:px-8 pt-5px border-b z-40 transition-all duration-300 ease-in-out background"
-      :class="{ 'header--is-scrolled': fab }"
+      class="header flex-center sticky inset-0 w-full px-4 sm:px-6 lg:px-8 z-40 transition-all duration-300 ease-in-out background"
+      :class="{ 'header--is-scrolled': isScrolled }"
     >
       <div class="container mx-auto flex justify-between items-center">
         <div class="header__left">
-          <Logo :show-logo="showLogo" :fab="fab" @click.native="toTop" />
+          <Logo :show-back-button="!isHomePage" @click.native="toTop" />
         </div>
         <div class="header__right">
           <ToggleTheme class="ml-4" />
         </div>
       </div>
     </header>
-    <main class="main-container">
+
+    <main class="main-container relative flex-1 flex flex-col">
       <slot />
     </main>
+
     <div
-      v-show="fab"
-      class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-10"
+      v-show="isScrolled"
+      class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-10 hover:opacity-75"
       title="Scroll To Top"
       @scroll="onScroll"
       @click="toTop"
     >
-      <v-icon name="arrow-up-circle"></v-icon>
+      <v-icon name="arrow-up-circle" class="w-10 h-10"></v-icon>
     </div>
+
     <footer class="footer text-center py-4 mt-auto flex-center">
-      Copyright © {{ new Date().getFullYear() }}&nbsp;-&nbsp;<a
+      Copyright © {{ new Date().getFullYear() }}&nbsp;-&nbsp;
+      <a
         href="https://github.com/tkhquang"
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center justify-center"
       >
-        Aleks Quang Trinh&nbsp;<v-icon name="github" class="w-4 h-4"></v-icon
-      ></a>
+        Aleks Quang Trinh&nbsp;
+        <v-icon name="github" class="w-4 h-4"></v-icon>
+      </a>
     </footer>
   </div>
 </template>
@@ -71,14 +74,16 @@ export default {
 
   mixins: [cssVars],
 
-  data: () => ({
-    fab: false,
-    indicator: 0
-  }),
+  data() {
+    return {
+      isScrolled: false,
+      indicator: 0
+    };
+  },
 
   computed: {
-    showLogo() {
-      return this.$route.path !== "/";
+    isHomePage() {
+      return /^\/(\d.+)?$/.test(this.$route.path);
     }
   },
 
@@ -105,11 +110,11 @@ export default {
     onScroll(e) {
       if (process.isClient) {
         const top = global.pageYOffset || e.target.scrollTop || 0;
-        this.fab = top > parseInt(this.cssVars["header-height"]) * 2;
+        this.isScrolled = top > parseInt(this.cssVars["header-height"]) * 2;
 
         const scrollPos = global.scrollY;
         const winHeight = global.innerHeight;
-        const docHeight = global.document.body.scrollHeight;
+        const docHeight = global.document.documentElement.scrollHeight;
         const perc = (100 * scrollPos) / (docHeight - winHeight);
         if (perc > 100) {
           this.indicator = 100;
@@ -133,8 +138,13 @@ export default {
   height: calc(var(--header-height) * 2);
 }
 
+#indicator {
+  top: var(--header-height);
+}
+
 .header {
   min-height: var(--header-height);
+  box-shadow: 0px 3px 3px rgba($color: #000000, $alpha: 0.1);
 
   &--is-scrolled {
     //

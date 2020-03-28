@@ -1,10 +1,9 @@
 <template slot-scope="settings">
   <g-link
-    class="logo flip-animate font-extrabold uppercase"
-    :class="fab && 'scroll'"
+    class="logo flip-animate font-extrabold uppercase focus:outline-none"
     to="/"
   >
-    <template v-if="showLogo">
+    <template v-if="showBackButton">
       <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon> &nbsp;Back
       to&nbsp;
     </template>
@@ -23,11 +22,7 @@ export default {
     }
   },
   props: {
-    fab: {
-      type: Boolean,
-      default: false
-    },
-    showLogo: {
+    showBackButton: {
       type: Boolean,
       default: false
     }
@@ -75,9 +70,7 @@ export default {
     text-align: center;
   }
 
-  &:hover span,
-  // &:focus span,
-  &.scroll span {
+  &:hover span {
     transform: rotateX(90deg) translateY(-22px);
     &::before {
       color: rgb(210, 73, 54);

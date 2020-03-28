@@ -20,6 +20,7 @@
         fit="cover"
         blur="10"
       />
+      <figcaption></figcaption>
     </figure>
     <div class="article__content v-html" v-html="$page.post.content" />
     <div class="article__footer mb-12">
@@ -29,7 +30,7 @@
     <hr />
 
     <Author
-      class="article-author my-12 mx-2 md:mx-6 lg:mx-12"
+      class="article-author my-12 px-6 md:px-8 lg:px-12 py-8 md:py-12 shadow-md surface rounded"
       :show-title="true"
     />
 
