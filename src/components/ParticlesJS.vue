@@ -4,7 +4,6 @@
 
 <script>
 import cssVars from "~/utils/mixins/cssVars.js";
-import * as helpers from "~/utils/helpers";
 
 const config = {
   DEFAULT_CONFIG: {
@@ -170,9 +169,9 @@ export default {
       }
 
       const currentTheme = {
-        "tone-1": helpers.hslStringToHex(colors["tone-1"]),
-        primary: helpers.hslStringToHex(colors.primary),
-        surface: helpers.hslStringToHex(colors.surface)
+        "tone-1": colors["tone-1"],
+        primary: colors.primary,
+        surface: colors.surface
       };
 
       const particles = global.tsParticles.domItem(0);

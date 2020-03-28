@@ -20,6 +20,10 @@
   }
 }
 
+// @each $name, $color in $colors {
+//   --#{$name}: #{$color};
+// }
+
 :root {
   /*
     Base variables
@@ -27,45 +31,46 @@
   */
 
   // For reference
-  // --red-hue: 360;
-  // --blue-hue: 240;
-  // --green-hue: 120;
+  // $red-hue: 360;
+  // $blue-hue: 240;
+  // $green-hue: 120;
 
   // Everything is theming based on these main hue values
-  --main-hue-1: 220;
-  --main-hue-2: 200;
-  --main-hue-3: 360;
+  $main-hue-1: 220;
+  $main-hue-2: 200;
+  $main-hue-3: 360;
 
-  // The original colors
-  --tone-1: hsl(var(--main-hue-1), 100%, 50%);
-  --tone-2: hsl(var(--main-hue-2), 100%, 50%);
-  --tone-3: hsl(var(--main-hue-3), 100%, 50%);
+  $colors: (
 
-  // Light Theme
-  --background-light: hsl(var(--main-hue-1), 50%, 95%);
-  --on-background-light: hsl(var(--main-hue-1), 50%, 30%);
+    // The original colors
+    tone-1: hsl($main-hue-1, 100%, 50%),
+    tone-2: hsl($main-hue-2, 100%, 50%),
+    tone-3: hsl($main-hue-3, 100%, 50%),
 
-  --primary-light: hsl(var(--main-hue-1), 50%, 50%);
-  --on-primary-light: hsl(var(--main-hue-1), 50%, 90%);
+    // Light Theme
+    background-light: hsl($main-hue-1, 50%, 95%),
+    on-background-light: hsl($main-hue-1, 50%, 30%),
+    primary-light: hsl($main-hue-1, 50%, 50%),
+    on-primary-light: hsl($main-hue-1, 50%, 90%),
+    secondary-light: hsl($main-hue-1, 93%, 88%),
+    on-secondary-light: hsl($main-hue-1, 50%, 30%),
+    surface-light: hsl($main-hue-1, 50%, 90%),
+    on-surface-light: hsl($main-hue-1, 50%, 30%),
 
-  --secondary-light: hsl(var(--main-hue-1), 93%, 88%);
-  --on-secondary-light: hsl(var(--main-hue-1), 50%, 30%);
+    // Dark Theme
+    background-dark: hsl($main-hue-1, 50%, 20%),
+    on-background-dark: hsl($main-hue-1, 50%, 80%),
+    primary-dark: hsl($main-hue-1, 50%, 70%),
+    on-primary-dark: hsl($main-hue-1, 50%, 10%),
+    secondary-dark: hsl($main-hue-1, 50%, 30%),
+    on-secondary-dark: hsl($main-hue-1, 20%, 85%),
+    surface-dark: hsl($main-hue-1, 50%, 25%),
+    on-surface-dark: hsl($main-hue-1, 50%, 85%)
+  );
 
-  --surface-light: hsl(var(--main-hue-1), 50%, 90%);
-  --on-surface-light: hsl(var(--main-hue-1), 50%, 30%);
-
-  // Dark Theme
-  --background-dark: hsl(var(--main-hue-1), 50%, 20%);
-  --on-background-dark: hsl(var(--main-hue-1), 50%, 80%);
-
-  --primary-dark: hsl(var(--main-hue-1), 50%, 70%);
-  --on-primary-dark: hsl(var(--main-hue-1), 50%, 10%);
-
-  --secondary-dark: hsl(var(--main-hue-1), 50%, 30%);
-  --on-secondary-dark: hsl(var(--main-hue-1), 20%, 85%);
-
-  --surface-dark: hsl(var(--main-hue-1), 50%, 25%);
-  --on-surface-dark: hsl(var(--main-hue-1), 50%, 85%);
+  @each $name, $color in $colors {
+    --#{$name}: #{$color};
+  }
 }
 
 body {

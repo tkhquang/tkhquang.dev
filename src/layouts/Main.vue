@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen">
     <div
       id="indicator"
-      class="fixed inset-0 h-5px z-50"
+      class="fixed inset-0 h-5px z-50 primary"
       :style="`width: ${indicator}%`"
     ></div>
 
