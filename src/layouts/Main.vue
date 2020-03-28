@@ -2,7 +2,7 @@
   <div class="flex flex-col min-h-screen">
     <div
       id="indicator"
-      class="fixed inset-0 h-5px z-50 primary"
+      class="fixed inset-0 h-5px z-50"
       :style="`width: ${indicator}%`"
     ></div>
 
@@ -91,7 +91,7 @@ export default {
 
   created() {
     if (process.isClient) {
-      global.addEventListener("scroll", this.onScroll, { passive: true });
+      global.addEventListener("scroll", this.onScroll);
     }
   },
 
@@ -118,6 +118,7 @@ export default {
         this.indicator = perc;
       }
     },
+
     toTop() {
       if (process.isClient) {
         global.scrollTo({ top: 0, behavior: "smooth" });

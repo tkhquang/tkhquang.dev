@@ -10,6 +10,9 @@ module.exports = {
       },
       colors: {
         theme: {
+          "tone-1": "var(--tone-1)",
+          "tone-2": "var(--tone-2)",
+          "tone-3": "var(--tone-3)",
           primary: "var(--primary)",
           "on-primary": "var(--on-primary)",
           secondary: "var(--secondary)",

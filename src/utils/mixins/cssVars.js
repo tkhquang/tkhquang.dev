@@ -23,6 +23,9 @@ export default {
     setCssVariables() {
       this.cssVars = {
         ...this.getCssVariable("--header-height"),
+        ...this.getCssVariable("--tone-1"),
+        ...this.getCssVariable("--tone-2"),
+        ...this.getCssVariable("--tone-3"),
         ...this.getCssVariable("--primary"),
         ...this.getCssVariable("--secondary"),
         ...this.getCssVariable("--background"),

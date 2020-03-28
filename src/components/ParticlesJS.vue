@@ -131,7 +131,11 @@ export default {
   watch: {
     cssVars: {
       handler(newCssVars) {
-        if (!newCssVars["on-surface"] || !newCssVars.surface) {
+        if (
+          !newCssVars.primary ||
+          !newCssVars.surface ||
+          !newCssVars["tone-1"]
+        ) {
           return;
         }
 
@@ -146,6 +150,19 @@ export default {
     this.initParticlesJS();
   },
 
+  beforeDestroy() {
+    if (!global.tsParticles) {
+      return;
+    }
+    const particles = global.tsParticles.domItem(0);
+
+    if (!particles) {
+      return;
+    }
+
+    particles.destroy();
+  },
+
   methods: {
     setParticleColors(colors) {
       if (!global.tsParticles) {
@@ -153,6 +170,7 @@ export default {
       }
 
       const currentTheme = {
+        "tone-1": helpers.hslStringToHex(colors["tone-1"]),
         primary: helpers.hslStringToHex(colors.primary),
         surface: helpers.hslStringToHex(colors.surface)
       };
@@ -165,7 +183,7 @@ export default {
 
       const options = particles.options;
 
-      options.particles.color.value = currentTheme.primary;
+      options.particles.color.value = currentTheme["tone-1"];
       options.particles.lineLinked.color = currentTheme.primary;
       options.particles.shape.stroke.color = currentTheme.surface;
 
