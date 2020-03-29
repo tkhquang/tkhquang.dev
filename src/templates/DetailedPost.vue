@@ -34,40 +34,43 @@
       :show-title="true"
     />
 
-    <div class="article-comments">
-      <div class="commentbox" />
+    <div class="article-comments surface p-2 w-full md:px-6 lg:px-12">
+      <CommentBox :key="commentBoxKey" />
     </div>
   </article>
 </template>
 
 <script>
-import commentBox from "commentbox.io";
-
+import EventBus from "~/utils/EventBus";
 import seo from "~/utils/mixins/seo.js";
 
-import PostMeta from "~/components/PostMeta";
-import PostTags from "~/components/PostTags";
-import Author from "~/components/Author.vue";
+import PostMeta from "~/components/common/PostMeta";
+import PostTags from "~/components/common/PostTags";
+import Author from "~/components/common/Author.vue";
+
+import CommentBox from "~/components/CommentBox";
 
 export default {
   components: {
     Author,
     PostMeta,
-    PostTags
+    PostTags,
+    CommentBox
   },
+
   mixins: [seo],
+
+  data() {
+    return {
+      commentBoxKey: 0
+    };
+  },
   mounted() {
-    this.removeCommentBox = commentBox(
-      `${process.env.GRIDSOME_COMMENTBOX_PROJECT_ID}`,
-      {
-        textColor: "white",
-        subtextColor: "#dddddd"
-      }
-    );
+    EventBus.$on("toggleTheme", () => {
+      this.commentBoxKey += 1;
+    });
   },
-  beforeDestroy() {
-    this.removeCommentBox();
-  },
+
   metaInfo() {
     const {
       title: siteTitle,

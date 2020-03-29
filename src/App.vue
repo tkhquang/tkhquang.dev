@@ -1,12 +1,9 @@
-// This will let you keep your header, footer on all pages and add page
-transitions.
-
 <template>
-  <MainLayout>
+  <DefaultLayout>
     <transition name="fade">
       <router-view />
     </transition>
-  </MainLayout>
+  </DefaultLayout>
 </template>
 
 <static-query>
@@ -40,11 +37,11 @@ query index {
 <script>
 import seo from "~/utils/mixins/seo.js";
 
-import MainLayout from "~/layouts/Main.vue";
+import DefaultLayout from "~/layouts/Default";
 
 export default {
   components: {
-    MainLayout
+    DefaultLayout
   },
   mixins: [seo],
   provide() {
@@ -71,20 +68,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-  transition-property: opacity;
-  transition-duration: 0.5s;
-}
-
-.fade-enter-active {
-  transition-delay: 0.5s;
-}
-
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-</style>

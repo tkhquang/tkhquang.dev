@@ -1,14 +1,18 @@
-
 @import "tailwindcss/base";
-/* any of my own custom base styles go here */
+/* Any of my own custom base styles go here */
 @import "variables";
 @import "base";
 
 @import "tailwindcss/components";
-/* any of my own custom component styles go here */
-@import "code";
+/* Any of my own custom component styles go here */
+@import "mixins";
 
 @import "tailwindcss/utilities";
-/* any of my own custom utilities go here */
+/* Any of my own custom utilities go here */
 @import "utils";
-@import "mixins";
+@import "code";
+@import "pagination";
+
+// Third party plugins
+@import "prismjs/plugins/command-line/prism-command-line.css";
+@import "prismjs/plugins/line-numbers/prism-line-numbers.css";

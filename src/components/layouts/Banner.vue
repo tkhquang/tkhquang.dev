@@ -1,5 +1,5 @@
 <template>
-  <div id="particles-js"></div>
+  <div id="banner" class="banner relative flex-center px-12 background" />
 </template>
 
 <script>
@@ -125,8 +125,6 @@ const config = {
 };
 
 export default {
-  name: "ParticleJS",
-
   mixins: [cssVars],
 
   watch: {
@@ -184,9 +182,9 @@ export default {
     initParticlesJS() {
       if (process.isClient) {
         require("tsparticles");
-        require("pathseg");
+        // require("pathseg");
 
-        global.tsParticles.load("particles-js", config.DEFAULT_CONFIG);
+        global.tsParticles.load("banner", config.DEFAULT_CONFIG);
       }
     }
   }
