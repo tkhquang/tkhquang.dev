@@ -1,3 +1,18 @@
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.5s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.5s;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
 .flex-center {
   @apply flex justify-center items-center;
 }
@@ -20,31 +35,4 @@
 
 .surface {
   @apply text-theme-on-surface bg-theme-surface;
-}
-
-.pagination-wrapper {
-  @apply w-full inline-flex justify-center items-center pl-0 py-12 rounded-sm;
-  & > a {
-    @apply relative flex cursor-pointer float-left px-4 py-2 leading-6 no-underline background border;
-    &:first-of-type {
-      @apply rounded-l;
-    }
-    &:last-of-type {
-      @apply rounded-r;
-    }
-    &:hover,
-    &:focus {
-      @apply z-10 secondary;
-    }
-    &.active,
-    &.active:hover,
-    &.active:focus {
-      @apply z-20 primary cursor-default outline-none;
-    }
-    &.disabled,
-    &.disabled:hover,
-    &.disabled:focus {
-      @apply cursor-not-allowed;
-    }
-  }
 }

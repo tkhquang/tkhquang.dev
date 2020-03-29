@@ -64,8 +64,5 @@ export default {
 </script>
 
 <style lang="scss">
-select:focus {
-  outline-color: transparent;
-}
 // Styles
 </style>

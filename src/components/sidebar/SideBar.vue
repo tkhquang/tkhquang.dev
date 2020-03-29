@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Author from "~/components/Author";
+import Author from "~/components/common/Author";
 
 export default {
   components: {

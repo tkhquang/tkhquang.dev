@@ -2,12 +2,13 @@
   <g-link
     class="logo flip-animate font-extrabold uppercase focus:outline-none"
     to="/"
+    @click.native="scrollToTop"
   >
-    <template v-if="showBackButton">
+    <template v-if="!isHomePage">
       <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon> &nbsp;Back
       to&nbsp;
     </template>
-    <span class="logo__text" data-hover="Ljóss">
+    <span class="logo__text" :data-hover="settings.siteTitle">
       Home
     </span>
   </g-link>
@@ -21,16 +22,23 @@ export default {
       required: true
     }
   },
-  props: {
-    showBackButton: {
-      type: Boolean,
-      default: false
+  computed: {
+    isHomePage() {
+      return /^\/(\d.+)?$/.test(this.$route.path);
+    }
+  },
+  methods: {
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .logo {
   display: inline-flex;
   justify-content: center;
