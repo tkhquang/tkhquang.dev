@@ -63,7 +63,9 @@ export default {
 
   created() {
     this.handleScroll = debounce(this.onScroll, 10);
-    window.addEventListener("scroll", this.handleScroll);
+    if (process.isClient) {
+      window.addEventListener("scroll", this.handleScroll);
+    }
   },
 
   destroyed() {
