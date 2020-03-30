@@ -10,7 +10,7 @@
       blur="10"
     />
 
-    <h1 v-if="showTitle" class="author__site-title text-2xl font-bold mb-4">
+    <h1 class="author__site-title text-2xl font-bold mb-4">
       {{ settings.siteOwner.name }}
     </h1>
 
@@ -23,12 +23,6 @@
 
 <script>
 export default {
-  props: {
-    showTitle: {
-      type: Boolean,
-      default: false
-    }
-  },
   inject: {
     settings: {
       type: Object,
