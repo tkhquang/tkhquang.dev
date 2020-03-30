@@ -1,6 +1,6 @@
 <template slot-scope="settings">
   <g-link
-    class="logo flip-animate font-extrabold uppercase focus:outline-none"
+    class="logo flip-animate font-extrabold uppercase focus:outline-none select-none"
     to="/"
     @click.native="scrollToTop"
   >
@@ -29,6 +29,9 @@ export default {
   },
   methods: {
     scrollToTop() {
+      if (!this.isHomePage) {
+        return;
+      }
       window.scrollTo({
         top: 0,
         behavior: "smooth"

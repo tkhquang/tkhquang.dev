@@ -1,7 +1,7 @@
 <template>
   <section class="sidebar w-full lg:w-1/4 mt-8 lg:mt-4 relative">
     <div class="shadow-md p-8 surface rounded">
-      <Author :show-title="true" />
+      <Author />
     </div>
   </section>
 </template>

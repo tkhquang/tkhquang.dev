@@ -31,7 +31,6 @@
 
     <Author
       class="article-author my-12 px-6 md:px-8 lg:px-12 py-8 md:py-12 shadow-md surface rounded"
-      :show-title="true"
     />
 
     <div class="article-comments surface p-2 w-full md:px-6 lg:px-12">
@@ -66,6 +65,7 @@ export default {
     };
   },
   mounted() {
+    // Force CommentBox to update everytime theme is changed
     EventBus.$on("toggleTheme", () => {
       this.commentBoxKey += 1;
     });
