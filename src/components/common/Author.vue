@@ -4,8 +4,8 @@
       :alt="settings.siteOwner.name"
       :src="imageUrl"
       class="author__image rounded-full mb-4 shadow-lg"
-      width="180"
-      height="180"
+      width="150"
+      height="150"
       fit="cover"
       blur="10"
     />

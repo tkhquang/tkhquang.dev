@@ -1,5 +1,5 @@
 <template>
-  <article class="article container mx-auto lg:w-4/5 w-full">
+  <article class="article container mx-auto lg:w-4/5 w-full max-w-screen-md">
     <h1
       class="article__title heading lg:text-5xl text-3xl w-full lg:w-4/5 my-12"
     >
@@ -33,7 +33,7 @@
       class="article-author my-12 px-6 md:px-8 lg:px-12 py-8 md:py-12 shadow-md surface rounded"
     />
 
-    <div class="article-comments surface p-2 w-full md:px-6 lg:px-12">
+    <div class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded">
       <CommentBox :key="commentBoxKey" />
     </div>
   </article>
