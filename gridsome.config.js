@@ -4,44 +4,6 @@
 // Changes here requires a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
 
-const purgecss = require("@fullhuman/postcss-purgecss")({
-  content: [
-    "./src/**/*.vue",
-    "./src/**/*.js",
-    "./src/**/*.jsx",
-    "./src/**/*.html",
-    "./src/**/*.pug",
-    "./src/**/*.md"
-  ],
-  whitelist: [
-    // Force chomp
-    "html",
-    "body"
-  ].concat(
-    require("purgecss-whitelister")([
-      // Force chomp
-      "./src/assets/styles/*.scss"
-    ])
-  ),
-  whitelistPatterns: [
-    // Force chomp
-    /^g-image*/,
-    /^gridsome*/,
-    /^language-*/,
-    /^line-numbers*/,
-    /^infinite-*/,
-    /^v-icon*/
-  ],
-  whitelistPatternsChildren: [
-    // Force chomp
-    /^gridsome*/,
-    /^command-line-prompt*/
-  ],
-  defaultExtractor: content => {
-    return content.match(/[\w-/:]+(?<!:)/g) || [];
-  }
-});
-
 module.exports = {
   /*
     As using netlify proxing
@@ -165,8 +127,7 @@ module.exports = {
         plugins: [
           require("postcss-import"),
           require("tailwindcss")("./tailwind.config.js"),
-          require("autoprefixer"),
-          ...(process.env.NODE_ENV === "production" ? [purgecss] : [])
+          require("autoprefixer")
         ]
       },
       scss: {
