@@ -8,7 +8,7 @@
 </template>
 
 <page-query>
-  query allPostsByCategory ($page: Int, $slug: String!) {
+  query allPostsByCategory ($page: Int, $slug: ID) {
     allPostsByCategory: allPost
       (
         filter: {

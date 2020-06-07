@@ -181,3 +181,6 @@ src/assets/uploads/remote/*
 
 # But please keep the folder
 !src/assets/uploads/remote/.gitkeep
+
+# Will be generated automatically while building
+static/admin/config.yml

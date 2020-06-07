@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { tsParticles } from "tsparticles";
 import { isEmpty } from "lodash";
 
 import cssVars from "~/utils/mixins/cssVars.js";
@@ -15,7 +16,7 @@ const config = {
         limit: 60,
         density: {
           enable: true,
-          area: 120
+          area: 200
         }
       },
       color: {
@@ -119,9 +120,9 @@ const config = {
         }
       }
     },
-    detectsRetina: true
-  },
-  MAX_PARTICLES: 60
+    detectsRetina: true,
+    fpsLimit: 60
+  }
 };
 
 export default {
@@ -146,10 +147,10 @@ export default {
   },
 
   beforeDestroy() {
-    if (!global.tsParticles) {
+    if (!tsParticles) {
       return;
     }
-    const particles = global.tsParticles.domItem(0);
+    const particles = tsParticles.domItem(0);
 
     if (!particles) {
       return;
@@ -160,11 +161,11 @@ export default {
 
   methods: {
     setParticleColors(colors) {
-      if (!global.tsParticles) {
+      if (!tsParticles) {
         return;
       }
 
-      const particles = global.tsParticles.domItem(0);
+      const particles = tsParticles.domItem(0);
 
       if (!particles) {
         return;
@@ -173,7 +174,7 @@ export default {
       const options = particles.options;
 
       options.particles.color.value = colors["on-background"];
-      options.particles.lineLinked.color = colors["tone-1"];
+      options.particles.lineLinked.color = colors["primary"];
       options.particles.shape.stroke.color = colors.surface;
 
       particles.refresh();
@@ -181,10 +182,7 @@ export default {
 
     initParticlesJS() {
       if (process.isClient) {
-        require("tsparticles");
-        // require("pathseg");
-
-        global.tsParticles.load("banner", config.DEFAULT_CONFIG);
+        tsParticles.load("banner", config.DEFAULT_CONFIG);
       }
     }
   }

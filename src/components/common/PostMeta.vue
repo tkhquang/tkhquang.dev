@@ -1,6 +1,6 @@
 <template>
   <div
-    class="text-red-700 uppercase font-semibold text-md tracking-wider opacity-75"
+    class="text-theme-error uppercase font-semibold text-md tracking-wider opacity-75"
   >
     <time :datetime="post.created_at">
       {{ dates.created_at }}
@@ -27,7 +27,7 @@ export default {
   },
   computed: {
     dates() {
-      const formatDate = rawDate => {
+      const formatDate = (rawDate) => {
         if (!dayjs(rawDate).isValid()) {
           return null;
         }
