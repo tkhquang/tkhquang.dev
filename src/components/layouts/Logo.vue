@@ -1,4 +1,4 @@
-<template slot-scope="settings">
+<template>
   <g-link
     class="logo flip-animate font-extrabold uppercase focus:outline-none select-none"
     to="/"
@@ -8,7 +8,7 @@
       <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon> &nbsp;Back
       to&nbsp;
     </template>
-    <span class="logo__text" :data-hover="settings.siteTitle">
+    <span class="logo__text" :data-hover="$settings.siteTitle">
       Home
     </span>
   </g-link>
@@ -17,7 +17,7 @@
 <script>
 export default {
   inject: {
-    settings: {
+    $settings: {
       type: Object,
       required: true
     }

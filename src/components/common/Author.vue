@@ -1,7 +1,7 @@
-<template slot-scope="settings">
+<template>
   <div class="author flex-center flex-col text-center">
     <g-image
-      :alt="settings.siteOwner.name"
+      :alt="$settings.siteOwner.name"
       :src="imageUrl"
       class="author__image rounded-full mb-4 shadow-lg"
       width="150"
@@ -11,12 +11,12 @@
     />
 
     <h1 class="author__site-title text-2xl font-bold mb-4">
-      {{ settings.siteOwner.name }}
+      {{ $settings.siteOwner.name }}
     </h1>
 
     <div
       class="author__intro v-html text-left opacity-75"
-      v-html="settings.siteOwner.description"
+      v-html="$settings.siteOwner.description"
     />
   </div>
 </template>
@@ -24,7 +24,7 @@
 <script>
 export default {
   inject: {
-    settings: {
+    $settings: {
       type: Object,
       required: true
     }

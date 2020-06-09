@@ -57,8 +57,8 @@ export default {
       }
     );
     return {
-      settings: this.$static.metadata,
-      categories: tagsBySlug
+      $settings: this.$static.metadata,
+      $categories: tagsBySlug
     };
   },
 

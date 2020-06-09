@@ -1,4 +1,4 @@
-<template slot-scope="categories">
+<template>
   <ul class="tag-list inline-flex mt-4">
     <li v-for="tag in post.tags" :key="tag.id" class="tag-list__item">
       <g-link

@@ -6,8 +6,6 @@
 import { tsParticles } from "tsparticles";
 import { isEmpty } from "lodash";
 
-import cssVars from "~/utils/mixins/cssVars.js";
-
 const config = {
   DEFAULT_CONFIG: {
     particles: {
@@ -126,7 +124,18 @@ const config = {
 };
 
 export default {
-  mixins: [cssVars],
+  inject: {
+    $getCssVars: {
+      type: Object,
+      required: true
+    }
+  },
+
+  computed: {
+    cssVars() {
+      return this.$getCssVars();
+    }
+  },
 
   watch: {
     cssVars: {

@@ -1,4 +1,4 @@
-<template slot-scope="categories">
+<template>
   <nav class="py-4 flex items-center mx-auto lg:w-4/5">
     <label for="category" class="font-bold text-left mr-4 uppercase">
       Filter:
@@ -31,7 +31,7 @@ export default {
     };
   },
   inject: {
-    categories: {
+    $categories: {
       type: Object,
       required: true
     }
@@ -45,7 +45,7 @@ export default {
           slug: "all",
           path: "/"
         },
-        ...this.categories
+        ...this.$categories
       };
     }
   },
