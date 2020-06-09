@@ -3,11 +3,15 @@
 </template>
 
 <script>
-import cssVars from "~/utils/mixins/cssVars.js";
 import commentBox from "commentbox.io";
 
 export default {
-  mixins: [cssVars],
+  inject: {
+    $getCssVars: {
+      type: Object,
+      required: true
+    }
+  },
 
   data() {
     return {
@@ -15,8 +19,16 @@ export default {
     };
   },
 
+  computed: {
+    cssVars() {
+      return this.$getCssVars();
+    }
+  },
+
   mounted() {
-    this.initCommentBox();
+    this.$nextTick(() => {
+      this.initCommentBox();
+    });
   },
 
   beforeDestroy() {
