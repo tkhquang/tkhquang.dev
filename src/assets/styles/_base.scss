@@ -27,3 +27,14 @@ a:not(.button) {
 img {
   @apply max-w-full;
 }
+
+hr {
+  @apply w-full mx-0 border-0 h-px; 
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--on-background) 30%,
+    var(--on-background) 70%,
+    transparent 100%
+  );
+}

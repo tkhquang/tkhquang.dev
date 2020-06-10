@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import EventBus from "~/utils/EventBus";
-import seo from "~/utils/mixins/seo.js";
+import EventBus from "~/vue-utils/EventBus";
+import seo from "~/vue-utils/mixins/seo.js";
 
 import PostMeta from "~/components/common/PostMeta";
 import PostTags from "~/components/common/PostTags";

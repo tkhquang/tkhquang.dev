@@ -1,0 +1,7 @@
+[dev]
+  command = "yarn dev"
+  functions = "functions"
+
+[build]
+  command = "yarn build"
+  functions = "functions"

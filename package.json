@@ -25,6 +25,7 @@
     "qs": "^6.9.4",
     "slugify": "^1.4.0",
     "tailwindcss": "^1.4.6",
+    "tailwindcss-gradients": "^3.0.0",
     "tsparticles": "^1.15.1",
     "typeface-merriweather": "^0.0.72",
     "typeface-montserrat": "^0.0.75",

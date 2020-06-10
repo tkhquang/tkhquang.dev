@@ -64,10 +64,12 @@ module.exports = {
           background: "var(--background)",
           "on-background": "var(--on-background)",
           error: "var(--error)",
+          success: "var(--success)",
           code: "var(--code)"
         }
       },
       spacing: {
+        "2px": "2px",
         "4px": "4px",
         "5px": "5px",
         "header-height": "var(--header-height)"
@@ -691,7 +693,11 @@ module.exports = {
       "500": "500ms",
       "700": "700ms",
       "1000": "1000ms"
-    }
+    },
+    // For tailwindcss-gradients
+    linearGradientColors: (theme) => theme("colors"),
+    radialGradientColors: (theme) => theme("colors"),
+    conicGradientColors: (theme) => theme("colors")
   },
   variants: {
     accessibility: ["responsive", "focus"],
@@ -784,5 +790,8 @@ module.exports = {
     transitionDuration: ["responsive"]
   },
   corePlugins: {},
-  plugins: []
+  plugins: [
+    // Force chomp
+    require("tailwindcss-gradients")
+  ]
 };

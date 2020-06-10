@@ -153,6 +153,9 @@ export default {
 
   mounted() {
     this.initParticlesJS();
+    this.$nextTick(() => {
+      this.setParticleColors(this.cssVars);
+    });
   },
 
   beforeDestroy() {
@@ -182,9 +185,8 @@ export default {
 
       const options = particles.options;
 
-      options.particles.color.value = colors["on-background"];
-      options.particles.lineLinked.color = colors["primary"];
-      options.particles.shape.stroke.color = colors.surface;
+      options.particles.color.value = colors["primary"];
+      options.particles.lineLinked.color = colors["secondary"];
 
       particles.refresh();
     },
