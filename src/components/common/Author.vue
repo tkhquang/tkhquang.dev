@@ -15,22 +15,14 @@
     </h1>
 
     <div
-      class="author__intro v-html text-left opacity-75"
+      class="author__intro v-html italic text-left opacity-75"
       v-html="$settings.siteOwner.description"
     />
-
-    <hr class="my-5" />
-    <Subscribe />
   </div>
 </template>
 
 <script>
-import Subscribe from "~/components/common/Subscribe";
-
 export default {
-  components: {
-    Subscribe
-  },
   inject: {
     $settings: {
       type: Object,
@@ -46,5 +38,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//
+.author /deep/ .v-html {
+  p {
+    display: inline;
+    background-color: var(--surface);
+  }
+}
 </style>

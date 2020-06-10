@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p class="mx-auto w-4/5">
+    <p class="mx-auto">
       <strong>
         Get rekt!
       </strong>
       I'll send new posts to your inbox.
     </p>
     <form
-      class="email-form w-full pt-5 px-5 flex flex-wrap flex-center text-center"
+      class="email-form w-full pt-5 flex flex-wrap flex-center text-center"
       name="newsletter"
       method="POST"
       data-netlify="true"
@@ -24,16 +24,13 @@
         <input
           id="email"
           v-model="email"
-          class="block h-10 px-2 min-w-full bg-theme-background text-theme-on-background mb-5"
+          class="input h-10 px-2 min-w-full mb-5"
           type="email"
           name="email"
           placeholder="your-email@address.ex"
           required
         />
-        <button
-          type="submit"
-          class="block h-10 px-2 bg-theme-secondary text-theme-on-secondary shadow-md border-2 border-theme-secondary hover:bg-theme-primary hover:text-theme-on-primary rounded transition-all duration-200"
-        >
+        <button type="submit" class="button">
           Subscribe
         </button>
       </template>
@@ -51,11 +48,7 @@
         <p class="my-2">
           {{ errorMessage }}
         </p>
-        <button
-          type="button"
-          class="block h-10 px-2 bg-theme-secondary text-theme-on-secondary shadow-md border-2 border-theme-secondary hover:bg-theme-primary hover:text-theme-on-primary rounded transition-all duration-200 mx-auto"
-          @click="retryHandler"
-        >
+        <button type="button" class="button mx-auto" @click="retryHandler">
           Retry
         </button>
       </div>
