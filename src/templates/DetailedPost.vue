@@ -1,8 +1,6 @@
 <template>
   <article class="article container mx-auto lg:w-4/5 w-full max-w-screen-md">
-    <h1
-      class="article__title heading lg:text-5xl text-3xl w-full lg:w-4/5 my-12"
-    >
+    <h1 class="article__title heading lg:text-5xl text-3xl w-full my-12">
       {{ $page.post.title }}
     </h1>
     <PostMeta class="article__meta mb-4" :post="$page.post" />

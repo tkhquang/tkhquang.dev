@@ -1,5 +1,5 @@
 <template>
-  <li class="news-feed__list-item py-8 lg:w-4/5 w-full">
+  <li class="news-feed__list-item pt-8 lg:w-4/5 w-full">
     <PostMeta class="news-feed__list-item__meta" :post="post" />
 
     <h2
@@ -34,7 +34,7 @@
     />
 
     <PostTags class="news-feed__list-item__tags" :post="post" />
-    <hr class="my-6" />
+    <hr class="mt-8" />
   </li>
 </template>
 
