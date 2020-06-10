@@ -36,7 +36,8 @@ export default {
 
   provide() {
     return {
-      $getCssVars: () => this.cssVars
+      $getCssVars: () => this.cssVars,
+      $getYOffset: () => this.yOffsett
     };
   },
 
@@ -44,7 +45,8 @@ export default {
     return {
       cssVars: {},
       isScrolled: false,
-      indicatorWidth: 0
+      indicatorWidth: 0,
+      yOffsett: 0
     };
   },
 
@@ -103,9 +105,11 @@ export default {
       const perc = (100 * scrollPos) / (docHeight - winHeight);
       if (perc > 100) {
         this.indicatorWidth = 100;
+        this.yOffsett = 100;
         return;
       }
       this.indicatorWidth = perc;
+      this.yOffsett = perc;
     },
 
     setCssVariables() {
