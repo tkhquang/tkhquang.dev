@@ -1,5 +1,5 @@
 <template>
-  <li class="news-feed__list-item border-b py-8 lg:w-4/5 w-full">
+  <li class="news-feed__list-item py-8 lg:w-4/5 w-full">
     <PostMeta class="news-feed__list-item__meta" :post="post" />
 
     <h2
@@ -14,8 +14,7 @@
       <g-link class="news-feed__list-item__link" :to="post.path">
         <g-image
           alt="Cover image"
-          class="news-feed__list-item__image shadow-lg mb-4 rounded
-        mt-2"
+          class="news-feed__list-item__image shadow-lg mb-4 rounded mt-2"
           :src="
             require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${post.cover_image}`)
           "
@@ -35,6 +34,7 @@
     />
 
     <PostTags class="news-feed__list-item__tags" :post="post" />
+    <hr class="my-6" />
   </li>
 </template>
 

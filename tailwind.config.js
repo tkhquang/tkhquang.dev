@@ -64,10 +64,12 @@ module.exports = {
           background: "var(--background)",
           "on-background": "var(--on-background)",
           error: "var(--error)",
+          success: "var(--success)",
           code: "var(--code)"
         }
       },
       spacing: {
+        "2px": "2px",
         "4px": "4px",
         "5px": "5px",
         "header-height": "var(--header-height)"
@@ -784,5 +786,7 @@ module.exports = {
     transitionDuration: ["responsive"]
   },
   corePlugins: {},
-  plugins: []
+  plugins: [
+    // Force chomp
+  ]
 };

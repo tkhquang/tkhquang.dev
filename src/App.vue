@@ -35,7 +35,7 @@ query index {
 </static-query>
 
 <script>
-import seo from "~/utils/mixins/seo.js";
+import seo from "~/vue-utils/mixins/seo.js";
 
 import DefaultLayout from "~/layouts/Default";
 

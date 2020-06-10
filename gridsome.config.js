@@ -28,7 +28,7 @@ module.exports = {
     siteDescription: "Ljóss - The portal to a nobody's inner world.",
     siteOwner: {
       name: "Aleks",
-      description: `<i>Hello there, I'm Aleks, a Software Engineer  living and working in Ho Chi Minh City, Vietnam. I like helping founders add value to society through technology, I love open-source products and micro startups.</i>`
+      description: `<i>Hello there, I'm Aleks, a Software Engineer who loves open-source products and micro startups. This blog is just a place for me to post random stuff about things I like, interesting stories, and sometimes technical problems.</i>`
     },
     siteTwitter: "@holy_quangtk"
   },

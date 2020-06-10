@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import EventBus from "~/utils/EventBus";
+import EventBus from "~/vue-utils/EventBus";
 
 export default {
   data() {

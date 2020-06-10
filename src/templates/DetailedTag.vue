@@ -55,7 +55,7 @@
 </page-query>
 
 <script>
-import seo from "~/utils/mixins/seo.js";
+import seo from "~/vue-utils/mixins/seo.js";
 
 import FeedList from "~/components/newsfeed/FeedList";
 import SideBar from "~/components/sidebar/SideBar";
