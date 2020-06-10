@@ -85,8 +85,6 @@ export default {
     },
 
     handleSubmit() {
-      this.submitted = true;
-
       request({
         url: "/",
         method: "POST",
@@ -98,19 +96,19 @@ export default {
           email: this.email
         })
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.status = "success";
         })
         .catch((err) => {
           const error = errHandler(err);
-          console.log(errHandler(err));
+          console.error(errHandler(err));
           if (error.message) {
             this.errorMessage = error.message;
           }
           this.status = "error";
         });
     },
+
     retryHandler() {
       this.status = "";
       this.errorMessage = "";

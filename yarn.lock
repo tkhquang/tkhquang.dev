@@ -5374,7 +5374,7 @@ graphql-compose@^7.3.0:
     graphql-type-json "^0.3.1"
     object-path "^0.11.4"
 
-graphql-playground-html@1.6.22:
+graphql-playground-html@^1.6.22:
   version "1.6.22"
   resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.22.tgz#c33c2625c9631a6564723b87c85871f16977b9a4"
   integrity sha512-pqDJ8N8tI1LFORLZTDC+gByuqiBfbirjgMKprFxRbCmFylnIRj2AyUQUhTPQkm08n8pWj8w5T0wWCVtbE323ag==
@@ -9659,7 +9659,7 @@ qs@6.7.0:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
-qs@^6.5.2, qs@^6.9.4:
+qs@^6.5.2:
   version "6.9.4"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
   integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
@@ -11853,14 +11853,6 @@ table@^5.2.3, table@^5.4.6:
     lodash "^4.17.14"
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
-
-tailwindcss-gradients@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/tailwindcss-gradients/-/tailwindcss-gradients-3.0.0.tgz#aabcff1ec9afd7d09ffc2af82e8e4113412bd088"
-  integrity sha512-EM1OreQggjWW6WuaiHKy02j1ZxgQIEp2zj0cruf4XMZ1RoCBpb1a14i/CiTE9rjl+APk57oCb3l+kbsJy4W4EA==
-  dependencies:
-    color "^3.1.2"
-    lodash "^4.17.15"
 
 tailwindcss@^1.4.6:
   version "1.4.6"

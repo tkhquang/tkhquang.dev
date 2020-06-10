@@ -693,11 +693,7 @@ module.exports = {
       "500": "500ms",
       "700": "700ms",
       "1000": "1000ms"
-    },
-    // For tailwindcss-gradients
-    linearGradientColors: (theme) => theme("colors"),
-    radialGradientColors: (theme) => theme("colors"),
-    conicGradientColors: (theme) => theme("colors")
+    }
   },
   variants: {
     accessibility: ["responsive", "focus"],
@@ -792,6 +788,5 @@ module.exports = {
   corePlugins: {},
   plugins: [
     // Force chomp
-    require("tailwindcss-gradients")
   ]
 };
