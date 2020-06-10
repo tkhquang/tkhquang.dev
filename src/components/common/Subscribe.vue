@@ -1,13 +1,13 @@
 <template>
   <div>
-    <p class="mx-auto w-4/5">
+    <p class="mx-auto">
       <strong>
         Get rekt!
       </strong>
       I'll send new posts to your inbox.
     </p>
     <form
-      class="email-form w-full pt-5 px-5 flex flex-wrap flex-center text-center"
+      class="email-form w-full pt-5 flex flex-wrap flex-center text-center"
       name="newsletter"
       method="POST"
       data-netlify="true"
