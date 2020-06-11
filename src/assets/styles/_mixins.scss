@@ -42,6 +42,32 @@ default values of TailwindCSS
     margin-bottom: 1.25em;
   }
 
+  a {
+    font-weight: bold;
+    color: (var(--primary));
+    position: relative;
+
+    &[target="_blank"]::after {
+      content: " ";
+      background-image: url('~@/assets/resources/svg/external-link.svg');
+      background-size: 1em;
+      background-size: contain;
+      margin-left: 3px;
+      width: 1em;
+      height: 1em;
+      display: inline-block;
+      vertical-align: text-top;
+    }
+    &:hover,
+    &:active {
+      text-decoration: underline;
+      filter: brightness(85%);
+    }
+    &:visited {
+      filter: brightness(85%);
+    }
+  }
+
   h1, h2, h3, h4, h5 {
     transition: color .6s;
     margin: 2.75rem 0 1rem;

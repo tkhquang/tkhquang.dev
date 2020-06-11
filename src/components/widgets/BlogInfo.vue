@@ -1,12 +1,14 @@
 <template>
-  <section class="side-bar w-full lg:w-1/4 mt-8 lg:mt-4 relative">
+  <section class="blog-info relative z-10">
     <div
-      class="side-bar__content shadow-md p-8 text-on-surface rounded relative z-10"
+      class="blog-info__content shadow-md p-8 text-on-surface rounded relative"
     >
-      <Author />
-      <hr class="my-5" />
-      <Subscribe />
-      <CircuitBoard class="side-bar__background absolute inset-0 surface" />
+      <div class="">
+        <Author />
+        <hr class="my-5" />
+        <Subscribe />
+      </div>
+      <CircuitBoard class="absolute inset-0 surface z-bg" />
     </div>
   </section>
 </template>
@@ -26,9 +28,8 @@ export default {
 </script>
 
 <style lang="scss">
-.side-bar {
-  &__background {
-    z-index: -1;
+.blog-info {
+  &__content {
     box-shadow: inset 0px 0px 10px 10px var(--surface);
   }
 }

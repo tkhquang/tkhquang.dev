@@ -3,7 +3,7 @@
     class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
     <FeedList :page-data="$page.allPostsByCategory" :show-filter-bar="true" />
-    <SideBar />
+    <BlogInfo />
   </div>
 </template>
 
@@ -57,12 +57,12 @@
 import seo from "~/vue-utils/mixins/seo.js";
 
 import FeedList from "~/components/newsfeed/FeedList";
-import SideBar from "~/components/sidebar/SideBar";
+import BlogInfo from "~/components/widgets/BlogInfo";
 
 export default {
   components: {
     FeedList,
-    SideBar
+    BlogInfo
   },
   mixins: [seo],
 

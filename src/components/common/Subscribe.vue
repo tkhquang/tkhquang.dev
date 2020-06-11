@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="mx-auto">
+    <p class="mx-auto text-center">
       <strong>
         Get rekt!
       </strong>

@@ -27,9 +27,7 @@
 
     <hr />
 
-    <Author
-      class="article-author my-12 px-6 md:px-8 lg:px-12 py-8 md:py-12 shadow-md surface rounded"
-    />
+    <BlogInfo class="w-full my-12" />
 
     <div class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded">
       <CommentBox :key="commentBoxKey" />
@@ -43,13 +41,13 @@ import seo from "~/vue-utils/mixins/seo.js";
 
 import PostMeta from "~/components/common/PostMeta";
 import PostTags from "~/components/common/PostTags";
-import Author from "~/components/common/Author.vue";
+import BlogInfo from "~/components/widgets/BlogInfo";
 
 import CommentBox from "~/components/CommentBox";
 
 export default {
   components: {
-    Author,
+    BlogInfo,
     PostMeta,
     PostTags,
     CommentBox

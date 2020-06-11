@@ -73,6 +73,10 @@ module.exports = {
         "4px": "4px",
         "5px": "5px",
         "header-height": "var(--header-height)"
+      },
+      zIndex: {
+        bg: "-1",
+        "1": "1"
       }
     },
     screens: {
