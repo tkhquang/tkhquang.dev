@@ -88,11 +88,14 @@ export default {
 
           this.status = "error";
 
+          if (error.response.data && error.response.data.message) {
+            this.errorMessage = error.response.data.message;
+
+            return;
+          }
+
           if (error.message) {
             this.errorMessage = error.message;
-          }
-          if (error.response.data) {
-            this.errorMessage = error.response.data.message;
           }
         });
     },
