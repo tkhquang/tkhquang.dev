@@ -15,9 +15,7 @@
         <g-image
           alt="Cover image"
           class="news-feed__list-item__image shadow-lg mb-4 rounded mt-2"
-          :src="
-            require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${post.cover_image}`)
-          "
+          :src="coverImage"
           width="1280"
           height="720"
           quality="80"
@@ -51,6 +49,14 @@ export default {
     post: {
       type: Object,
       required: true
+    }
+  },
+  computed: {
+    coverImage() {
+      if (!this.post.cover_image) {
+        return "";
+      }
+      return require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${this.post.cover_image}`);
     }
   }
 };

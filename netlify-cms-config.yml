@@ -3,7 +3,7 @@ backend:
   repo: tkhquang/tkhquang-blog
   branch: NETLIFY_CMS_BRANCH # Will be replaced during build with the current branch
 media_folder: "/src/assets/uploads/images"
-public_folder: "/src/assets/uploads/images"
+public_folder: "/uploads/images"
 collections:
   - name: "posts"
     label: "Posts"

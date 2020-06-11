@@ -6,7 +6,7 @@ published: true
 category: gaming
 tags:
   - The Witcher 3
-cover_image: /src/assets/uploads/images/292030_screenshots_20200508031808_1.jpg
+cover_image: /uploads/images/witcher-3.jpg
 description: "The Witcher 3: Wild Hunt, one of the things I have been up to lately."
 ---
 At the end of March, I made the first post of this blog to imply that I would be available for blogging as I had more free time to spend, which seemed so much promising. However, the second post in this blog was made in June which was more than 2 months after my first statement.
