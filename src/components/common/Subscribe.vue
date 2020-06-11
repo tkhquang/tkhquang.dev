@@ -69,36 +69,31 @@ export default {
   },
 
   methods: {
-    encode(data) {
-      return Object.keys(data)
-        .map(
-          (key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-        )
-        .join("&");
-    },
-
     handleSubmit() {
       request({
-        url: "/submission-created",
+        url: "/.netlify/functions/newsletter-signup",
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data: this.encode({
+        data: {
           "form-name": "newsletter",
           email: this.email
-        })
+        }
       })
-        .then(() => {
+        .then(({ data }) => {
+          console.log("Signup Data: ", data);
           this.status = "success";
         })
         .catch((err) => {
           const error = errHandler(err);
           console.error(errHandler(err));
+
+          this.status = "error";
+
           if (error.message) {
             this.errorMessage = error.message;
           }
-          this.status = "error";
+          if (error.response.data) {
+            this.errorMessage = error.response.data.message;
+          }
         });
     },
 

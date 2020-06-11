@@ -4,16 +4,19 @@ const errHandler = (err, filter = null, space = "\t") => {
     obj[key] = err[key];
   });
 
-  return JSON.parse(
-    JSON.stringify(
-      {
-        ...obj,
-        stack: err.stack
-      },
-      filter,
-      space
-    )
-  );
+  return {
+    ...JSON.parse(
+      JSON.stringify(
+        {
+          ...obj
+        },
+        filter,
+        space
+      )
+    ),
+    stack: err.stack,
+    response: err.response
+  };
 };
 
 export default errHandler;

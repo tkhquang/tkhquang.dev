@@ -155,8 +155,6 @@ temp/
 **/*.backup.*
 **/*.back.*
 
-node_modules
-
 *.sublime*
 
 psd
@@ -184,3 +182,7 @@ src/assets/uploads/remote/*
 
 # Will be generated automatically while building
 static/admin/config.yml
+
+# Netlify functions
+functions/
+src/lambda/node_modules/
