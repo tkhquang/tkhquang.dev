@@ -10,11 +10,11 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 module.exports = function (api) {
   api.configureServer((app) => {
     app.use(
-      "/.netlify/functions/",
+      "/api/",
       createProxyMiddleware({
         target: "http://127.0.0.1:9000",
         pathRewrite: {
-          "/.netlify/functions": ""
+          "/api": ""
         }
       })
     );

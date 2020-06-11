@@ -71,7 +71,7 @@ export default {
   methods: {
     handleSubmit() {
       request({
-        url: "/.netlify/functions/newsletter-signup",
+        url: "/api/newsletter-signup",
         method: "POST",
         data: {
           "form-name": "newsletter",
