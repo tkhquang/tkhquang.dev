@@ -25,7 +25,7 @@ export default {
         siteTwitter,
         // siteOwner,
         // prefixPath,
-        metaImageUrl = `/uploads/images/default.jpg`,
+        metaImageUrl = `blog/resources/images/default.jpg`,
         path = ""
       } = opts;
 
@@ -75,7 +75,10 @@ export default {
       }
 
       if (metaImageUrl) {
-        const coverImage = this.stripSlashes(`${this.siteUrl}/${metaImageUrl}`);
+        const coverImage = this.stripSlashes(
+          `${process.env.GRIDSOME_SITE_URL}/${metaImageUrl}`
+        );
+
         metaInfo.meta = [
           ...metaInfo.meta,
           {

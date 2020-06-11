@@ -9,9 +9,7 @@
         v-if="$page.post.cover_image"
         alt="Cover image"
         class="article__image my-4"
-        :src="
-          require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${$page.post.cover_image}`)
-        "
+        :src="coverImage"
         width="1280"
         height="720"
         quality="80"
@@ -60,6 +58,16 @@ export default {
       commentBoxKey: 0
     };
   },
+
+  computed: {
+    coverImage() {
+      if (!this.$page.post.cover_image) {
+        return "";
+      }
+      return require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${this.$page.post.cover_image}`);
+    }
+  },
+
   mounted() {
     // Force CommentBox to update everytime theme is changed
     EventBus.$on("toggleTheme", () => {
@@ -71,13 +79,13 @@ export default {
     const {
       title: siteTitle,
       description: siteDescription,
-      cover_image: metaImageUrl,
+      // cover_image: metaImageUrl,
       path
     } = this.$page.post;
     return this.generateMetaInfo({
       siteTitle,
       siteDescription,
-      metaImageUrl,
+      metaImageUrl: this.coverImage.src,
       path
     });
   }
