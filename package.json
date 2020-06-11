@@ -7,6 +7,7 @@
     "install:lambda": "cd src/lambda && yarn",
     "build": "yarn prebuild $HEAD && gridsome build",
     "build:lambda": "netlify-lambda build src/lambda",
+    "build:test": "concurrently \"yarn dev:lambda\" \"yarn build && http-server dist --proxy http://127.0.0.1:9000\"",
     "dev:site": "gridsome develop",
     "dev:lambda": "netlify-lambda serve src/lambda",
     "dev": "concurrently \"yarn dev:lambda\" \"yarn dev:site\"",

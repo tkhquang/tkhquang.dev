@@ -12,7 +12,7 @@ module.exports = function (api) {
     app.use(
       "/.netlify/functions/",
       createProxyMiddleware({
-        target: process.env.GRIDSOME_SITE_API,
+        target: "http://127.0.0.1:9000",
         pathRewrite: {
           "/.netlify/functions": ""
         }
