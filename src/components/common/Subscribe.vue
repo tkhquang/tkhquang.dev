@@ -79,7 +79,7 @@ export default {
 
     handleSubmit() {
       request({
-        url: "/.netlify/functions/submission-created",
+        url: "/submission-created",
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
