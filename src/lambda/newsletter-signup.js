@@ -7,8 +7,6 @@ const { EMAIL_TOKEN } = process.env;
 exports.handler = async (event) => {
   const { email } = JSON.parse(event.body);
 
-  console.log(email);
-
   // Bail if email is missing
   if (!email) {
     return {

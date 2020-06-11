@@ -5,18 +5,18 @@
 // Changes here requires a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
 
-const { createProxyMiddleware } = require("http-proxy-middleware");
+// const { createProxyMiddleware } = require("http-proxy-middleware");
 
-module.exports = function (api) {
-  api.configureServer((app) => {
-    app.use(
-      "/api/",
-      createProxyMiddleware({
-        target: "http://127.0.0.1:9000",
-        pathRewrite: {
-          "/api": ""
-        }
-      })
-    );
-  });
-};
+// module.exports = function (api) {
+//   api.configureServer((app) => {
+//     app.use(
+//       "/api/",
+//       createProxyMiddleware({
+//         target: "http://127.0.0.1:9000",
+//         pathRewrite: {
+//           "/api": ""
+//         }
+//       })
+//     );
+//   });
+// };
