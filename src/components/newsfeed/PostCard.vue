@@ -31,8 +31,9 @@
       v-html="post.description"
     />
 
-    <PostTags class="news-feed__list-item__tags" :post="post" />
-    <hr class="mt-8" />
+    <PostTags class="news-feed__list-item__tags mt-3" :post="post" />
+
+    <hr class="mt-6 -mb-3" />
   </li>
 </template>
 

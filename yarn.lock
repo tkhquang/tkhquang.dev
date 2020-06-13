@@ -5528,6 +5528,13 @@ gridsome-plugin-remark-prismjs-all@^0.3.5:
     prismjs "^1.19.0"
     unist-util-visit "^2.0.2"
 
+gridsome-remark-figure-caption@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/gridsome-remark-figure-caption/-/gridsome-remark-figure-caption-1.0.0.tgz#73ff45e723e038121c015af1db0c372db9b2553d"
+  integrity sha512-5UFEykshVLvgL/w4ARFmrjzx5ZiD44IsjWbh4LU3GYtUkKLiuVmaSujY6n2K//aB/OmWC0FgfT5UVuEyR5AJgA==
+  dependencies:
+    unist-util-visit "^2.0.2"
+
 gridsome@^0.7.17:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/gridsome/-/gridsome-0.7.17.tgz#c15fc04d26ce9ff635d956c23358498d87b672dd"

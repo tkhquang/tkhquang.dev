@@ -1,9 +1,9 @@
 <template>
   <article class="article container mx-auto lg:w-4/5 w-full max-w-screen-md">
-    <h1 class="article__title heading lg:text-5xl text-3xl w-full my-12">
+    <h1 class="article__title heading lg:text-5xl text-3xl w-full my-8">
       {{ $page.post.title }}
     </h1>
-    <PostMeta class="article__meta mb-4" :post="$page.post" />
+    <PostMeta class="article__meta" :post="$page.post" />
     <figure>
       <g-image
         v-if="$page.post.cover_image"
@@ -18,14 +18,20 @@
       />
       <figcaption></figcaption>
     </figure>
+
+    <hr class="my-6" />
+
     <div class="article__content v-html" v-html="$page.post.content" />
-    <div class="article__footer mb-12">
+
+    <div class="flex article__footer my-6">
       <PostTags :post="$page.post" />
     </div>
 
-    <hr />
+    <hr class="my-6" />
 
-    <BlogInfo class="w-full my-12" />
+    <BlogInfo class="w-full" />
+
+    <hr class="my-6" />
 
     <div class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded">
       <CommentBox :key="commentBoxKey" />

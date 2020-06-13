@@ -79,6 +79,15 @@ module.exports = {
           }
         ],
         [
+          "gridsome-remark-figure-caption",
+          {
+            wrapperClassName: "md-figure-wrapper",
+            figureClassName: "md-figure-block",
+            imageClassName: "md-figure-image",
+            captionClassName: "md-figure-caption"
+          }
+        ],
+        [
           "@noxify/gridsome-plugin-remark-image-download",
           {
             targetPath: "./src/assets/uploads/remote"
