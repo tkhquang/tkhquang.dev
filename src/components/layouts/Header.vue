@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Logo from "./Logo";
-import ToggleTheme from "./ToggleTheme";
+import Logo from "./header/Logo";
+import ToggleTheme from "./header/ToggleTheme";
 
 export default {
   components: {
