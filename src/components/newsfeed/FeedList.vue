@@ -1,6 +1,5 @@
 <template>
   <section class="news-feed w-full lg:w-3/4">
-    <FilterBar v-if="showFilterBar" />
     <h1
       v-if="!loadedPosts.length"
       class="w-full flex-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 mt-6"
@@ -38,23 +37,17 @@
 import { Pager } from "gridsome";
 
 import PostCard from "./PostCard";
-import FilterBar from "./FilterBar";
 
 export default {
   components: {
     PostCard,
-    Pager,
-    FilterBar
+    Pager
   },
 
   props: {
     pageData: {
       type: Object,
       required: true
-    },
-    showFilterBar: {
-      type: Boolean,
-      default: false
     }
   },
 

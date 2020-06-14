@@ -19,4 +19,14 @@ module.exports = function (api) {
       })
     );
   });
+
+  api.createPages(({ createPage }) => {
+    createPage({
+      path: "/categories",
+      component: "./src/templates/DetailedCategory.vue",
+      context: {
+        slug: "all"
+      }
+    });
+  });
 };

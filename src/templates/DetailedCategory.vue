@@ -1,9 +1,6 @@
 <template>
-  <div
-    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
-  >
-    <FeedList :page-data="$page.allPostsByCategory" :show-filter-bar="false" />
-    <BlogInfo class="w-full lg:w-1/4 mt-8 lg:mt-4" />
+  <div>
+    <Newsfeed :page-data="pageData" />
   </div>
 </template>
 
@@ -47,6 +44,46 @@
           tags {
             id
             title
+            path
+          }
+        }
+      }
+    }
+    allPosts: allPost
+      (
+        filter: {
+          published: {
+            eq: true
+          }
+        },
+        sort: [
+          {
+            by: "created_at",
+            order: DESC
+          }
+        ],
+        perPage: 5,
+        page: $page
+      ) @paginate {
+      totalCount
+      pageInfo {
+        totalPages
+        currentPage,
+        isLast
+      }
+      edges {
+        node {
+          id
+          title
+          created_at
+          updated_at
+          timeToRead
+          description
+          cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
+          path
+          tags {
+            id
+            title
           }
         }
       }
@@ -57,23 +94,37 @@
 <script>
 import seo from "~/vue-utils/mixins/seo.js";
 
-import FeedList from "~/components/newsfeed/FeedList";
-import BlogInfo from "~/components/widgets/BlogInfo";
+import Newsfeed from "~/components/layouts/Newsfeed";
 
 export default {
   components: {
-    FeedList,
-    BlogInfo
+    Newsfeed
   },
+
   inject: {
     $categories: {
       type: Object,
       required: true
     }
   },
+
   mixins: [seo],
 
+  computed: {
+    pageData() {
+      if (!this.$route.params.slug) {
+        return this.$page.allPosts;
+      }
+      return this.$page.allPostsByCategory;
+    }
+  },
+
   metaInfo() {
+    if (!this.$route.params.slug) {
+      return this.generateMetaInfo({
+        siteTitle: "All Posts"
+      });
+    }
     return this.generateMetaInfo({
       siteTitle: this.$categories[this.$route.params.slug].title
     });
