@@ -3,23 +3,32 @@
     <h1 class="article__title heading lg:text-5xl text-3xl w-full my-8">
       {{ $page.post.title }}
     </h1>
-    <PostMeta class="article__meta" :post="$page.post" />
-    <figure>
-      <g-image
-        v-if="$page.post.cover_image"
-        alt="Cover image"
-        class="article__image my-4"
-        :src="coverImage"
-        width="1280"
-        height="720"
-        quality="80"
-        fit="cover"
-        blur="10"
-      />
-      <figcaption></figcaption>
-    </figure>
 
-    <hr class="my-6" />
+    <PostMeta class="article__meta my-3" :post="$page.post" />
+
+    <HorizontalLine class="my-3" />
+
+    <PathInfo class="article__path-info" :slug="$page.post.category" />
+
+    <HorizontalLine class="my-3" />
+
+    <template v-if="$page.post.cover_image">
+      <figure class="mb-6">
+        <g-image
+          alt="Cover image"
+          class="article__image my-4"
+          :src="coverImage"
+          width="1280"
+          height="720"
+          quality="80"
+          fit="cover"
+          blur="10"
+        />
+        <figcaption></figcaption>
+      </figure>
+
+      <HorizontalLine class="mb-6" />
+    </template>
 
     <div class="article__content v-html" v-html="$page.post.content" />
 
@@ -27,11 +36,11 @@
       <PostTags :post="$page.post" />
     </div>
 
-    <hr class="my-6" />
+    <HorizontalLine class="my-6" />
 
     <BlogInfo class="w-full" />
 
-    <hr class="my-6" />
+    <HorizontalLine class="my-6" />
 
     <div class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded">
       <CommentBox :key="commentBoxKey" />
@@ -43,6 +52,7 @@
 import EventBus from "~/vue-utils/EventBus";
 import seo from "~/vue-utils/mixins/seo.js";
 
+import PathInfo from "~/components/common/PathInfo";
 import PostMeta from "~/components/common/PostMeta";
 import PostTags from "~/components/common/PostTags";
 import BlogInfo from "~/components/widgets/BlogInfo";
@@ -51,6 +61,7 @@ import CommentBox from "~/components/CommentBox";
 
 export default {
   components: {
+    PathInfo,
     BlogInfo,
     PostMeta,
     PostTags,
@@ -109,6 +120,7 @@ query Post ($path: String!) {
     description
     content
     cover_image (width: 1280, height: 720, blur: 10, quality: 80)
+    category
     tags {
       id
       title

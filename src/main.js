@@ -1,5 +1,8 @@
 import feather from "vue-icon";
 
+// Import global components
+import "~/vue-utils/GlobalComponents";
+
 // Import main css
 import "~/assets/styles/index.scss";
 
@@ -8,7 +11,7 @@ import "typeface-montserrat";
 import "typeface-merriweather";
 
 // eslint-disable-next-line no-unused-vars
-export default function(Vue, { router, head, isClient }) {
+export default function (Vue, { router, head, isClient }) {
   Vue.use(feather, {
     name: "v-icon",
     props: {

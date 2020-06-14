@@ -84,7 +84,7 @@ export default {
   &:hover span {
     transform: rotateX(90deg) translateY(-22px);
     &::before {
-      color: rgb(210, 73, 54);
+      color: var(--error);
     }
   }
 }

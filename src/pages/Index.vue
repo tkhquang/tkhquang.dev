@@ -25,6 +25,7 @@
         perPage: 5,
         page: $page
       ) @paginate {
+      totalCount
       pageInfo {
         totalPages
         currentPage

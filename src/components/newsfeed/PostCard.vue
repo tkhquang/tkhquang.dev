@@ -33,7 +33,7 @@
 
     <PostTags class="news-feed__list-item__tags mt-3" :post="post" />
 
-    <hr class="mt-6 -mb-3" />
+    <HorizontalLine class="mt-6 -mb-3" />
   </li>
 </template>
 
