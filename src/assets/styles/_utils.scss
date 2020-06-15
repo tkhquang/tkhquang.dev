@@ -12,38 +12,3 @@
 .fade-leave-active {
   opacity: 0;
 }
-
-.flex-center {
-  @apply flex justify-center items-center;
-}
-
-.heading {
-  @apply leading-tight font-bold tracking-tight text-theme-primary;
-}
-
-.primary {
-  @apply text-theme-on-primary bg-theme-primary;
-}
-
-.secondary {
-  @apply text-theme-on-secondary bg-theme-secondary;
-}
-
-.background {
-  @apply text-theme-on-background bg-theme-background;
-}
-
-.surface {
-  @apply text-theme-on-surface bg-theme-surface;
-}
-
-.input {
-  @apply inline-block bg-theme-background text-theme-on-background border shadow-inner;
-}
-
-.button {
-  @apply block h-10 px-2 bg-theme-secondary text-theme-on-secondary shadow-md border-2 border-theme-secondary rounded transition-all duration-200;
-  &:hover {
-    @apply bg-theme-primary text-theme-on-primary;
-  }
-}

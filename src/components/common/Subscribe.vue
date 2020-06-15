@@ -21,6 +21,11 @@
         </label>
       </div>
       <template v-if="!status">
+        <div hidden aria-hidden="true">
+          <label for="email">
+            Your email
+          </label>
+        </div>
         <input
           id="email"
           v-model="email"
