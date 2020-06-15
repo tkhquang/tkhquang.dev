@@ -57,6 +57,8 @@ import seo from "~/vue-utils/mixins/seo.js";
 import Newsfeed from "~/components/layouts/Newsfeed";
 
 export default {
+  name: "Home",
+
   components: {
     Newsfeed
   },

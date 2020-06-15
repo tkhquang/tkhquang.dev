@@ -15,13 +15,14 @@
 /// @param {'dark'|'light'} $theme -
 ///   Content rules will apply to this theme.
 @mixin on-theme($theme) {
+  $self: &;
   @if $theme == dark {
-    #{&} {
+    #{$self} {
       @content;
     }
   }
   @else if $theme == light {
-    @at-root body[data-theme="light"] #{&} {
+    @at-root body[data-theme="light"] #{$self} {
       @content;
     }
   }

@@ -4,6 +4,7 @@
       :data="categories"
       :label="activeCategory"
       :is-active="activeCategory !== 'Categories'"
+      :active-slug="activeSlug"
     />
   </nav>
 </template>
@@ -51,6 +52,20 @@ export default {
       }
 
       return this.$categories[this.$route.params.slug].title;
+    },
+
+    activeSlug() {
+      if (!this.$route.params.slug) {
+        if (/^\/(\d.+)?$/.test(this.$route.path)) {
+          return "none";
+        }
+        if (/^\/posts\/.*/.test(this.$route.path)) {
+          return this.$categories[this.$page.post.category].slug;
+        }
+        return "all";
+      }
+
+      return this.$categories[this.$route.params.slug].slug;
     }
   }
 };

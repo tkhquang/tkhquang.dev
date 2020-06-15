@@ -84,6 +84,7 @@
           tags {
             id
             title
+            path
           }
         }
       }
@@ -97,6 +98,8 @@ import seo from "~/vue-utils/mixins/seo.js";
 import Newsfeed from "~/components/layouts/Newsfeed";
 
 export default {
+  name: "Category",
+
   components: {
     Newsfeed
   },
@@ -112,7 +115,7 @@ export default {
 
   computed: {
     pageData() {
-      if (!this.$route.params.slug) {
+      if (this.$context.slug) {
         return this.$page.allPosts;
       }
       return this.$page.allPostsByCategory;
@@ -120,7 +123,7 @@ export default {
   },
 
   metaInfo() {
-    if (!this.$route.params.slug) {
+    if (this.$context.slug) {
       return this.generateMetaInfo({
         siteTitle: "All Posts"
       });

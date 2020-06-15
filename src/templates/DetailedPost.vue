@@ -60,6 +60,8 @@ import BlogInfo from "~/components/widgets/BlogInfo";
 import CommentBox from "~/components/CommentBox";
 
 export default {
+  name: "Post",
+
   components: {
     PathInfo,
     BlogInfo,
