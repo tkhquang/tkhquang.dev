@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/styles/_variables";
+@import "~/assets/styles/_mixins";
 
 $secondary-dark: get-color("secondary-dark");
 $secondary-light: get-color("secondary-light");

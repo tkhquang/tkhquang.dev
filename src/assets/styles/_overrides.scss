@@ -1,0 +1,7 @@
+@import "mixins";
+
+$primary-light: get-color("primary-light");
+
+html, body {
+  @include apply-scrollbar(10px, $primary-light, #2e3645);
+}

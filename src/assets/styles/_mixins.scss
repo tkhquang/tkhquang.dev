@@ -1,15 +1,43 @@
-/*
-Mobile first approach
-In sync with the
-default values of TailwindCSS
-*/
+@import "constants";
 
+/// Get the color value from $colors constant
+///
+/// @param {string} $key -
+///   Key name of the color to search in $colors.
+/// @return {color} -
+///   Color value found in $colors based on the key.
+@function get-color($key) {
+  @return map-get($colors, $key);
+}
+
+/// Apply rules on current element based on 'data-theme' attribute of the body tag, default to dark theme.
+///
+/// @param {'dark'|'light'} $theme -
+///   Content rules will apply to this theme.
+@mixin on-theme($theme) {
+  @if $theme == dark {
+    #{&} {
+      @content;
+    }
+  }
+  @else if $theme == light {
+    @at-root body[data-theme="light"] #{&} {
+      @content;
+    }
+  }
+}
+
+/// Generate media queries based on a specific screen size with mobile first approach.
+///
+/// @param {'XS' | 'SM' | 'MD' | 'LG' | 'XL'} $canvas -
+///   Screen sizes, in sync with TailwindCSS
 @mixin Responsive($canvas) {
-  $XS: 480px; /* Custom added */
+  $XS: 480px; // Custom added
   $SM: 640px;
   $MD: 768px;
   $LG: 1024px;
   $XL: 1280px;
+
   @if $canvas == XS {
    @media only screen and (min-width: $XS) {
      @content;
@@ -155,10 +183,40 @@ default values of TailwindCSS
   }
 }
 
-@mixin alterScrollbars($size, $moz-size, $foreground-color, $background-color) {
+/// Apply custom scrollbar styles to the current element.
+///
+/// @param {length | string} $webkit-size -
+///   The size of the scrollbars for webkit based browsers.
+/// @param {color} $foreground-color -
+///   The color of scrollbar thumb.
+/// @param {color} $background-color -
+///   The color of scrollbar track.
+/// @param {auto | thin | none} $moz-size [null] -
+///   The size of the scrollbars for firefox.
+@mixin apply-scrollbar($webkit-size, $foreground-color, $background-color, $moz-size: null) {
+  @if $moz-size == null {
+    @if type-of($webkit-size) == number {
+      @if $webkit-size <= 8px {
+        $moz-size: thin
+      }
+    
+      @else if $webkit-size == 0 {
+        $moz-size: none
+      }
+  
+      @else {
+        $moz-size: auto
+      }
+    }
+    @else {
+      $moz-size: auto
+    }
+  }
+
+  // webkit based browsers
   &::-webkit-scrollbar {
-    width: $size;
-    height: $size;
+    width: $webkit-size;
+    height: $webkit-size;
   }
 
   &::-webkit-scrollbar-thumb {
@@ -176,16 +234,12 @@ default values of TailwindCSS
   &::-webkit-scrollbar-corner {
     background-color: $background-color;
   }
-  /* Firefox */
-  scrollbar-color: $foreground-color $background-color;
-  scrollbar-width: $moz-size; /* thin auto none */
-}
 
-@mixin scrollbars($selector, $size, $moz-size, $foreground-color, $background-color) {
-  #{$selector} {
-    &::before, &::after {
-      @include alterScrollbars($size, $moz-size, $foreground-color, $background-color);
-    }
-    @include alterScrollbars($size, $moz-size, $foreground-color, $background-color);
-  }
+  // For Internet Explorer
+  scrollbar-face-color: $foreground-color;
+  scrollbar-track-color: $background-color;
+
+  // For Firefox
+  scrollbar-color: $foreground-color $background-color;
+  scrollbar-width: $moz-size;
 }
