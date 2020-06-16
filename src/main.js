@@ -29,6 +29,8 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     }
   });
 
+  appOptions.store = store;
+
   if (isClient) {
     NProgress.configure({ showSpinner: false });
 
@@ -46,6 +48,4 @@ export default function (Vue, { router, head, isClient, appOptions }) {
       NProgress.done();
     });
   }
-
-  appOptions.store = store;
 }

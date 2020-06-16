@@ -1,4 +1,3 @@
-import { path } from 'prettier';
 <template>
   <article class="article container mx-auto lg:w-4/5 w-full max-w-screen-md">
     <h1 class="article__title heading lg:text-5xl text-3xl w-full my-8">
