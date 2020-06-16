@@ -7,7 +7,7 @@ html {
   @apply overflow-hidden;
 
   body {
-    @apply h-screen overflow-auto;
+    @apply h-screen w-screen overflow-auto;
     @include apply-scrollbar(10px, $primary-dark, #2e3645);
 
     &[data-theme="light"] {
