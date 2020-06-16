@@ -89,7 +89,7 @@ export default {
 
   mounted() {
     // Force CommentBox to update everytime theme is changed
-    EventBus.$on("toggleTheme", () => {
+    EventBus.$on("toggle-theme", () => {
       this.commentBoxKey += 1;
     });
   },

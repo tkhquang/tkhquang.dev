@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav__list flex-center h-full px-2">
+  <ul class="nav__list flex-center h-full">
     <li
       :class="{
         'nav__list-item--is-active': isActive,
@@ -12,7 +12,7 @@
         <button
           type="button"
           :title="label"
-          class="nav__list-item__button text-lg flex-center w-full h-full px-2 rounded-md transition-all duration-200 focus:outline-none font-bold hover:bg-theme-secondary hover:text-theme-on-secondary"
+          class="nav__list-item__button text-lg flex-center w-full h-full px-4 rounded-md transition-all duration-200 focus:outline-none font-bold hover:bg-theme-secondary hover:text-theme-on-secondary"
         >
           <span class="truncate">
             {{ label }}
@@ -102,7 +102,11 @@ $surface-light: get-color("surface-light");
   &-item {
     $item: &;
 
-    width: 150px;
+    max-width: none;
+
+    &--is-active {
+      max-width: 150px;
+    }
 
     &__button {
       #{$item}--is-open & {

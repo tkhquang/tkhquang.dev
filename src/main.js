@@ -1,4 +1,8 @@
-import feather from "vue-icon";
+/* eslint-disable no-unused-vars */
+import VueIcon from "vue-icon";
+import NProgress from "nprogress";
+
+import store from "~/store";
 
 // Import global components
 import "~/vue-utils/GlobalComponents";
@@ -10,9 +14,8 @@ import "~/assets/styles/index.scss";
 import "typeface-montserrat";
 import "typeface-merriweather";
 
-// eslint-disable-next-line no-unused-vars
-export default function (Vue, { router, head, isClient }) {
-  Vue.use(feather, {
+export default function (Vue, { router, head, isClient, appOptions }) {
+  Vue.use(VueIcon, {
     name: "v-icon",
     props: {
       baseClass: {
@@ -25,4 +28,24 @@ export default function (Vue, { router, head, isClient }) {
       }
     }
   });
+
+  if (isClient) {
+    NProgress.configure({ showSpinner: false });
+
+    router.beforeEach((to, from, next) => {
+      store.dispatch("page/LOADING_START");
+
+      NProgress.start();
+
+      next();
+    });
+
+    router.afterEach((to, from) => {
+      store.dispatch("page/LOADING_END");
+
+      NProgress.done();
+    });
+  }
+
+  appOptions.store = store;
 }

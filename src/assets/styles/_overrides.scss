@@ -3,16 +3,49 @@
 $primary-light: get-color("primary-light");
 $primary-dark: get-color("primary-dark");
 
-html {
-  @apply overflow-hidden;
+html, body {
+  @include apply-scrollbar(10px, $primary-dark, #2e3645);
 
-  body {
-    @apply h-screen w-screen overflow-auto;
-    @include apply-scrollbar(10px, $primary-dark, #2e3645);
+  &[data-theme="light"] {
+    @include apply-scrollbar(10px, $primary-light, #2e3645);
+  }
+}
 
-    &[data-theme="light"] {
-      @include apply-scrollbar(10px, $primary-light, #2e3645);
+#nprogress {
+  .bar {
+    top: auto;
+    bottom: 0;
+    height: 5px;
 
-    }
+    background: var(--primary) linear-gradient(to right, var(--primary), var(--tone), var(--secondary), var(--tone), var(--primary));
+    background-size: 500%;
+    animation: 2s linear infinite bar-progress, 0.3s fade-in;
+  }
+
+  .peg {
+    display: none;
+  }
+
+  .spinner-icon {
+    border-top-color: transparent;
+    border-left-color: transparent;
+  }
+}
+
+@keyframes bar-progress {
+  0% {
+    background-position: 0% 0
+  }
+  to {
+    background-position: 125% 0
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

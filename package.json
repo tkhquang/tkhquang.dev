@@ -28,13 +28,16 @@
     "gridsome-remark-figure-caption": "^1.0.0",
     "lodash": "^4.17.15",
     "netlify-cms": "^2.10.50",
+    "nprogress": "^0.2.0",
     "prismjs": "^1.20.0",
     "slugify": "^1.4.0",
     "tailwindcss": "^1.4.6",
     "tsparticles": "^1.15.1",
     "typeface-merriweather": "^0.0.72",
     "typeface-montserrat": "^0.0.75",
-    "vue-icon": "^2.1.2"
+    "vue-icon": "^2.1.2",
+    "vuex": "^3.4.0",
+    "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.0",

@@ -17,10 +17,14 @@
 @import "utils";
 @import "code";
 @import "pagination";
-@import "overrides";
 //- UTILITIES
 
 //- THIRD PARTY
 @import "prismjs/plugins/command-line/prism-command-line.css";
 @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+@import 'nprogress/nprogress.css';
 //- THIRD PARTY
+
+//- OVERRIDES
+@import "overrides";
+//- OVERRIDES
