@@ -1,7 +1,18 @@
 @import "mixins";
 
 $primary-light: get-color("primary-light");
+$primary-dark: get-color("primary-dark");
 
-html, body {
-  @include apply-scrollbar(10px, $primary-light, #2e3645);
+html {
+  @apply overflow-hidden;
+
+  body {
+    @apply h-screen overflow-auto;
+    @include apply-scrollbar(10px, $primary-dark, #2e3645);
+
+    &[data-theme="light"] {
+      @include apply-scrollbar(10px, $primary-light, #2e3645);
+
+    }
+  }
 }
