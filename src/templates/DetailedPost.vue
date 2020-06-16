@@ -1,3 +1,4 @@
+import { path } from 'prettier';
 <template>
   <article class="article container mx-auto lg:w-4/5 w-full max-w-screen-md">
     <h1 class="article__title heading lg:text-5xl text-3xl w-full my-8">
@@ -8,7 +9,7 @@
 
     <HorizontalLine class="my-3" />
 
-    <PathInfo class="article__path-info" :slug="$page.post.category" />
+    <PathInfo class="article__path-info" :slug="$page.post.category_slug" />
 
     <HorizontalLine class="my-3" />
 
@@ -90,7 +91,9 @@ export default {
   mounted() {
     // Force CommentBox to update everytime theme is changed
     EventBus.$on("toggle-theme", () => {
-      this.commentBoxKey += 1;
+      this.$nextTick(() => {
+        this.commentBoxKey += 1;
+      });
     });
   },
 
@@ -122,7 +125,7 @@ query Post ($path: String!) {
     description
     content
     cover_image (width: 1280, height: 720, blur: 10, quality: 80)
-    category
+    category_slug
     tags {
       id
       title

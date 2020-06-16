@@ -3,7 +3,7 @@ title: Hello World!
 created_at: 2020-03-30T07:49:25.588Z
 updated_at: ''
 published: true
-category: the-inner-crisis
+category_slug: the-inner-crisis
 tags:
   - Ljóss
 description: 'Hello world! It''s me, the same old Aleks and this is my new blog.'

@@ -10,6 +10,21 @@
   </nav>
 </template>
 
+<static-query>
+query pathInfo {
+  categories: allCategory (sortBy: "title") {
+    edges {
+      node {
+        id
+        title
+        slug
+        path
+      }
+    }
+  }
+}
+</static-query>
+
 <script>
 export default {
   props: {
@@ -18,15 +33,13 @@ export default {
       required: true
     }
   },
-  inject: {
-    $categories: {
-      type: Object,
-      required: true
-    }
-  },
   computed: {
     category() {
-      return this.$categories[this.slug];
+      const { node } = this.$static.categories.edges.find(
+        ({ node }) => node.slug === this.slug
+      );
+
+      return { ...node };
     }
   }
 };

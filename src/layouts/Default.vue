@@ -30,14 +30,12 @@ export default {
 
   provide() {
     return {
-      $getCssVars: () => this.cssVars,
       $getYOffset: () => this.yOffsett
     };
   },
 
   data() {
     return {
-      cssVars: {},
       isScrolled: false,
       indicatorWidth: 0,
       yOffsett: 0
@@ -53,14 +51,6 @@ export default {
     }
   },
 
-  // Unused for now
-  inject: {
-    $settings: {
-      type: Object,
-      required: true
-    }
-  },
-
   created() {
     if (process.isClient) {
       window.addEventListener("scroll", this.onScroll);
@@ -69,9 +59,11 @@ export default {
   },
 
   mounted() {
-    this.setCssVariables();
+    this.$store.dispatch("page/CSS_VARIABLES");
 
-    this.observer = new MutationObserver(this.setCssVariables);
+    this.observer = new MutationObserver(() =>
+      this.$store.dispatch("page/CSS_VARIABLES")
+    );
     this.observer.observe(global.document.body, {
       attributes: true,
       attributeFilter: ["data-theme", "style"]
@@ -79,7 +71,7 @@ export default {
 
     // const mediaQuery = global.matchMedia("(min-width:640px)");
     // mediaQuery.onchange = () => {
-    //   this.setCssVariables();
+    //   this.$store.dispatch("page/CSS_VARIABLES");
     // };
   },
 
@@ -92,7 +84,8 @@ export default {
   methods: {
     onScroll(e) {
       const top = window.pageYOffset || e.target.scrollTop || 0;
-      this.isScrolled = top > parseInt(this.cssVars["header-height"]) * 2;
+      this.isScrolled =
+        top > parseInt(this.$store.state.page.cssVars["header-height"]) * 2;
 
       const scrollPos = window.scrollY;
       const winHeight = window.innerHeight;
@@ -104,45 +97,6 @@ export default {
         return;
       }
       this.yOffsett = perc;
-    },
-
-    setCssVariables() {
-      this.cssVars = {
-        ...this.getCssVariable("--header-height"),
-        ...this.getCssVariable("--tone"),
-        ...this.getCssVariable("--tone-1"),
-        ...this.getCssVariable("--tone-2"),
-        ...this.getCssVariable("--tone-3"),
-        ...this.getCssVariable("--primary"),
-        ...this.getCssVariable("--secondary"),
-        ...this.getCssVariable("--background"),
-        ...this.getCssVariable("--surface"),
-        ...this.getCssVariable("--on-primary"),
-        ...this.getCssVariable("--on-secondary"),
-        ...this.getCssVariable("--on-background"),
-        ...this.getCssVariable("--on-surface"),
-        ...this.getCssVariable("--error")
-      };
-    },
-
-    // Get or set a css variable from body
-    getCssVariable(name, value) {
-      if (process.isClient) {
-        if (name.substr(0, 2) !== "--") {
-          name = "--" + name;
-        }
-
-        if (value) {
-          global.document.body.style.setProperty(name, value);
-        }
-
-        return {
-          [name.replace(/^--/, "")]: global
-            .getComputedStyle(global.document.body)
-            .getPropertyValue(name)
-            .trim()
-        };
-      }
     }
   }
 };

@@ -3,7 +3,7 @@ title: The foundation of Ljóss 💥
 created_at: 2020-06-10T20:25:26.490Z
 updated_at: ""
 published: true
-category: the-inner-crisis
+category_slug: the-inner-crisis
 tags:
   - Ljóss
 cover_image: /uploads/images/ljoss.jpg

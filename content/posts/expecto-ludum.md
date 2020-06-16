@@ -3,7 +3,7 @@ title: "“Expecto Ludum!”"
 created_at: 2020-06-11T20:39:01.620Z
 updated_at: ""
 published: true
-category: gaming
+category_slug: gaming
 tags:
   - The Witcher 3
 cover_image: /uploads/images/witcher-3.jpg

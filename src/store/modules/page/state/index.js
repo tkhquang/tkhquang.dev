@@ -1,5 +1,7 @@
 export default {
   state: {
-    isLoading: true
+    isLoading: true,
+    cssVars: {},
+    metadata: {}
   }
 };

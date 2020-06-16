@@ -11,7 +11,7 @@
       </span>
       <span
         class="logo__text relative hidden md:inline-flex"
-        :data-hover="$settings.siteTitle"
+        :data-hover="metadata.siteTitle"
       >
         Home
       </span>
@@ -19,7 +19,7 @@
     <span
       v-else
       class="logo__text relative inline-flex"
-      :data-hover="$settings.siteTitle"
+      :data-hover="metadata.siteTitle"
     >
       Home
     </span>
@@ -27,14 +27,13 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
-  inject: {
-    $settings: {
-      type: Object,
-      required: true
-    }
-  },
   computed: {
+    ...mapGetters({
+      metadata: "page/metadata"
+    }),
     isHomePage() {
       return /^\/(\d.+)?$/.test(this.$route.path);
     }

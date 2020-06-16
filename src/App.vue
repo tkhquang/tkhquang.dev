@@ -26,7 +26,6 @@ query index {
       node {
         id
         title
-        slug
         path
       }
     }
@@ -44,22 +43,9 @@ export default {
     DefaultLayout
   },
   mixins: [seo],
-  provide() {
-    let tagsBySlug = {};
-    this.$static.categories.edges.forEach(
-      ({ node: { id, title, slug, path } }) => {
-        tagsBySlug[slug] = {
-          id,
-          slug,
-          title,
-          path
-        };
-      }
-    );
-    return {
-      $settings: this.$static.metadata,
-      $categories: tagsBySlug
-    };
+
+  created() {
+    this.$store.dispatch("page/METADATA", this.$static.metadata);
   },
 
   metaInfo() {

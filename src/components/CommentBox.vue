@@ -3,16 +3,10 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import commentBox from "commentbox.io";
 
 export default {
-  inject: {
-    $getCssVars: {
-      type: Object,
-      required: true
-    }
-  },
-
   data() {
     return {
       removeCommentBox: null
@@ -20,9 +14,9 @@ export default {
   },
 
   computed: {
-    cssVars() {
-      return this.$getCssVars();
-    }
+    ...mapGetters({
+      cssVars: "page/cssVars"
+    })
   },
 
   mounted() {

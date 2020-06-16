@@ -6,13 +6,12 @@
 
 <page-query>
   query allPostsByCategory ($page: Int, $slug: String!) {
-    allPostsByCategory: allPost
-      (
+    allPostsByCategory: allPost (
         filter: {
           published: {
             eq: true
           },
-          category: {
+          category_slug: {
             eq: $slug
           }
         },
@@ -92,6 +91,21 @@
   }
 </page-query>
 
+<static-query>
+query pathInfo {
+  categories: allCategory (sortBy: "title") {
+    edges {
+      node {
+        id
+        title
+        slug
+        path
+      }
+    }
+  }
+}
+</static-query>
+
 <script>
 import seo from "~/vue-utils/mixins/seo.js";
 
@@ -102,13 +116,6 @@ export default {
 
   components: {
     Newsfeed
-  },
-
-  inject: {
-    $categories: {
-      type: Object,
-      required: true
-    }
   },
 
   mixins: [seo],
@@ -128,8 +135,11 @@ export default {
         siteTitle: "All Posts"
       });
     }
+
     return this.generateMetaInfo({
-      siteTitle: this.$categories[this.$route.params.slug].title
+      siteTitle: this.$static.categories.edges.find(
+        ({ node }) => node.slug === this.$route.params.slug
+      ).node.title
     });
   }
 };
