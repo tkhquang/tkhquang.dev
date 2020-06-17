@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { tsParticles } from "tsparticles";
 import { isEmpty } from "lodash";
 
@@ -126,9 +125,9 @@ const config = {
 
 export default {
   computed: {
-    ...mapGetters({
-      cssVars: "page/cssVars"
-    })
+    cssVars() {
+      return this.$store.getters["page/cssVars"];
+    }
   },
 
   watch: {
