@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <Banner v-if="isCurrent('Home') || isHomePage" />
+    <Banner v-show="isCurrent('Home')" />
 
     <Header :is-scrolled="isScrolled" />
 
@@ -48,10 +48,7 @@ export default {
     ...mapGetters({
       isCurrent: "page/isCurrent",
       cssVars: "page/isCurrent"
-    }),
-    isHomePage() {
-      return /^\/(\d.+)?$/.test(this.$route.path);
-    }
+    })
   },
 
   created() {
