@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <Banner v-show="isCurrent('Home')" />
+    <ClientOnly>
+      <Banner v-if="isCurrent('Home')" />
+    </ClientOnly>
 
     <Header :is-scrolled="isScrolled" />
 
