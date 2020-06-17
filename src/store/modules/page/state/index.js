@@ -1,7 +1,7 @@
 export default {
-  state: {
+  state: () => ({
     isLoading: true,
     cssVars: {},
     metadata: {}
-  }
+  })
 };
