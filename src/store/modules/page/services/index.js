@@ -49,7 +49,6 @@ export const getCssVars = () => {
   VARIABLES.forEach((variable) => {
     cssVars = { ...cssVars, ...getCssVariable(variable) };
   });
-  console.log("service", cssVars);
 
   return cssVars;
 };

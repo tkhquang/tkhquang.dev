@@ -3,137 +3,22 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { tsParticles } from "tsparticles";
 import { isEmpty } from "lodash";
 
-const config = {
-  DEFAULT_CONFIG: {
-    particles: {
-      number: {
-        value: 40,
-        limit: 60,
-        density: {
-          enable: true,
-          area: 200
-        }
-      },
-      color: {
-        value: "#FFFFFF"
-      },
-      shape: {
-        type: "circle",
-        stroke: {
-          width: 0,
-          color: "#111111"
-        },
-        polygon: {
-          sides: 5
-        },
-        image: {
-          src: "img/github.svg",
-          width: 100,
-          height: 100
-        }
-      },
-      opacity: {
-        value: 0.5,
-        random: false,
-        animation: {
-          enable: false,
-          speed: 1,
-          minimumValue: 0.1,
-          sync: false
-        }
-      },
-      size: {
-        value: 3,
-        random: true,
-        animation: {
-          enable: false,
-          speed: 40,
-          minimumValue: 0.1,
-          sync: false
-        }
-      },
-      lineLinked: {
-        enable: true,
-        distance: 150,
-        color: "#FFFFFF",
-        opacity: 0.4,
-        width: 1
-      },
-      move: {
-        enable: true,
-        speed: 1.5,
-        direction: "none",
-        random: false,
-        straight: false,
-        outMode: "out",
-        collisions: true,
-        attract: {
-          enable: false,
-          rotate: {
-            x: 600,
-            y: 1200
-          }
-        }
-      }
-    },
-    interactivity: {
-      detectsOn: "canvas",
-      events: {
-        onHover: {
-          enable: true,
-          mode: "grab"
-        },
-        onClick: {
-          enable: true,
-          mode: "push"
-        },
-        resize: true
-      },
-      modes: {
-        grab: {
-          distance: 140,
-          lineLinked: {
-            opacity: 1
-          }
-        },
-        bubble: {
-          distance: 400,
-          size: 40,
-          duration: 2,
-          opacity: 8,
-          speed: 3
-        },
-        repulse: {
-          distance: 120,
-          duration: 0.4
-        },
-        push: {
-          quantity: 2
-        },
-        remove: {
-          quantity: 2
-        }
-      }
-    },
-    detectsRetina: true,
-    fpsLimit: 60
-  }
-};
+import { default as config } from "./banner/config.json";
 
 export default {
   computed: {
-    cssVars() {
-      return this.$store.getters["page/cssVars"];
-    }
+    ...mapGetters({
+      cssVars: "page/cssVars"
+    })
   },
 
   watch: {
     cssVars: {
       handler(newCssVars) {
-        console.log("Banner Watcher CSS Vars", newCssVars);
         this.setParticleColors(newCssVars);
       },
       deep: true,
@@ -188,7 +73,7 @@ export default {
 
     initParticlesJS() {
       if (process.isClient) {
-        tsParticles.load("banner", config.DEFAULT_CONFIG);
+        tsParticles.load("banner", config);
       }
     }
   }
