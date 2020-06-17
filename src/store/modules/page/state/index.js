@@ -2,6 +2,7 @@ export default {
   state: {
     isLoading: true,
     cssVars: {},
-    metadata: {}
+    metadata: {},
+    name: ""
   }
 };

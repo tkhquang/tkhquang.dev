@@ -12,12 +12,7 @@
 <static-query>
 query Navigation {
   categories: allCategory (
-      sortBy: "title",
-      filter: {
-        slug: {
-          ne: "hidden"
-        }
-      }
+      sortBy: "title"
     ) {
     edges {
       node {
@@ -32,6 +27,8 @@ query Navigation {
 </static-query>
 
 <script>
+import { mapGetters } from "vuex";
+
 import Layout from "./navigation/Layout";
 
 export default {
@@ -40,8 +37,12 @@ export default {
   },
 
   computed: {
-    categories() {
-      const allCategories = [
+    ...mapGetters({
+      isCurrent: "page/isCurrent"
+    }),
+
+    categories_all() {
+      return [
         {
           id: "all",
           title: "All Posts",
@@ -52,47 +53,61 @@ export default {
           return { ...node };
         })
       ];
+    },
 
-      const activeCategory = (() => {
-        if (!this.$route.params.slug) {
-          if (/^\/(\d.+)?$/.test(this.$route.path)) {
-            return "Categories";
-          }
-          if (/^\/posts\/.*/.test(this.$route.path)) {
-            return allCategories.find(
-              (category) => category.slug === this.$page.post.category_slug
-            ).title;
-          }
-          return "All Posts";
+    categories_label() {
+      if (this.isCurrent("Home")) {
+        return "Categories";
+      }
+
+      if (this.isCurrent("Post")) {
+        if (this.$page.post) {
+          return this.categories_all.find(
+            (category) => category.slug === this.$page.post.category_slug
+          ).title;
         }
+      }
 
-        return allCategories.find(
-          (category) => category.slug === this.$route.params.slug
-        ).title;
-      })();
-
-      const activeSlug = (() => {
-        if (!this.$route.params.slug) {
-          if (/^\/(\d.+)?$/.test(this.$route.path)) {
-            return "none";
-          }
-          if (/^\/posts\/.*/.test(this.$route.path)) {
-            return allCategories.find(
-              (category) => category.slug === this.$page.post.category_slug
-            ).slug;
-          }
-          return "all";
+      if (this.isCurrent("Category")) {
+        if (this.$route.params.slug) {
+          return this.categories_all.find(
+            (category) => category.slug === this.$route.params.slug
+          ).title;
         }
+      }
 
-        return allCategories.find(
-          (category) => category.slug === this.$route.params.slug
-        ).slug;
-      })();
+      return "All Posts";
+    },
 
+    categories_active_slug() {
+      if (this.isCurrent("Home")) {
+        return "";
+      }
+
+      if (this.isCurrent("Post")) {
+        if (this.$page.post) {
+          return this.categories_all.find(
+            (category) => category.slug === this.$page.post.category_slug
+          ).slug;
+        }
+      }
+
+      if (this.isCurrent("Category")) {
+        if (this.$route.params.slug) {
+          return this.categories_all.find(
+            (category) => category.slug === this.$route.params.slug
+          ).slug;
+        }
+      }
+
+      return "all";
+    },
+
+    categories() {
       return {
-        data: allCategories,
-        label: activeCategory,
-        activeSlug: activeSlug
+        data: this.categories_all,
+        label: this.categories_label,
+        activeSlug: this.categories_active_slug
       };
     }
   }

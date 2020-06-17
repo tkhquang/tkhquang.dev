@@ -129,6 +129,10 @@ export default {
     }
   },
 
+  created() {
+    this.$store.dispatch("page/NAME", this.$options.name);
+  },
+
   metaInfo() {
     if (this.$context.slug) {
       return this.generateMetaInfo({

@@ -8,7 +8,11 @@
 
 <script>
 export default {
-  name: "404"
+  name: "404",
+
+  created() {
+    this.$store.dispatch("page/NAME", this.$options.name);
+  }
 };
 </script>
 

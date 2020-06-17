@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import EventBus from "~/vue-utils/EventBus";
 import seo from "~/vue-utils/mixins/seo.js";
 
 import PathInfo from "~/components/common/PathInfo";
@@ -87,9 +86,11 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
+    this.$store.dispatch("page/NAME", this.$options.name);
+
     // Force CommentBox to update everytime theme is changed
-    EventBus.$on("toggle-theme", () => {
+    this.$bus.$on("toggle-theme", () => {
       this.$nextTick(() => {
         this.commentBoxKey += 1;
       });

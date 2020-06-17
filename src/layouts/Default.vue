@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <Banner v-if="isHomePage" />
+    <Banner v-if="isCurrent('Home')" />
 
     <Header :is-scrolled="isScrolled" />
 
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import Banner from "~/components/layouts/Banner";
 import Header from "~/components/layouts/Header";
 import BackToTop from "~/components/layouts/BackToTop";
@@ -43,12 +45,9 @@ export default {
   },
 
   computed: {
-    isHomePage() {
-      return /^\/(\d.+)?$/.test(this.$route.path);
-    },
-    isDetailedPostPage() {
-      return /^\/posts\/.*/.test(this.$route.path);
-    }
+    ...mapGetters({
+      isCurrent: "page/isCurrent"
+    })
   },
 
   created() {
@@ -56,27 +55,13 @@ export default {
       window.addEventListener("scroll", this.onScroll);
       window.addEventListener("load", this.onScroll);
     }
-  },
 
-  mounted() {
-    this.$store.dispatch("page/CSS_VARIABLES");
-
-    this.observer = new MutationObserver(() =>
+    this.$bus.$on("toggle-theme", () =>
       this.$store.dispatch("page/CSS_VARIABLES")
     );
-    this.observer.observe(global.document.body, {
-      attributes: true,
-      attributeFilter: ["data-theme", "style"]
-    });
-
-    // const mediaQuery = global.matchMedia("(min-width:640px)");
-    // mediaQuery.onchange = () => {
-    //   this.$store.dispatch("page/CSS_VARIABLES");
-    // };
   },
 
   destroyed() {
-    this.observer.disconnect();
     window.removeEventListener("scroll", this.onScroll);
     window.removeEventListener("load", this.onScroll);
   },

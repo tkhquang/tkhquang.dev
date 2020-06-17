@@ -4,7 +4,8 @@ export const Action = {
 
   CSS_VARIABLES: "CSS_VARIABLES",
 
-  METADATA: "METADATA"
+  METADATA: "METADATA",
+  NAME: "NAME"
 };
 
 export const Mutation = {
@@ -13,5 +14,6 @@ export const Mutation = {
 
   CSS_VARIABLES: "CSS_VARIABLES",
 
-  METADATA: "METADATA"
+  METADATA: "METADATA",
+  NAME: "NAME"
 };

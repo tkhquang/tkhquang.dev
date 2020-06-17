@@ -52,6 +52,7 @@ module.exports = {
       },
       colors: {
         theme: {
+          tone: "var(--tone)",
           "tone-1": "var(--tone-1)",
           "tone-2": "var(--tone-2)",
           "tone-3": "var(--tone-3)",

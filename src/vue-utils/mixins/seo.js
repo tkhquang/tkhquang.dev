@@ -1,22 +1,22 @@
+const helpers = {
+  stripSlashes(url) {
+    if (!url) {
+      return "";
+    }
+    return url.replace(/(https?:\/\/)|(\/)+/g, "$1$2");
+  }
+};
+
 export default {
   computed: {
     siteUrl() {
-      const envUrl = process.env.GRIDSOME_SITE_URL;
-
-      if (!envUrl) {
-        return "";
-      }
+      const envUrl = process.env.GRIDSOME_SITE_URL || "";
 
       return process.isProduction ? `${envUrl}/blog` : envUrl;
     }
   },
+
   methods: {
-    stripSlashes(url) {
-      if (!url) {
-        return "";
-      }
-      return url.replace(/(https?:\/\/)|(\/)+/g, "$1$2");
-    },
     generateMetaInfo(opts) {
       const {
         siteTitle,
@@ -75,7 +75,7 @@ export default {
       }
 
       if (metaImageUrl) {
-        const coverImage = this.stripSlashes(
+        const coverImage = helpers.stripSlashes(
           `${process.env.GRIDSOME_SITE_URL}/${metaImageUrl}`
         );
 
@@ -115,7 +115,7 @@ export default {
         {
           key: "og:url",
           property: "og:url",
-          content: this.stripSlashes(`${this.siteUrl}${path}`)
+          content: helpers.stripSlashes(`${this.siteUrl}${path}`)
         }
       ];
 

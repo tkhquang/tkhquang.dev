@@ -7,5 +7,13 @@ export default {
   },
   metadata: (state) => {
     return state.metadata;
+  },
+  name: (state) => {
+    return state.name;
+  },
+  isCurrent: (state) => {
+    return (name) => {
+      return state.name === name;
+    };
   }
 };

@@ -8,7 +8,11 @@
 
 <script>
 export default {
-  name: "Thankyou"
+  name: "Thankyou",
+
+  created() {
+    this.$store.dispatch("page/NAME", this.$options.name);
+  }
 };
 </script>
 

@@ -47,8 +47,6 @@
 </template>
 
 <script>
-import EventBus from "~/vue-utils/EventBus";
-
 export default {
   data() {
     return {
@@ -66,7 +64,7 @@ export default {
 
       // This is using a script that is added in index.html
       window.__setPreferredTheme(this.darkTheme ? "dark" : "light");
-      EventBus.$emit("toggle-theme", this.darkTheme ? "dark" : "light");
+      this.$bus.$emit("toggle-theme", this.darkTheme ? "dark" : "light");
     }
   }
 };

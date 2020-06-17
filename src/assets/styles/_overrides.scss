@@ -13,9 +13,9 @@ html, body {
 
 #nprogress {
   .bar {
-    top: auto;
-    bottom: 0;
-    height: 5px;
+    // top: auto;
+    // bottom: 0;
+    height: 2px;
 
     background: var(--primary) linear-gradient(to right, var(--primary), var(--tone), var(--secondary), var(--tone), var(--primary));
     background-size: 500%;

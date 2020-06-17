@@ -4,7 +4,7 @@
     to="/"
     @click.native="scrollToTop"
   >
-    <template v-if="!isHomePage">
+    <template v-if="!isCurrent('Home')">
       <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon>
       <span class="hidden md:inline-flex">
         &nbsp;Back to&nbsp;
@@ -32,17 +32,17 @@ import { mapGetters } from "vuex";
 export default {
   computed: {
     ...mapGetters({
-      metadata: "page/metadata"
-    }),
-    isHomePage() {
-      return /^\/(\d.+)?$/.test(this.$route.path);
-    }
+      metadata: "page/metadata",
+      isCurrent: "page/isCurrent"
+    })
   },
+
   methods: {
     scrollToTop() {
-      if (!this.isHomePage) {
+      if (!this.isCurrent("Home")) {
         return;
       }
+
       window.scrollTo({
         top: 0,
         behavior: "smooth"

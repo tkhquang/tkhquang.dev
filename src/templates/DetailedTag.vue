@@ -66,6 +66,10 @@ export default {
 
   mixins: [seo],
 
+  created() {
+    this.$store.dispatch("page/NAME", this.$options.name);
+  },
+
   metaInfo() {
     return this.generateMetaInfo({ siteTitle: this.$page.allPostsByTag.title });
   }

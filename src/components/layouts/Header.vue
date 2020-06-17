@@ -14,11 +14,13 @@
         <ToggleTheme class="ml-4" />
       </div>
     </div>
-    <Indicator v-if="isDetailedPostPage" />
+    <Indicator v-if="isCurrent('Post')" />
   </header>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import Logo from "./header/Logo";
 import ToggleTheme from "./header/ToggleTheme";
 import Navigation from "./header/Navigation";
@@ -31,16 +33,18 @@ export default {
     Navigation,
     Indicator
   },
+
   props: {
     isScrolled: {
       type: Boolean,
       default: false
     }
   },
+
   computed: {
-    isDetailedPostPage() {
-      return /^\/posts\/.*/.test(this.$route.path);
-    }
+    ...mapGetters({
+      isCurrent: "page/isCurrent"
+    })
   }
 };
 </script>

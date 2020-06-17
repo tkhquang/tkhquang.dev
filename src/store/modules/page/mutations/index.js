@@ -14,5 +14,9 @@ export default {
 
   [Mutation.METADATA](state, payload) {
     state.metadata = payload;
+  },
+
+  [Mutation.NAME](state, payload) {
+    state.name = payload;
   }
 };
