@@ -107,7 +107,8 @@ query pathInfo {
 </static-query>
 
 <script>
-import seo from "~/vue-utils/mixins/seo.js";
+import seoMixin from "~/vue-utils/mixins/seo";
+import routerMixin from "~/vue-utils/mixins/router";
 
 import Newsfeed from "~/components/layouts/Newsfeed";
 
@@ -118,7 +119,7 @@ export default {
     Newsfeed
   },
 
-  mixins: [seo],
+  mixins: [seoMixin, routerMixin],
 
   computed: {
     pageData() {
@@ -127,10 +128,6 @@ export default {
       }
       return this.$page.allPostsByCategory;
     }
-  },
-
-  created() {
-    this.$store.dispatch("page/NAME", this.$options.name);
   },
 
   metaInfo() {

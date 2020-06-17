@@ -14,12 +14,12 @@
         <ToggleTheme class="ml-4" />
       </div>
     </div>
-    <Indicator v-if="isCurrent('Post')" />
+    <Indicator v-if="isPostPage" />
   </header>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import pageMixin from "~/vue-utils/mixins/page";
 
 import Logo from "./header/Logo";
 import ToggleTheme from "./header/ToggleTheme";
@@ -34,17 +34,13 @@ export default {
     Indicator
   },
 
+  mixins: [pageMixin],
+
   props: {
     isScrolled: {
       type: Boolean,
       default: false
     }
-  },
-
-  computed: {
-    ...mapGetters({
-      isCurrent: "page/isCurrent"
-    })
   }
 };
 </script>

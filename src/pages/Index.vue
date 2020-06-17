@@ -50,7 +50,8 @@
 </page-query>
 
 <script>
-import seo from "~/vue-utils/mixins/seo.js";
+import seoMixin from "~/vue-utils/mixins/seo";
+import routerMixin from "~/vue-utils/mixins/router";
 
 import Newsfeed from "~/components/layouts/Newsfeed";
 
@@ -61,11 +62,7 @@ export default {
     Newsfeed
   },
 
-  mixins: [seo],
-
-  created() {
-    this.$store.dispatch("page/NAME", this.$options.name);
-  },
+  mixins: [seoMixin, routerMixin],
 
   metaInfo() {
     return this.generateMetaInfo({ siteTitle: "Home" });

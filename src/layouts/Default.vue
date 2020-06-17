@@ -1,8 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <ClientOnly>
-      <Banner v-if="isCurrent('Home')" />
-    </ClientOnly>
+    <Banner v-if="isHomePage" />
 
     <Header :is-scrolled="isScrolled" />
 
@@ -19,6 +17,8 @@
 <script>
 import { mapGetters } from "vuex";
 
+import pageMixin from "~/vue-utils/mixins/page";
+
 import Banner from "~/components/layouts/Banner";
 import Header from "~/components/layouts/Header";
 import BackToTop from "~/components/layouts/BackToTop";
@@ -32,6 +32,7 @@ export default {
     BackToTop
   },
 
+  mixins: [pageMixin],
   provide() {
     return {
       $getYOffset: () => this.yOffsett
@@ -48,8 +49,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      isCurrent: "page/isCurrent",
-      cssVars: "page/isCurrent"
+      cssVars: "page/cssVars"
     })
   },
 
@@ -62,6 +62,10 @@ export default {
     this.$bus.$on("toggle-theme", () => {
       this.$store.dispatch("page/CSS_VARIABLES");
     });
+  },
+
+  mounted() {
+    this.$store.dispatch("page/CSS_VARIABLES");
   },
 
   destroyed() {

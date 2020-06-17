@@ -12,6 +12,9 @@ const getCssVariable = (name, value) => {
 
   if (value) {
     window.document.body.style.setProperty(name, value);
+    return {
+      [name.replace(/^--/, "")]: value
+    };
   }
 
   return {

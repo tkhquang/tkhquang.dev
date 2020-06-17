@@ -4,7 +4,7 @@
     to="/"
     @click.native="scrollToTop"
   >
-    <template v-if="!isCurrent('Home')">
+    <template v-if="!isHomePage">
       <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon>
       <span class="hidden md:inline-flex">
         &nbsp;Back to&nbsp;
@@ -29,17 +29,20 @@
 <script>
 import { mapGetters } from "vuex";
 
+import pageMixin from "~/vue-utils/mixins/page";
+
 export default {
+  mixins: [pageMixin],
+
   computed: {
     ...mapGetters({
-      metadata: "page/metadata",
-      isCurrent: "page/isCurrent"
+      metadata: "page/metadata"
     })
   },
 
   methods: {
     scrollToTop() {
-      if (!this.isCurrent("Home")) {
+      if (!this.isHomePage) {
         return;
       }
 

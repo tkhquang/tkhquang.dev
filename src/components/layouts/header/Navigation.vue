@@ -27,7 +27,7 @@ query Navigation {
 </static-query>
 
 <script>
-import { mapGetters } from "vuex";
+import pageMixin from "~/vue-utils/mixins/page";
 
 import Layout from "./navigation/Layout";
 
@@ -36,11 +36,9 @@ export default {
     Layout
   },
 
-  computed: {
-    ...mapGetters({
-      isCurrent: "page/isCurrent"
-    }),
+  mixins: [pageMixin],
 
+  computed: {
     categories_all() {
       return [
         {
@@ -56,11 +54,11 @@ export default {
     },
 
     categories_label() {
-      if (this.isCurrent("Home")) {
+      if (this.isHomePage) {
         return "Categories";
       }
 
-      if (this.isCurrent("Post")) {
+      if (this.isPostPage) {
         if (this.$page.post) {
           return this.categories_all.find(
             (category) => category.slug === this.$page.post.category_slug
@@ -68,7 +66,7 @@ export default {
         }
       }
 
-      if (this.isCurrent("Category")) {
+      if (this.isCategoryPage) {
         if (this.$route.params.slug) {
           return this.categories_all.find(
             (category) => category.slug === this.$route.params.slug
@@ -80,11 +78,11 @@ export default {
     },
 
     categories_active_slug() {
-      if (this.isCurrent("Home")) {
+      if (this.isHomePage) {
         return "";
       }
 
-      if (this.isCurrent("Post")) {
+      if (this.isPostPage) {
         if (this.$page.post) {
           return this.categories_all.find(
             (category) => category.slug === this.$page.post.category_slug
@@ -92,7 +90,7 @@ export default {
         }
       }
 
-      if (this.isCurrent("Category")) {
+      if (this.isCategoryPage) {
         if (this.$route.params.slug) {
           return this.categories_all.find(
             (category) => category.slug === this.$route.params.slug

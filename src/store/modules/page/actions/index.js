@@ -16,9 +16,5 @@ export default {
 
   [Action.METADATA]({ commit }, metadata) {
     commit(`${[Mutation.METADATA]}`, metadata);
-  },
-
-  [Action.NAME]({ commit }, name) {
-    commit(`${[Mutation.NAME]}`, name);
   }
 };

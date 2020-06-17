@@ -3,26 +3,25 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import commentBox from "commentbox.io";
+import { isEmpty } from "lodash";
 
 export default {
+  props: {
+    cssVars: {
+      type: Object,
+      required: true
+    }
+  },
+
   data() {
     return {
       removeCommentBox: null
     };
   },
 
-  computed: {
-    ...mapGetters({
-      cssVars: "page/cssVars"
-    })
-  },
-
   mounted() {
-    this.$nextTick(() => {
-      this.initCommentBox();
-    });
+    this.initCommentBox();
   },
 
   beforeDestroy() {
@@ -31,14 +30,24 @@ export default {
 
   methods: {
     initCommentBox() {
-      this.removeCommentBox = commentBox(
-        `${process.env.GRIDSOME_COMMENTBOX_PROJECT_ID}`,
-        {
-          backgroundColor: this.cssVars["surface"],
-          textColor: this.cssVars["on-background"],
-          subtextColor: this.cssVars["on-surface"]
+      if (isEmpty(this.cssVars)) {
+        return;
+      }
+
+      try {
+        this.removeCommentBox = commentBox(
+          `${process.env.GRIDSOME_COMMENTBOX_PROJECT_ID}`,
+          {
+            backgroundColor: this.cssVars["surface"],
+            textColor: this.cssVars["on-background"],
+            subtextColor: this.cssVars["on-surface"]
+          }
+        );
+      } catch (error) {
+        if (process.isClient) {
+          console.log(error);
         }
-      );
+      }
     }
   }
 };

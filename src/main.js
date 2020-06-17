@@ -2,6 +2,11 @@
 import VueIcon from "vue-icon";
 import NProgress from "nprogress";
 
+// Import typefaces
+import "typeface-montserrat";
+import "typeface-merriweather";
+
+// Vuex store
 import store from "~/store";
 
 // Import global components
@@ -9,10 +14,6 @@ import "~/vue-utils/GlobalComponents";
 
 // Import main css
 import "~/assets/styles/index.scss";
-
-// Import typefaces
-import "typeface-montserrat";
-import "typeface-merriweather";
 
 export default function (Vue, { router, head, isClient, appOptions }) {
   Vue.use(VueIcon, {
@@ -29,11 +30,11 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     }
   });
 
+  NProgress.configure({ showSpinner: false });
+
   appOptions.store = store;
 
   if (isClient) {
-    NProgress.configure({ showSpinner: false });
-
     router.beforeEach((to, from, next) => {
       store.dispatch("page/LOADING_START");
 
@@ -46,6 +47,14 @@ export default function (Vue, { router, head, isClient, appOptions }) {
       store.dispatch("page/LOADING_END");
 
       NProgress.done();
+    });
+
+    Object.defineProperties(Vue.prototype, {
+      $nprogress: {
+        get() {
+          return NProgress;
+        }
+      }
     });
   }
 }

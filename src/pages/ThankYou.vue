@@ -7,12 +7,12 @@
 </template>
 
 <script>
+import routerMixin from "~/vue-utils/mixins/router";
+
 export default {
   name: "Thankyou",
 
-  created() {
-    this.$store.dispatch("page/NAME", this.$options.name);
-  }
+  mixins: [routerMixin]
 };
 </script>
 

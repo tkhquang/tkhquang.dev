@@ -11,9 +11,7 @@ export default {
   name: (state) => {
     return state.name;
   },
-  isCurrent: (state) => {
-    return (name) => {
-      return state.name === name;
-    };
+  isCurrent: (state) => (name) => {
+    return state.name === name;
   }
 };

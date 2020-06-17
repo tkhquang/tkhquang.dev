@@ -43,12 +43,15 @@
     <HorizontalLine class="my-6" />
 
     <div class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded">
-      <CommentBox :key="commentBoxKey" />
+      <CommentBox :key="commentBoxKey" :css-vars="cssVars" />
     </div>
   </article>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { isEmpty } from "lodash";
+
 import seo from "~/vue-utils/mixins/seo.js";
 
 import PathInfo from "~/components/common/PathInfo";
@@ -78,6 +81,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      cssVars: "page/cssVars"
+    }),
+
     coverImage() {
       if (!this.$page.post.cover_image) {
         return "";
@@ -86,22 +93,31 @@ export default {
     }
   },
 
-  created() {
-    this.$store.dispatch("page/NAME", this.$options.name);
+  watch: {
+    cssVars: {
+      handler(newCssVars) {
+        if (isEmpty(newCssVars)) {
+          return;
+        }
+        this.reloadCommentBox();
+      },
+      deep: true,
+      immediate: true
+    }
+  },
 
-    // Force CommentBox to update everytime theme is changed
-    this.$bus.$on("toggle-theme", () => {
+  methods: {
+    reloadCommentBox() {
       this.$nextTick(() => {
         this.commentBoxKey += 1;
       });
-    });
+    }
   },
 
   metaInfo() {
     const {
       title: siteTitle,
       description: siteDescription,
-      // cover_image: metaImageUrl,
       path
     } = this.$page.post;
     return this.generateMetaInfo({

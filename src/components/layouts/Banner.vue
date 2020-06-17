@@ -131,13 +131,22 @@ export default {
     })
   },
 
-  created() {
-    this.$bus.$on("toggle-theme", this.setParticleColors);
+  watch: {
+    cssVars: {
+      handler(newCssVars) {
+        this.setParticleColors(newCssVars);
+      },
+      deep: true,
+      immediate: true
+    }
   },
 
   mounted() {
     this.initParticlesJS();
-    this.setParticleColors();
+
+    this.$nextTick(() => {
+      this.setParticleColors(this.cssVars);
+    });
   },
 
   beforeDestroy() {
@@ -154,31 +163,27 @@ export default {
   },
 
   methods: {
-    setParticleColors() {
-      this.$nextTick(() => {
-        const colors = this.cssVars;
+    setParticleColors(colors) {
+      if (isEmpty(colors)) {
+        return;
+      }
 
-        if (isEmpty(colors)) {
-          return;
-        }
+      if (!tsParticles) {
+        return;
+      }
 
-        if (!tsParticles) {
-          return;
-        }
+      const particles = tsParticles.domItem(0);
 
-        const particles = tsParticles.domItem(0);
+      if (!particles) {
+        return;
+      }
 
-        if (!particles) {
-          return;
-        }
+      const options = particles.options;
 
-        const options = particles.options;
+      options.particles.color.value = colors["primary"];
+      options.particles.lineLinked.color = colors["secondary"];
 
-        options.particles.color.value = colors["primary"];
-        options.particles.lineLinked.color = colors["secondary"];
-
-        particles.refresh();
-      });
+      particles.refresh();
     },
 
     initParticlesJS() {
