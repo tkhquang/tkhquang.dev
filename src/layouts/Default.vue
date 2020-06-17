@@ -81,7 +81,10 @@ export default {
 
   methods: {
     onScroll(e) {
-      const headerHeight = this.cssVars["header-height"] || 60;
+      const headerHeight =
+        this.cssVars && this.cssVars["header-height"]
+          ? this.cssVars["header-height"]
+          : 60;
 
       const top = window.pageYOffset || e.target.scrollTop || 0;
       this.isScrolled = top > parseInt(headerHeight) * 2;
