@@ -58,25 +58,33 @@ export default {
       window.addEventListener("scroll", this.onScroll);
       window.addEventListener("load", this.onScroll);
     }
-
-    this.$bus.$on("toggle-theme", () => {
-      this.$store.dispatch("page/CSS_VARIABLES");
-    });
   },
 
   mounted() {
     this.$store.dispatch("page/CSS_VARIABLES");
+
+    this.observer = new MutationObserver(() =>
+      this.$store.dispatch("page/CSS_VARIABLES")
+    );
+    this.observer.observe(global.document.body, {
+      attributes: true,
+      attributeFilter: ["data-theme", "style"]
+    });
   },
 
   destroyed() {
+    this.observer.disconnect();
+
     window.removeEventListener("scroll", this.onScroll);
     window.removeEventListener("load", this.onScroll);
   },
 
   methods: {
     onScroll(e) {
+      const headerHeight = this.cssVars["header-height"] || 60;
+
       const top = window.pageYOffset || e.target.scrollTop || 0;
-      this.isScrolled = top > parseInt(this.cssVars["header-height"]) * 2;
+      this.isScrolled = top > parseInt(headerHeight) * 2;
 
       const scrollPos = window.scrollY;
       const winHeight = window.innerHeight;
