@@ -61,15 +61,17 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("page/CSS_VARIABLES");
+    if (process.isClient) {
+      this.$store.dispatch("page/CSS_VARIABLES");
 
-    this.observer = new MutationObserver(() =>
-      this.$store.dispatch("page/CSS_VARIABLES")
-    );
-    this.observer.observe(global.document.body, {
-      attributes: true,
-      attributeFilter: ["data-theme", "style"]
-    });
+      this.observer = new MutationObserver(() =>
+        this.$store.dispatch("page/CSS_VARIABLES")
+      );
+      this.observer.observe(global.document.body, {
+        attributes: true,
+        attributeFilter: ["data-theme", "style"]
+      });
+    }
   },
 
   destroyed() {
