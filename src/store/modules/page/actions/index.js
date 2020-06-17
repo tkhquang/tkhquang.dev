@@ -11,6 +11,7 @@ export default {
 
   [Action.CSS_VARIABLES]({ commit }) {
     const cssVars = getCssVars();
+    console.log("ACTION PAYLOAD", cssVars);
     commit(`${[Mutation.CSS_VARIABLES]}`, cssVars);
   },
 

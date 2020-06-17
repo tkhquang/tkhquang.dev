@@ -134,6 +134,7 @@ export default {
   watch: {
     cssVars: {
       handler(newCssVars) {
+        console.log("Banner Watcher CSS Vars", newCssVars);
         this.setParticleColors(newCssVars);
       },
       deep: true,
