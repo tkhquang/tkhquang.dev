@@ -34,7 +34,7 @@ export default function (Vue, { router, head, isClient, appOptions }) {
   if (isClient) {
     NProgress.configure({ showSpinner: false });
 
-    router.beforeResolve((to, from, next) => {
+    router.beforeEach((to, from, next) => {
       store.dispatch("page/LOADING_START");
 
       NProgress.start();

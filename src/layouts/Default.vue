@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <Banner v-if="isCurrent('Home')" />
+    <Banner v-if="isCurrent('Home') || isHomePage" />
 
     <Header :is-scrolled="isScrolled" />
 
@@ -46,8 +46,12 @@ export default {
 
   computed: {
     ...mapGetters({
-      isCurrent: "page/isCurrent"
-    })
+      isCurrent: "page/isCurrent",
+      cssVars: "page/isCurrent"
+    }),
+    isHomePage() {
+      return /^\/(\d.+)?$/.test(this.$route.path);
+    }
   },
 
   created() {
@@ -56,9 +60,9 @@ export default {
       window.addEventListener("load", this.onScroll);
     }
 
-    this.$bus.$on("toggle-theme", () =>
-      this.$store.dispatch("page/CSS_VARIABLES")
-    );
+    this.$bus.$on("toggle-theme", () => {
+      this.$store.dispatch("page/CSS_VARIABLES");
+    });
   },
 
   destroyed() {
@@ -69,8 +73,7 @@ export default {
   methods: {
     onScroll(e) {
       const top = window.pageYOffset || e.target.scrollTop || 0;
-      this.isScrolled =
-        top > parseInt(this.$store.state.page.cssVars["header-height"]) * 2;
+      this.isScrolled = top > parseInt(this.cssVars["header-height"]) * 2;
 
       const scrollPos = window.scrollY;
       const winHeight = window.innerHeight;
