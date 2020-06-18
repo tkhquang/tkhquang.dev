@@ -54,6 +54,7 @@
 import { isEmpty } from "lodash";
 
 import seoMixin from "~/vue-utils/mixins/seo";
+import routerMixin from "~/vue-utils/mixins/router";
 
 import PathInfo from "~/components/common/PathInfo";
 import PostMeta from "~/components/common/PostMeta";
@@ -73,7 +74,7 @@ export default {
     CommentBox
   },
 
-  mixins: [seoMixin],
+  mixins: [seoMixin, routerMixin],
 
   inject: {
     $getCssVars: {
