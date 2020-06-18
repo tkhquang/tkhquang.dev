@@ -26,7 +26,7 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     }
   });
 
-  const options = {
+  Vue.use(VueProgressBar, {
     color: "var(--primary)",
     failedColor: "var(--error)",
     thickness: "2px",
@@ -38,7 +38,5 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     autoRevert: true,
     location: "top",
     inverse: false
-  };
-
-  Vue.use(VueProgressBar, options);
+  });
 }

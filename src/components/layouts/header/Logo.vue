@@ -1,29 +1,35 @@
 <template>
-  <g-link
-    class="logo flip-animate flex-center whitespace-no-wrap no-underine font-extrabold uppercase focus:outline-none select-none"
-    to="/"
-    @click.native="scrollToTop"
+  <button
+    type="button"
+    class="focus:outline-none"
+    @focus="(e) => e.target.blur()"
   >
-    <template v-if="!isHomePage">
-      <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon>
-      <span class="hidden md:inline-flex">
-        &nbsp;Back to&nbsp;
-      </span>
+    <g-link
+      class="logo flip-animate flex-center whitespace-no-wrap no-underine font-extrabold uppercase focus:outline-none select-none"
+      to="/"
+      @click.native="scrollToTop"
+    >
+      <template v-if="!isHomePage">
+        <v-icon name="arrow-left-circle" class="w-8 h-8"></v-icon>
+        <span class="hidden md:inline-flex">
+          &nbsp;Back to&nbsp;
+        </span>
+        <span
+          class="logo__text relative hidden md:inline-flex"
+          :data-hover="metadata.siteTitle"
+        >
+          Home
+        </span>
+      </template>
       <span
-        class="logo__text relative hidden md:inline-flex"
+        v-else
+        class="logo__text relative inline-flex"
         :data-hover="metadata.siteTitle"
       >
         Home
       </span>
-    </template>
-    <span
-      v-else
-      class="logo__text relative inline-flex"
-      :data-hover="metadata.siteTitle"
-    >
-      Home
-    </span>
-  </g-link>
+    </g-link>
+  </button>
 </template>
 
 <script>

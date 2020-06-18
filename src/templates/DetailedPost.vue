@@ -42,7 +42,9 @@
 
     <HorizontalLine class="my-6" />
 
-    <div class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded">
+    <div
+      class="article-comments surface p-2 w-full md:px-6 lg:px-12 rounded shadow-md"
+    >
       <CommentBox :key="commentBoxKey" :css-vars="cssVars" />
     </div>
   </article>
@@ -114,9 +116,7 @@ export default {
 
   methods: {
     reloadCommentBox() {
-      this.$nextTick(() => {
-        this.commentBoxKey += 1;
-      });
+      this.commentBoxKey += 1;
     }
   },
 

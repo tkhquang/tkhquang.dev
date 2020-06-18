@@ -8,7 +8,7 @@
         <HorizontalLine class="my-5" />
         <Subscribe />
       </div>
-      <CircuitBoard class="absolute inset-0 surface z-bg" />
+      <CircuitBoard class="absolute inset-0 shadow-md surface z-bg rounded" />
     </div>
   </section>
 </template>

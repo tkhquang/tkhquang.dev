@@ -35,7 +35,7 @@
           placeholder="your-email@address.ex"
           required
         />
-        <button type="submit" class="button">
+        <button type="submit" class="button" :disabled="status === 'fetching'">
           Subscribe
         </button>
       </template>
@@ -75,6 +75,7 @@ export default {
 
   methods: {
     handleSubmit() {
+      this.status = "fetching";
       request({
         url: "/api/newsletter-signup",
         method: "POST",

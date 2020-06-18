@@ -4,7 +4,7 @@
 
     <Header :is-scrolled="isScrolled" />
 
-    <main class="main-container relative flex-1 flex flex-col">
+    <main class="main-container relative flex-1 flex flex-col mb-5 md:mb-8">
       <slot />
     </main>
 
@@ -50,14 +50,20 @@ export default {
 
   created() {
     if (process.isClient) {
-      window.addEventListener("scroll", this.onScroll);
-      window.addEventListener("load", this.onScroll);
+      window.addEventListener("scroll", this.setYOffset);
+      window.addEventListener("load", this.setYOffset);
 
-      this.observer = new MutationObserver(this.setCssVars);
-      this.observer.observe(global.document.body, {
+      this.styleObserver = new MutationObserver(this.setCssVars);
+      this.styleObserver.observe(global.document.body, {
         attributes: true,
         attributeFilter: ["data-theme", "style"]
       });
+
+      // Might need to add polifills later
+      if (typeof ResizeObserver === "function") {
+        this.resizeObserver = new ResizeObserver(this.setYOffset);
+        this.resizeObserver.observe(global.document.body);
+      }
     }
   },
 
@@ -68,10 +74,16 @@ export default {
   },
 
   destroyed() {
-    this.observer.disconnect();
+    if (this.styleObserver) {
+      this.styleObserver.disconnect();
+    }
 
-    window.removeEventListener("scroll", this.onScroll);
-    window.removeEventListener("load", this.onScroll);
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+
+    window.removeEventListener("scroll", this.setYOffset);
+    window.removeEventListener("load", this.setYOffset);
   },
 
   methods: {
@@ -79,10 +91,10 @@ export default {
       this.cssVars = helpers.getCssVars();
     },
 
-    onScroll(e) {
+    setYOffset() {
       const headerHeight = this.cssVars["header-height"] || 60;
 
-      const top = window.pageYOffset || e.target.scrollTop || 0;
+      const top = window.pageYOffset || 0;
       this.isScrolled = top > parseInt(headerHeight) * 2;
 
       const scrollPos = window.scrollY;
