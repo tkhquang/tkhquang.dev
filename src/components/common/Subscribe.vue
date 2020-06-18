@@ -21,8 +21,8 @@
         </label>
       </div>
       <template v-if="!status || status === 'fetching'">
-        <div hidden aria-hidden="true">
-          <label for="email">
+        <div aria-hidden="true">
+          <label for="email" class="hidden">
             Your email
           </label>
         </div>
@@ -35,8 +35,19 @@
           placeholder="your-email@address.ex"
           required
         />
-        <button type="submit" class="button" :disabled="status === 'fetching'">
-          Subscribe
+        <button
+          type="submit"
+          class="button w-32"
+          :disabled="status === 'fetching'"
+        >
+          <template v-if="status !== 'fetching'">
+            Subscribe
+          </template>
+          <template v-else>
+            <span class="flex-center">
+              <v-icon name="loader" class="spinner w-4 h-4"></v-icon>
+            </span>
+          </template>
         </button>
       </template>
       <div v-else-if="status === 'success'" class="text-theme-success">
@@ -113,3 +124,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.spinner {
+  animation: spin 4s linear infinite;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="commentbox" />
+  <div ref="commentBox" class="commentbox" />
 </template>
 
 <script>
@@ -44,6 +44,16 @@ export default {
           subtextColor: this.cssVars["on-surface"]
         }
       );
+
+      try {
+        this.$nextTick(() => {
+          this.$refs.commentBox
+            .getElementsByTagName("iframe")[0]
+            .setAttribute("id", "comment-box");
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };

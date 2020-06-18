@@ -32,4 +32,7 @@
   &:hover {
     @apply bg-theme-primary text-theme-on-primary;
   }
+  &:disabled {
+    @apply outline-none cursor-not-allowed bg-gray-600 border-gray-500 text-white shadow-inner pointer-events-none;
+  }
 }
