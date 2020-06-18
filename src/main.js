@@ -31,12 +31,31 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     failedColor: "var(--error)",
     thickness: "2px",
     transition: {
-      speed: "0.2s",
+      speed: "0.1s",
       opacity: "0.6s",
       termination: 300
     },
     autoRevert: true,
     location: "top",
-    inverse: false
+    inverse: false,
+    autoFinish: false
   });
+
+  if (isClient) {
+    router.beforeEach((to, from, next) => {
+      if (!Vue.prototype.$Progress.$vm.RADON_LOADING_BAR.percent) {
+        Vue.prototype.$Progress.start();
+      } else {
+        Vue.prototype.$Progress.set(
+          Vue.prototype.$Progress.$vm.RADON_LOADING_BAR.percent || 0
+        );
+      }
+
+      next();
+    });
+
+    router.afterEach((to, from) => {
+      Vue.prototype.$Progress.finish();
+    });
+  }
 }

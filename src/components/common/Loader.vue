@@ -1,0 +1,56 @@
+<template>
+  <div class="loader flex-center" aria-hidden="true">
+    <div class="loader__line"></div>
+    <div class="loader__line"></div>
+    <div class="loader__line"></div>
+    <div class="loader__line"></div>
+    <div class="loader__line"></div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.loader {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loader__line {
+  max-width: 8px;
+  min-width: 5px;
+  max-height: 80px;
+  width: 100%;
+  height: 100%;
+  background: var(--on-background);
+  display: inline-block;
+  margin: 0 5px;
+  animation: loading 1s linear infinite;
+  $delays: (
+    2: -0.8s,
+    3: -0.7s,
+    4: -0.6s,
+    5: -0.5s
+  );
+  @each $idx, $delay in $delays {
+    &:nth-child(#{$idx}) {
+      animation-delay: $delay;
+    }
+  }
+}
+
+@keyframes loading {
+  0%,
+  10%,
+  80%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  30%,
+  60% {
+    transform: scaleY(1);
+  }
+}
+</style>

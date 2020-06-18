@@ -8,6 +8,8 @@
       <slot />
     </main>
 
+    <Loader v-cloak class="relative flex-1 hidden" />
+
     <BackToTop v-show="isScrolled" />
 
     <Footer />
@@ -18,6 +20,7 @@
 import { helpers } from "~/utils/";
 import pageMixin from "~/vue-utils/mixins/page";
 
+import Loader from "~/components/common/Loader";
 import Banner from "~/components/layouts/Banner";
 import Header from "~/components/layouts/Header";
 import BackToTop from "~/components/layouts/BackToTop";
@@ -25,6 +28,7 @@ import Footer from "~/components/layouts/Footer";
 
 export default {
   components: {
+    Loader,
     Header,
     Footer,
     Banner,
@@ -113,7 +117,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#banner {
-  height: calc(var(--header-height) * 2);
+.loader[v-cloak] {
+  display: flex;
 }
 </style>

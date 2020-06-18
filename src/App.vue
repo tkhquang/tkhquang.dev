@@ -60,31 +60,6 @@ export default {
 
   metaInfo() {
     return this.generateMetaInfo(this.$static.metadata);
-  },
-
-  mounted() {
-    this.$Progress.finish();
-  },
-
-  created() {
-    this.$Progress.start();
-
-    this.$router.beforeEach((to, from, next) => {
-      //  Does the page we want to go to have a meta.progress object?
-      if (to.meta.progress !== undefined) {
-        let meta = to.meta.progress;
-
-        this.$Progress.parseMeta(meta);
-      }
-
-      this.$Progress.start();
-
-      next();
-    });
-
-    this.$router.afterEach((to, from) => {
-      this.$Progress.finish();
-    });
   }
 };
 </script>

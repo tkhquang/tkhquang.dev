@@ -1,14 +1,32 @@
 <template>
-  <div id="banner" class="banner relative flex-center px-12 background" />
+  <div
+    id="banner"
+    aria-hidden="true"
+    class="banner relative flex-center px-12 background"
+  >
+    <Loader v-if="!isInitialized" />
+  </div>
 </template>
 
 <script>
 import { tsParticles } from "tsparticles";
 import { isEmpty } from "lodash";
 
+import Loader from "~/components/common/Loader";
+
 import { default as config } from "./banner/config.json";
 
 export default {
+  components: {
+    Loader
+  },
+
+  data() {
+    return {
+      isInitialized: false
+    };
+  },
+
   computed: {
     cssVars() {
       return this.$getCssVars();
@@ -75,6 +93,8 @@ export default {
       options.particles.lineLinked.color = colors["secondary"];
 
       particles.refresh();
+
+      this.isInitialized = true;
     },
 
     initParticlesJS() {
@@ -85,3 +105,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+#banner {
+  height: calc(var(--header-height) * 2);
+}
+</style>

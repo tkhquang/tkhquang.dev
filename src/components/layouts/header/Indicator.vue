@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="indicator relative block w-full h-5px z-20"
-    aria-hidden="true"
-    hidden
-  >
+  <div class="indicator relative block w-full h-5px z-20" aria-hidden="true">
     <div
       class="indicator__bar absolute top-0 left-0 h-5px primary"
       :style="`width: ${!isLoading ? yOffset : 0}%`"
