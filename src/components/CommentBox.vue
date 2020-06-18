@@ -25,7 +25,9 @@ export default {
   },
 
   beforeDestroy() {
-    this.removeCommentBox();
+    if (this.removeCommentBox) {
+      this.removeCommentBox();
+    }
   },
 
   methods: {
@@ -34,20 +36,14 @@ export default {
         return;
       }
 
-      try {
-        this.removeCommentBox = commentBox(
-          `${process.env.GRIDSOME_COMMENTBOX_PROJECT_ID}`,
-          {
-            backgroundColor: this.cssVars["surface"],
-            textColor: this.cssVars["on-background"],
-            subtextColor: this.cssVars["on-surface"]
-          }
-        );
-      } catch (error) {
-        if (process.isClient) {
-          console.log(error);
+      this.removeCommentBox = commentBox(
+        `${process.env.GRIDSOME_COMMENTBOX_PROJECT_ID}`,
+        {
+          backgroundColor: this.cssVars["surface"],
+          textColor: this.cssVars["on-background"],
+          subtextColor: this.cssVars["on-surface"]
         }
-      }
+      );
     }
   }
 };

@@ -11,25 +11,10 @@ html, body {
   }
 }
 
-#nprogress {
-  .bar {
-    // top: auto;
-    // bottom: 0;
-    height: 2px;
-
-    background: var(--primary) linear-gradient(to right, var(--primary), var(--tone), var(--secondary), var(--tone), var(--primary));
-    background-size: 500%;
-    animation: 2s linear infinite bar-progress, 0.3s fade-in;
-  }
-
-  .peg {
-    display: none;
-  }
-
-  .spinner-icon {
-    border-top-color: transparent;
-    border-left-color: transparent;
-  }
+.__cov-progress {
+  background: var(--primary) linear-gradient(to right, var(--primary), var(--tone), var(--secondary), var(--tone), var(--primary));
+  background-size: 500%;
+  animation: 2s linear infinite bar-progress;
 }
 
 @keyframes bar-progress {
@@ -38,14 +23,5 @@ html, body {
   }
   to {
     background-position: 125% 0
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }

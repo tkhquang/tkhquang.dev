@@ -6,13 +6,13 @@
   >
     <div
       class="indicator__bar absolute top-0 left-0 h-5px primary"
-      :style="`width: ${isInitalized ? yOffset : 0}%`"
+      :style="`width: ${!isLoading ? yOffset : 0}%`"
     />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import loadMixin from "~/vue-utils/mixins/load";
 
 export default {
   inject: {
@@ -22,24 +22,11 @@ export default {
     }
   },
 
-  data() {
-    return {
-      isInitalized: false
-    };
-  },
+  mixins: [loadMixin],
 
   computed: {
     yOffset() {
       return this.$getYOffset();
-    },
-    ...mapGetters({
-      isLoading: "page/isLoading"
-    })
-  },
-
-  watch: {
-    isLoading(newValue) {
-      this.setIndicatorWidth(newValue);
     }
   },
 

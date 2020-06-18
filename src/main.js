@@ -1,13 +1,9 @@
-/* eslint-disable no-unused-vars */
 import VueIcon from "vue-icon";
-import NProgress from "nprogress";
+import VueProgressBar from "vue-progressbar";
 
 // Import typefaces
 import "typeface-montserrat";
 import "typeface-merriweather";
-
-// Vuex store
-import store from "~/store";
 
 // Import global components
 import "~/vue-utils/GlobalComponents";
@@ -30,31 +26,19 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     }
   });
 
-  NProgress.configure({ showSpinner: false });
+  const options = {
+    color: "var(--primary)",
+    failedColor: "var(--error)",
+    thickness: "2px",
+    transition: {
+      speed: "0.2s",
+      opacity: "0.6s",
+      termination: 300
+    },
+    autoRevert: true,
+    location: "top",
+    inverse: false
+  };
 
-  appOptions.store = store;
-
-  if (isClient) {
-    router.beforeEach((to, from, next) => {
-      store.dispatch("page/LOADING_START");
-
-      NProgress.start();
-
-      next();
-    });
-
-    router.afterEach((to, from) => {
-      store.dispatch("page/LOADING_END");
-
-      NProgress.done();
-    });
-
-    Object.defineProperties(Vue.prototype, {
-      $nprogress: {
-        get() {
-          return NProgress;
-        }
-      }
-    });
-  }
+  Vue.use(VueProgressBar, options);
 }

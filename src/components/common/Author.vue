@@ -22,13 +22,19 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
+  inject: {
+    $getMetadata: {
+      type: Object,
+      required: true
+    }
+  },
+
   computed: {
-    ...mapGetters({
-      metadata: "page/metadata"
-    }),
+    metadata() {
+      return this.$getMetadata();
+    },
+
     imageUrl() {
       return require(`!!assets-loader?width=150&height=150&fit=cover&blur=10!~/assets/uploads/images/author.jpg`);
     }

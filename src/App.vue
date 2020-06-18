@@ -3,6 +3,7 @@
     <transition name="fade">
       <router-view />
     </transition>
+    <vue-progress-bar></vue-progress-bar>
   </DefaultLayout>
 </template>
 
@@ -34,7 +35,7 @@ query index {
 </static-query>
 
 <script>
-import seo from "~/vue-utils/mixins/seo.js";
+import seoMixin from "~/vue-utils/mixins/seo";
 
 import DefaultLayout from "~/layouts/Default";
 
@@ -42,14 +43,48 @@ export default {
   components: {
     DefaultLayout
   },
-  mixins: [seo],
 
-  created() {
-    this.$store.dispatch("page/METADATA", this.$static.metadata);
+  mixins: [seoMixin],
+
+  data() {
+    return {
+      metadata: {}
+    };
+  },
+
+  provide() {
+    return {
+      $getMetadata: () => this.$static.metadata
+    };
   },
 
   metaInfo() {
     return this.generateMetaInfo(this.$static.metadata);
+  },
+
+  mounted() {
+    this.$Progress.finish();
+  },
+
+  created() {
+    this.$Progress.start();
+
+    this.$router.beforeEach((to, from, next) => {
+      //  Does the page we want to go to have a meta.progress object?
+      if (to.meta.progress !== undefined) {
+        let meta = to.meta.progress;
+
+        this.$Progress.parseMeta(meta);
+      }
+
+      this.$Progress.start();
+
+      next();
+    });
+
+    this.$router.afterEach((to, from) => {
+      this.$Progress.finish();
+    });
   }
 };
 </script>

@@ -49,10 +49,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { isEmpty } from "lodash";
 
-import seo from "~/vue-utils/mixins/seo.js";
+import seoMixin from "~/vue-utils/mixins/seo";
 
 import PathInfo from "~/components/common/PathInfo";
 import PostMeta from "~/components/common/PostMeta";
@@ -72,7 +71,14 @@ export default {
     CommentBox
   },
 
-  mixins: [seo],
+  mixins: [seoMixin],
+
+  inject: {
+    $getCssVars: {
+      type: Object,
+      require: true
+    }
+  },
 
   data() {
     return {
@@ -81,9 +87,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters({
-      cssVars: "page/cssVars"
-    }),
+    cssVars() {
+      return this.$getCssVars();
+    },
 
     coverImage() {
       if (!this.$page.post.cover_image) {

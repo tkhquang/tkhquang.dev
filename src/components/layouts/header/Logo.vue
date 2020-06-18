@@ -27,17 +27,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 import pageMixin from "~/vue-utils/mixins/page";
 
 export default {
   mixins: [pageMixin],
 
+  inject: {
+    $getMetadata: {
+      type: Object,
+      required: true
+    }
+  },
+
   computed: {
-    ...mapGetters({
-      metadata: "page/metadata"
-    })
+    metadata() {
+      return this.$getMetadata();
+    }
   },
 
   methods: {

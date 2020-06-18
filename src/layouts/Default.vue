@@ -15,8 +15,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
+import { helpers } from "~/utils/";
 import pageMixin from "~/vue-utils/mixins/page";
 
 import Banner from "~/components/layouts/Banner";
@@ -33,44 +32,38 @@ export default {
   },
 
   mixins: [pageMixin],
+
   provide() {
     return {
+      $getCssVars: () => this.cssVars,
       $getYOffset: () => this.yOffsett
     };
   },
 
   data() {
     return {
+      cssVars: {},
       isScrolled: false,
-      indicatorWidth: 0,
       yOffsett: 0
     };
-  },
-
-  computed: {
-    ...mapGetters({
-      cssVars: "page/cssVars"
-    })
   },
 
   created() {
     if (process.isClient) {
       window.addEventListener("scroll", this.onScroll);
       window.addEventListener("load", this.onScroll);
+
+      this.observer = new MutationObserver(this.setCssVars);
+      this.observer.observe(global.document.body, {
+        attributes: true,
+        attributeFilter: ["data-theme", "style"]
+      });
     }
   },
 
   mounted() {
     if (process.isClient) {
-      this.$store.dispatch("page/CSS_VARIABLES");
-
-      this.observer = new MutationObserver(() =>
-        this.$store.dispatch("page/CSS_VARIABLES")
-      );
-      this.observer.observe(global.document.body, {
-        attributes: true,
-        attributeFilter: ["data-theme", "style"]
-      });
+      this.setCssVars();
     }
   },
 
@@ -82,11 +75,12 @@ export default {
   },
 
   methods: {
+    setCssVars() {
+      this.cssVars = helpers.getCssVars();
+    },
+
     onScroll(e) {
-      const headerHeight =
-        this.cssVars && this.cssVars["header-height"]
-          ? this.cssVars["header-height"]
-          : 60;
+      const headerHeight = this.cssVars["header-height"] || 60;
 
       const top = window.pageYOffset || e.target.scrollTop || 0;
       this.isScrolled = top > parseInt(headerHeight) * 2;

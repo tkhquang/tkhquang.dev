@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { tsParticles } from "tsparticles";
 import { isEmpty } from "lodash";
 
@@ -11,9 +10,16 @@ import { default as config } from "./banner/config.json";
 
 export default {
   computed: {
-    ...mapGetters({
-      cssVars: "page/cssVars"
-    })
+    cssVars() {
+      return this.$getCssVars();
+    }
+  },
+
+  inject: {
+    $getCssVars: {
+      type: Object,
+      require: true
+    }
   },
 
   watch: {
