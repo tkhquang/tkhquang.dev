@@ -47,9 +47,11 @@ export default {
 
       try {
         this.$nextTick(() => {
-          this.$refs.commentBox
-            .getElementsByTagName("iframe")[0]
-            .setAttribute("id", "comment-box");
+          const iframe = this.$refs.commentBox.getElementsByTagName(
+            "iframe"
+          )[0];
+
+          iframe.setAttribute("title", "Comments");
         });
       } catch (error) {
         console.log(error);

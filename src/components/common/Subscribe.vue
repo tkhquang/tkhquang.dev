@@ -7,7 +7,7 @@
       I'll send new posts to your inbox.
     </p>
     <form
-      class="email-form w-full pt-5 flex flex-wrap flex-center text-center"
+      class="email-form relative w-full pt-5 flex flex-wrap flex-center text-center"
       name="newsletter"
       method="POST"
       data-netlify="true"
@@ -21,11 +21,9 @@
         </label>
       </div>
       <template v-if="!status || status === 'fetching'">
-        <div aria-hidden="true">
-          <label for="email" class="hidden">
-            Your email
-          </label>
-        </div>
+        <label for="email" class="opacity-0 absolute inset-0 z-bg">
+          Your email
+        </label>
         <input
           id="email"
           v-model="email"
