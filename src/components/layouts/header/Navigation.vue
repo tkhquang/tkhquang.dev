@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex-center h-full hidden md:flex">
+  <nav class="flex-center h-full flex">
     <Layout
       :data="categories.data"
       :label="categories.label"

@@ -20,7 +20,7 @@
           <input name="bot-field" />
         </label>
       </div>
-      <template v-if="!status">
+      <template v-if="!status || status === 'fetching'">
         <div hidden aria-hidden="true">
           <label for="email">
             Your email
