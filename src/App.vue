@@ -58,6 +58,20 @@ export default {
     };
   },
 
+  mounted() {
+    this.$Progress.finish();
+  },
+
+  created() {
+    if (process.isClient) {
+      if (!this.$Progress.$vm.RADON_LOADING_BAR.percent) {
+        this.$Progress.start();
+      } else {
+        this.$Progress.set(this.$Progress.$vm.RADON_LOADING_BAR.percent || 0);
+      }
+    }
+  },
+
   metaInfo() {
     return this.generateMetaInfo(this.$static.metadata);
   }
