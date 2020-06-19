@@ -14,12 +14,13 @@
         <ToggleTheme class="ml-4" />
       </div>
     </div>
-    <Indicator v-if="isPostPage" />
+    <Indicator v-if="isPostPage && !isLeaving" />
   </header>
 </template>
 
 <script>
 import pageMixin from "~/vue-utils/mixins/page";
+import routerMixin from "~/vue-utils/mixins/router";
 
 import Logo from "./header/Logo";
 import ToggleTheme from "./header/ToggleTheme";
@@ -34,7 +35,7 @@ export default {
     Indicator
   },
 
-  mixins: [pageMixin],
+  mixins: [pageMixin, routerMixin],
 
   props: {
     isScrolled: {

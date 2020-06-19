@@ -13,6 +13,21 @@
   opacity: 0;
 }
 
+.quick-fade-enter-active,
+.quick-fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.2s;
+}
+
+.quick-fade-enter-active {
+  transition-delay: 0;
+}
+
+.quick-fade-enter,
+.quick-fade-leave-active {
+  opacity: 0;
+}
+
 .list-border {
   & > li {
     padding-bottom: 1px;

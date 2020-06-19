@@ -1,10 +1,18 @@
+import Loader from "~/components/common/Loader";
+
 export default {
+  components: {
+    Loader
+  },
+
+  data() {
+    return {
+      isLeaving: false
+    };
+  },
+
   beforeRouteLeave(to, from, next) {
-    if (!this.$Progress.$vm.RADON_LOADING_BAR.percent) {
-      this.$Progress.start();
-    } else {
-      this.$Progress.set(this.$Progress.$vm.RADON_LOADING_BAR.percent || 0);
-    }
+    this.isLeaving = true;
 
     next();
   }

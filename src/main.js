@@ -43,13 +43,7 @@ export default function (Vue, { router, head, isClient, appOptions }) {
 
   if (isClient) {
     router.beforeEach((to, from, next) => {
-      if (!Vue.prototype.$Progress.$vm.RADON_LOADING_BAR.percent) {
-        Vue.prototype.$Progress.start();
-      } else {
-        Vue.prototype.$Progress.set(
-          Vue.prototype.$Progress.$vm.RADON_LOADING_BAR.percent || 0
-        );
-      }
+      Vue.prototype.$Progress.start();
 
       next();
     });

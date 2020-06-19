@@ -2,13 +2,24 @@
   <div class="flex flex-col min-h-screen">
     <Banner v-if="isHomePage" />
 
-    <Header :is-scrolled="isScrolled" />
+    <Header scrolled="isScrolled" />
 
-    <main class="main-container relative flex-1 flex flex-col mb-5 md:mb-8">
-      <slot />
-    </main>
+    <transition name="quick-fade">
+      <main
+        v-if="!isLeaving"
+        class="main-container relative flex-1 flex flex-col mb-5 md:mb-8"
+      >
+        <slot />
+      </main>
+    </transition>
 
-    <Loader v-cloak class="relative flex-1 hidden" />
+    <transition name="quick-fade">
+      <Loader v-if="isLeaving" class="relative flex flex-1" />
+    </transition>
+
+    <transition name="quick-fade">
+      <Loader v-cloak class="relative flex-1 hidden" />
+    </transition>
 
     <BackToTop v-show="isScrolled" />
 
@@ -19,6 +30,7 @@
 <script>
 import { helpers } from "~/utils/";
 import pageMixin from "~/vue-utils/mixins/page";
+import routerMixin from "~/vue-utils/mixins/router";
 
 import Loader from "~/components/common/Loader";
 import Banner from "~/components/layouts/Banner";
@@ -35,7 +47,7 @@ export default {
     BackToTop
   },
 
-  mixins: [pageMixin],
+  mixins: [pageMixin, routerMixin],
 
   provide() {
     return {
