@@ -41,15 +41,24 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     autoFinish: false
   });
 
-  if (isClient) {
-    router.beforeEach((to, from, next) => {
-      Vue.prototype.$Progress.start();
+  //if (isClient) {
 
-      next();
-    });
+  router.beforeEach((to, from, next) => {
+    Vue.prototype.$Progress.start();
 
-    router.afterEach((to, from) => {
-      Vue.prototype.$Progress.finish();
-    });
-  }
+    next();
+  });
+
+  router.afterEach((to, from) => {
+    Vue.prototype.$Progress.finish();
+
+    Vue.prototype.$bus.$emit("route-leaving", false);
+  });
+
+  router.onError((to, from, currentLocation) => {
+    Vue.prototype.$Progress.finish();
+
+    Vue.prototype.$bus.$emit("route-leaving", false);
+  });
+  //}
 }

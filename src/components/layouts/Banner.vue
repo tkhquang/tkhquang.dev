@@ -2,9 +2,9 @@
   <div
     id="banner"
     aria-hidden="true"
-    class="banner relative flex-center px-12 background"
+    class="banner relative flex-center px-12 background z-40"
   >
-    <Loader v-if="!isInitialized" />
+    <Loader v-if="!isInitialized" class="absolute h-1/2" />
   </div>
 </template>
 
@@ -109,5 +109,9 @@ export default {
 <style lang="scss" scoped>
 #banner {
   height: calc(var(--header-height) * 2);
+
+  .loader {
+    height: 50%;
+  }
 }
 </style>

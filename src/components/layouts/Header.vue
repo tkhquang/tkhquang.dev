@@ -14,7 +14,7 @@
         <ToggleTheme class="ml-4" />
       </div>
     </div>
-    <Indicator v-if="isPostPage && !isLeaving" />
+    <Indicator v-if="isPostPage" />
   </header>
 </template>
 

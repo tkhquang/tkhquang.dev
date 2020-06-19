@@ -2,7 +2,7 @@
   <div class="indicator relative block w-full h-5px z-20" aria-hidden="true">
     <div
       class="indicator__bar absolute top-0 left-0 h-5px primary"
-      :style="`width: ${!isLoading ? yOffset : 0}%`"
+      :style="`width: ${!isLoading && !isLeaving ? yOffset : 0}%`"
     />
   </div>
 </template>
@@ -20,10 +20,22 @@ export default {
 
   mixins: [loadMixin],
 
+  data() {
+    return {
+      isLeaving: false
+    };
+  },
+
   computed: {
     yOffset() {
       return this.$getYOffset();
     }
+  },
+
+  created() {
+    this.$bus.$on("route-leaving", (event) => {
+      this.isLeaving = event;
+    });
   },
 
   mounted() {

@@ -4,21 +4,16 @@
 
     <Header scrolled="isScrolled" />
 
+    <main class="main-container relative flex-1 flex flex-col mb-5 md:mb-8">
+      <slot />
+    </main>
+
     <transition name="quick-fade">
-      <main
-        v-if="!isLeaving"
-        class="main-container relative flex-1 flex flex-col mb-5 md:mb-8"
-      >
-        <slot />
-      </main>
+      <Loader v-if="isLeaving" class="loader__leaving z-50" />
     </transition>
 
     <transition name="quick-fade">
-      <Loader v-if="isLeaving" class="relative flex flex-1" />
-    </transition>
-
-    <transition name="quick-fade">
-      <Loader v-cloak class="relative flex-1 hidden" />
+      <Loader v-cloak class="loader__fallback relative flex-1 hidden" />
     </transition>
 
     <BackToTop v-show="isScrolled" />
@@ -30,7 +25,6 @@
 <script>
 import { helpers } from "~/utils/";
 import pageMixin from "~/vue-utils/mixins/page";
-import routerMixin from "~/vue-utils/mixins/router";
 
 import Loader from "~/components/common/Loader";
 import Banner from "~/components/layouts/Banner";
@@ -47,7 +41,7 @@ export default {
     BackToTop
   },
 
-  mixins: [pageMixin, routerMixin],
+  mixins: [pageMixin],
 
   provide() {
     return {
@@ -58,6 +52,7 @@ export default {
 
   data() {
     return {
+      isLeaving: false,
       cssVars: {},
       isScrolled: false,
       yOffsett: 0
@@ -81,6 +76,17 @@ export default {
         this.resizeObserver.observe(global.document.body);
       }
     }
+
+    this.$bus.$on("route-leaving", (event) => {
+      this.isLeaving = event;
+
+      // Remove the loading overlay after 60s regardless
+      if (event) {
+        setTimeout(() => {
+          this.isLeaving = false;
+        }, 60000);
+      }
+    });
   },
 
   mounted() {
@@ -129,7 +135,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.loader[v-cloak] {
-  display: flex;
+.loader__fallback {
+  background: none;
+
+  &[v-cloak] {
+    display: flex;
+  }
+}
+
+.loader__leaving {
+  position: fixed;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 </style>

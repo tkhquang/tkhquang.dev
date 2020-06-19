@@ -5,14 +5,8 @@ export default {
     Loader
   },
 
-  data() {
-    return {
-      isLeaving: false
-    };
-  },
-
   beforeRouteLeave(to, from, next) {
-    this.isLeaving = true;
+    this.$bus.$emit("route-leaving", true);
 
     next();
   }
