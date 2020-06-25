@@ -114,24 +114,17 @@ query pathInfo {
 <script>
 import dayjs from "dayjs";
 
-import {
-  VsaList,
-  VsaItem,
-  VsaHeading,
-  VsaContent,
-  VsaIcon
-} from "vue-simple-accordion";
+import seoMixin from "~/vue-utils/mixins/seo";
+import routerMixin from "~/vue-utils/mixins/router";
+
 import BlogInfo from "~/components/widgets/BlogInfo";
 
 export default {
   components: {
-    VsaList,
-    VsaItem,
-    VsaHeading,
-    VsaContent,
-    VsaIcon,
     BlogInfo
   },
+
+  mixins: [seoMixin, routerMixin],
 
   computed: {
     categories() {
@@ -158,6 +151,10 @@ export default {
       }
       return dayjs(rawDate).format("HH:mm-DD/MM/YYYY");
     }
+  },
+
+  metaInfo() {
+    return this.generateMetaInfo({ siteTitle: "All Categories" });
   }
 };
 </script>
