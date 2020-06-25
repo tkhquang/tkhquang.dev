@@ -186,3 +186,6 @@ static/admin/config.yml
 # Netlify functions
 functions/
 src/lambda/node_modules/
+
+# Custom libs
+lib/*/node_modules/

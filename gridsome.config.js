@@ -14,24 +14,12 @@ module.exports = {
   icon: "src/favicon.png",
 
   // Add global metadata to the GraphQL schema.
-  siteName: "Ljóss - The Portal To A Nobody's Inner World",
-  siteDescription: "Ljóss - The portal to a nobody's inner world.",
-  titleTemplate: `%s | Ljóss - The Portal To A Nobody's Inner World`,
+  ...require("./static/resources/json/site-meta.json"),
   siteUrl:
     process.env.NODE_ENV === "production"
       ? `${process.env.GRIDSOME_SITE_URL}/blog`
       : process.env.GRIDSOME_SITE_URL,
-  metadata: {
-    siteTitle: "Ljóss",
-    siteHeading: "The Portal To A Nobody's Inner World",
-    siteName: "Ljóss - The Portal To A Nobody's Inner World",
-    siteDescription: "Ljóss - The portal to a nobody's inner world.",
-    siteOwner: {
-      name: "Aleks",
-      description: `<p>Hello there, I'm Aleks, a Software Engineer who loves open-source products and micro startups. This blog is just a place for me to post random stuff about things I like, interesting stories, and sometimes technical problems.</p>`
-    },
-    siteTwitter: "@holy_quangtk"
-  },
+  metadata: require("./static/resources/json/meta.json"),
 
   templates: {
     Post: [
@@ -60,6 +48,11 @@ module.exports = {
       externalLinksTarget: "_blank",
       externalLinksRel: ["nofollow", "noopener", "noreferrer"],
       anchorClassName: "icon icon-link",
+      processImages: true,
+      imageBlurRatio: 10,
+      imageQuality: 75,
+      lazyLoadImages: true,
+      imageSource: "./src/assets/uploads/images",
       plugins: [
         [
           "gridsome-plugin-remark-prismjs-all",
@@ -81,16 +74,17 @@ module.exports = {
         [
           "gridsome-remark-figure-caption",
           {
-            wrapperClassName: "md-figure-wrapper",
             figureClassName: "md-figure-block",
             imageClassName: "md-figure-image",
             captionClassName: "md-figure-caption"
           }
         ],
         [
-          "@noxify/gridsome-plugin-remark-image-download",
+          require("./lib/gridsome-custom-plugin"),
           {
-            targetPath: "./src/assets/uploads/remote"
+            targetPath: "./src/assets/uploads/remote",
+            publicFolder: "./src/assets/uploads/images",
+            cache: true
           }
         ]
       ]

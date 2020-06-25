@@ -4,7 +4,7 @@
 
     <Header scrolled="isScrolled" />
 
-    <main class="main-container relative flex-1 flex flex-col mb-5 md:mb-8">
+    <main class="main-container relative flex-1 flex flex-col">
       <slot />
     </main>
 

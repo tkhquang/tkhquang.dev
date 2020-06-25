@@ -8,6 +8,9 @@ export default {
     },
     isCategoryPage() {
       return /^\/categories\/.*/.test(this.$route.path);
+    },
+    isTagPage() {
+      return /^\/tags\/.*/.test(this.$route.path);
     }
   }
 };

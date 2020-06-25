@@ -25,6 +25,7 @@ export default {
       required: true
     }
   },
+
   computed: {
     dates() {
       const formatDate = (rawDate) => {

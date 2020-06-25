@@ -4,19 +4,18 @@
       {{ $page.post.title }}
     </h1>
 
-    <PostMeta class="article__meta my-3" :post="$page.post" />
+    <PostMeta class="article__meta mt-3 mb-6" :post="$page.post" />
 
-    <HorizontalLine class="my-3" />
-
-    <PathInfo class="article__path-info" :slug="$page.post.category_slug" />
-
-    <HorizontalLine class="my-3" />
+    <PathInfo
+      class="article__path-info"
+      :category-slug="$page.post.category_slug"
+    />
 
     <template v-if="$page.post.cover_image">
-      <figure class="mb-6">
+      <figure class="my-6">
         <g-image
           alt="Cover image"
-          class="article__image my-4"
+          class="article__image"
           :src="coverImage"
           width="1280"
           height="720"
@@ -47,6 +46,8 @@
     >
       <CommentBox :key="commentBoxKey" :css-vars="cssVars" />
     </div>
+
+    <HorizontalLine class="my-6" />
   </article>
 </template>
 
@@ -144,7 +145,6 @@ query Post ($path: String!) {
     path
     created_at
     updated_at
-    timeToRead
     description
     content
     cover_image (width: 1280, height: 720, blur: 10, quality: 80)
