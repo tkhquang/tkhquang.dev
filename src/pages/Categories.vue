@@ -28,31 +28,29 @@
             </VsaIcon>
 
             <VsaContent>
-              <ul class="">
+              <ul class="post__list">
                 <li
                   v-for="post in filterByCategories(category.slug)"
                   :key="post.id"
-                  class="mb-2"
+                  class="post__item mb-2 grid gap-4 p-2 hover:bg-theme-secondary hover:text-theme-on-secondary transition duration-500 rounded truncate"
                 >
-                  <div
-                    class="grid grid-cols-2 gap-4 p-2 hover:bg-theme-secondary hover:text-theme-on-secondary transition duration-500"
+                  <time class="font-mono" :datetime="post.created_at">
+                    <span class="hidden md:inline">
+                      {{ formatDate(post.created_at).time }}
+                    </span>
+                    <span>
+                      {{ formatDate(post.created_at).date }}
+                    </span>
+                  </time>
+                  <g-link
+                    class="link mr-auto"
+                    :to="post.path"
+                    :title="post.description"
                   >
-                    <time
-                      class="font-mono"
-                      :datetime="formatDate(post.created_at)"
-                    >
-                      {{ formatDate(post.created_at) }}
-                    </time>
-                    <g-link
-                      class="link mr-auto"
-                      :to="post.path"
-                      :title="post.description"
-                    >
-                      <span>
-                        {{ post.title }}
-                      </span>
-                    </g-link>
-                  </div>
+                    <span>
+                      {{ post.title }}
+                    </span>
+                  </g-link>
                 </li>
               </ul>
             </VsaContent>
@@ -149,7 +147,11 @@ export default {
       if (!dayjs(rawDate).isValid()) {
         return null;
       }
-      return dayjs(rawDate).format("HH:mm-DD/MM/YYYY");
+
+      return {
+        time: dayjs(rawDate).format("HH:mm"),
+        date: dayjs(rawDate).format("DD/MM/YYYY")
+      };
     }
   },
 
@@ -160,6 +162,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.post__item {
+  grid-template-columns: 1fr 2fr;
+}
+
 .vsa-list {
   --vsa-bg-color: var(--surface);
   --vsa-highlight-color: var(--primary);
