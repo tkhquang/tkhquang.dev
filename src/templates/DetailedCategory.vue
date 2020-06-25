@@ -36,7 +36,6 @@
           title
           created_at
           updated_at
-          timeToRead
           description
           cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
           path
@@ -76,7 +75,6 @@
           title
           created_at
           updated_at
-          timeToRead
           description
           cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
           path

@@ -1,12 +1,18 @@
 <template>
-  <nav class="path-info font-bold italic text-theme-primary">
+  <nav v-if="!isHomePage" class="path-info font-bold italic text-theme-primary">
+    <HorizontalLine class="my-3" />
     <g-link class="path-info__link" to="/">
       Home
     </g-link>
     ->
-    <g-link class="path-info__link" :to="category.path">
-      {{ category.title }}
+    <g-link class="path-info__link" :to="pathData.base.path">
+      {{ pathData.base.title }}
     </g-link>
+    ->
+    <g-link class="path-info__link" :to="pathData.path">
+      {{ pathData.title }}
+    </g-link>
+    <HorizontalLine class="my-3" />
   </nav>
 </template>
 
@@ -22,24 +28,81 @@ query pathInfo {
       }
     }
   }
+  tags: allTag (sortBy: "title") {
+    edges {
+      node {
+        id
+        title
+        path
+      }
+    }
+  }
 }
 </static-query>
 
 <script>
+import pageMixin from "~/vue-utils/mixins/page";
+
 export default {
+  mixins: [pageMixin],
+
   props: {
-    slug: {
+    categorySlug: {
       type: String,
-      required: true
+      required: false,
+      default: undefined
     }
   },
-  computed: {
-    category() {
-      const { node } = this.$static.categories.edges.find(
-        ({ node }) => node.slug === this.slug
-      );
 
-      return { ...node };
+  computed: {
+    pathData() {
+      return this.category || this.tag;
+    },
+
+    allCategories() {
+      return this.$static.categories.edges.map(({ node }) => {
+        return {
+          ...node,
+          base: {
+            path: "/categories/",
+            title: "Categories"
+          }
+        };
+      });
+    },
+
+    category() {
+      if (!this.isCategoryPage && !this.isPostPage) {
+        return null;
+      }
+
+      return this.allCategories.find((category) => {
+        return category.path.includes(
+          this.categorySlug || this.$route.params.slug
+        );
+      });
+    },
+
+    allTags() {
+      return this.$static.tags.edges.map(({ node }) => {
+        return {
+          ...node,
+          base: {
+            path: "/tags/",
+            title: "Tags"
+          }
+        };
+      });
+    },
+
+    tag() {
+      if (!this.isTagPage) {
+        return null;
+      }
+
+      return this.allTags.find((tag) => {
+        return tag.path.includes(this.$route.params.title);
+      });
     }
   }
 };

@@ -15,4 +15,9 @@ You properly won't see this but still:
 npm run install
 ```
 
-![In the land of a Thousand Fables...](https://steamuserimages-a.akamaihd.net/ugc/1190587229906118910/20E7530397BAB1EFC9742B8C5F3055B403A81C17/)
+# Test for remote image
+![This is a remote image](https://steamuserimages-a.akamaihd.net/ugc/1190587229906118910/20E7530397BAB1EFC9742B8C5F3055B403A81C17/)
+
+
+# Test for local image
+![This is a local image](/gridsome.jpg)

@@ -5529,9 +5529,9 @@ gridsome-plugin-remark-prismjs-all@^0.3.5:
     unist-util-visit "^2.0.2"
 
 gridsome-remark-figure-caption@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/gridsome-remark-figure-caption/-/gridsome-remark-figure-caption-1.0.1.tgz#272db0fa21784e09c23eb9ebe933031665dae3a2"
-  integrity sha512-uQ/mVIGZuxWD0EUxV8UUAcpgl5H5p4IsAQzJjijgLTz7WhYQ9q78WOvL8NyqWm5kIY6f7+bgXTjPjBRQk9AfLQ==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/gridsome-remark-figure-caption/-/gridsome-remark-figure-caption-1.1.1.tgz#6e260d50f965ad1341620d5ba0023d35e18c4d05"
+  integrity sha512-n84ihiqY8uvdcdAOgMgd24xjRgnCI9Mtw4F+rCEwb/XLRLfuWQjpv4m7LMlD9ZQRwoJR52omqsqjjiFzvyezrQ==
   dependencies:
     unist-util-visit "^2.0.2"
 
@@ -7175,6 +7175,11 @@ lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
   integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
+
+lodash.merge@^4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
 lodash.template@^4.5.0:
   version "4.5.0"
@@ -13105,6 +13110,13 @@ vue-server-renderer@^2.6.10:
     resolve "^1.2.0"
     serialize-javascript "^2.1.2"
     source-map "0.5.6"
+
+vue-simple-accordion@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/vue-simple-accordion/-/vue-simple-accordion-0.0.4.tgz#8f243316d6ba08c764eae2343cfa46ce6c1502ee"
+  integrity sha512-RQNE5rsKxboR+KMYRL8TyWJfFamXBpnzjo0fHoAPzeKmQ84YFaj1rzU4T9keIHkBEJQUCWZS4nO+DOlwOQDsSg==
+  dependencies:
+    lodash.merge "^4.6.2"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"

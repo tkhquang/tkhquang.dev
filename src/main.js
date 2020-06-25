@@ -1,6 +1,8 @@
 import VueIcon from "vue-icon";
 import VueProgressBar from "vue-progressbar";
 
+// import VueSimpleAccordion from "vue-simple-accordion";
+
 // Import typefaces
 import "typeface-montserrat";
 import "typeface-merriweather";
@@ -41,7 +43,7 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     autoFinish: false
   });
 
-  //if (isClient) {
+  //  Vue.use(VueSimpleAccordion, {});
 
   router.beforeEach((to, from, next) => {
     Vue.prototype.$Progress.start();
@@ -60,5 +62,4 @@ export default function (Vue, { router, head, isClient, appOptions }) {
 
     Vue.prototype.$bus.$emit("route-leaving", false);
   });
-  //}
 }
