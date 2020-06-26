@@ -19,13 +19,12 @@
     "@gridsome/remark-prismjs": "^0.3.0",
     "@gridsome/source-filesystem": "^0.6.2",
     "@gridsome/transformer-remark": "^0.6.0",
-    "@noxify/gridsome-plugin-remark-image-download": "https://github.com/noxify/gridsome-plugin-remark-image-download.git",
     "axios": "^0.19.2",
     "commentbox.io": "^2.0.0",
     "dayjs": "^1.8.28",
     "gridsome": "^0.7.17",
     "gridsome-plugin-remark-prismjs-all": "^0.3.5",
-    "gridsome-remark-figure-caption": "^1.0.0",
+    "gridsome-remark-figure-caption": "1.1.2",
     "lodash": "^4.17.15",
     "netlify-cms": "^2.10.50",
     "prismjs": "^1.20.0",
@@ -36,9 +35,7 @@
     "typeface-montserrat": "^0.0.75",
     "vue-icon": "^2.1.2",
     "vue-progressbar": "^0.7.5",
-    "vue-simple-accordion": "0.0.4",
-    "vuex": "^3.4.0",
-    "vuex-persistedstate": "^3.0.1"
+    "vue-simple-accordion": "0.0.4"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.0",

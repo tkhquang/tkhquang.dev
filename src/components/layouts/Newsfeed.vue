@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
+    class="relative max-w-xl mx-auto px-4 my-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
     <FeedList :page-data="pageData" />
     <BlogInfo class="w-full lg:w-1/4 mt-8 lg:mt-4" />
