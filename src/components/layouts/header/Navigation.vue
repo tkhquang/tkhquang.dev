@@ -54,7 +54,7 @@ export default {
     },
 
     categories_label() {
-      if (this.isHomePage) {
+      if (this.isHomePage || this.isTagPage) {
         return "Categories";
       }
 
@@ -78,7 +78,7 @@ export default {
     },
 
     categories_active_slug() {
-      if (this.isHomePage) {
+      if (this.isHomePage || this.isTagPage) {
         return "";
       }
 

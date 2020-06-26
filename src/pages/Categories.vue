@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
+    class="relative max-w-xl mx-auto px-4 my-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
     <section class="categories w-full lg:w-3/4">
       <div class="lg:w-4/5 mx-auto">
