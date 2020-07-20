@@ -41,7 +41,7 @@
                     </span>
                   </time>
                   <g-link
-                    class="link mr-auto"
+                    class="link truncate"
                     :to="post.path"
                     :title="post.description"
                   >
