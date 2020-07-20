@@ -13,7 +13,7 @@ description: (July 20, 2017 - July 20, 2020), it's been 3 years since Chester
   listening to Linkin Park's songs.
 ---
 
-*(July 20, 2017 - July 20, 2020);, it's been 3 years since Chester Bennington's death, yet feels like forever from when I've first started listening to Linkin Park's songs.*
+*(July 20, 2017 - July 20, 2020), it's been 3 years since Chester Bennington's death, yet feels like forever from when I've first started listening to Linkin Park's songs.*
 
 # One step closer to a new genre
 
