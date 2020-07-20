@@ -72,6 +72,12 @@ module.exports = {
           }
         ],
         [
+          "@noxify/gridsome-plugin-remark-embed",
+          {
+            enabledProviders: ["Youtube", "Gist"]
+          }
+        ],
+        [
           "gridsome-remark-figure-caption",
           {
             figureClassName: "md-figure-block",
