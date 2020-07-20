@@ -8,12 +8,12 @@ tags:
   - Music
   - Memories
 cover_image: /uploads/images/chester.jpg
-description: July 20, 2017 - July 20, 2020, it's been 3 years since Chester
+description: (July 20, 2017 - July 20, 2020), it's been 3 years since Chester
   Bennington's death, yet feels like forever from when I've first started
   listening to Linkin Park's songs.
 ---
 
-*July 20, 2017 - July 20, 2020, it's been 3 years since Chester Bennington's death, yet feels like forever from when I've first started listening to Linkin Park's songs.*
+*(July 20, 2017 - July 20, 2020);, it's been 3 years since Chester Bennington's death, yet feels like forever from when I've first started listening to Linkin Park's songs.*
 
 # One step closer to a new genre
 
@@ -29,7 +29,7 @@ As I look back at it, the first song of Linkin Park I've heard was [**One Step C
 
 > We're living at the mercy of the pain and the fear. Until we tell it, forget it, let it all disappear...
 >
-> -- <cite>Linkin Park (Waiting For The End)</cite>
+> <cite>Linkin Park (Waiting For The End)</cite>
 
 https://www.youtube.com/watch?v=5qF_qbaWt3Q
 
@@ -39,13 +39,13 @@ I don't listen to every Linkin Park's song. There are only a few of them I liste
 
 > They say that I don't belong, say that I should retreat, that I'm marching to the rhythm of a lonesome defeat. But the sound of your voice puts the pain in reverse. No surrender, no illusions and for better or worse.
 >
-> -- -- <cite>Linkin Park (Battle Symphony)</cite>
+> <cite>Linkin Park (Battle Symphony)</cite>
 
 There is a false saying, *"Whoever cannot save himself, how can he save others?"*. But if I have the key to your chains, why should my lock and yours be the same?
 
 > Nobody's looking to die, when they're happy inside...
 >
-> -- <cite>Mayday Parade (It Is What It Is)</cite>
+> <cite>Mayday Parade (It Is What It Is)</cite>
 
 It's really shocking how someone that you never meet in person can impact so deeply on you. **Rest in peace, Chester.**
 
