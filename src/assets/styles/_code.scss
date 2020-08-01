@@ -17,7 +17,7 @@ $functionColor: #DD4A68;
 $regexColor: #ee9900;
 
 pre {
-  @apply p-12 mb-8 shadow-inner border-4 bg-theme-code border;
+  @apply px-12 py-2 mb-8 shadow-inner bg-theme-code rounded-b-md;
 }
 
 code {
@@ -54,7 +54,7 @@ pre[class*="language-"] {
 
 /* Inline code */
 :not(pre) > code[class*="language-"] {
-  @apply whitespace-normal border border-4 bg-theme-code;
+  @apply whitespace-normal bg-theme-code px-1 shadow-inner;
 }
 
 .token.comment,
@@ -134,11 +134,11 @@ pre[class*="language-"] {
 }
 
 .gridsome-code-title {
-  @apply m-4;
+  @apply px-4 py-2 bg-theme-surface font-bold rounded-t-md;
 }
 
 .line-numbers .line-numbers-rows {
-  @apply my-12 mx-2 border-r;
+  @apply py-2 mx-2 border-r;
 }
 
 .command-line-prompt {
