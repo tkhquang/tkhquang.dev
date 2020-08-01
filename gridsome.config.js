@@ -74,7 +74,7 @@ module.exports = {
         [
           "@noxify/gridsome-plugin-remark-embed",
           {
-            enabledProviders: ["Youtube", "Gist"]
+            enabledProviders: ["Youtube", "Gist", "CodeSandbox"]
           }
         ],
         [
