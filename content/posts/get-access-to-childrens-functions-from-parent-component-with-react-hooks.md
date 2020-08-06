@@ -16,7 +16,7 @@ But if you must expose an imperative method on a child component, you can use `r
 
 # The Problem
 
-In this example we will create a simple counter application with the 2 individual counters. It will update the total count value (sum of the 2 counter values) only when the user click on the `Update Counter` button. To give an illustration, [this](https://htv0z.csb.app/) is what we are going to build.
+In this example we will create a simple counter application with the 2 individual counters. It will update the total count value (sum of the 2 counter values) only when the user clicks on the `Update Counter` button. To give an illustration, [this](https://htv0z.csb.app/) is what we are going to build.
 
 In case the above link no longer works:
 
@@ -62,7 +62,7 @@ Now, the problem is that we need to get access to the states of the children to 
 
 # `useImperativeHandle` to the rescue
 
-To achieve what we are bulding, there are different approaches, but in this case, we will be using [**`useRef`**](https://reactjs.org/docs/hooks-reference.html#useref), [**`forwardRef`**](https://reactjs.org/docs/react-api.html#reactforwardref) and [**`useImperativeHandle`**](https://reactjs.org/docs/hooks-reference.html#useimperativehandle).
+To achieve what we are building, there are different approaches, but in this case, we will be using [**`useRef`**](https://reactjs.org/docs/hooks-reference.html#useref), [**`forwardRef`**](https://reactjs.org/docs/react-api.html#reactforwardref) and [**`useImperativeHandle`**](https://reactjs.org/docs/hooks-reference.html#useimperativehandle).
 
 To begin, we need to pass a `ref` from the parent to the children component. So that we can access to the children properties from the outside.
 
@@ -131,4 +131,4 @@ Here is a working CodeSandbox for the example:
 
 https://codesandbox.io/s/restless-meadow-htv0z?file=/src/App.js
 
-To sum it up, we use `useRef()` which returns a mutable `ref` object whose `.current` property is initialized to the passed argument. The returned object will persist for the full lifetime of the component. Now, the function `getCount()` is initialized in `.current` property of `ref` thanks to the help of `useImperativeHandle`. So that the function can be called from the parent component where its `ref` has been passed down to the child component by using `forwardRef`.
+To sum it up, we use `useRef` which returns a mutable `ref` object whose `.current` property is initialized to the passed argument. The returned object will persist for the full lifetime of the component. Now, the function `getCount` is initialized in `.current` property of `ref` thanks to the help of `useImperativeHandle`. So that the function can be called from the parent component where its `ref` has been passed down to the child component by using `forwardRef`.
