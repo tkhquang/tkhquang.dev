@@ -66,11 +66,11 @@ To achieve what we are building, there are different approaches, but in this cas
 
 To begin, we need to pass a `ref` from the parent to the children component. So that we can access to the children properties from the outside.
 
-```js{codeTitle: "In src/components/Counter.js"}
+```js{3, 5}{codeTitle: "In src/components/Counter.js"}
+import React, { useState } from "react";
+
 function Counter(props, ref) {
   // ... Rest
-}
-
 export default forwardRef(Counter);
 ```
 

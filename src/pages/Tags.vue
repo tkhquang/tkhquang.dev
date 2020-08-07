@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
+    class="relative max-w-xl mx-auto px-4 mt-12 mb-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
   >
     <section class="tags w-full lg:w-3/4">
       <div class="lg:w-4/5 mx-auto">
@@ -56,7 +56,7 @@
         </VsaList>
       </div>
     </section>
-    <BlogInfo class="w-full lg:w-1/4 mt-8 lg:mt-4" />
+    <BlogInfo class="w-full lg:w-1/4 my-8 lg:my-4" />
   </div>
 </template>
 

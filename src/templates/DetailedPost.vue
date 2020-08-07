@@ -29,7 +29,10 @@
       <HorizontalLine class="mb-6" />
     </template>
 
-    <div class="article__content v-html" v-html="$page.post.content" />
+    <div
+      class="article__content v-html"
+      v-html="generateInnerHTML(this.$page.post.content)"
+    />
 
     <div class="flex article__footer my-6">
       <PostTags :post="$page.post" />
@@ -53,6 +56,7 @@
 
 <script>
 import { isEmpty } from "lodash";
+import * as clipboard from "clipboard-polyfill/text";
 
 import seoMixin from "~/vue-utils/mixins/seo";
 import routerMixin from "~/vue-utils/mixins/router";
@@ -116,9 +120,61 @@ export default {
     }
   },
 
+  mounted() {
+    const pres = document.getElementsByTagName("pre");
+    pres.forEach((pre) => {
+      if (/language-*/.test(pre.className)) {
+        const button = pre.querySelector(".copy");
+        button.onclick = function () {
+          clipboard
+            .writeText(pre.getElementsByTagName("code")[0].textContent)
+            .then(
+              () => {
+                button.classList.add("copy--is-success");
+
+                setTimeout(() => {
+                  button.classList.remove("copy--is-success");
+                }, 3000);
+              },
+              () => {
+                button.classList.add("copy--is-error");
+
+                setTimeout(() => {
+                  button.classList.remove("copy--is-error");
+                }, 3000);
+              }
+            );
+        };
+      }
+    });
+  },
+
   methods: {
     reloadCommentBox() {
       this.commentBoxKey += 1;
+    },
+
+    generateInnerHTML(html) {
+      if (process.isClient) {
+        const content = document.createElement("div");
+        content.innerHTML = html || "";
+
+        const pres = content.getElementsByTagName("pre");
+        pres.forEach((pre) => {
+          if (/language-*/.test(pre.className)) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "copy";
+            button.title = "Copy to clipboard";
+
+            pre.appendChild(button);
+          }
+        });
+
+        return content.innerHTML;
+      }
+
+      return html;
     }
   },
 
