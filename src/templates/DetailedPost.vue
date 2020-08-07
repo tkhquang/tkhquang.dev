@@ -121,31 +121,29 @@ export default {
   },
 
   mounted() {
-    const pres = document.getElementsByTagName("pre");
-    pres.forEach((pre) => {
-      if (/language-*/.test(pre.className)) {
-        const button = pre.querySelector(".copy");
-        button.onclick = function () {
-          clipboard
-            .writeText(pre.getElementsByTagName("code")[0].textContent)
-            .then(
-              () => {
-                button.classList.add("copy--is-success");
+    const codeBlocks = document.querySelectorAll(".gridsome-highlight");
+    codeBlocks.forEach((block) => {
+      const button = block.querySelector(".copy");
+      button.onclick = function () {
+        clipboard
+          .writeText(block.getElementsByTagName("code")[0].textContent)
+          .then(
+            () => {
+              button.classList.add("copy--is-success");
 
-                setTimeout(() => {
-                  button.classList.remove("copy--is-success");
-                }, 3000);
-              },
-              () => {
-                button.classList.add("copy--is-error");
+              setTimeout(() => {
+                button.classList.remove("copy--is-success");
+              }, 3000);
+            },
+            () => {
+              button.classList.add("copy--is-error");
 
-                setTimeout(() => {
-                  button.classList.remove("copy--is-error");
-                }, 3000);
-              }
-            );
-        };
-      }
+              setTimeout(() => {
+                button.classList.remove("copy--is-error");
+              }, 3000);
+            }
+          );
+      };
     });
   },
 
@@ -159,27 +157,25 @@ export default {
         const content = document.createElement("div");
         content.innerHTML = html || "";
 
-        const pres = content.getElementsByTagName("pre");
-        pres.forEach((pre) => {
-          if (/language-*/.test(pre.className)) {
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = "copy";
-            button.title = "Copy to clipboard";
+        const codeBlocks = content.querySelectorAll(".gridsome-highlight");
+        codeBlocks.forEach((block) => {
+          const button = document.createElement("button");
+          button.className = "copy";
+          button.type = "button";
+          button.title = "Copy to clipboard";
 
-            pre.appendChild(button);
+          block.appendChild(button);
 
-            const highlightBlocks = pre.querySelectorAll(
-              ".gridsome-highlight-code-line"
-            );
+          const highlightBlocks = block.querySelectorAll(
+            ".gridsome-highlight-code-line"
+          );
 
-            highlightBlocks.forEach((block) => {
-              const line_break = document.createElement("text");
-              line_break.textContent = "\n";
+          highlightBlocks.forEach((block) => {
+            const line_break = document.createElement("text");
+            line_break.textContent = "\n";
 
-              block.appendChild(line_break);
-            });
-          }
+            block.appendChild(line_break);
+          });
         });
 
         return content.innerHTML;
