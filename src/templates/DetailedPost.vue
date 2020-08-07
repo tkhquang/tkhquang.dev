@@ -174,10 +174,10 @@ export default {
             );
 
             highlightBlocks.forEach((block) => {
-              if (block.nextSibling) {
-                block.nextSibling.textContent =
-                  "\n" + block.nextSibling.textContent;
-              }
+              const line_break = document.createElement("text");
+              line_break.textContent = "\n";
+
+              block.appendChild(line_break);
             });
           }
         });
