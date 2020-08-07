@@ -129,8 +129,6 @@ function App() {
 
 That's it, now everytime we click the `Update Counter` button, it will update the total count value base on the current count of the 2 counters.
 
-Here is a working CodeSandbox for the example:
-
-https://codesandbox.io/embed/restless-meadow-htv0z?fontsize=14&hidenavigation=1&theme=dark
+[Here](https://codesandbox.io/embed/restless-meadow-htv0z?fontsize=14&hidenavigation=1&theme=dark) is a working CodeSandbox for the example.
 
 To sum it up, we use `useRef` which returns a mutable `ref` object whose `.current` property is initialized to the passed argument. The returned object will persist for the full lifetime of the component. Now, the function `getCount` is initialized in `.current` property of `ref` thanks to the help of `useImperativeHandle`. So that the function can be called from the parent component where its `ref` has been passed down to the child component by using `forwardRef`.

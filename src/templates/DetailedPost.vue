@@ -168,6 +168,17 @@ export default {
             button.title = "Copy to clipboard";
 
             pre.appendChild(button);
+
+            const highlightBlocks = pre.querySelectorAll(
+              ".gridsome-highlight-code-line"
+            );
+
+            highlightBlocks.forEach((block) => {
+              const line_break = document.createElement("text");
+              line_break.textContent = "\n";
+
+              block.appendChild(line_break);
+            });
           }
         });
 
