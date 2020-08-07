@@ -66,7 +66,7 @@ To achieve what we are building, there are different approaches, but in this cas
 
 To begin, we need to pass a `ref` from the parent to the children component. So that we can access to the children properties from the outside.
 
-```js{3,7}{codeTitle: "In src/components/Counter.js"}
+```js{3, 7}{codeTitle: "In src/components/Counter.js"}
 import React, { useState } from "react";
 
 function Counter(props, ref) {
@@ -131,6 +131,6 @@ That's it, now everytime we click the `Update Counter` button, it will update th
 
 Here is a working CodeSandbox for the example:
 
-https://codesandbox.io/s/restless-meadow-htv0z?file=/src/App.js
+https://codesandbox.io/embed/restless-meadow-htv0z?fontsize=14&hidenavigation=1&theme=dark
 
 To sum it up, we use `useRef` which returns a mutable `ref` object whose `.current` property is initialized to the passed argument. The returned object will persist for the full lifetime of the component. Now, the function `getCount` is initialized in `.current` property of `ref` thanks to the help of `useImperativeHandle`. So that the function can be called from the parent component where its `ref` has been passed down to the child component by using `forwardRef`.
