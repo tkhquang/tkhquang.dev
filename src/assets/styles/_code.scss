@@ -16,40 +16,9 @@ $functionColor: #DD4A68;
 // Regex, important, variable
 $regexColor: #ee9900;
 
-pre {
-  @apply px-12 py-2 mb-8 shadow-inner bg-theme-code rounded-b-md;
-
-  .copy {
-    background-image: url("~@/assets/resources/svg/clipboard-add.svg");
-    background-size: 75% auto;
-
-    @apply absolute top-0 right-0 w-8 h-8 m-1 opacity-0 rounded bg-no-repeat bg-center bg-theme-surface transition-all duration-500;
-
-    filter: drop-shadow(0px 15px 17.5px rgba(51, 78, 104, 0.1));
-
-    &--is-success {
-      background-image: url("~@/assets/resources/svg/clipboard-success.svg");
-    }
-
-    &--is-error {
-      background-image: url("~@/assets/resources/svg/clipboard-error.svg");
-    }
-  }
-
-  &:hover {
-    .copy {
-      @apply opacity-100;
-    }
-  }
-}
-
-code {
-  // Placeholder
-}
-
 code[class*="language-"],
 pre[class*="language-"] {
-  @apply relative font-mono text-left whitespace-pre break-normal leading-6;
+  @apply font-mono text-left whitespace-pre break-normal leading-6;
 	word-spacing: normal;
 	word-wrap: normal;
 
@@ -63,16 +32,25 @@ pre[class*="language-"] {
 	hyphens: none;
 }
 
+pre[class*="language-"] {
+  @apply relative px-12 py-2 mb-8 shadow-inner bg-theme-code rounded-b-md overflow-auto;
+
+  & > code[class*="language-"] {
+    @apply inline-block min-w-full;
+    .gridsome-highlight-code-line {
+      @apply block -mx-12 border-l-4 bg-theme-surface min-w-full;
+
+      filter: drop-shadow(0px 15px 17.5px rgba(51, 78, 104, 0.1));
+      padding-left: 2.785rem;
+    }
+  }
+}
+
 @media print {
 	code[class*="language-"],
 	pre[class*="language-"] {
 		text-shadow: none;
 	}
-}
-
-/* Code blocks */
-pre[class*="language-"] {
-	@apply overflow-auto;
 }
 
 /* Inline code */
@@ -160,13 +138,6 @@ pre[class*="language-"] {
   @apply px-4 py-2 bg-theme-surface font-bold rounded-t-md;
 }
 
-.gridsome-highlight-code-line {
-  @apply block bg-theme-surface -mx-12 pr-12 border-l-4;
-
-  padding-left: 2.785rem;
-  filter: drop-shadow(0px 15px 17.5px rgba(51, 78, 104, 0.1));
-}
-
 .line-numbers .line-numbers-rows {
   @apply py-2 mx-2 border-r;
 }
@@ -174,5 +145,33 @@ pre[class*="language-"] {
 .command-line-prompt {
   & > span {
     @apply font-extrabold;
+  }
+}
+
+.gridsome-highlight {
+
+  @apply relative;
+
+  .copy {
+    background-image: url("~@/assets/resources/svg/clipboard-add.svg");
+    background-size: 75% auto;
+
+    @apply absolute top-0 right-0 w-8 h-8 mr-2 mt-2 opacity-0 rounded bg-no-repeat bg-center bg-theme-surface transition-all duration-500;
+
+    filter: drop-shadow(0px 15px 17.5px rgba(51, 78, 104, 0.1));
+
+    &--is-success {
+      background-image: url("~@/assets/resources/svg/clipboard-success.svg");
+    }
+
+    &--is-error {
+      background-image: url("~@/assets/resources/svg/clipboard-error.svg");
+    }
+  }
+
+  &:hover {
+    .copy {
+      @apply opacity-100;
+    }
   }
 }
