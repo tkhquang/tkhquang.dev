@@ -422,7 +422,7 @@ query Post ($path: String!) {
   }
 
   .header__waves {
-    transition: all 0.5s linear;
+    transition: opacity 0.5s linear;
     transform: matrix(1, 0, 0, -1, 0, 0);
   }
 }
