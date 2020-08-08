@@ -18,7 +18,8 @@
     "background",
     "on-background",
     "error",
-    "success"
+    "success",
+    "darken"
   ;
   @each $var in $list {
     --#{$var}: var(--#{$var}-#{$theme});

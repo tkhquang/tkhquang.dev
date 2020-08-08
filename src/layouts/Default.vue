@@ -9,7 +9,7 @@
     </main>
 
     <transition name="quick-fade">
-      <Loader v-if="isLeaving" class="loader__leaving z-50" />
+      <Loader v-if="isLeaving" class="loader__leaving z-header" />
     </transition>
 
     <transition name="quick-fade">
