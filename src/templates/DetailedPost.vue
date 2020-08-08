@@ -3,16 +3,17 @@
     <div class="">
       <template v-if="$page.post.cover_image">
         <div
+          tabindex="0"
           class="header__wrapper relative bg-center w-full overflow-hidden"
           :style="{
             '--background-url': `url(${require('~/assets' +
               $page.post.cover_image)})`,
-            height: '50vh'
+            maxHeight: '50vh'
           }"
         >
           <g-image
             alt="Cover image"
-            class="header__image block h-full max-h-full m-auto w-auto shadow-xl"
+            class="header__image block max-h-full w-auto mx-auto shadow-xl"
             :src="coverImage"
             width="1280"
             height="720"
@@ -408,7 +409,8 @@ query Post ($path: String!) {
     z-index: -1;
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     @apply shadow-2xl;
     .header__waves {
       opacity: 0;
