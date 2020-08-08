@@ -53,6 +53,12 @@ module.exports = {
       imageQuality: 75,
       lazyLoadImages: true,
       imageSource: "./src/assets/uploads/images",
+      autolinkHeadings: {
+        content: {
+          type: "text",
+          value: "#"
+        }
+      },
       plugins: [
         [
           "gridsome-plugin-remark-prismjs-all",

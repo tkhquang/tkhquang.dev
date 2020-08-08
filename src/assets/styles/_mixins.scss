@@ -138,6 +138,21 @@
     position: relative;
     padding-bottom: 0.75em;
 
+    a {
+      transition: all 0.5s linear;
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      left: -2rem;
+    }
+
+    &:hover {
+      a {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
     &::after {
       content: "";
       position: absolute;

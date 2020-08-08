@@ -55,6 +55,15 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     Vue.prototype.$Progress.finish();
 
     Vue.prototype.$bus.$emit("route-leaving", false);
+
+    if (to.hash) {
+      setTimeout(() => {
+        const anchor = document.createElement("a");
+        anchor.href = to.hash;
+
+        anchor.click();
+      }, 501);
+    }
   });
 
   router.onError((to, from, currentLocation) => {

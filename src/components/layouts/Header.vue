@@ -1,6 +1,6 @@
 <template>
   <header
-    class="header relative h-header-height p-0 m-0 flex-center flex-wrap sticky inset-0 w-full z-40 transition-all duration-300 ease-in-out background shadow-md"
+    class="header h-header-height p-0 m-0 flex-center flex-wrap sticky inset-0 w-full z-header transition-all duration-300 ease-in-out background shadow-md"
     :class="{ 'header--is-scrolled': isScrolled }"
   >
     <div
