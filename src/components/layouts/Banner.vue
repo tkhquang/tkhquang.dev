@@ -10,7 +10,7 @@
 
 <script>
 import { tsParticles } from "tsparticles";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash.isempty";
 
 import Loader from "~/components/common/Loader";
 

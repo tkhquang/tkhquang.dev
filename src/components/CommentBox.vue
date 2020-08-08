@@ -4,7 +4,7 @@
 
 <script>
 import commentBox from "commentbox.io";
-import { isEmpty } from "lodash";
+import isEmpty from "lodash.isempty";
 
 export default {
   props: {
