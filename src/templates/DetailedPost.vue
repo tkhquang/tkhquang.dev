@@ -33,23 +33,9 @@
             <defs>
               <linearGradient id="gradient" x2="0%" y2="100%">
                 <stop offset="0%" stop-color="var(--background)" />
-                <stop offset="100%" stop-color="rgba(0, 0, 0, 0.4)" />
+                <stop offset="100%" stop-color="var(--darken)" />
               </linearGradient>
             </defs>
-            <defs>
-              <linearGradient id="gradient2" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="var(--background)" />
-                <stop offset="100%" stop-color="var(--background)" />
-              </linearGradient>
-            </defs>
-            <path fill="url(#gradient2)">
-              <animate
-                attributeName="d"
-                values="M 27 10C 21 8 14 3 0 3L 0 0L 54 0L 54 14C 40 14 33 12 27 10Z;M 27 14C 12 14 5 7 0 7L 0 0L 54 0L 54 7C 49 7 42 14 27 14Z;M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z;M 27 10C 21 12 14 14 0 14L 0 0L 54 0L 54 3C 40 3 33 8 27 10Z;M 27 14C 12 14 5 7 0 7L 0 0L 54 0L 54 7C 49 7 42 14 27 14Z;M 27 10C 21 8 14 3 0 3L 0 0L 54 0L 54 14C 40 14 33 12 27 10Z"
-                repeatCount="indefinite"
-                dur="25s"
-              ></animate>
-            </path>
             <path fill="url(#gradient)">
               <animate
                 attributeName="d"
@@ -382,15 +368,23 @@ query Post ($path: String!) {
 
   @keyframes waves {
     0% {
-      background-position: 0% 0%;
+      background-position: top left;
+    }
+
+    25% {
+      background-position: bottom right;
     }
 
     50% {
-      background-position: 100% 100%;
+      background-position: center;
+    }
+
+    75% {
+      background-position: top right;
     }
 
     100% {
-      background-position: 0% 0%;
+      background-position: bottom left;
     }
   }
 
@@ -398,15 +392,23 @@ query Post ($path: String!) {
     position: absolute;
     display: block;
     content: "";
-    top: -10px;
-    bottom: -10px;
-    left: -10px;
-    right: -10px;
-    background-image: var(--background-url);
-    background-size: 120% auto;
+    top: -16px;
+    bottom: -16px;
+    left: -16px;
+    right: -16px;
+    background-image: var(--background-url),
+      linear-gradient(
+        to right,
+        var(--darken) 0%,
+        var(--secondary) 30%,
+        var(--secondary) 70%,
+        var(--darken) 100%
+      );
+
+    background-size: 105% auto, cover;
     background-position: center;
-    animation: waves 45s linear;
-    filter: blur(5px);
+    animation: waves 45s linear infinite alternate both;
+    filter: blur(8px);
     z-index: -1;
   }
 
