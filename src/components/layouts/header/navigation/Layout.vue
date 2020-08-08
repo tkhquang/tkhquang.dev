@@ -49,7 +49,7 @@
           </ul>
         </div>
         <div
-          class="nav__list-item__backdrop fixed z-40 block inset-0 bg-transparent cursor-default hidden"
+          class="nav__list-item__backdrop fixed z-40 inset-0 bg-transparent cursor-default hidden"
           aria-hidden="true"
           hidden
         />
