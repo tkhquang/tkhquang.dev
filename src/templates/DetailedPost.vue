@@ -6,13 +6,13 @@
           class="header__wrapper relative bg-center w-full overflow-hidden"
           :style="{
             '--background-url': `url(${require('~/assets' +
-              $page.post.cover_image)})`
+              $page.post.cover_image)})`,
+            height: '50vh'
           }"
         >
           <g-image
             alt="Cover image"
-            class="header__image w-full mx-auto object-contain object-center"
-            :style="{ maxHeight: '50vh' }"
+            class="header__image block h-full max-h-full m-auto w-auto shadow-xl"
             :src="coverImage"
             width="1280"
             height="720"
@@ -63,7 +63,7 @@
           v-if="$page.post.headings.length > 0"
           class="table-of-content__list sticky hidden lg:block mt-header-height top-0 pt-header-height"
         >
-          <h3 class="heading text-2xl mt-10">Table of Content</h3>
+          <h2 class="heading text-2xl mt-10">Table of Content</h2>
           <ul class="mt-5">
             <li
               v-for="(heading, index) in $page.post.headings"
@@ -121,7 +121,7 @@
             :style="{ minWidth: '280px' }"
             class="fixed left-0 top-0 bottom-0 pt-header-height mt-10 bg-theme-background flex flex-col z-1 px-4 w-4/12"
           >
-            <h3 class="heading text-2xl">Table of Content</h3>
+            <h2 class="heading text-2xl">Table of Content</h2>
             <ul class="mt-5">
               <li
                 v-for="(heading, index) in $page.post.headings"
@@ -184,7 +184,7 @@
 </template>
 
 <script>
-import { isEmpty } from "lodash";
+import isEmpty from "lodash.isempty";
 import * as clipboard from "clipboard-polyfill/text";
 
 import seoMixin from "~/vue-utils/mixins/seo";
@@ -362,10 +362,6 @@ query Post ($path: String!) {
 @import "~/assets/styles/_mixins";
 
 .header__wrapper {
-  .header__image {
-    filter: drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.25));
-  }
-
   @keyframes waves {
     0% {
       background-position: top left;
@@ -408,11 +404,23 @@ query Post ($path: String!) {
     background-size: 105% auto, cover;
     background-position: center;
     animation: waves 45s linear infinite alternate both;
-    filter: blur(8px);
+    filter: blur(8px) brightness(75%);
     z-index: -1;
   }
 
+  &:hover {
+    @apply shadow-2xl;
+    .header__waves {
+      opacity: 0;
+    }
+
+    &::before {
+      animation-play-state: paused;
+    }
+  }
+
   .header__waves {
+    transition: all 0.5s linear;
     transform: matrix(1, 0, 0, -1, 0, 0);
   }
 }
