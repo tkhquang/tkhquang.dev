@@ -1,10 +1,10 @@
 <template>
   <div
-    class="relative max-w-xl mx-auto px-4 mt-12 sm:px-6 lg:px-8 lg:max-w-screen-xl flex flex-wrap"
+    class="relative max-w-xl px-4 sm:px-6 lg:px-8 lg:max-w-screen-xl flex-center flex-wrap mx-auto my-8"
   >
-    <section class="categories w-full lg:w-3/4">
+    <section class="categories w-full lg:w-3/4 self-start">
       <div class="lg:w-4/5 mx-auto">
-        <HorizontalLine class="my-3 h-2px" />
+        <HorizontalLine class="mb-3 h-2px" />
 
         <h1
           class="text-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9"
@@ -12,9 +12,13 @@
           Categories ({{ categories.length }})
         </h1>
 
-        <HorizontalLine class="mt-3 mb-8 h-2px" />
+        <HorizontalLine class="mt-3 h-2px" />
 
-        <VsaList class="w-full" :init-active="true" :auto-collapse="false">
+        <VsaList
+          class="w-full my-10"
+          :init-active="false"
+          :auto-collapse="false"
+        >
           <VsaItem v-for="category in categories" :key="category.id">
             <VsaHeading>
               {{ category.title }} ({{
@@ -58,7 +62,7 @@
         </VsaList>
       </div>
     </section>
-    <BlogInfo class="w-full lg:w-1/4 my-8 lg:my-4" />
+    <BlogInfo class="w-full lg:w-1/4 self-start" />
   </div>
 </template>
 

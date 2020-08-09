@@ -4,7 +4,7 @@
       <template v-if="$page.post.cover_image">
         <div
           tabindex="0"
-          class="header__wrapper relative bg-center w-full overflow-hidden"
+          class="header__wrapper relative bg-center overflow-hidden flex flex-col"
           :style="{
             '--background-url': `url(${require('~/assets' +
               $page.post.cover_image)})`,
@@ -13,7 +13,7 @@
         >
           <g-image
             alt="Cover image"
-            class="header__image block max-h-full w-auto mx-auto shadow-xl"
+            class="header__image block w-full min-h-full m-auto object-contain"
             :src="coverImage"
             width="1280"
             height="720"
