@@ -12,10 +12,6 @@
       <Loader v-if="isLeaving" class="loader__leaving z-header" />
     </transition>
 
-    <transition name="quick-fade">
-      <Loader v-cloak class="loader__fallback relative flex-1 hidden" />
-    </transition>
-
     <BackToTop v-show="isScrolled" />
 
     <Footer />
@@ -135,14 +131,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.loader__fallback {
-  background: none;
-
-  &[v-cloak] {
-    display: flex;
-  }
-}
-
 .loader__leaving {
   position: fixed;
   pointer-events: none;
