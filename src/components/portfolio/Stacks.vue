@@ -6,7 +6,15 @@
       </h2>
       <div class="flex flex-col lg:flex-row">
         <div class="w-full lg:w-1/3 flex-center mx-auto">
-          <g-image src="@/assets/resources/svg/Dev.svg" alt="Developer" />
+          <g-image
+            src="@/assets/resources/svg/Dev.svg"
+            alt="Developer"
+            width="500"
+            height="500"
+            fit="cover"
+            blur="10"
+            immediate="true"
+          />
         </div>
         <div
           class="chart-container w-full lg:w-2/3 text-center overflow-hidden"
@@ -88,6 +96,11 @@
                   require(`!!assets-loader?width=150&height=150&fit=cover&blur=10!~/assets/resources/svg/stacks/${stack.icon}`)
                 "
                 :alt="stack.title"
+                width="150"
+                height="150"
+                fit="cover"
+                blur="10"
+                immediate="true"
               />
             </div>
             <span class="text-xl font-bold leading-loose">

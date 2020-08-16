@@ -13,6 +13,10 @@
             src="@/assets/resources/images/Aleks.png"
             alt="Aleks"
             class="author__image"
+            width="500"
+            height="500"
+            fit="cover"
+            blur="10"
           />
         </div>
       </div>
