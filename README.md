@@ -1,5 +1,5 @@
-# tkhquang-blog
+# tkhquang.dev
 
-Source code of my personal Blog.
+Source code of my personal website.
 
 Powered by [Gridsome](https://github.com/gridsome/gridsome).
