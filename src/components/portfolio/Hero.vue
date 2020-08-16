@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import isEmpty from "lodash.isempty";
+import { helpers } from "~/utils/";
 
 import SocialLinks from "~/components/common/SocialLinks";
 
@@ -90,7 +90,7 @@ export default {
   watch: {
     cssVars: {
       handler(newCssVars) {
-        if (isEmpty(newCssVars)) {
+        if (helpers.isEmpty(newCssVars)) {
           return;
         }
         this.reloadWaves();
