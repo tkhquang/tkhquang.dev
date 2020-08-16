@@ -4,7 +4,7 @@
 
 <script>
 import commentBox from "commentbox.io";
-import isEmpty from "lodash.isempty";
+import { helpers } from "~/utils/";
 
 export default {
   props: {
@@ -32,7 +32,7 @@ export default {
 
   methods: {
     initCommentBox() {
-      if (isEmpty(this.cssVars)) {
+      if (helpers.isEmpty(this.cssVars)) {
         return;
       }
 

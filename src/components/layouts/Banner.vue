@@ -10,10 +10,10 @@
 
 <script>
 import { tsParticles } from "tsparticles";
-import isEmpty from "lodash.isempty";
 
 import Loader from "~/components/common/Loader";
 
+import { helpers } from "~/utils/";
 import { default as config } from "./banner/config.json";
 
 export default {
@@ -73,7 +73,7 @@ export default {
 
   methods: {
     setParticleColors(colors) {
-      if (isEmpty(colors)) {
+      if (helpers.isEmpty(colors)) {
         return;
       }
 

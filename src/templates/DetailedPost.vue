@@ -185,7 +185,6 @@
 </template>
 
 <script>
-import isEmpty from "lodash.isempty";
 import * as clipboard from "clipboard-polyfill/text";
 
 import seoMixin from "~/vue-utils/mixins/seo";
@@ -198,6 +197,8 @@ import BlogInfo from "~/components/widgets/BlogInfo";
 
 import CommentBox from "~/components/CommentBox";
 import Modal from "~/components/common/Modal";
+
+import { helpers } from "~/utils/";
 
 export default {
   name: "Post",
@@ -243,7 +244,7 @@ export default {
   watch: {
     cssVars: {
       handler(newCssVars) {
-        if (isEmpty(newCssVars)) {
+        if (helpers.isEmpty(newCssVars)) {
           return;
         }
         this.reloadCommentBox();
