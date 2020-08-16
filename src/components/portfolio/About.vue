@@ -25,20 +25,18 @@
         <a
           class="download__link shadow-md"
           :href="resume.path"
-          download
           target="_blank"
           rel="noopener noreferrer"
-          title="Download Resume"
+          title="View Resume"
         >
           <span>Download</span>
           <span>PDF</span>
         </a>
         <a
           :href="resume.path"
-          download
           target="_blank"
           rel="noopener noreferrer"
-          title="Download Resume"
+          title="View Resume"
         >
           {{ resume.fileName }}
         </a>
