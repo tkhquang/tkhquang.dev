@@ -12,7 +12,7 @@ export default {
     siteUrl() {
       const envUrl = process.env.GRIDSOME_SITE_URL || "";
 
-      return process.isProduction ? `${envUrl}/blog` : envUrl;
+      return envUrl;
     }
   },
 
@@ -20,12 +20,9 @@ export default {
     generateMetaInfo(opts) {
       const {
         siteTitle,
-        // siteName,
         siteDescription,
         siteTwitter,
-        // siteOwner,
-        // prefixPath,
-        metaImageUrl = `blog/resources/images/default.jpg`,
+        metaImageUrl = `/resources/images/default.jpg`,
         path = ""
       } = opts;
 

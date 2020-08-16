@@ -28,6 +28,21 @@ img {
   @apply max-w-full;
 }
 
+select {
+  appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+button:focus,
+textarea:focus, 
+input:focus,
+select:focus {
+  outline: none;
+}
+
 hr {
   @apply w-full mx-0 border-0 h-px; 
   background-image: linear-gradient(

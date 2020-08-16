@@ -84,10 +84,18 @@
 }
 
 @keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    height: 0;
+    opacity: 0;
   }
   to {
-    transform: rotate(360deg);
+    height: auto;
+    opacity: 1;
   }
 }

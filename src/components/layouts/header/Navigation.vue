@@ -45,7 +45,7 @@ export default {
           id: "all",
           title: "All Posts",
           slug: "all",
-          path: "/categories/"
+          path: "/blog/categories/"
         },
         ...this.$static.categories.edges.map(({ node }) => {
           return { ...node };

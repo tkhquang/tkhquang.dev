@@ -1,6 +1,5 @@
 import VueIcon from "vue-icon";
 import VueProgressBar from "vue-progressbar";
-
 import VueSimpleAccordion from "vue-simple-accordion";
 
 // Import typefaces
@@ -42,6 +41,14 @@ export default function (Vue, { router, head, isClient, appOptions }) {
     inverse: false,
     autoFinish: false
   });
+
+  if (isClient) {
+    Vue.use(
+      require("vue-fusioncharts"),
+      require("fusioncharts"),
+      require("fusioncharts/fusioncharts.charts")
+    );
+  }
 
   Vue.use(VueSimpleAccordion, {});
 

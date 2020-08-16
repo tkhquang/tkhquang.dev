@@ -1,70 +1,42 @@
 <template>
   <div>
-    <Newsfeed :page-data="$page.allPosts" />
+    <Hero />
+    <About />
+    <Stacks />
+    <Projects />
+    <Contact />
   </div>
 </template>
-
-<page-query>
-  query allPost ($page: Int) {
-    allPosts: allPost
-      (
-        filter: {
-          published: {
-            eq: true
-          }
-        },
-        sort: [
-          {
-            by: "created_at",
-            order: DESC
-          }
-        ],
-        perPage: 5,
-        page: $page
-      ) @paginate {
-      totalCount
-      pageInfo {
-        totalPages
-        currentPage
-        isLast
-      }
-      edges {
-        node {
-          id
-          title
-          created_at
-          updated_at
-          description
-          cover_image (width: 1280, height: 720, blur: 10, quality: 80, fit: cover)
-          path
-          tags {
-            id
-            title
-            path
-          }
-        }
-      }
-    }
-  }
-</page-query>
 
 <script>
 import seoMixin from "~/vue-utils/mixins/seo";
 import routerMixin from "~/vue-utils/mixins/router";
 
-import Newsfeed from "~/components/layouts/Newsfeed";
+import Hero from "~/components/portfolio/Hero";
+import About from "~/components/portfolio/About";
+import Stacks from "~/components/portfolio/Stacks";
+import Projects from "~/components/portfolio/Projects";
+import Contact from "~/components/portfolio/Contact";
 
 export default {
   name: "Home",
 
   components: {
-    Newsfeed
+    Hero,
+    About,
+    Stacks,
+    Projects,
+    Contact
   },
 
   mixins: [seoMixin, routerMixin],
 
   metaInfo() {
-    return this.generateMetaInfo({ siteTitle: "Home" });
+    return this.generateMetaInfo({
+      siteTitle: "Aleks's Portfolio",
+      siteDescription:
+        "Highly motivated, self-starting developer with a good understanding of HTML, CSS, JavaScript and modern JS libraries and frameworks such as React, Vue, seeking to launch a career building web applications and services."
+    });
   }
 };
 </script>

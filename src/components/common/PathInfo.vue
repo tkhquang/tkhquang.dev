@@ -1,7 +1,10 @@
 <template>
-  <nav v-if="!isHomePage" class="path-info font-bold italic text-theme-primary">
+  <nav
+    v-if="isPostPage && isCategoryPage && isTagPage"
+    class="path-info font-bold italic text-theme-primary"
+  >
     <HorizontalLine class="my-3" />
-    <g-link class="path-info__link" to="/">
+    <g-link class="path-info__link" to="/blog">
       Home
     </g-link>
     ->
@@ -64,7 +67,7 @@ export default {
         return {
           ...node,
           base: {
-            path: "/categories/",
+            path: "/blog/categories/",
             title: "Categories"
           }
         };
@@ -88,7 +91,7 @@ export default {
         return {
           ...node,
           base: {
-            path: "/tags/",
+            path: "/blog/tags/",
             title: "Tags"
           }
         };

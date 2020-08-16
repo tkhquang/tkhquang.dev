@@ -64,6 +64,7 @@ module.exports = {
           "on-surface": "var(--on-surface)",
           background: "var(--background)",
           "on-background": "var(--on-background)",
+          darken: "var(--darken)",
           error: "var(--error)",
           success: "var(--success)",
           code: "var(--code)"
@@ -83,6 +84,10 @@ module.exports = {
         "3": "3",
         fg: "999",
         header: "1000"
+      },
+      boxShadow: {
+        box: "0 1px 10px 0 rgba(0, 0, 0, 0.20)",
+        "box-md": "0 1px 10px 2px rgba(0, 0, 0, 0.30)"
       }
     },
     screens: {

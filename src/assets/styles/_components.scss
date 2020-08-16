@@ -4,7 +4,22 @@
 }
 
 .heading {
-  @apply leading-tight font-bold tracking-tight text-theme-primary;
+  @apply relative leading-tight font-bold tracking-tight text-theme-primary;
+}
+
+.heading--section {
+  @apply heading pb-4;
+
+  &::after {
+    content: "";
+    position: absolute;
+    display: block;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    opacity: 0.25;
+    background-color: var(--primary);
+  }
 }
 
 .primary {
@@ -24,7 +39,19 @@
 }
 
 .input {
-  @apply inline-block bg-theme-background text-theme-on-background border shadow-inner;
+  @apply inline-block bg-theme-background text-theme-on-background border-2 border-theme-secondary shadow-inner rounded;
+
+  &:focus {
+    @apply border-theme-tone;
+  }
+}
+
+.textarea {
+  @apply input resize-none;
+
+  &:focus {
+    @apply border-theme-tone;
+  }
 }
 
 .button {
