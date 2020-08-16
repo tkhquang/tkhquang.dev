@@ -9,8 +9,8 @@ module.exports = {
     As using netlify proxing
     Had to move this to a sub folder
   */
-  outputDir: "dist/blog",
-  pathPrefix: "/blog",
+  outputDir: "dist",
+  pathPrefix: "",
   icon: "src/favicon.png",
 
   // Add global metadata to the GraphQL schema.
@@ -24,19 +24,19 @@ module.exports = {
   templates: {
     Post: [
       {
-        path: "/posts/:title",
+        path: "/blog/posts/:title",
         component: "./src/templates/DetailedPost.vue"
       }
     ],
     Category: [
       {
-        path: "/categories/:slug",
+        path: "/blog/categories/:slug",
         component: "./src/templates/DetailedCategory.vue"
       }
     ],
     Tag: [
       {
-        path: "/tags/:title",
+        path: "/blog/tags/:title",
         component: "./src/templates/DetailedTag.vue"
       }
     ]
@@ -128,9 +128,23 @@ module.exports = {
       }
     },
     {
-      use: "@gridsome/plugin-google-analytics",
+      use: "@gridsome/source-graphql",
       options: {
-        id: process.env.GA_TRACKING_ID
+        url: "https://api.github.com/graphql",
+        fieldName: "github",
+        typeName: "Github",
+
+        headers: {
+          Authorization: `bearer ${process.env.GITHUB_TOKEN}`
+        }
+      }
+    },
+    {
+      use: "gridsome-plugin-gtm",
+      options: {
+        id: process.env.GA_TRACKING_ID,
+        enabled: true,
+        debug: false
       }
     }
   ],

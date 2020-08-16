@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col min-h-screen">
-    <Banner v-if="isHomePage" />
+    <Banner v-if="isBlogPage" />
 
-    <Header scrolled="isScrolled" />
+    <Header :is-scrolled="isScrolled" />
 
     <main class="main-container relative flex-1 flex flex-col">
       <slot />
@@ -113,7 +113,12 @@ export default {
       const headerHeight = this.cssVars["header-height"] || 60;
 
       const top = window.pageYOffset || 0;
-      this.isScrolled = top > parseInt(headerHeight) * 2;
+
+      if (this.isHomePage) {
+        this.isScrolled = top > 600 - 96;
+      } else {
+        this.isScrolled = top > parseInt(headerHeight) * 2;
+      }
 
       const scrollPos = window.scrollY;
       const winHeight = window.innerHeight;

@@ -1,11 +1,11 @@
 <template>
   <button
     type="button"
-    class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-10 hover:opacity-75 focus:outline-none"
+    class="fixed right-0 bottom-0 w-10 h-10 cursor-pointer z-10 m-10 hover:opacity-75 focus:outline-none transition-all duration-300"
     title="Scroll To Top"
     @click="scrollToTop"
   >
-    <v-icon name="arrow-up-circle" class="w-10 h-10"></v-icon>
+    <v-icon name="arrow-up-circle" class="w-10 h-10 background rounded-full" />
   </button>
 </template>
 
