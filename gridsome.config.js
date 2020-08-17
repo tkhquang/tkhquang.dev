@@ -3,6 +3,7 @@
 
 // Changes here requires a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
+const fs = require("fs");
 
 module.exports = {
   /*
@@ -12,15 +13,17 @@ module.exports = {
   outputDir: "dist",
   pathPrefix: "",
   icon: "src/favicon.png",
-
   // Add global metadata to the GraphQL schema.
-  ...require("./static/resources/json/site-meta.json"),
+  ...JSON.parse(
+    fs.readFileSync("./src/assets/resources/json/site-meta.json", "utf-8")
+  ),
   siteUrl:
     process.env.NODE_ENV === "production"
       ? `${process.env.GRIDSOME_SITE_URL}/blog`
       : process.env.GRIDSOME_SITE_URL,
-  metadata: require("./static/resources/json/meta.json"),
-
+  metadata: JSON.parse(
+    fs.readFileSync("./src/assets/resources/json/meta.json", "utf-8")
+  ),
   templates: {
     Post: [
       {
@@ -48,11 +51,6 @@ module.exports = {
       externalLinksTarget: "_blank",
       externalLinksRel: ["nofollow", "noopener", "noreferrer"],
       anchorClassName: "icon icon-link",
-      processImages: true,
-      imageBlurRatio: 10,
-      imageQuality: 75,
-      lazyLoadImages: true,
-      imageSource: "./src/assets/uploads/images",
       autolinkHeadings: {
         content: {
           type: "text",
@@ -94,8 +92,8 @@ module.exports = {
         [
           require("./lib/gridsome-custom-plugin"),
           {
-            targetPath: "./src/assets/uploads/remote",
-            publicFolder: "./src/assets/uploads/images",
+            targetPath: "./static/uploads/remote",
+            publicFolder: "./static/uploads/images",
             cache: true
           }
         ]

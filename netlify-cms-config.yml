@@ -2,7 +2,7 @@ backend:
   name: git-gateway
   repo: tkhquang/tkhquang-blog
   branch: NETLIFY_CMS_BRANCH # Will be replaced during build with the current branch
-media_folder: "/src/assets/uploads/images"
+media_folder: "/static/uploads/images"
 public_folder: "/uploads/images"
 collections:
   - name: "posts"

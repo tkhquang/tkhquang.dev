@@ -36,7 +36,7 @@ export default {
     },
 
     imageUrl() {
-      return require(`!!assets-loader?width=150&height=150&fit=cover&blur=10!~/assets/uploads/images/author.jpg`);
+      return require(`!!assets-loader?width=150&height=150&fit=cover&blur=10!~/../static/uploads/images/author.jpg`);
     }
   }
 };

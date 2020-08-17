@@ -1,4 +1,3 @@
-import default from '../../assets/uploads/images/default.png';
 <template>
   <div class="modal relative z-fg">
     <button

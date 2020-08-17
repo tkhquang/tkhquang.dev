@@ -1,9 +1,14 @@
-if (window.navigator && navigator.serviceWorker) {
-  window.navigator.serviceWorker.getRegistrations().then((registrations) => {
-    if (registrations.length > 0) {
-      Promise.all(registrations.map((r) => r.unregister())).then(() =>
-        window.location.reload()
-      );
-    }
-  });
-}
+self.addEventListener("install", function (e) {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", function (e) {
+  self.registration
+    .unregister()
+    .then(function () {
+      return self.clients.matchAll();
+    })
+    .then(function (clients) {
+      clients.forEach((client) => client.navigate(client.url));
+    });
+});

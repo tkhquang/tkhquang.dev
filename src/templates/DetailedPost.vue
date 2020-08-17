@@ -6,8 +6,7 @@
           tabindex="0"
           class="header__wrapper relative bg-center overflow-hidden flex flex-col"
           :style="{
-            '--background-url': `url(${require('~/assets' +
-              $page.post.cover_image)})`,
+            '--background-url': `url(${$page.post.cover_image})`,
             maxHeight: '50vh'
           }"
         >
@@ -237,7 +236,7 @@ export default {
       if (!this.$page.post.cover_image) {
         return "";
       }
-      return require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${this.$page.post.cover_image}`);
+      return require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/../static${this.$page.post.cover_image}`);
     }
   },
 
@@ -328,7 +327,7 @@ export default {
     return this.generateMetaInfo({
       siteTitle,
       siteDescription,
-      metaImageUrl: this.coverImage.src,
+      metaImageUrl: this.$page.post.cover_image,
       path
     });
   }
