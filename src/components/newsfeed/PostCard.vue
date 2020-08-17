@@ -57,7 +57,7 @@ export default {
       if (!this.post.cover_image) {
         return "";
       }
-      return require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/assets${this.post.cover_image}`);
+      return require(`!!assets-loader?width=1280&height=720&fit=cover&blur=10!~/../static${this.post.cover_image}`);
     }
   }
 };

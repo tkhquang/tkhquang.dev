@@ -175,10 +175,10 @@ src/.temp
 .env.*
 
 # Ignore files in folder
-src/assets/uploads/remote/*
+static/uploads/remote/*
 
 # But please keep the folder
-!src/assets/uploads/remote/.gitkeep
+!static/uploads/remote/.gitkeep
 
 # Will be generated automatically while building
 static/admin/config.yml
