@@ -103,6 +103,26 @@ module.exports = {
 
   plugins: [
     {
+      use: "gridsome-plugin-gtm",
+      options: {
+        id: process.env.GA_TRACKING_ID,
+        enabled: true,
+        debug: false
+      }
+    },
+    {
+      use: "@gridsome/plugin-sitemap",
+      options: {
+        cacheTime: 600000,
+        config: {
+          "/blog/posts/*": {
+            changefreq: "weekly",
+            priority: 0.5
+          }
+        }
+      }
+    },
+    {
       // Create posts from markdown files
       use: "@gridsome/source-filesystem",
       options: {
@@ -135,14 +155,6 @@ module.exports = {
         headers: {
           Authorization: `bearer ${process.env.GITHUB_TOKEN}`
         }
-      }
-    },
-    {
-      use: "gridsome-plugin-gtm",
-      options: {
-        id: process.env.GA_TRACKING_ID,
-        enabled: true,
-        debug: false
       }
     }
   ],
