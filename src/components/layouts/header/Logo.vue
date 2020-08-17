@@ -6,13 +6,13 @@
   >
     <g-link
       class="logo flip-animate flex-center whitespace-no-wrap no-underine font-extrabold uppercase focus:outline-none select-none"
-      :to="isHomePage ? '/' : '/blog'"
+      :to="isHomePage ? '/' : '/blog/'"
       @click.native="scrollToTop"
     >
       <template v-if="!isBlogPage">
         <template v-if="isHomePage">
           <svg
-            class="rounded-full shadow-box"
+            class=""
             width="24px"
             height="24px"
             viewBox="0 0 256 256"
