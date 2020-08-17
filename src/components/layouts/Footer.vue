@@ -5,7 +5,7 @@
         Copyright © {{ new Date().getFullYear() }}
       </div>
 
-      <SocialLinks class="flex-center text-2xl gap-2" />
+      <SocialLinks class="flex-center text-2xl flex-gap-4" />
     </div>
   </footer>
 </template>

@@ -109,7 +109,7 @@
               />
             </div>
             <p class="mx-4" v-html="description" />
-            <ul class="flex-center gap-2 my-5 mx-4">
+            <ul class="flex-center flex-gap-2 my-5 mx-4">
               <li
                 v-for="stack in stacks"
                 :key="stack"
@@ -118,7 +118,7 @@
                 <span>{{ stack }}</span>
               </li>
             </ul>
-            <div class="flex-center gap-2">
+            <div class="flex-center flex-gap-2">
               <a
                 :href="live"
                 target="_blank"

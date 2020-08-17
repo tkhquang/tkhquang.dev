@@ -18,7 +18,7 @@
       </div>
 
       <SocialLinks
-        class="social-links flex-center text-3xl lg:text-5xl lg:mt-10 gap-4 h-0 opacity-0"
+        class="social-links flex-center text-3xl lg:text-5xl lg:mt-10 flex-gap-8 h-0 opacity-0"
       />
     </div>
     <svg

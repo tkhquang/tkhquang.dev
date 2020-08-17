@@ -4,7 +4,7 @@
       <h2 class="heading--section my-10 text-4xl">
         About Me 🙋‍♂️
       </h2>
-      <div class="flex-center flex-col-reverse lg:flex-row gap-4">
+      <div class="flex-center flex-col-reverse lg:flex-row flex-gap-8">
         <div class="w-full lg:w-2/3 v-html" v-html="about"></div>
         <div
           class="author w-10/12 md:w-8/12 lg:w-1/3 p-6 mx-6 my-auto flex-center"
