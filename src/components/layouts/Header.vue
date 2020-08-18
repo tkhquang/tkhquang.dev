@@ -1,12 +1,13 @@
 <template>
   <header
-    class="header h-header-height p-0 m-0 flex-center flex-wrap inset-0 w-full z-header transition-all duration-300 ease-in-out"
+    class="header h-header-height p-0 m-0 flex-center flex-wrap inset-0 w-full z-header"
     :class="{
-      'sticky background shadow-lg': !isHomePage,
+      'sticky background shadow-lg transition-all duration-500 ease-in-out': !isHomePage,
       fixed: isHomePage,
-      surface: isHomePage && isLoading,
+      'surface transition-none': isHomePage && isLoading,
       'text-gray-200 bg-transparent': isHomePage && !isLoading,
-      'header--is-scrolled bg-theme-tone shadow-lg': isHomePage && isScrolled
+      'header--is-scrolled bg-theme-tone shadow-lg transition-all duration-500 ease-in-out':
+        isHomePage && isScrolled
     }"
   >
     <div
