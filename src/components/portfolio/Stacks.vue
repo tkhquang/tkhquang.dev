@@ -163,6 +163,9 @@
 </static-query>
 
 <script>
+/**
+ * Base icon path: `~/assets/resources/svg/stacks/`
+ */
 const stacks = [
   {
     title: "JavaScript",

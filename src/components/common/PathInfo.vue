@@ -1,10 +1,10 @@
 <template>
   <nav
-    v-if="isPostPage && isCategoryPage && isTagPage"
+    v-if="isPostPage || isCategoryPage || isTagPage"
     class="path-info font-bold italic text-theme-primary"
   >
     <HorizontalLine class="my-3" />
-    <g-link class="path-info__link" to="/blog">
+    <g-link class="path-info__link" to="/blog/">
       Home
     </g-link>
     ->
