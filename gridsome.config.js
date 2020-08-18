@@ -173,6 +173,11 @@ module.exports = {
       }
     }
   },
+  chainWebpack: (config) => {
+    const svgRule = config.module.rule("svg");
+    svgRule.uses.clear();
+    svgRule.use("vue-svg-loader").loader("vue-svg-loader");
+  },
   host: "127.0.0.1",
   port: 8080
 };
