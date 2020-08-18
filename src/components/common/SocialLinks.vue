@@ -6,7 +6,7 @@
         target="_blank"
         rel="noopener noreferrer"
         title="Github"
-        class="hover:text-theme-primary"
+        class="hover:opacity-75"
       >
         <svg
           stroke="currentColor"

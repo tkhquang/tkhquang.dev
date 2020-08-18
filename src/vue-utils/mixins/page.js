@@ -4,7 +4,7 @@ export default {
       return /^\/(\d.+)?$/.test(this.$route.path);
     },
     isBlogPage() {
-      return /^\/blog(\/\d.+)?$/.test(this.$route.path);
+      return /^\/blog(\/)?(\d.+)?$/.test(this.$route.path);
     },
     isPostPage() {
       return /^\/blog\/posts\/.*/.test(this.$route.path);

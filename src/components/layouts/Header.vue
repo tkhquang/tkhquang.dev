@@ -3,7 +3,9 @@
     class="header h-header-height p-0 m-0 flex-center flex-wrap inset-0 w-full z-header transition-all duration-300 ease-in-out"
     :class="{
       'sticky background shadow-lg': !isHomePage,
-      'fixed text-gray-200 bg-transparent': isHomePage,
+      fixed: isHomePage,
+      surface: isHomePage && isLoading,
+      'text-gray-200 bg-transparent': isHomePage && !isLoading,
       'header--is-scrolled bg-theme-tone shadow-lg': isHomePage && isScrolled
     }"
   >
@@ -23,6 +25,7 @@
 </template>
 
 <script>
+import loadMixin from "~/vue-utils/mixins/load";
 import pageMixin from "~/vue-utils/mixins/page";
 import routerMixin from "~/vue-utils/mixins/router";
 
@@ -39,7 +42,7 @@ export default {
     Indicator
   },
 
-  mixins: [pageMixin, routerMixin],
+  mixins: [pageMixin, routerMixin, loadMixin],
 
   props: {
     isScrolled: {

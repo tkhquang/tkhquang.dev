@@ -3,36 +3,24 @@
 }
 
 @mixin flex-gap($size) {
-  --gap: #{$size};
+  --gap: calc(0.0625rem * #{$size});
 
-  margin: calc(-1 * var(--gap)) var(--gap);
+  margin: calc(-1 * var(--gap));
   & > * {
     margin: var(--gap);
   }
-
-  &:first-child {
-    margin-left: 0;
-  }
-
-  &:last-child {
-    margin-right: 0;
-  }
-}
-
-.flex-gap-16 {
-  @include flex-gap(1rem);
 }
 
 .flex-gap-8 {
-  @include flex-gap(0.5rem);
+  @include flex-gap(8);
 }
 
 .flex-gap-4 {
-  @include flex-gap(0.25rem);
+  @include flex-gap(4);
 }
 
 .flex-gap-2 {
-  @include flex-gap(calc(0.25rem / 2));
+  @include flex-gap(2);
 }
 
 .heading {
