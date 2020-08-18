@@ -212,6 +212,9 @@
 </static-query>
 
 <script>
+/**
+ * Base preview image path: `~/assets/resources/images/demos/`
+ */
 const demos = [
   {
     title: "Buggi Tracker",
