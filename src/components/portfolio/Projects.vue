@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="projects">
     <div class="container">
       <h2 class="heading--section my-10 text-4xl">
         Projects 💻

@@ -35,7 +35,7 @@
     "netlify-cms": "^2.10.55",
     "prismjs": "^1.21.0",
     "slugify": "^1.4.5",
-    "tailwindcss": "^1.6.2",
+    "tailwindcss": "^1.7.3",
     "tsparticles": "^1.17.8",
     "typeface-merriweather": "^0.0.72",
     "typeface-montserrat": "^0.0.75",
