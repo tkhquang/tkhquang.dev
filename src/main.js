@@ -13,6 +13,8 @@ import "~/vue-utils/GlobalComponents";
 import "~/assets/styles/index.scss";
 
 export default function (Vue, { router, head, isClient, appOptions }) {
+  Vue.config.productionTip = false;
+
   Vue.use(VueIcon, {
     name: "v-icon",
     props: {
