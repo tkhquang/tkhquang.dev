@@ -91,7 +91,7 @@ export default {
     }
   },
 
-  destroyed() {
+  beforeDestroy() {
     if (this.styleObserver) {
       this.styleObserver.disconnect();
     }
