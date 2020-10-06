@@ -51,7 +51,7 @@ export default {
     });
   },
 
-  destroyed() {
+  beforeDestroy() {
     this.$parent.$off("toggle-modal");
   },
 
