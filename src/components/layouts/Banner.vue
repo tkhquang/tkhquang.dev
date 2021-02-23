@@ -21,6 +21,13 @@ export default {
     Loader
   },
 
+  inject: {
+    $getCssVars: {
+      type: Object,
+      require: true
+    }
+  },
+
   data() {
     return {
       isInitialized: false
@@ -30,13 +37,6 @@ export default {
   computed: {
     cssVars() {
       return this.$getCssVars();
-    }
-  },
-
-  inject: {
-    $getCssVars: {
-      type: Object,
-      require: true
     }
   },
 
