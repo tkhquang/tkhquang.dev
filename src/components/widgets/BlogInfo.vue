@@ -1,9 +1,9 @@
 <template>
   <section class="blog-info relative z-10">
     <div
-      class="blog-info__content shadow-md p-8 text-on-surface rounded relative"
+      class="blog-info__content shadow-md p-8 text-on-surface rounded sticky"
     >
-      <div class="">
+      <div>
         <Author />
         <HorizontalLine class="my-5" />
         <Subscribe />
@@ -31,6 +31,7 @@ export default {
 .blog-info {
   &__content {
     box-shadow: inset 0px 0px 10px 10px var(--surface);
+    top: calc(var(--header-height) + 2rem);
   }
 }
 </style>
