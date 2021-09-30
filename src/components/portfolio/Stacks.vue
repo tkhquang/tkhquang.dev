@@ -121,6 +121,7 @@
           orderBy: { field: STARGAZERS, direction: DESC }
           isFork: false
           affiliations: [OWNER, ORGANIZATION_MEMBER, COLLABORATOR]
+          ownerAffiliations:[OWNER, ORGANIZATION_MEMBER, COLLABORATOR]
           first: 100
         ) {
           edges {
