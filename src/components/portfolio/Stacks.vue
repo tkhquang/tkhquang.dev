@@ -17,7 +17,7 @@
           />
         </div>
         <div
-          class="chart-container w-full lg:w-2/3 text-center overflow-hidden"
+          class="chart-container w-full lg:w-2/3 text-center overflow-hidden pointer-events-none md:pointer-events-auto"
         >
           <ClientOnly>
             <fusioncharts
