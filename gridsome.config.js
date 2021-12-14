@@ -17,10 +17,7 @@ module.exports = {
   ...JSON.parse(
     fs.readFileSync("./src/assets/resources/json/site-meta.json", "utf-8")
   ),
-  siteUrl:
-    process.env.NODE_ENV === "production"
-      ? `${process.env.GRIDSOME_SITE_URL}/blog`
-      : process.env.GRIDSOME_SITE_URL,
+  siteUrl: process.env.GRIDSOME_SITE_URL,
   metadata: JSON.parse(
     fs.readFileSync("./src/assets/resources/json/meta.json", "utf-8")
   ),
