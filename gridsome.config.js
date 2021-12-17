@@ -111,12 +111,31 @@ module.exports = {
       use: "@gridsome/plugin-sitemap",
       options: {
         cacheTime: 600000,
+        exclude: [
+          // Force chomp
+          "/thank-you",
+          "/blog/posts/hidden"
+        ],
         config: {
           "/blog/posts/*": {
             changefreq: "weekly",
             priority: 0.5
           }
         }
+      }
+    },
+    {
+      use: "gridsome-plugin-robots-txt",
+      options: {
+        host: process.env.GRIDSOME_SITE_URL,
+        sitemap: `${process.env.GRIDSOME_SITE_URL}/sitemap.xml`,
+        policy: [
+          {
+            userAgent: "*",
+            allow: "/",
+            disallow: ["*.pdf"]
+          }
+        ]
       }
     },
     {
