@@ -182,6 +182,7 @@ static/uploads/remote/*
 
 # Will be generated automatically while building
 static/admin/config.yml
+static/admin/config.yml-e
 
 # Netlify functions
 functions/
