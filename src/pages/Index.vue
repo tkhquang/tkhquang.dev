@@ -44,7 +44,7 @@ export default {
       ...this.generateMetaInfo({
         siteTitle: "Aleks's Portfolio",
         siteDescription:
-          "Highly motivated, self-starting developer with a good understanding of HTML, CSS, JavaScript and modern JS libraries and frameworks such as React, Vue, seeking to launch a career building web applications and services."
+          "Highly motivated, self-starting developer with a good understanding of HTML, CSS, JavaScript and its modern libraries and frameworks such as React, Vue, seeking to launch a career building web applications and services."
       }),
       titleTemplate: "%s"
     };
