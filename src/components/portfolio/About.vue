@@ -81,7 +81,8 @@ export default {
             <li>Agile/Scrums (Software development)</li>
           </ul>`,
       resume: {
-        path: "/resources/Quang Trinh Khac - Resume.pdf",
+        path:
+          "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
         fileName: "Quang Trinh Khac - Resume.pdf"
       }
     };
