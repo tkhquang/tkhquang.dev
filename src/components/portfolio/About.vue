@@ -59,7 +59,7 @@ export default {
 
           <p>
             I am a highly motivated, self-starting developer with a good
-            understanding of HTML, CSS, JavaScript and its modern libraries amd frameworks such
+            understanding of HTML, CSS, JavaScript and its modern libraries and frameworks such
             as React, Vue,... seeking to launch a career building
             web applications and services. The work I provide is of highest
             quality, fully responsive, and well-tested in a wide variety of
