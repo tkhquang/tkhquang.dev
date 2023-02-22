@@ -1,4 +1,4 @@
-name: nightly-netlify-build
+name: Trigger scheduled Netlify build
 
 on:
   schedule:
