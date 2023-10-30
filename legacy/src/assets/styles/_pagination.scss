@@ -1,0 +1,26 @@
+.pagination-wrapper {
+  @apply w-full inline-flex justify-center items-center pl-0 py-12 rounded-sm;
+  & > a {
+    @apply relative flex cursor-pointer float-left px-4 py-2 leading-6 no-underline bg-theme-background text-theme-on-background border;
+    &:first-of-type {
+      @apply rounded-l;
+    }
+    &:last-of-type {
+      @apply rounded-r;
+    }
+    &:hover,
+    &:focus {
+      @apply z-10 bg-theme-secondary text-theme-on-secondary;
+    }
+    &.active,
+    &.active:hover,
+    &.active:focus {
+      @apply z-20 bg-theme-primary text-theme-on-primary cursor-default outline-none;
+    }
+    &.disabled,
+    &.disabled:hover,
+    &.disabled:focus {
+      @apply cursor-not-allowed;
+    }
+  }
+}

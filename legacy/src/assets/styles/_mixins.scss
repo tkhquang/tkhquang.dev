@@ -114,7 +114,7 @@
 
     &[target="_blank"]::after {
       content: " ";
-      background-image: url('~@/src/assets/resources/svg/external-link.svg');
+      background-image: url('~@/assets/resources/svg/external-link.svg');
       background-size: 1em;
       background-size: contain;
       margin-left: 3px;
@@ -165,7 +165,7 @@
     }
   }
 
-  h1 {
+  h1 { 
     display: block;
     font-size: 2em;
     margin-top: 0.67em;
@@ -185,7 +185,7 @@
     font-weight: bold;
   }
 
-  h3 {
+  h3 { 
     display: block;
     font-size: 1.17em;
     margin-top: 1em;
@@ -195,7 +195,7 @@
     font-weight: bold;
   }
 
-  h4 {
+  h4 { 
     display: block;
     margin-top: 1.33em;
     margin-bottom: 1.33em;
@@ -204,7 +204,7 @@
     font-weight: bold;
   }
 
-  h5 {
+  h5 { 
     display: block;
     font-size: .83em;
     margin-top: 1.67em;
@@ -214,7 +214,7 @@
     font-weight: bold;
   }
 
-  h6 {
+  h6 { 
     display: block;
     font-size: .67em;
     margin-top: 2.33em;
@@ -255,7 +255,7 @@
         margin-right: 0.15em;
         vertical-align: -0.4em;
       }
-
+  
       &::after {
         pointer-events: none;
         color: var(--on-surface);
@@ -326,11 +326,11 @@
       @if $webkit-size <= 8px {
         $moz-size: thin
       }
-
+    
       @else if $webkit-size == 0 {
         $moz-size: none
       }
-
+  
       @else {
         $moz-size: auto
       }

@@ -1,0 +1,86 @@
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+@mixin flex-gap($size) {
+  --gap: calc(0.0625rem * #{$size});
+
+  margin: calc(-1 * var(--gap));
+  overflow: hidden;
+  & > * {
+    margin: var(--gap);
+  }
+}
+
+.flex-gap-8 {
+  @include flex-gap(8);
+}
+
+.flex-gap-4 {
+  @include flex-gap(4);
+}
+
+.flex-gap-2 {
+  @include flex-gap(2);
+}
+
+.heading {
+  @apply relative leading-tight font-bold tracking-tight text-theme-primary;
+}
+
+.heading--section {
+  @apply heading pb-4;
+
+  &::after {
+    content: "";
+    position: absolute;
+    display: block;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    opacity: 0.25;
+    background-color: var(--primary);
+  }
+}
+
+.primary {
+  @apply text-theme-on-primary bg-theme-primary;
+}
+
+.secondary {
+  @apply text-theme-on-secondary bg-theme-secondary;
+}
+
+.background {
+  @apply text-theme-on-background bg-theme-background;
+}
+
+.surface {
+  @apply text-theme-on-surface bg-theme-surface;
+}
+
+.input {
+  @apply inline-block bg-theme-background text-theme-on-background border-2 border-theme-secondary shadow-inner rounded;
+
+  &:focus {
+    @apply border-theme-tone;
+  }
+}
+
+.textarea {
+  @apply input resize-none;
+
+  &:focus {
+    @apply border-theme-tone;
+  }
+}
+
+.button {
+  @apply block h-10 px-2 bg-theme-secondary text-theme-on-secondary shadow-md border-2 border-theme-secondary rounded transition-all duration-200;
+  &:hover {
+    @apply bg-theme-primary text-theme-on-primary;
+  }
+  &:disabled {
+    @apply outline-none cursor-not-allowed bg-gray-600 border-gray-500 text-white shadow-inner pointer-events-none;
+  }
+}

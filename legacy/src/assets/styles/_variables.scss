@@ -1,0 +1,45 @@
+@import "constants";
+
+/// Generate variables for the current element based on theme.
+/// Ex:
+///   `--primary` on `light` theme will take the value of `--primary-light` variable in :root
+///
+/// @param {'dark'|'light'} $theme -
+///   The theme to which the variables need to adjust to.
+@mixin color-variables($theme) {
+  $list:
+    "tone",
+    "primary",
+    "on-primary",
+    "secondary",
+    "on-secondary",
+    "surface",
+    "on-surface",
+    "background",
+    "on-background",
+    "error",
+    "success",
+    "darken"
+  ;
+  @each $var in $list {
+    --#{$var}: var(--#{$var}-#{$theme});
+  }
+}
+
+:root {
+  @each $name, $color in $colors {
+    --#{$name}: #{$color};
+  }
+}
+
+body {
+  // Default dark theme
+  @include color-variables("dark");
+
+  &[data-theme="light"] {
+    @include color-variables("light");
+  }
+
+  --code: rgba(0, 0, 0, 0.1);
+  --header-height: 60px;
+}
