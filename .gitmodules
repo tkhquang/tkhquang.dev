@@ -1,0 +1,3 @@
+[submodule "lib/vue-fusioncharts"]
+	path = lib/vue-fusioncharts
+	url = git@github.com:fusioncharts/vue-fusioncharts.git
