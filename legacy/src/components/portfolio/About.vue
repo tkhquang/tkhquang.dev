@@ -1,9 +1,7 @@
 <template>
   <section class="about">
     <div class="container">
-      <h2 class="heading--section my-10 text-4xl">
-        About Me 🙋‍♂️
-      </h2>
+      <h2 class="heading--section my-10 text-4xl">About Me 🙋‍♂️</h2>
       <div class="flex-center flex-col-reverse lg:flex-row flex-gap-8">
         <div class="w-full lg:w-2/3 v-html" v-html="about"></div>
         <div
@@ -81,8 +79,7 @@ export default {
             <li>Agile/Scrums (Software development)</li>
           </ul>`,
       resume: {
-        path:
-          "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
+        path: "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
         fileName: "Quang Trinh Khac - Resume.pdf"
       }
     };
@@ -124,7 +121,8 @@ export default {
     );
     border-radius: 42% 58% 49% 51% / 48% 64% 36% 52%;
     z-index: -1;
-    animation: spin 12s linear infinite reverse,
+    animation:
+      spin 12s linear infinite reverse,
       morph 8s ease-in-out infinite both alternate;
     animation-play-state: paused;
   }

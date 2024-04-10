@@ -1,3 +1,5 @@
+@import "~/assets/styles/_mixins";
+
 .flex-center {
   @apply flex justify-center items-center;
 }
@@ -83,4 +85,8 @@
   &:disabled {
     @apply outline-none cursor-not-allowed bg-gray-600 border-gray-500 text-white shadow-inner pointer-events-none;
   }
+}
+
+.typography {
+  @include typography;
 }

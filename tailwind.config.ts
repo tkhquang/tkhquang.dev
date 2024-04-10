@@ -7,6 +7,10 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+    },
     extend: {
       // Adds a new breakpoint in addition to the default breakpoints
       screens: {
@@ -30,6 +34,30 @@ const config: Config = {
           error: "var(--error)",
           success: "var(--success)",
           code: "var(--code)",
+          "primary-light": "var(--primary-light)",
+          '"on-primary"-light': "var(--on-primary-light)",
+          "secondary-light": "var(--secondary-light)",
+          '"on-secondary"-light': "var(--on-secondary-light)",
+          "surface-light": "var(--surface-light)",
+          '"on-surface"-light': "var(--on-surface-light)",
+          "background-light": "var(--background-light)",
+          '"on-background"-light': "var(--on-background-light)",
+          "darken-light": "var(--darken-light)",
+          "error-light": "var(--error-light)",
+          "success-light": "var(--success-light)",
+          "code-light": "var(--code-light)",
+          "primary-dark": "var(--primary-dark)",
+          '"on-primary"-dark': "var(--on-primary-dark)",
+          "secondary-dark": "var(--secondary-dark)",
+          '"on-secondary"-dark': "var(--on-secondary-dark)",
+          "surface-dark": "var(--surface-dark)",
+          '"on-surface"-dark': "var(--on-surface-dark)",
+          "background-dark": "var(--background-dark)",
+          '"on-background"-dark': "var(--on-background-dark)",
+          "darken-dark": "var(--darken-dark)",
+          "error-dark": "var(--error-dark)",
+          "success-dark": "var(--success-dark)",
+          "code-dark": "var(--code-dark)",
         },
       },
       spacing: {
@@ -60,9 +88,30 @@ const config: Config = {
             "min-height": "600px",
           },
         },
+        typing: {
+          from: {
+            width: "0",
+          },
+          to: {
+            width: "100%",
+          },
+        },
+        "fade-in": {
+          from: {
+            height: "0",
+            opacity: "0",
+          },
+          to: {
+            height: "auto",
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "hero-height": "hero-height 1.5s linear",
+        typing: "typing 0.5s steps(20, end) forwards",
+        "fade-in": "fade-in 0.3s linear",
+        "fade-in-forwards": "fade-in 1s forwards",
       },
     },
   },
