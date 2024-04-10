@@ -13189,10 +13189,8 @@ vue-eslint-parser@^7.0.0, vue-eslint-parser@^7.1.0:
     esquery "^1.0.1"
     lodash "^4.17.15"
 
-vue-fusioncharts@^3.1.0:
+"vue-fusioncharts@file:./lib/vue-fusioncharts":
   version "3.1.0"
-  resolved "https://registry.yarnpkg.com/vue-fusioncharts/-/vue-fusioncharts-3.1.0.tgz#dd9b9fa1d62f6e534ff95765f76555253d998b60"
-  integrity sha512-8D4d6qbq9ZfbwrcRMMdxhmF+Y7949AXg7xOlAtPmZkRtUkhaADNskxArQn/jwfodrxw/s3rDJH3rTDL7ktPl6A==
   dependencies:
     underscore "^1.9.1"
 
