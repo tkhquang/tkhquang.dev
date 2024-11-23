@@ -1,11 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 type Mode = "dark" | "light";
 
 type WindowWithTheme = Window &
   typeof globalThis & {
+    __onThemeChange: (theme: Mode) => void;
     __setPreferredTheme: (theme: Mode) => void;
     __theme: Mode;
   };
@@ -24,6 +25,38 @@ const ThemeToggle = () => {
     if ((window as WindowWithTheme).__theme == "light") {
       setIsDarkTheme(false);
     }
+  }, []);
+
+  useEffect(() => {
+    (function (window) {
+      window.__onThemeChange = function () {};
+      function setTheme(newTheme: Mode) {
+        window.__theme = newTheme;
+        preferredTheme = newTheme;
+        document.body.setAttribute("data-theme", newTheme);
+        document.documentElement.setAttribute("data-theme", newTheme);
+        window.__onThemeChange(newTheme);
+      }
+
+      let preferredTheme!: Mode;
+      try {
+        preferredTheme = localStorage.getItem("theme") as Mode;
+      } catch (err) {}
+
+      window.__setPreferredTheme = function (newTheme) {
+        setTheme(newTheme);
+        try {
+          localStorage.setItem("theme", newTheme);
+        } catch (err) {}
+      };
+
+      let darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      darkQuery.addListener(function (e) {
+        window.__setPreferredTheme(e.matches ? "dark" : "light");
+      });
+
+      setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"));
+    })(window as WindowWithTheme);
   }, []);
 
   return (

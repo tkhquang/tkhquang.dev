@@ -34,3 +34,26 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/dist
+/.cache
+src/.temp
+.env.*
+.env
+
+# Ignore files in folder
+static/uploads/remote/*
+
+# But please keep the folder
+!static/uploads/remote/.gitkeep
+
+# Will be generated automatically while building
+static/admin/config.yml
+static/admin/config.yml-e
+
+# Netlify functions
+functions/
+src/lambda/node_modules/
+
+# Custom libs
+lib/*/node_modules/

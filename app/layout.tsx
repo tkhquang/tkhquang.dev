@@ -56,12 +56,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={classNames("flex flex-col min-h-screen", inter.className)}
+        data-theme="dark"
       >
-        <script
-          dangerouslySetInnerHTML={{
-            __html: SCRIPT_CONTENT,
-          }}
-        />
         <Header />
         <Main className=" flex-1">{children}</Main>
         <Footer />

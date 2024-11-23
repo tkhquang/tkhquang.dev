@@ -1,4 +1,7 @@
-@import "constants";
+@use "sass:color";
+@use "sass:map";
+@use "sass:meta";
+@use "constants";
 
 /// Get the color value from $colors constant
 ///
@@ -7,7 +10,7 @@
 /// @return {color} -
 ///   Color value found in $colors based on the key.
 @function get-color($key) {
-  @return map-get($colors, $key);
+  @return map.get(constants.$colors, $key);
 }
 
 /// Apply rules on current element based on 'data-theme' attribute of the body tag, default to dark theme.
@@ -114,7 +117,7 @@
 
     &[target="_blank"]::after {
       content: " ";
-      background-image: url('~@/assets/resources/svg/external-link.svg');
+      // background-image: url('@/assets/resources/svg/external-link.svg');
       background-size: 1em;
       background-size: contain;
       margin-left: 3px;
@@ -322,7 +325,7 @@
 ///   The size of the scrollbars for firefox.
 @mixin apply-scrollbar($webkit-size, $foreground-color, $background-color, $moz-size: null) {
   @if $moz-size == null {
-    @if type-of($webkit-size) == number {
+    @if meta.type-of($webkit-size) == number {
       @if $webkit-size <= 8px {
         $moz-size: thin
       }
@@ -351,7 +354,7 @@
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: mix($foreground-color, #000000, 80%);
+    background: color.mix($foreground-color, #000000, 80%);
   }
 
   &::-webkit-scrollbar-track {

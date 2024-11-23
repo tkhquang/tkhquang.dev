@@ -1,3 +1,4 @@
+@use "sass:color";
 // Basic hue values
 $red-hue: 360;
 $blue-hue: 240;
@@ -17,7 +18,7 @@ $colors: (
   // Light Theme
   tone-light: hsl($main-hue-1, 100%, 50%),
   background-light: hsl($main-hue-1, 50%, 95%),
-  darken-light: mix(hsl($main-hue-1, 50%, 95%), #000000, 80%),
+  darken-light: color.mix(hsl($main-hue-1, 50%, 95%), #000000, 80%),
   on-background-light: hsl($main-hue-1, 50%, 30%),
   primary-light: hsl($main-hue-1, 50%, 50%),
   on-primary-light: hsl($main-hue-1, 50%, 95%),
@@ -31,7 +32,7 @@ $colors: (
   // Dark Theme
   tone-dark: hsl($main-hue-2, 100%, 50%),
   background-dark: hsl($main-hue-2, 50%, 15%),
-  darken-dark: mix(hsl($main-hue-2, 50%, 15%), #000000, 80%),
+  darken-dark: color.mix(hsl($main-hue-2, 50%, 15%), #000000, 80%),
   on-background-dark: hsl($main-hue-2, 50%, 80%),
   primary-dark: hsl($main-hue-2, 50%, 70%),
   on-primary-dark: hsl($main-hue-2, 50%, 10%),

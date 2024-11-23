@@ -1,22 +1,26 @@
+@use "variables";
+@use "base";
+@use "components";
+@use "utils";
+@use "code";
+@use "pagination";
+@use "overrides";
+
+
 //- BASE
 @import "tailwindcss/base";
 // Any of my own custom base styles go here
-@import "variables";
-@import "base";
+
 //- BASE
 
 //- COMPONENTS
 @import "tailwindcss/components";
 // Any of my own custom component styles go here
-@import "components";
 //- COMPONENTS
 
 //- UTILITIES
 @import "tailwindcss/utilities";
 // Any of my own custom utilities go here
-@import "utils";
-@import "code";
-@import "pagination";
 //- UTILITIES
 
 // //- THIRD PARTY
@@ -24,7 +28,3 @@
 // @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 // @import "vue-simple-accordion/dist/vue-simple-accordion.css";
 // //- THIRD PARTY
-
-//- OVERRIDES
-@import "overrides";
-//- OVERRIDES

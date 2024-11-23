@@ -1,4 +1,4 @@
-@import "constants";
+@use "constants";
 
 /// Generate variables for the current element based on theme.
 /// Ex:
@@ -27,7 +27,7 @@
 }
 
 :root {
-  @each $name, $color in $colors {
+  @each $name, $color in constants.$colors {
     --#{$name}: #{$color};
   }
 }

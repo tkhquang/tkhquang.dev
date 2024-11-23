@@ -1,4 +1,4 @@
-@import "~/assets/styles/_mixins";
+@use "mixins";
 
 .flex-center {
   @apply flex justify-center items-center;
@@ -88,5 +88,5 @@
 }
 
 .typography {
-  @include typography;
+  @include mixins.typography;
 }
