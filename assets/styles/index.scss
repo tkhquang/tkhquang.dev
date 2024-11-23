@@ -1,30 +1,30 @@
+//- BASE
+@use "tailwindcss/base" as *;
+// Any of my own custom base styles go here
 @use "variables";
 @use "base";
+//- BASE
+
+//- COMPONENTS
+@use "tailwindcss/components"  as *;
+// Any of my own custom component styles go here
 @use "components";
+//- COMPONENTS
+
+//- UTILITIES
+@use "tailwindcss/utilities"  as *;
+// Any of my own custom utilities go here
 @use "utils";
 @use "code";
 @use "pagination";
+//- UTILITIES
+
+// //- THIRD PARTY
+// @use "prismjs/plugins/command-line/prism-command-line.css";
+// @use "prismjs/plugins/line-numbers/prism-line-numbers.css";
+// @use "vue-simple-accordion/dist/vue-simple-accordion.css";
+// //- THIRD PARTY
+
+//- OVERRIDES
 @use "overrides";
-
-
-//- BASE
-@import "tailwindcss/base";
-// Any of my own custom base styles go here
-
-//- BASE
-
-//- COMPONENTS
-@import "tailwindcss/components";
-// Any of my own custom component styles go here
-//- COMPONENTS
-
-//- UTILITIES
-@import "tailwindcss/utilities";
-// Any of my own custom utilities go here
-//- UTILITIES
-
-// //- THIRD PARTY
-// @import "prismjs/plugins/command-line/prism-command-line.css";
-// @import "prismjs/plugins/line-numbers/prism-line-numbers.css";
-// @import "vue-simple-accordion/dist/vue-simple-accordion.css";
-// //- THIRD PARTY
+//- OVERRIDES
