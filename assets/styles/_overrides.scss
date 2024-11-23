@@ -1,13 +1,13 @@
-@use "mixins";
+@use "mixins" as *;
 
-$primary-light: mixins.get-color("primary-light");
-$primary-dark: mixins.get-color("primary-dark");
+$primary-light: get-color("primary-light");
+$primary-dark: get-color("primary-dark");
 
 html, body {
-  @include mixins.apply-scrollbar(10px, $primary-dark, #2e3645);
+  @include apply-scrollbar(10px, $primary-dark, #2e3645);
 
   &[data-theme="light"] {
-    @include mixins.apply-scrollbar(10px, $primary-light, #2e3645);
+    @include apply-scrollbar(10px, $primary-light, #2e3645);
   }
 }
 

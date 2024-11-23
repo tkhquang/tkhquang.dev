@@ -1,4 +1,4 @@
-@use "@/assets/styles/mixins";
+@use "@/assets/styles/mixins" as *;
 
 @keyframes morph {
   0% {
@@ -49,7 +49,7 @@
 }
 
 .download-container {
-  @include mixins.typography;
+  @include typography;
 
   a[target="_blank"]::after {
     display: none;

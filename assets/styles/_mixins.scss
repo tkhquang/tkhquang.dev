@@ -1,7 +1,7 @@
 @use "sass:color";
 @use "sass:map";
 @use "sass:meta";
-@use "constants";
+@use "constants" as *;
 
 /// Get the color value from $colors constant
 ///
@@ -10,7 +10,7 @@
 /// @return {color} -
 ///   Color value found in $colors based on the key.
 @function get-color($key) {
-  @return map.get(constants.$colors, $key);
+  @return map.get($colors, $key);
 }
 
 /// Apply rules on current element based on 'data-theme' attribute of the body tag, default to dark theme.
