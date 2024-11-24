@@ -1,20 +1,13 @@
 "use client";
 
-import { ChartData } from "@/components/landing/stacks/Stacks";
-import { AppContext } from "@/providers/AppProvider";
-import FusionCharts from "fusioncharts";
-import Pie3D from "fusioncharts/fusioncharts.charts"; // Load the chart type
-import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion"; // Load the theme
 import React from "react";
-import { useContext } from "react";
-import ReactFCOriginal from "react-fusioncharts";
-
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "@/tailwind.config";
 import { useAtomValue } from "jotai";
+import ReactFCOriginal from "react-fusioncharts";
+import FusionCharts from "fusioncharts";
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
+import Pie3D from "fusioncharts/fusioncharts.charts";
+import { ChartData } from "@/components/landing/stacks/Stacks";
 import { themeStore } from "@/src/store/theme";
-
-const fullConfig = resolveConfig(tailwindConfig);
 
 // Pass FusionCharts modules to ReactFC
 ReactFCOriginal.fcRoot(FusionCharts, Pie3D, FusionTheme);
@@ -41,6 +34,9 @@ export default function StacksChartContent({
     dataFormat: "json",
     dataSource: {
       chart: {
+        baseFont: "Montserrat",
+        baseFontSize: "14",
+        use3DLighting: "1",
         caption: "Tech Stacks",
         captionFontColor: cssVariables["primary"],
         subCaption: "Based on Github commits",
@@ -52,28 +48,31 @@ export default function StacksChartContent({
         useDataPlotColorForLabels: "0",
         labelFontColor: cssVariables["on-background"],
         labelFontBold: "1",
-        labelFontSize: "16",
+        // labelFontSize: "16",
         canvasBgAlpha: "0",
         bgAlpha: "0",
         theme: "ocean",
         startingAngle: "0",
-        enablesmartlabels: "1",
+        enableSmartLabels: "1",
         decimals: "1",
         showLegend: "1",
         legendBgColor: "#ffffff",
         legendBgAlpha: "0",
         legendBorderAlpha: "0",
         legendShadow: "0",
-        legendItemFontSize: "16",
+        // legendItemFontSize: "16",
         legendItemFontColor: cssVariables["on-background"],
         legendPosition: "bottom",
-        minimiseWrappingInLegend: "1",
+        alignLegendWithCanvas: "1",
+        minimiseWrappingInLegend: "0",
         pieYScale: 40,
         pieSliceDepth: 22,
-        showLabels: true,
-        showPercentValues: false,
-        plotHighlightEffect: false,
-        showValues: false,
+        showLabels: "0",
+        showValues: "1",
+        showPercentValues: "1",
+        plotHighlightEffect: "0",
+        captionPadding: "0",
+        showValuesInLegend: "0",
       },
       data: chartData,
     },

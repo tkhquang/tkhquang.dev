@@ -44,11 +44,19 @@ svg[id^="raphael-"] {
 
   & g[class*="-legendGroup"] text {
     transform: translateY(-0.4rem) !important;
+    font-size: calc(8px + 1vw) !important;
   }
 
   & g[class*="-caption"] text:last-of-type {
     font-style: italic !important;
     font-size: small !important;
     transform: translateY(-0.4rem) !important;
+  }
+
+  & g[class*="-labels"] text {
+    font-size: calc(8px + 0.75vw) !important;
+    @screen md {
+      font-size: calc(10px + 0.75vw) !important;
+    }
   }
 }

@@ -120,7 +120,7 @@ export default async function StacksPage() {
   }));
 
   return (
-    <div className="p-4">
+    <div className="p-0 md:p-4">
       <StacksChart chartData={chartData} />
     </div>
   );
