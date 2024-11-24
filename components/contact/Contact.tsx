@@ -33,7 +33,7 @@ const Contact = () => {
     setStatus("fetching");
 
     try {
-      await fetch("/", {
+      await fetch("/__contact_form.html", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
@@ -67,8 +67,6 @@ const Contact = () => {
             className="email-form flex-center relative flex w-full flex-wrap overflow-hidden pt-5 text-center"
             name="portfolio-dev"
             method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
             onSubmit={handleSubmit(onSubmit)}
             autoComplete="off"
           >
