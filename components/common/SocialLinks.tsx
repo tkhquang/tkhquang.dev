@@ -1,4 +1,4 @@
-const LandingSocialLinks = (props: React.ComponentProps<"ul">) => {
+const SocialLinks = (props: React.ComponentProps<"ul">) => {
   return (
     <ul {...props}>
       <li>
@@ -77,4 +77,4 @@ const LandingSocialLinks = (props: React.ComponentProps<"ul">) => {
   );
 };
 
-export default LandingSocialLinks;
+export default SocialLinks;

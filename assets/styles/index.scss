@@ -6,13 +6,13 @@
 //- BASE
 
 //- COMPONENTS
-@use "tailwindcss/components"  as *;
+@use "tailwindcss/components" as *;
 // Any of my own custom component styles go here
 @use "components" as *;
 //- COMPONENTS
 
 //- UTILITIES
-@use "tailwindcss/utilities"  as *;
+@use "tailwindcss/utilities" as *;
 // Any of my own custom utilities go here
 @use "utils" as *;
 @use "code" as *;

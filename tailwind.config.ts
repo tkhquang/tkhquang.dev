@@ -1,16 +1,19 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
+const config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-
+  darkMode: ["selector", '[data-theme="dark"]'],
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: {
+        DEFAULT: "1rem",
+        xs: "2rem",
+      },
     },
     extend: {
       fontFamily: {
@@ -143,5 +146,5 @@ const config: Config = {
     },
   },
   plugins: [],
-};
+} satisfies Config;
 export default config;

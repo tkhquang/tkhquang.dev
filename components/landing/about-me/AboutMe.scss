@@ -27,7 +27,8 @@
     );
     border-radius: 42% 58% 49% 51% / 48% 64% 36% 52%;
     z-index: -1;
-    animation: spin 12s linear infinite reverse,
+    animation:
+      spin 12s linear infinite reverse,
       morph 8s ease-in-out infinite both alternate;
     animation-play-state: paused;
   }

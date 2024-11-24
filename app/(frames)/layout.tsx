@@ -5,6 +5,7 @@ import "@/assets/styles/index.scss";
 import classNames from "classnames";
 
 import { Header, Main, Footer } from "@/components/layout";
+import AppProvider from "@/providers/AppProvider";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const merriweather = Merriweather({
@@ -26,12 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={classNames("flex flex-col min-h-screen")}
-        data-theme="dark"
+        className={classNames("flex min-h-screen flex-col")}
+        style={{
+          background: "transparent",
+        }}
       >
-        <Header />
-        <Main className=" flex-1">{children}</Main>
-        <Footer />
+        <Main className="flex-1">{children}</Main>
       </body>
     </html>
   );

@@ -30,10 +30,10 @@ const HeroRolesContent = () => {
         return (
           <div
             className={classnames(
-              "h-0 opacity-0 leading-none transition-all duration-500 text-center",
+              "h-0 text-center leading-none opacity-0 transition-all duration-500",
               {
                 "h-10 opacity-100": selectedIndex === index,
-              },
+              }
             )}
             key={index}
           >

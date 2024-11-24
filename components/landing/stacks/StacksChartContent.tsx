@@ -1,0 +1,83 @@
+"use client";
+
+import { ChartData } from "@/components/landing/stacks/Stacks";
+import { AppContext } from "@/providers/AppProvider";
+import FusionCharts from "fusioncharts";
+import Pie3D from "fusioncharts/fusioncharts.charts"; // Load the chart type
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion"; // Load the theme
+import React from "react";
+import { useContext } from "react";
+import ReactFCOriginal from "react-fusioncharts";
+
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "@/tailwind.config";
+import { useAtomValue } from "jotai";
+import { themeStore } from "@/src/store/theme";
+
+const fullConfig = resolveConfig(tailwindConfig);
+
+// Pass FusionCharts modules to ReactFC
+ReactFCOriginal.fcRoot(FusionCharts, Pie3D, FusionTheme);
+
+/**
+ * Dynamic wrapper for ReactFC to resolve TypeScript JSX issues.
+ */
+const FusionChartWrapper: React.FC<React.ComponentProps<any>> = (props) => {
+  return React.createElement(ReactFCOriginal as any, props);
+};
+
+export default function StacksChartContent({
+  chartData,
+}: {
+  chartData: ChartData[];
+}) {
+  const { cssVariables } = useAtomValue(themeStore);
+
+  // FusionCharts configuration
+  const chartConfigs = {
+    type: "pie3d",
+    width: "100%",
+    height: "500",
+    dataFormat: "json",
+    dataSource: {
+      chart: {
+        caption: "Tech Stacks",
+        captionFontColor: cssVariables["primary"],
+        subCaption: "Based on Github commits",
+        subCaptionFontColor: cssVariables["on-background"],
+        showpercentintooltip: "1",
+        captionFontSize: "20",
+        subcaptionFontSize: "18",
+        subcaptionFontBold: "0",
+        useDataPlotColorForLabels: "0",
+        labelFontColor: cssVariables["on-background"],
+        labelFontBold: "1",
+        labelFontSize: "16",
+        canvasBgAlpha: "0",
+        bgAlpha: "0",
+        theme: "ocean",
+        startingAngle: "0",
+        enablesmartlabels: "1",
+        decimals: "1",
+        showLegend: "1",
+        legendBgColor: "#ffffff",
+        legendBgAlpha: "0",
+        legendBorderAlpha: "0",
+        legendShadow: "0",
+        legendItemFontSize: "16",
+        legendItemFontColor: cssVariables["on-background"],
+        legendPosition: "bottom",
+        minimiseWrappingInLegend: "1",
+        pieYScale: 40,
+        pieSliceDepth: 22,
+        showLabels: true,
+        showPercentValues: false,
+        plotHighlightEffect: false,
+        showValues: false,
+      },
+      data: chartData,
+    },
+  };
+
+  return <FusionChartWrapper {...chartConfigs} />;
+}

@@ -4,13 +4,13 @@ const HeroLeading = ({ className, ...props }: React.ComponentProps<"h1">) => {
   return (
     <h1
       className={classNames(
-        "text-4xl lg:text-6xl font-bold !leading-loose overflow-hidden whitespace-nowrap my-0 text-center animate-fade-in-forwards",
-        className,
+        "my-0 animate-fade-in-forwards overflow-hidden whitespace-nowrap text-center text-4xl font-bold !leading-loose lg:text-6xl",
+        className
       )}
       {...props}
     >
       Hello
-      <span className="text-left animate-typing inline-block w-0">
+      <span className="inline-block w-0 animate-typing text-left">
         , I&apos;m Aleks!
       </span>
     </h1>

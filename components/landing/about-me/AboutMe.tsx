@@ -43,16 +43,16 @@ const RESUME = {
 const AboutMe = () => {
   return (
     <section className="about">
-      <div className="container max-w-[1280px]">
-        <h2 className="heading--section my-10 text-4xl">About Me 🙋‍♂️</h2>
-        <div className="flex-center flex-col-reverse lg:flex-row flex-gap-8">
+      <div className="container">
+        <h2 className="heading--section my-10 text-4xl">About Me 🙋🏻‍♂️</h2>
+        <div className="flex-center flex-gap-8 flex-col-reverse lg:flex-row">
           <div
-            className="w-full lg:w-2/3 typography"
+            className="typography w-full lg:w-2/3"
             dangerouslySetInnerHTML={{
               __html: ABOUT_ME,
             }}
           ></div>
-          <div className="author w-10/12 md:w-8/12 lg:w-1/3 p-6 mx-6 my-auto flex-center">
+          <div className="author flex-center mx-6 my-auto w-10/12 p-6 md:w-8/12 lg:w-1/3">
             <Image
               className="author__image object-cover"
               src={Me}
@@ -63,7 +63,7 @@ const AboutMe = () => {
           </div>
         </div>
 
-        <div className="download-container flex-center flex-col my-2">
+        <div className="download-container flex-center my-2 flex-col">
           <a
             className="download__link shadow-md"
             target="_blank"

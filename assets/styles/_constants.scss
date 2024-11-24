@@ -14,7 +14,6 @@ $colors: (
   tone-1: hsl($main-hue-1, 100%, 50%),
   tone-2: hsl($main-hue-2, 100%, 50%),
   tone-3: hsl($main-hue-3, 100%, 50%),
-
   // Light Theme
   tone-light: hsl($main-hue-1, 100%, 50%),
   background-light: hsl($main-hue-1, 50%, 95%),
@@ -28,7 +27,6 @@ $colors: (
   on-surface-light: hsl($main-hue-1, 50%, 35%),
   error-light: hsl($red-hue, 50%, 40%),
   success-light: hsl($green-hue, 50%, 40%),
-
   // Dark Theme
   tone-dark: hsl($main-hue-2, 100%, 50%),
   background-dark: hsl($main-hue-2, 50%, 15%),
@@ -41,5 +39,5 @@ $colors: (
   surface-dark: hsl($main-hue-2, 50%, 18%),
   on-surface-dark: hsl($main-hue-2, 50%, 85%),
   error-dark: hsl($red-hue, 50%, 70%),
-  success-dark: hsl($green-hue, 50%, 60%),
+  success-dark: hsl($green-hue, 50%, 60%)
 );

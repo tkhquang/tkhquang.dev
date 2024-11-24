@@ -1,23 +1,23 @@
 import HeroWaves from "@/components/landing/hero/HeroWaves";
-import HeroSocialLinks from "@/components/landing/hero/HeroSocialLinks";
 import HeroRoles from "@/components/landing/hero/HeroRoles";
 import HeroLeading from "@/components/landing/hero/HeroLeading";
+import SocialLinks from "@/components/common/SocialLinks";
 
 const Hero = () => {
   return (
-    <section className="relative flex-center animate-hero-height min-h-[600px] overflow-hidden text-theme-on-primary-light before:absolute before:block before:content-[''] before:top-0 before:left-0 before:right-0 before:min-h-screen before:h-full before:bg-gradient-to-br before:from-theme-tone before:to-theme-on-background-light before:pointer-events-none">
-      <div className="flex-center flex-col items-center justify-center h-full pb-24 transition-all duration-500">
+    <section className="flex-center relative min-h-[600px] animate-hero-height overflow-hidden text-theme-on-primary-light before:pointer-events-none before:absolute before:left-0 before:right-0 before:top-0 before:block before:h-full before:min-h-screen before:bg-gradient-to-br before:from-theme-tone before:to-theme-on-background-light before:content-['']">
+      <div className="flex-center h-full flex-col items-center justify-center pb-24 transition-all duration-500">
         <HeroLeading className="mx-auto" />
         <HeroRoles />
-        <HeroSocialLinks
-          className="flex-center text-3xl lg:text-5xl lg:mt-10 flex-gap-8 h-0 opacity-0 overflow-hidden animate-fade-in-forwards"
+        <SocialLinks
+          className="flex-center flex-gap-8 h-0 animate-fade-in-forwards overflow-hidden text-3xl opacity-0 lg:mt-10 lg:text-5xl"
           style={{
             animationDelay: "1.5s",
           }}
         />
       </div>
 
-      <HeroWaves className="hero__waves absolute bottom-0 inset-x-0 h-24 z-1" />
+      <HeroWaves className="hero__waves absolute inset-x-0 bottom-0 z-1 h-24" />
     </section>
   );
 };

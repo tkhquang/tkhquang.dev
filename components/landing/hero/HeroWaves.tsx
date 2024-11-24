@@ -3,7 +3,7 @@ import classnames from "classnames";
 const LandingWaves = ({ className, ...props }: React.ComponentProps<"svg">) => {
   const classNames = classnames(
     "waves w-full transition-[opacity_0.5s_linear]",
-    className,
+    className
   );
 
   return (

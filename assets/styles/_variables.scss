@@ -7,20 +7,8 @@
 /// @param {'dark'|'light'} $theme -
 ///   The theme to which the variables need to adjust to.
 @mixin color-variables($theme) {
-  $list:
-    "tone",
-    "primary",
-    "on-primary",
-    "secondary",
-    "on-secondary",
-    "surface",
-    "on-surface",
-    "background",
-    "on-background",
-    "error",
-    "success",
-    "darken"
-  ;
+  $list: "tone", "primary", "on-primary", "secondary", "on-secondary", "surface",
+    "on-surface", "background", "on-background", "error", "success", "darken";
   @each $var in $list {
     --#{$var}: var(--#{$var}-#{$theme});
   }

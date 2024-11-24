@@ -1,7 +1,7 @@
 @use "mixins" as *;
 
 .flex-center {
-  @apply flex justify-center items-center;
+  @apply flex items-center justify-center;
 }
 
 @mixin flex-gap($size) {
@@ -27,7 +27,7 @@
 }
 
 .heading {
-  @apply relative leading-tight font-bold tracking-tight text-theme-primary;
+  @apply relative font-bold leading-tight tracking-tight text-theme-primary;
 }
 
 .heading--section {
@@ -46,23 +46,23 @@
 }
 
 .primary {
-  @apply text-theme-on-primary bg-theme-primary;
+  @apply bg-theme-primary text-theme-on-primary;
 }
 
 .secondary {
-  @apply text-theme-on-secondary bg-theme-secondary;
+  @apply bg-theme-secondary text-theme-on-secondary;
 }
 
 .background {
-  @apply text-theme-on-background bg-theme-background;
+  @apply bg-theme-background text-theme-on-background;
 }
 
 .surface {
-  @apply text-theme-on-surface bg-theme-surface;
+  @apply bg-theme-surface text-theme-on-surface;
 }
 
 .input {
-  @apply inline-block bg-theme-background text-theme-on-background border-2 border-theme-secondary shadow-inner rounded;
+  @apply inline-block rounded border-2 border-theme-secondary bg-theme-background text-theme-on-background shadow-inner;
 
   &:focus {
     @apply border-theme-tone;
@@ -78,12 +78,12 @@
 }
 
 .button {
-  @apply block h-10 px-2 bg-theme-secondary text-theme-on-secondary shadow-md border-2 border-theme-secondary rounded transition-all duration-200;
+  @apply block h-10 rounded border-2 border-theme-secondary bg-theme-secondary px-2 text-theme-on-secondary shadow-md transition-all duration-200;
   &:hover {
     @apply bg-theme-primary text-theme-on-primary;
   }
   &:disabled {
-    @apply outline-none cursor-not-allowed bg-gray-600 border-gray-500 text-white shadow-inner pointer-events-none;
+    @apply pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner outline-none;
   }
 }
 
