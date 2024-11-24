@@ -55,6 +55,7 @@ export interface ChartData {
 }
 
 export const dynamic = "force-static";
+export const revalidate = 86400;
 
 export default async function StacksPage() {
   const data: GitHubData = await fetchGitHubCommitStats();

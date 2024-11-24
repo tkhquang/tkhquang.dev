@@ -55,7 +55,7 @@ const AboutMe = () => {
           <div className="author flex-center mx-6 my-auto w-10/12 p-6 md:w-8/12 lg:w-1/3">
             <Image
               className="author__image object-cover"
-              src={Me}
+              src="/assets/resources/images/Aleks.png"
               width={500}
               height={500}
               alt="Aleks"

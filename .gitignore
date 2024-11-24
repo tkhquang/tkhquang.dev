@@ -39,6 +39,7 @@ next-env.d.ts
 /.cache
 src/.temp
 .env.*
+!.env.example
 .env
 
 # Ignore files in folder

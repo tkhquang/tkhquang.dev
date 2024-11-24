@@ -4,6 +4,7 @@ import Stacks from "@/components/landing/stacks/Stacks";
 import Projects from "@/components/projects/Projects";
 
 export const dynamic = "force-static";
+export const revalidate = 86400;
 
 export default function Home() {
   return (
