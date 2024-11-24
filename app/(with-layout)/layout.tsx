@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Merriweather } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "@/assets/styles/index.scss";
 import classNames from "classnames";
@@ -33,6 +34,9 @@ export default function RootLayout({
           <Footer />
         </AppProvider>
       </body>
+      <GoogleAnalytics
+        gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID as string}
+      />
     </html>
   );
 }
