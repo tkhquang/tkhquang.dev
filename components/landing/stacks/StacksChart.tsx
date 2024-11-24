@@ -5,17 +5,11 @@ import dynamic from "next/dynamic";
 import { ChartData } from "@/components/landing/stacks/Stacks";
 import { useAtom } from "jotai";
 import { themeStore } from "@/src/store/theme";
-import LoaderLines from "@/components/common/loader/LoaderLines";
 
 const StacksChartContent = dynamic(
   () => import("@/components/landing/stacks/StacksChartContent"),
   {
     ssr: false,
-    loading: () => (
-      <div>
-        <LoaderLines />
-      </div>
-    ),
   }
 );
 

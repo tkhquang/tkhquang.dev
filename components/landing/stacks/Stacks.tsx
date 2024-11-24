@@ -1,6 +1,7 @@
-import StacksChartFrame from "@/components/landing/stacks/StacksChartFrame";
 import Image from "next/image";
 import Link from "next/link";
+
+import StacksChartFrame from "@/components/landing/stacks/StacksChartFrame";
 
 const stacks = [
   {

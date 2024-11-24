@@ -30,6 +30,7 @@ export default function RootLayout({
         className={classNames("flex min-h-screen flex-col")}
         style={{
           background: "transparent",
+          overflow: "hidden",
         }}
       >
         <Main className="flex-1">{children}</Main>
