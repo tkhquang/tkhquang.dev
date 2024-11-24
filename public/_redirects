@@ -1,0 +1,3 @@
+# Redirect default Netlify subdomain to primary domain
+https://tkhquang.netlify.app/*   https://tkhquang.dev/:splat   301!
+/blog/*                     https://legacy.tkhquang.dev/:splat   307!

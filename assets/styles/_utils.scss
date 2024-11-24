@@ -1,0 +1,110 @@
+.container {
+  @apply max-w-[1280px];
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.5s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.5s;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+.quick-fade-enter-active,
+.quick-fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.2s;
+}
+
+.quick-fade-enter-active {
+  transition-delay: 0.2s;
+}
+
+.quick-fade-enter,
+.quick-fade-leave-active {
+  opacity: 0;
+}
+
+.list-border {
+  & > li {
+    padding-bottom: 1px;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        var(--primary) 30%,
+        var(--primary) 70%,
+        transparent 100%
+      ),
+      linear-gradient(
+        to right,
+        transparent 0%,
+        var(--primary) 30%,
+        var(--primary) 70%,
+        transparent 100%
+      );
+    background-size: 100% 1px;
+    background-position:
+      bottom 0 left 0,
+      bottom 1px left 0;
+    background-repeat: no-repeat;
+
+    &:first-of-type {
+      background-size: 100% 2px;
+      background-position:
+        top 0 left 0,
+        bottom 0 left 0;
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+  }
+}
+
+.link {
+  font-weight: bold;
+  color: (var(--primary));
+  position: relative;
+
+  &[target="_blank"]::after {
+    content: " ";
+    // background-image: url('@/assets/resources/svg/external-link.svg');
+    background-size: 1em;
+    background-size: contain;
+    margin-left: 3px;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: text-top;
+  }
+  &:hover,
+  &:active {
+    text-decoration: underline;
+    filter: brightness(85%);
+  }
+  &:visited {
+    filter: brightness(85%);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: auto;
+    opacity: 1;
+  }
+}

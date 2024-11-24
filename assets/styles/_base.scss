@@ -1,0 +1,55 @@
+*,
+*::before,
+*::after {
+  @apply box-border border-theme-primary;
+}
+
+html,
+body {
+  @apply m-0 p-0;
+}
+
+html {
+  @apply text-sm;
+  @media screen and (min-width: 640px) {
+    @apply text-base;
+  }
+}
+
+body {
+  @apply bg-theme-background font-sans leading-6 text-theme-on-background antialiased transition duration-500;
+}
+
+a:not(.button) {
+  @apply transition-all duration-200;
+}
+
+img {
+  @apply max-w-full;
+}
+
+select {
+  appearance: none;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+button:focus,
+textarea:focus,
+input:focus,
+select:focus {
+  outline: none;
+}
+
+hr {
+  @apply mx-0 h-px w-full border-0;
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--primary) 30%,
+    var(--primary) 70%,
+    transparent 100%
+  );
+}

@@ -1,0 +1,9 @@
+[build]
+  command = "yarn build && yarn install:lambda && yarn build:lambda"
+  functions = "functions"
+  publish = "dist"
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true
