@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAtom } from "jotai";
-import { themeStore } from "@/src/store/theme";
+import { themeStore } from "@/store/theme";
 import LoaderLines from "@/components/common/loader/LoaderLines";
 import classNames from "classnames";
 

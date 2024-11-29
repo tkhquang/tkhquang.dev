@@ -46,10 +46,6 @@ function StackedLayerProvider({ children, id }: StackedLayerProviderProps) {
     })();
   }, [id]);
 
-  if (!rootNode) {
-    return null;
-  }
-
   return (
     <PortalContext.Provider value={rootNode}>{children}</PortalContext.Provider>
   );

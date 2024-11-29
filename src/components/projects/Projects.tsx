@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { fetchGitHubProjects } from "@/lib/github";
+import { fetchGitHubProjects } from "@/services/github";
 
 // Define repository and demo types
 interface Language {

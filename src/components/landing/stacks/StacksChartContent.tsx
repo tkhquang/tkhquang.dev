@@ -7,7 +7,7 @@ import FusionCharts from "fusioncharts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 import Pie3D from "fusioncharts/fusioncharts.charts";
 import { ChartData } from "@/components/landing/stacks/Stacks";
-import { themeStore } from "@/src/store/theme";
+import { themeStore } from "@/store/theme";
 
 // Pass FusionCharts modules to ReactFC
 ReactFCOriginal.fcRoot(FusionCharts, Pie3D, FusionTheme);

@@ -1,6 +1,7 @@
 import { canUseDOM } from "@ariakit/core/utils/dom";
 import { getCssVariables } from "@/utils/helpers";
 import { atom } from "jotai";
+import { debounce } from "debounce";
 
 const DEFAULT_THEME_MODE = "dark";
 
@@ -32,3 +33,24 @@ export const themeStore = atom(
     });
   }
 );
+
+export const scrolledStore = atom<{ isScrolled: boolean }>({
+  isScrolled: false,
+});
+
+scrolledStore.onMount = (set) => {
+  const checkIfIsScrolled = debounce(() => {
+    const top = window.scrollY || 0;
+
+    set({
+      isScrolled: top > 600 - 96,
+    });
+  }, 5);
+  checkIfIsScrolled();
+
+  window.addEventListener("scroll", checkIfIsScrolled);
+
+  return () => {
+    window.removeEventListener("scroll", checkIfIsScrolled);
+  };
+};

@@ -1,30 +1,12 @@
 "use client";
 
-import debounce from "debounce";
 import classNames from "classnames";
-import { useCallback, useEffect, useState } from "react";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useAtomValue } from "jotai";
+import { scrolledStore } from "@/store/theme";
 
 const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  const checkIfIsScrolled = useCallback(
-    debounce(() => {
-      const top = window.scrollY || 0;
-
-      setIsScrolled(top > 600 - 96);
-    }, 5),
-    []
-  );
-
-  useEffect(() => {
-    checkIfIsScrolled();
-    window.addEventListener("scroll", checkIfIsScrolled);
-
-    return () => {
-      window.removeEventListener("scroll", checkIfIsScrolled);
-    };
-  }, [checkIfIsScrolled]);
+  const { isScrolled } = useAtomValue(scrolledStore);
 
   return (
     <header

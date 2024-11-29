@@ -1,6 +1,6 @@
 import { animated, useSpring } from "react-spring";
 import { useAtomValue } from "jotai";
-import { ThemeMode, themeStore } from "@/src/store/theme";
+import { ThemeMode, themeStore } from "@/store/theme";
 
 const properties = {
   dark: {

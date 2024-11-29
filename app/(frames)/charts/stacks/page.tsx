@@ -1,5 +1,5 @@
-import { fetchGitHubCommitStats } from "@/lib/github";
 import StacksChart from "@/components/landing/stacks/StacksChart";
+import { fetchGitHubCommitStats } from "@/services/github";
 
 // Define repository and language types
 interface LanguageNode {
