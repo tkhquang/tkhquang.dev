@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Merriweather } from "next/font/google";
 
-import classNames from "classnames";
 import StackedLayers from "@/components/layout/StackedLayers";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -61,13 +60,15 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={classNames("flex min-h-screen flex-col")}>
+      <body className="flex min-h-screen flex-col">
         <script
           dangerouslySetInnerHTML={{
             __html: SCRIPT_CONTENT,
           }}
         />
-        <div className="relative z-0">{children}</div>
+        <div id="_next" className="relative z-0 flex size-full flex-1 flex-col">
+          {children}
+        </div>
         <StackedLayers />
         <div id="class-keeper" className="hidden" aria-hidden></div>
       </body>
