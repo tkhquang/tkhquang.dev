@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import { themeStore } from "@/store/theme";
 import LoaderLines from "@/components/common/loader/LoaderLines";
 import classNames from "classnames";
+import { useAfterPaintEffect } from "@/hooks/useAfterPaintEffect";
 
 export default function StacksChartFrame() {
   const [theme, setTheme] = useAtom(themeStore);
@@ -19,6 +20,12 @@ export default function StacksChartFrame() {
       });
     }
   }, [theme.mode]);
+
+  useAfterPaintEffect(() => {
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 5_000);
+  }, []);
 
   return (
     <div className="relative">

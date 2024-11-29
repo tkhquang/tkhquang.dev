@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import Me from "@/assets/resources/images/Aleks.png";
 import "./AboutMe.scss";
 
 const ABOUT_ME = `<p>
