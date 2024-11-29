@@ -10,14 +10,12 @@ body {
 }
 
 html {
+  @apply bg-theme-background font-sans leading-6 text-theme-on-background antialiased;
+
   @apply text-sm;
   @media screen and (min-width: 640px) {
     @apply text-base;
   }
-}
-
-body {
-  @apply bg-theme-background font-sans leading-6 text-theme-on-background antialiased transition duration-500;
 }
 
 a:not(.button) {
@@ -52,4 +50,8 @@ hr {
     var(--primary) 70%,
     transparent 100%
   );
+}
+
+#class-keeper {
+  @apply transition duration-500;
 }

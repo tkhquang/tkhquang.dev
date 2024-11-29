@@ -1,5 +1,5 @@
 import { animated, useSpring } from "react-spring";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { ThemeMode, themeStore } from "@/src/store/theme";
 
 const properties = {
@@ -84,9 +84,10 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
 };
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useAtom(themeStore);
+  const theme = useAtomValue(themeStore);
+
   const switchTheme = () => {
-    setTheme(theme.mode === "light" ? "dark" : "light");
+    window.__setPreferredTheme(theme.mode === "light" ? "dark" : "light");
   };
 
   return (

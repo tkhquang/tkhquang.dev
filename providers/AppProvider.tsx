@@ -1,16 +1,13 @@
 "use client";
 
-import { Provider, WritableAtom } from "jotai";
+import { Provider, useSetAtom, WritableAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
-import React, { createContext, useEffect, useState } from "react";
-import { getCssVariables } from "@/utils/helpers";
+import React, { createContext, useEffect } from "react";
 import { themeModeStore, themeStore } from "@/src/store/theme";
 
-export const AppContext = createContext({
-  cssVariables: {} as Record<string, string | number>,
-});
+export const AppContext = createContext<Record<string, unknown>>({});
 
-function AtomsHydrator({
+const AtomsHydrator = ({
   atomValues,
   children,
 }: {
@@ -19,41 +16,32 @@ function AtomsHydrator({
     readonly [WritableAtom<unknown, [any], unknown>, unknown]
   >;
   children: React.ReactNode;
-}) {
+}) => {
   useHydrateAtoms(new Map(atomValues));
   return children;
-}
+};
+
+const ThemeSetter = () => {
+  const setTheme = useSetAtom(themeStore);
+
+  useEffect(() => {
+    window.__onThemeChange = setTheme;
+    setTheme(window.__theme);
+  }, []);
+
+  return null;
+};
 
 export default function AppProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [cssVariables, setCssVariables] = useState<
-    Record<string, string | number>
-  >({});
-
-  useEffect(() => {
-    setCssVariables(getCssVariables());
-  }, []);
-
   return (
     <Provider>
-      <AtomsHydrator
-        atomValues={
-          [
-            // ..
-            // [themeStore, { mode: "dark", cssVariables: {} }],
-          ]
-        }
-      >
-        <AppContext.Provider
-          value={{
-            cssVariables,
-          }}
-        >
-          {children}
-        </AppContext.Provider>
+      <AtomsHydrator atomValues={[]}>
+        <ThemeSetter />
+        <AppContext.Provider value={{}}>{children}</AppContext.Provider>
       </AtomsHydrator>
     </Provider>
   );

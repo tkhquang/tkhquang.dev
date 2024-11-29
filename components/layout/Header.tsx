@@ -8,7 +8,6 @@ import ThemeToggle from "@/components/theme/ThemeToggle";
 const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const checkIfIsScrolled = useCallback(
     debounce(() => {
       const top = window.scrollY || 0;
@@ -19,12 +18,11 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
   );
 
   useEffect(() => {
+    checkIfIsScrolled();
     window.addEventListener("scroll", checkIfIsScrolled);
-    window.addEventListener("load", checkIfIsScrolled);
 
     return () => {
       window.removeEventListener("scroll", checkIfIsScrolled);
-      window.removeEventListener("load", checkIfIsScrolled);
     };
   }, [checkIfIsScrolled]);
 
