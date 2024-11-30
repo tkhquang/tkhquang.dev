@@ -1,5 +1,10 @@
+import {
+  GitHubCommitStatsQuery,
+  GitHubProjectsQuery,
+} from "@/graphql/generated/types";
+
 const fetchGitHubData = async (query: string, revalidate: number = 86400) => {
-  const response = await fetch("https://api.github.com/graphql", {
+  const response = await fetch(`${process.env.GITHUB_API_ENDPOINT}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,8 +25,9 @@ const fetchGitHubData = async (query: string, revalidate: number = 86400) => {
   return data;
 };
 
-export const fetchGitHubCommitStats = async () => {
-  const query = `
+export const fetchGitHubCommitStats =
+  async (): Promise<GitHubCommitStatsQuery> => {
+    const query = `
     query {
       viewer {
         repositories(
@@ -68,10 +74,10 @@ export const fetchGitHubCommitStats = async () => {
     }
   `;
 
-  return fetchGitHubData(query);
-};
+    return fetchGitHubData(query);
+  };
 
-export const fetchGitHubProjects = async () => {
+export const fetchGitHubProjects = async (): Promise<GitHubProjectsQuery> => {
   const query = `
     query {
       viewer {

@@ -1,45 +1,6 @@
 import StacksChart from "@/components/landing/stacks/StacksChart";
 import { fetchGitHubCommitStats } from "@/services/github";
 
-// Define repository and language types
-interface LanguageNode {
-  id: string;
-  name: string;
-  color: string;
-}
-
-interface LanguageEdge {
-  node: LanguageNode;
-  size: number;
-}
-
-interface RepositoryNode {
-  id: string;
-  name: string;
-  url: string;
-  description: string;
-  isPrivate: boolean;
-  stargazers: { totalCount: number };
-  forkCount: number;
-  primaryLanguage: LanguageNode | null;
-  isFork: boolean;
-  updatedAt: string;
-  languages: { edges: LanguageEdge[] };
-}
-
-interface RepositoryEdge {
-  node: RepositoryNode;
-}
-
-interface GitHubData {
-  viewer: {
-    repositories: {
-      edges: RepositoryEdge[];
-    };
-  };
-}
-
-// Type for the stats object
 interface LanguageStats {
   id: string;
   name: string;
@@ -48,17 +9,11 @@ interface LanguageStats {
   percentage?: number;
 }
 
-export interface ChartData {
-  label: string;
-  value: number;
-  color: string;
-}
-
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
 export default async function StacksPage() {
-  const data: GitHubData = await fetchGitHubCommitStats();
+  const data = await fetchGitHubCommitStats();
   const repositories = data.viewer.repositories.edges;
 
   const stats: Record<string, LanguageStats> = {};

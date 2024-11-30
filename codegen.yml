@@ -1,0 +1,19 @@
+overwrite: true
+schema:
+  - "${GITHUB_API_ENDPOINT}":
+      headers:
+        user-agent: "My-User-Agent"
+        Authorization: "Bearer ${GITHUB_TOKEN}"
+documents: "src/graphql/**/*.{ts,tsx}"
+generates:
+  src/graphql/generated/types.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-resolvers"
+      - "typescript-document-nodes"
+    config:
+      maybeValue: T
+      avoidOptionals: true
+require:
+  - "ts-node/register"

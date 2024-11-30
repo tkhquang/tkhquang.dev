@@ -1,29 +1,7 @@
 import React from "react";
 import Image from "next/image";
+
 import { fetchGitHubProjects } from "@/services/github";
-
-// Define repository and demo types
-interface Language {
-  color: string;
-  id: string;
-  name: string;
-}
-
-interface Stargazers {
-  totalCount: number;
-}
-
-interface Repository {
-  id: string;
-  name: string;
-  url: string;
-  description: string;
-  forkCount: number;
-  stargazers: Stargazers;
-  primaryLanguage: Language;
-  updatedAt: string;
-  isPrivate: boolean;
-}
 
 interface Demo {
   title: string;
@@ -74,14 +52,10 @@ const demos: Demo[] = [
 const Projects = async () => {
   const data = await fetchGitHubProjects();
 
-  // Extract repositories from the fetched GitHub data
-  const repositories: Repository[] = data.viewer.repositories.edges
-    .filter(
-      ({ node }: { node: Repository }) =>
-        !node.isPrivate && node.primaryLanguage !== null
-    )
-    .map(({ node }: { node: Repository }) => node)
-    .sort((a: Repository, b: Repository) => {
+  const repositories = data.viewer.repositories.edges
+    .filter(({ node }) => !node.isPrivate && node.primaryLanguage !== null)
+    .map(({ node }) => node)
+    .sort((a, b) => {
       if (a.stargazers.totalCount > 0 || b.stargazers.totalCount > 0) {
         return b.stargazers.totalCount - a.stargazers.totalCount;
       }
