@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Montserrat, Merriweather } from "next/font/google";
-
 import StackedLayers from "@/components/layout/StackedLayers";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
@@ -51,6 +50,9 @@ export const metadata: Metadata = {
   title: "Aleks's Portfolio",
   description:
     "Highly motivated, self-starting developer with a good understanding of HTML, CSS, JavaScript and its modern libraries and frameworks such as React, Vue, seeking to launch a career building web applications and services.",
+  other: {
+    version: Date.now(),
+  },
 };
 
 export default async function RootLayout({

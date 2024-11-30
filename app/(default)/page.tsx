@@ -6,7 +6,7 @@ import Projects from "@/components/projects/Projects";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
-export default async function Home() {
+export default async function HomePage() {
   return (
     <>
       <Landing />
