@@ -6,5 +6,8 @@
     "prettier",
     "plugin:tailwindcss/recommended"
   ],
-  "plugins": ["@typescript-eslint", "tailwindcss", "import"]
+  "plugins": ["@typescript-eslint", "tailwindcss", "import"],
+  "rules": {
+    "tailwindcss/no-custom-classname": "off"
+  }
 }

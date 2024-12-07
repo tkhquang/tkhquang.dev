@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Merriweather } from "next/font/google";
 import StackedLayers from "@/components/layout/StackedLayers";
+import "@/lib/global";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const merriweather = Merriweather({

@@ -89,4 +89,148 @@
 
 .typography {
   @include typography;
+
+  :target {
+    &::before {
+      content: "";
+      display: block;
+      height: var(--header-height);
+      margin-top: calc(var(--header-height) * -1);
+    }
+  }
+}
+
+.header__wrapper {
+  @keyframes waves {
+    0% {
+      background-position: top left;
+    }
+
+    25% {
+      background-position: bottom right;
+    }
+
+    50% {
+      background-position: center;
+    }
+
+    75% {
+      background-position: top right;
+    }
+
+    100% {
+      background-position: bottom left;
+    }
+  }
+
+  &::before {
+    position: absolute;
+    display: block;
+    content: "";
+    top: -16px;
+    bottom: -16px;
+    left: -16px;
+    right: -16px;
+    background-image: var(--background-url),
+      linear-gradient(
+        to right,
+        var(--darken) 0%,
+        var(--secondary) 30%,
+        var(--secondary) 70%,
+        var(--darken) 100%
+      );
+
+    background-size: 105% auto, cover;
+    background-position: center;
+    animation: waves 45s linear infinite alternate both;
+    filter: blur(8px) brightness(75%);
+    z-index: -1;
+  }
+
+  &:hover,
+  &:focus {
+    @apply shadow-2xl;
+    .header__waves {
+      opacity: 0;
+    }
+
+    // &::before {
+    //   animation-play-state: paused;
+    // }
+  }
+}
+
+.anchor--is-active {
+  //
+}
+
+.logo {
+  perspective: 1000px;
+
+  &__text {
+    transition: transform 0.3s;
+    transform-origin: 50% 0;
+    transform-style: preserve-3d;
+
+    &::before {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      content: attr(data-hover);
+      transition: color 0.3s;
+      transform: rotateX(-90deg);
+      transform-origin: 50% 0;
+      text-align: center;
+      display: none;
+    }
+  }
+
+  &:hover &__text {
+    transform: rotateX(90deg) translateY(-22px);
+    &::before {
+      display: block;
+      color: var(--error);
+    }
+  }
+}
+
+.horizontal-line {
+  background-image: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--primary) 30%,
+    var(--primary) 70%,
+    transparent 100%
+  );
+}
+
+.blog-info {
+  &__content {
+    box-shadow: inset 0px 0px 10px 10px var(--surface);
+    top: calc(var(--header-height) + 2rem);
+  }
+}
+
+.author .author__intro {
+  p {
+    display: inline;
+    background-color: var(--surface);
+  }
+}
+
+#circuit-path {
+  animation: pulse 3s infinite;
+}
+@keyframes pulse {
+  0% {
+    fill-opacity: 0.2;
+  }
+  50% {
+    fill-opacity: 0.1;
+  }
+  100% {
+    fill-opacity: 0.2;
+  }
 }

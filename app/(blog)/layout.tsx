@@ -2,10 +2,11 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "@/assets/styles/index.scss";
 
-import { Header, Main, Footer } from "@/components/layout";
+import { Main, Footer } from "@/components/layout";
 import AppProvider from "@/providers/AppProvider";
 import BackToTopButton from "@/components/layout/BackToTop";
 import { Portal } from "@ariakit/react";
+import BlogHeader from "@/components/layout/BlogHeader";
 
 export default async function DefaultLayout({
   children,
@@ -14,7 +15,7 @@ export default async function DefaultLayout({
 }) {
   return (
     <AppProvider>
-      <Header />
+      <BlogHeader />
       <Main className="flex-1">{children}</Main>
       <Footer />
 

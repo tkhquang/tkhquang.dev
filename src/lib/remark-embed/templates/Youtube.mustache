@@ -1,0 +1,10 @@
+<div class="youtube-embed">
+    <div style="width: {{#options.width}}{{options.width}}{{/options.width}}{{^options.width}}100%{{/options.width}}; {{#options.margin}}margin: {{options.margin}};{{/options.margin}}">
+        <div style="position: relative; padding-bottom: 56.25%; padding-top: 25px; height: 0;">
+            <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                src="https://www.youtube{{#options.nocookie}}-nocookie{{/options.nocookie}}.com/embed/{{#playlist}}videoseries?list={{/playlist}}{{id}}"
+                allow="autoplay; encrypted-media" allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</div>

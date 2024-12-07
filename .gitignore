@@ -43,10 +43,10 @@ src/.temp
 .env
 
 # Ignore files in folder
-static/uploads/remote/*
+public/uploads/remote/*
 
 # But please keep the folder
-!static/uploads/remote/.gitkeep
+!public/uploads/remote/.gitkeep
 
 # Will be generated automatically while building
 static/admin/config.yml
