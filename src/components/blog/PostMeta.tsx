@@ -1,10 +1,10 @@
 import React from "react";
 import { format, isValid } from "date-fns";
-import { PostsCollection } from "@/models/generated/markdown.types";
 import classNames from "classnames";
+import { MarkdownPost } from "@/models/markdown.types";
 
 interface PostDatesProps extends React.ComponentProps<"div"> {
-  post: PostsCollection;
+  post: MarkdownPost;
 }
 
 const PostMeta = ({ post, className }: PostDatesProps) => {

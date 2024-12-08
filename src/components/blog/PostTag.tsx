@@ -1,11 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import { PostsCollection } from "@/models/generated/markdown.types";
 import slugify from "slugify";
 import classNames from "classnames";
+import { MarkdownPost } from "@/models/markdown.types";
 
 interface TagListProps extends React.ComponentProps<"div"> {
-  post: PostsCollection;
+  post: MarkdownPost;
 }
 
 const TagList = ({ post, className }: TagListProps) => {

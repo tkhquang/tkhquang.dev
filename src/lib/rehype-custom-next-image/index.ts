@@ -1,12 +1,13 @@
 import { visit } from "unist-util-visit";
 import path from "path";
-import { promisify } from "util";
 import fs from "fs";
 import { imageSize } from "image-size";
 import { Element, Root } from "hast";
 import { Transformer } from "unified";
 import { getRemoteImage } from "@/utils/image";
 import { ImageProps } from "next/image";
+import lqip, { LqipModernOutput } from "lqip-modern";
+import { promisify } from "util";
 
 const sizeOf = promisify(imageSize);
 
@@ -15,6 +16,7 @@ interface Options {
   publicFolder?: string;
   cache?: boolean;
 }
+
 export default function rehypeCustomNextImage(
   options: Options = {}
 ): Transformer<Root> {
@@ -57,15 +59,6 @@ export default function rehypeCustomNextImage(
               cache,
             });
 
-            // Retrieve dimensions if width and height are not defined
-            if (!width || !height) {
-              const dimensions = await sizeOf(localPath);
-              if (dimensions) {
-                width = dimensions.width;
-                height = dimensions.height;
-              }
-            }
-
             const relativePath = path.relative(
               path.resolve("./public"),
               localPath
@@ -75,19 +68,26 @@ export default function rehypeCustomNextImage(
             // Handle local images
             const localImagePath = path.join(publicFolder, originalSrc);
 
-            if (!width || !height) {
-              if (fs.existsSync(localImagePath)) {
-                const dimensions = await sizeOf(localImagePath);
-                if (dimensions) {
-                  width = dimensions.width;
-                  height = dimensions.height;
-                }
-              }
-            }
-
             finalSrc = `/${path
               .relative(path.resolve("./public"), localImagePath)
               .replace(/\\+/g, "/")}`;
+          }
+
+          let result!: LqipModernOutput;
+          const filePath = path.join(process.cwd(), "public", finalSrc);
+
+          try {
+            result = await lqip(filePath);
+          } catch (error) {
+            console.error(error);
+          }
+
+          if (fs.existsSync(filePath)) {
+            const dimensions = await sizeOf(filePath);
+            if (dimensions) {
+              width = width ?? dimensions.width;
+              height = height ?? dimensions.height;
+            }
           }
 
           // Update the <img> node to <next-image>
@@ -97,6 +97,8 @@ export default function rehypeCustomNextImage(
             alt: originalAlt as string,
             width: width ?? 1280,
             height: height ?? 720,
+            blurDataURL: result?.metadata.dataURIBase64,
+            placeholder: "blur",
           } satisfies ImageProps;
         } catch (err) {
           console.error(`Failed to process image ${originalSrc}:`, err);

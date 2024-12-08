@@ -38,20 +38,20 @@ export async function getRemoteImage(
     const buffer = await response.arrayBuffer();
     const body = Buffer.from(buffer);
 
-    // Append file extension if needed
-    if (!path.extname(filePath)) {
-      const contentType = response.headers.get("content-type") as MimeType;
-      if (contentType) {
-        const ext = getExtensionFromMimeType(contentType);
-        if (ext) {
-          filePath += `.${ext}`;
-        } else {
-          throw new Error("Cannot detect file extension!");
-        }
-      } else {
-        throw new Error("Cannot detect file extension!");
-      }
-    }
+    // // Append file extension if needed
+    // if (!path.extname(filePath)) {
+    //   const contentType = response.headers.get("content-type") as MimeType;
+    //   if (contentType) {
+    //     const ext = getExtensionFromMimeType(contentType);
+    //     if (ext) {
+    //       filePath += `${ext}`;
+    //     } else {
+    //       throw new Error("Cannot detect file extension!");
+    //     }
+    //   } else {
+    //     throw new Error("Cannot detect file extension!");
+    //   }
+    // }
 
     // Ensure the target directory exists
     const dir = path.dirname(filePath);

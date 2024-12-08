@@ -8,14 +8,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { CategoriesCollection } from "@/models/generated/markdown.types";
 import HorizontalLine from "@/components/common/HorizontalLine";
+import { MarkdownCategory } from "@/models/markdown.types";
 
 export function PathInfo({
   category,
   className,
 }: {
-  category: CategoriesCollection;
+  category: MarkdownCategory;
   className?: string;
 }) {
   return (

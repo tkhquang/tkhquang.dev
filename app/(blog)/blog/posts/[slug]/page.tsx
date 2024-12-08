@@ -2,7 +2,6 @@ import BlogInfo from "@/components/blog/BlogInfo";
 import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
-import Image from "next/image";
 
 export default async function Post({
   params,
@@ -31,15 +30,13 @@ export default async function Post({
           }) as React.CSSProperties),
         }}
       >
-        {post.cover_image && (
-          <Image
-            alt="Cover"
-            className="header__image m-auto block min-h-full w-full object-contain"
-            src={post.cover_image}
-            width="1280"
-            height="720"
-          />
-        )}
+        {post.cover_image &&
+          post.renderCoverImage({
+            className:
+              "header__image m-auto block min-h-full w-full object-contain",
+            width: 1280,
+            height: 720,
+          })}
       </header>
       <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
         {post.title}

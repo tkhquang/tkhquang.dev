@@ -1,11 +1,10 @@
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
-import { PostsCollection } from "@/models/generated/markdown.types";
 import React from "react";
-import Image from "next/image";
+import { MarkdownPost } from "@/models/markdown.types";
 
 interface PostCardProps {
-  post: PostsCollection & { slug: string };
+  post: MarkdownPost;
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
@@ -28,13 +27,12 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             href={`/blog/posts/${post.slug}`}
             className="news-feed__list-item__link"
           >
-            <Image
-              alt="Cover image"
-              className="news-feed__list-item__image mb-4 mt-2 rounded shadow-lg"
-              src={coverImage}
-              width="1280"
-              height="720"
-            />
+            {post.renderCoverImage({
+              className:
+                "news-feed__list-item__image mb-4 mt-2 rounded shadow-lg",
+              width: "1280",
+              height: "720",
+            })}
           </a>
           <figcaption></figcaption>
         </figure>

@@ -1,13 +1,9 @@
 import React from "react";
 import PostCard from "./PostCard";
 import { PathInfo } from "@/components/blog/PathInfo";
-import { PostsCollection } from "@/models/generated/markdown.types";
+import { MarkdownPost } from "@/models/markdown.types";
 
-const FeedList = ({
-  posts,
-}: {
-  posts: (PostsCollection & { slug: string })[];
-}) => {
+const FeedList = ({ posts }: { posts: MarkdownPost[] }) => {
   return (
     <section className="news-feed w-full lg:w-3/4">
       {/* <PathInfo className="news-feed__path-info mx-auto w-full lg:w-4/5" /> */}

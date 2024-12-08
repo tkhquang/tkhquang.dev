@@ -1,13 +1,9 @@
+import React from "react";
 import BlogInfo from "@/components/blog/BlogInfo";
 import FeedList from "@/components/blog/FeedList";
-import { PostsCollection } from "@/models/generated/markdown.types";
-import React from "react";
+import { MarkdownPost } from "@/models/markdown.types";
 
-const NewsFeed = ({
-  posts,
-}: {
-  posts: (PostsCollection & { slug: string })[];
-}) => {
+const NewsFeed = ({ posts }: { posts: MarkdownPost[] }) => {
   return (
     <div className="relative mx-auto my-12 flex max-w-xl flex-wrap px-4 sm:px-6 lg:max-w-screen-xl lg:px-8">
       <FeedList posts={posts} />

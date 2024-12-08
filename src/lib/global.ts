@@ -1,4 +1,4 @@
-import MarkdownParser from "@/lib/MardownParser";
+import MarkdownParser from "@/lib/MarkdownParser";
 
 declare global {
   var _MarkdownParser: MarkdownParser;

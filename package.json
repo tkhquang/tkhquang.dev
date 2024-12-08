@@ -29,8 +29,10 @@
     "fusioncharts": "^4.1.2",
     "graphql": "^16.9.0",
     "gray-matter": "^4.0.3",
+    "hast-util-whitespace": "^3.0.0",
     "image-size": "^1.1.1",
     "jotai": "^2.10.3",
+    "lqip-modern": "^2.2.1",
     "lucide-react": "^0.468.0",
     "mustache": "^4.2.0",
     "next": "15.0.3",
@@ -56,7 +58,9 @@
     "slugify": "^1.6.6",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "unist-util-remove": "^4.0.0",
+    "vfile": "^6.0.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "5.0.3",
