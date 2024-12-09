@@ -1,6 +1,6 @@
 import fs from "fs";
-import path from "path";
 import Mustache from "mustache";
+import path from "path";
 
 export interface ProviderOptions {
   [key: string]: any; // Additional options
@@ -53,9 +53,9 @@ class Provider {
     const template = this.getTemplate();
 
     return Mustache.render(template, {
+      embedData: "",
       id: this.getEmbedId(embedLink),
       link: embedLink,
-      embedData: "",
       options: this.options,
     });
   }

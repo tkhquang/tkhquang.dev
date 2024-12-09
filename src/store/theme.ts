@@ -1,7 +1,7 @@
 import { canUseDOM } from "@ariakit/core/utils/dom";
-import { getCssVariables } from "@/utils/helpers";
-import { atom } from "jotai";
 import { debounce } from "debounce";
+import { atom } from "jotai";
+import { getCssVariables } from "@/utils/helpers";
 
 const DEFAULT_THEME_MODE = "dark";
 
@@ -20,8 +20,8 @@ export type ThemeStore = {
 };
 
 export const themeModeStore = atom<ThemeStore>({
-  mode: "dark",
   cssVariables: {},
+  mode: "dark",
 });
 
 export const themeStore = atom(
@@ -29,7 +29,7 @@ export const themeStore = atom(
   (get, set, mode: ThemeMode) => {
     set(themeModeStore, (prevState) => {
       const cssVariables = getCssVariables();
-      return { mode, cssVariables };
+      return { cssVariables, mode };
     });
   }
 );

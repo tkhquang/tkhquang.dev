@@ -1,8 +1,8 @@
+import classNames from "classnames";
+import React from "react";
 import Author from "@/components/blog/Author";
 import CircuitBoard from "@/components/blog/CircuitBoard";
 import HorizontalLine from "@/components/common/HorizontalLine";
-import classNames from "classnames";
-import React from "react";
 
 const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
   return (

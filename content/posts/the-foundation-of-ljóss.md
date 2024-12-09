@@ -9,6 +9,7 @@ tags:
 cover_image: /uploads/images/ljoss.jpg
 description: The story behind the foundation of this blog (Ljóss).
 ---
+
 For those who don't know, I had a blog back in the 2010s where I posted stuff about gaming and my own silly novels, which is then along with its content was erased completely at the end of 2019 after I decided to disappear from social media altogether. The process wasn't easy as my job required me to be proven alive on the internet, yet I managed to get myself off Facebook, Twitter and blogging with ease.
 
 I want to keep the reasons for that behavior to myself, just so you know that things were terribly horrible and I had to do what was best for me. Then again I was always interested in creating a personal blog all by myself so here we are. Technically, this blog has been built with [Gridsome](https://gridsome.org/), a VueJS-powered framework for building static generated websites witho̶u̶t̶ much pain. I will write more about it later since this blog is still no way near complete as the framework it's built upon.

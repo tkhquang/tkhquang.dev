@@ -7,13 +7,13 @@ import {
 
 export function createGithubClient(): ApolloClient<NormalizedCacheObject> {
   return new ApolloClient({
+    cache: new InMemoryCache(),
     link: new HttpLink({
-      uri: process.env.GITHUB_API_ENDPOINT,
+      fetch,
       headers: {
         authorization: `token ${process.env.GITHUB_TOKEN}`,
       },
-      fetch,
+      uri: process.env.GITHUB_API_ENDPOINT,
     }),
-    cache: new InMemoryCache(),
   });
 }

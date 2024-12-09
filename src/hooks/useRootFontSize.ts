@@ -1,5 +1,5 @@
-import { getRootFontSize } from "@/utils/dom";
 import { useEffect, useState } from "react";
+import { getRootFontSize } from "@/utils/dom";
 
 /**
  * A custom React hook to track the current root font size (`<html>` element) in pixels.

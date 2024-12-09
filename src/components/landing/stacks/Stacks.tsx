@@ -1,58 +1,57 @@
 import Image from "next/image";
 import Link from "next/link";
-
 import StacksChartFrame from "@/components/landing/stacks/StacksChartFrame";
 
 const stacks = [
   {
-    title: "Elixir",
     icon: "elixir.svg",
     link: "https://elixir-lang.org/",
+    title: "Elixir",
   },
   {
-    title: "JavaScript",
     icon: "javascript.svg",
     link: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    title: "JavaScript",
   },
   {
-    title: "React",
     icon: "react.svg",
     link: "https://reactjs.org/",
+    title: "React",
   },
   {
-    title: "Vue",
     icon: "vue.svg",
     link: "https://vuejs.org/",
+    title: "Vue",
   },
   {
-    title: "Node",
     icon: "nodejs.svg",
     link: "https://nodejs.org/en/",
+    title: "Node",
   },
   {
-    title: "SASS",
     icon: "sass.svg",
     link: "https://sass-lang.com/",
+    title: "SASS",
   },
   {
-    title: "Tailwind",
     icon: "tailwindcss.svg",
     link: "https://tailwindcss.com/",
+    title: "Tailwind",
   },
   {
-    title: "Next.js",
     icon: "next.svg",
     link: "https://nextjs.org/",
+    title: "Next.js",
   },
   {
-    title: "Gridsome",
     icon: "gridsome.svg",
     link: "https://gridsome.org",
+    title: "Gridsome",
   },
   {
-    title: "Git",
     icon: "git.svg",
     link: "https://git-scm.com/",
+    title: "Git",
   },
 ];
 

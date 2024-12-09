@@ -1,13 +1,14 @@
 ---
 title: Hello World!
 created_at: 2020-03-30T07:49:25.588Z
-updated_at: ''
+updated_at: ""
 published: true
 category_slug: the-inner-crisis
 tags:
   - Ljóss
-description: 'Hello world! It''s me, the same old Aleks and this is my new blog.'
+description: "Hello world! It's me, the same old Aleks and this is my new blog."
 ---
+
 Hello world! This is me, the same old Aleks.
 
 As you already know, I've been away from blogging for a very long time. I'm sorry for my sudden disappearance from the internet and for deleting the old blog.

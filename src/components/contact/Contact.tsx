@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 interface FormValues {
   name: string;
@@ -11,10 +11,10 @@ interface FormValues {
 
 const Contact = () => {
   const {
-    register,
-    handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
+    handleSubmit,
+    register,
+    reset,
   } = useForm<FormValues>();
 
   const [status, setStatus] = useState<"fetching" | "success" | "error" | "">(
@@ -34,12 +34,12 @@ const Contact = () => {
 
     try {
       await fetch("/__contact_form.html", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: encode({
           "form-name": "portfolio-dev",
           ...data,
         }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: "POST",
       });
 
       setStatus("success");
@@ -113,12 +113,12 @@ const Contact = () => {
                     type="email"
                     placeholder="Email*"
                     {...register("email", {
-                      required: "Email is required",
                       pattern: {
+                        message: "Invalid email address",
                         value:
                           /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                        message: "Invalid email address",
                       },
+                      required: "Email is required",
                     })}
                     required
                   />

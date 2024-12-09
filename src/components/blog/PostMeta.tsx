@@ -1,13 +1,13 @@
-import React from "react";
-import { format, isValid } from "date-fns";
 import classNames from "classnames";
+import { format, isValid } from "date-fns";
+import React from "react";
 import { MarkdownPost } from "@/models/markdown.types";
 
 interface PostDatesProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;
 }
 
-const PostMeta = ({ post, className }: PostDatesProps) => {
+const PostMeta = ({ className, post }: PostDatesProps) => {
   const formatDate = (date: Date): string | null => {
     if (!isValid(date)) {
       return null;

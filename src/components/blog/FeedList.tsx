@@ -1,7 +1,7 @@
 import React from "react";
-import PostCard from "./PostCard";
 import { PathInfo } from "@/components/blog/PathInfo";
 import { MarkdownPost } from "@/models/markdown.types";
+import PostCard from "./PostCard";
 
 const FeedList = ({ posts }: { posts: MarkdownPost[] }) => {
   return (

@@ -3,6 +3,29 @@ import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 
+export async function generateStaticParams() {
+  const posts = await _MarkdownParser.getAllPosts();
+
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const slug = (await params).slug;
+  const { title } = await _MarkdownParser.getPostBySlug(slug);
+  return {
+    title,
+  };
+}
+
+export const dynamic = "force-static";
+
+export const revalidate = 86400;
 export default async function Post({
   params,
 }: {
@@ -11,8 +34,8 @@ export default async function Post({
   const slug = (await params).slug;
   const post = await _MarkdownParser.getPostBySlug(slug);
   const {
-    result: html,
     data: { toc: headings },
+    result: html,
   } = await _MarkdownParser.parseMarkdown(post.content);
 
   const category = await _MarkdownParser.getCategoryBySlug(post.category_slug);
@@ -34,8 +57,8 @@ export default async function Post({
           post.renderCoverImage({
             className:
               "header__image m-auto block min-h-full w-full object-contain",
-            width: 1280,
             height: 720,
+            width: 1280,
           })}
       </header>
       <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
@@ -97,26 +120,3 @@ export default async function Post({
     </div>
   );
 }
-
-export async function generateStaticParams() {
-  const posts = await _MarkdownParser.getAllPosts();
-
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const slug = (await params).slug;
-  const { title } = await _MarkdownParser.getPostBySlug(slug);
-  return {
-    title,
-  };
-}
-
-export const dynamic = "force-static";
-export const revalidate = 86400;

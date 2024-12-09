@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Montserrat, Merriweather } from "next/font/google";
-import StackedLayers from "@/components/layout/StackedLayers";
 import "@/lib/global";
+import type { Metadata } from "next";
+import { Merriweather, Montserrat } from "next/font/google";
+import StackedLayers from "@/components/layout/StackedLayers";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const merriweather = Merriweather({
@@ -48,12 +48,12 @@ const SCRIPT_CONTENT = `
 `;
 
 export const metadata: Metadata = {
-  title: "Aleks's Portfolio",
   description:
     "Highly motivated, self-starting developer with a good understanding of HTML, CSS, JavaScript and its modern libraries and frameworks such as React, Vue, seeking to launch a career building web applications and services.",
   other: {
     version: Date.now(),
   },
+  title: "Aleks's Portfolio",
 };
 
 export default async function RootLayout({

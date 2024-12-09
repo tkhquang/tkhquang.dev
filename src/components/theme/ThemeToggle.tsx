@@ -1,45 +1,45 @@
-import { animated, useSpring } from "react-spring";
 import { useAtomValue } from "jotai";
+import { animated, useSpring } from "react-spring";
 import { ThemeMode, themeStore } from "@/store/theme";
 
 const properties = {
   dark: {
-    r: 9,
-    transform: "rotate(40deg)",
     cx: 12,
     cy: 4,
     opacity: 0,
+    r: 9,
+    transform: "rotate(40deg)",
   },
   light: {
-    r: 5,
-    transform: "rotate(90deg)",
     cx: 30,
     cy: 0,
     opacity: 1,
+    r: 5,
+    transform: "rotate(90deg)",
   },
-  springConfig: { mass: 4, tension: 250, friction: 35 },
+  springConfig: { friction: 35, mass: 4, tension: 250 },
 };
 
 const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
   const isDarkMode = mode === "dark";
 
-  const { r, transform, cx, cy, opacity } =
+  const { cx, cy, opacity, r, transform } =
     properties[isDarkMode ? "dark" : "light"];
 
   const svgContainerProps = useSpring({
-    transform,
     config: properties.springConfig,
+    transform,
   });
   const centerCircleProps: any = useSpring({
-    r,
     config: properties.springConfig,
+    r,
   });
   const maskedCircleProps: any = useSpring({
+    config: properties.springConfig,
     cx,
     cy,
-    config: properties.springConfig,
   });
-  const linesProps = useSpring({ opacity, config: properties.springConfig });
+  const linesProps = useSpring({ config: properties.springConfig, opacity });
 
   return (
     <animated.svg

@@ -10,5 +10,6 @@
   "plugins": ["@typescript-eslint", "tailwindcss", "import", "sort"],
   "rules": {
     "tailwindcss/no-custom-classname": "off"
-  }
+  },
+  "ignorePatterns": ["legacy/*"]
 }

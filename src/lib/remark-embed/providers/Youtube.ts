@@ -1,7 +1,7 @@
-import path from "path";
-import Provider from "./Provider";
 import Mustache from "mustache";
+import path from "path";
 import { fileURLToPath } from "url";
+import Provider from "./Provider";
 
 interface YoutubeOptions {
   nocookie?: boolean;
@@ -24,9 +24,9 @@ class Youtube extends Provider {
 
     const alignment = options.align || "auto";
     this.options = {
+      margin: `0 ${alignment}`,
       nocookie: true,
       width: "100%",
-      margin: `0 ${alignment}`,
       ...options,
     };
   }
@@ -44,11 +44,11 @@ class Youtube extends Provider {
     const template = this.getTemplate();
 
     return Mustache.render(template, {
+      embedData: "",
       id: this.getEmbedId(embedLink),
       link: embedLink,
-      playlist: this.isPlayList(embedLink),
-      embedData: "",
       options: this.options,
+      playlist: this.isPlayList(embedLink),
     });
   }
 }

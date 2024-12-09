@@ -1,5 +1,5 @@
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 interface Metadata {
   siteOwner: {
@@ -10,9 +10,9 @@ interface Metadata {
 
 const metadata: Metadata = {
   siteOwner: {
-    name: "Aleks",
     description:
       "<p>Hello there, I'm Aleks, a Software Engineer who loves open-source products and micro startups. This blog is just a place for me to post random stuff about things I like, interesting stories, and sometimes technical problems.</p>",
+    name: "Aleks",
   },
 };
 

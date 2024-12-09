@@ -1,5 +1,5 @@
-import React from "react";
 import "./LoaderLines.scss";
+import React from "react";
 
 const LoaderLines = () => {
   return (

@@ -1,12 +1,10 @@
-import { GoogleAnalytics } from "@next/third-parties/google";
-
 import "@/assets/styles/index.scss";
-
-import { Main, Footer } from "@/components/layout";
-import AppProvider from "@/providers/AppProvider";
-import BackToTopButton from "@/components/layout/BackToTop";
 import { Portal } from "@ariakit/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Footer, Main } from "@/components/layout";
+import BackToTopButton from "@/components/layout/BackToTop";
 import BlogHeader from "@/components/layout/BlogHeader";
+import AppProvider from "@/providers/AppProvider";
 
 export default async function DefaultLayout({
   children,

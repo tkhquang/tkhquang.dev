@@ -1,6 +1,5 @@
-import Image from "next/image";
-
 import "./AboutMe.scss";
+import Image from "next/image";
 
 const ABOUT_ME = `<p>
 My full name is Quang Trinh Khac, but you can call me Aleks. I am a
@@ -35,8 +34,8 @@ Engineer who can provide:
 </ul>`;
 
 const RESUME = {
-  path: "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
   fileName: "Quang Trinh Khac - Resume.pdf",
+  path: "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
 };
 
 const AboutMe = () => {

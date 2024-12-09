@@ -1,6 +1,6 @@
+import React from "react";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
-import React from "react";
 import { MarkdownPost } from "@/models/markdown.types";
 
 interface PostCardProps {
@@ -30,8 +30,8 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             {post.renderCoverImage({
               className:
                 "news-feed__list-item__image mb-4 mt-2 rounded shadow-lg",
-              width: "1280",
               height: "720",
+              width: "1280",
             })}
           </a>
           <figcaption></figcaption>

@@ -10,6 +10,7 @@ cover_image: /uploads/images/useimperativehandle.png
 description: |
   One way to expose Children Components in React.
 ---
+
 Generally, this is **not** the way to go about handling things in React. Usually what you want to do is hoist the states and the functions to the parent and pass data down as props ([Lifting State Up](https://reactjs.org/docs/lifting-state-up.html)).
 
 But if you must expose an imperative method on a child component, you can use `refs`. Remember this is an escape hatch and usually indicates a better design is available.
@@ -89,7 +90,7 @@ Obviously, it's a simple function which returns the current `count` state of the
 ```js title="In src/components/Counter.js" showLineNumbers
 useImperativeHandle(ref, () => {
   return {
-    getCount: getCount
+    getCount: getCount,
   };
 });
 ```

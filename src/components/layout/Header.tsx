@@ -1,8 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useAtomValue } from "jotai";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import { scrolledStore } from "@/store/theme";
 
 const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
@@ -30,8 +30,8 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
             className="cursor-pointer"
             onClick={() => {
               window.scrollTo({
-                top: 0,
                 behavior: "smooth",
+                top: 0,
               });
             }}
           >

@@ -1,8 +1,8 @@
+import { ImageProps } from "next/image";
 import {
   CategoriesCollection,
   PostsCollection,
 } from "@/models/generated/markdown.types";
-import { ImageProps } from "next/image";
 
 export interface MarkdownPost extends PostsCollection {
   slug: string;

@@ -1,12 +1,12 @@
 "use client";
 
 import classNames from "classnames";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useAtomValue } from "jotai";
-import { scrolledStore } from "@/store/theme";
-import { FiArrowLeftCircle } from "react-icons/fi";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FiArrowLeftCircle } from "react-icons/fi";
+import ThemeToggle from "@/components/theme/ThemeToggle";
+import { scrolledStore } from "@/store/theme";
 
 const BlogHeader = ({
   className,

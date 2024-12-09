@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import HorizontalLine from "@/components/common/HorizontalLine";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,7 +8,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import HorizontalLine from "@/components/common/HorizontalLine";
 import { MarkdownCategory } from "@/models/markdown.types";
 
 export function PathInfo({

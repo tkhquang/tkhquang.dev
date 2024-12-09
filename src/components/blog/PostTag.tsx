@@ -1,14 +1,14 @@
-import React from "react";
-import Link from "next/link";
-import slugify from "slugify";
 import classNames from "classnames";
+import Link from "next/link";
+import React from "react";
+import slugify from "slugify";
 import { MarkdownPost } from "@/models/markdown.types";
 
 interface TagListProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;
 }
 
-const TagList = ({ post, className }: TagListProps) => {
+const TagList = ({ className, post }: TagListProps) => {
   return (
     <ul className={classNames("tag-list inline-flex", className)}>
       {post.tags.map((tag) => (

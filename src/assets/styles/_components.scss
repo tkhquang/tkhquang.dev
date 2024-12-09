@@ -140,7 +140,9 @@
         var(--darken) 100%
       );
 
-    background-size: 105% auto, cover;
+    background-size:
+      105% auto,
+      cover;
     background-position: center;
     animation: waves 45s linear infinite alternate both;
     filter: blur(8px) brightness(75%);

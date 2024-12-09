@@ -27,9 +27,9 @@ export default async function StacksPage() {
 
         if (!stats[node.id]) {
           stats[node.id] = {
+            color: node.color,
             id: node.id,
             name: node.name,
-            color: node.color,
             size: 0,
           };
         }
@@ -61,17 +61,17 @@ export default async function StacksPage() {
   );
 
   stats["other"] = {
+    color: "#AAAAAA",
     id: "other",
     name: "Other",
-    color: "#AAAAAA",
-    size: total - Object.values(stats).reduce((acc, { size }) => acc + size, 0),
     percentage: 100 - totalPercentage,
+    size: total - Object.values(stats).reduce((acc, { size }) => acc + size, 0),
   };
 
   const chartData = Object.values(stats).map((stat) => ({
+    color: stat.color,
     label: stat.name,
     value: stat.size,
-    color: stat.color,
   }));
 
   return (

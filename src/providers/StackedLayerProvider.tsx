@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { PortalContext } from "@ariakit/react";
+import React, { useEffect, useState } from "react";
 
 interface StackedLayerProviderProps {
   children: React.ReactNode;

@@ -1,8 +1,8 @@
-import path from "path";
-import Mustache from "mustache";
-import Provider from "./Provider";
-import { fileURLToPath } from "url";
 import fs from "fs/promises";
+import Mustache from "mustache";
+import path from "path";
+import { fileURLToPath } from "url";
+import Provider from "./Provider";
 
 interface SpotifyOptions {
   width?: string;
@@ -28,8 +28,8 @@ class Spotify extends Provider {
 
     // Set default options
     this.options = {
-      width: "100%",
       height: "400",
+      width: "100%",
       ...options, // Override with provided options
     };
   }
@@ -46,11 +46,11 @@ class Spotify extends Provider {
 
       // Render the template with Mustache
       return Mustache.render(templateContent, {
-        id: this.getEmbedId(embedLink),
-        type: this.getType(embedLink),
-        link: embedLink,
         embedData: "",
+        id: this.getEmbedId(embedLink),
+        link: embedLink,
         options: this.options,
+        type: this.getType(embedLink),
       });
     } catch (error: any) {
       throw new Error(`Failed to render Spotify embed: ${error?.message}`);

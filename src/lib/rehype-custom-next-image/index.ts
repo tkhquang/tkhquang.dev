@@ -1,13 +1,13 @@
-import { visit } from "unist-util-visit";
-import path from "path";
 import fs from "fs";
 import { imageSize } from "image-size";
-import { Element, Root } from "hast";
-import { Transformer } from "unified";
-import { getRemoteImage } from "@/utils/image";
-import { ImageProps } from "next/image";
 import lqip, { LqipModernOutput } from "lqip-modern";
+import { ImageProps } from "next/image";
+import path from "path";
+import { Transformer } from "unified";
+import { visit } from "unist-util-visit";
 import { promisify } from "util";
+import { getRemoteImage } from "@/utils/image";
+import { Element, Root } from "hast";
 
 const sizeOf = promisify(imageSize);
 
@@ -21,9 +21,9 @@ export default function rehypeCustomNextImage(
   options: Options = {}
 ): Transformer<Root> {
   const {
-    targetPath = "./public",
-    publicFolder = "./public",
     cache = true,
+    publicFolder = "./public",
+    targetPath = "./public",
   } = options;
 
   return async function transformer(tree: Root): Promise<Root> {
@@ -55,8 +55,8 @@ export default function rehypeCustomNextImage(
           if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(originalSrc)) {
             // Handle remote images
             const localPath = await getRemoteImage(originalSrc, {
-              targetPath,
               cache,
+              targetPath,
             });
 
             const relativePath = path.relative(
@@ -93,12 +93,12 @@ export default function rehypeCustomNextImage(
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
           node.properties = {
-            src: finalSrc,
             alt: originalAlt as string,
-            width: width ?? 1280,
-            height: height ?? 720,
             blurDataURL: result?.metadata.dataURIBase64,
+            height: height ?? 720,
             placeholder: "blur",
+            src: finalSrc,
+            width: width ?? 1280,
           } satisfies ImageProps;
         } catch (err) {
           console.error(`Failed to process image ${originalSrc}:`, err);

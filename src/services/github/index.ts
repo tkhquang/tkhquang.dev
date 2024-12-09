@@ -5,13 +5,13 @@ import {
 
 const fetchGitHubData = async (query: string, revalidate: number = 86400) => {
   const response = await fetch(`${process.env.GITHUB_API_ENDPOINT}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-    },
     body: JSON.stringify({ query }),
     cache: "force-cache",
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    method: "POST",
     next: {
       revalidate,
     },

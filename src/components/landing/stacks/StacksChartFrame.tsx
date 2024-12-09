@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useAtom } from "jotai";
-import { themeStore } from "@/store/theme";
-import LoaderLines from "@/components/common/loader/LoaderLines";
 import classNames from "classnames";
+import { useAtom } from "jotai";
+import { useEffect, useRef, useState } from "react";
+import LoaderLines from "@/components/common/loader/LoaderLines";
 import { useAfterPaintEffect } from "@/hooks/useAfterPaintEffect";
+import { themeStore } from "@/store/theme";
 
 export default function StacksChartFrame() {
   const [theme, setTheme] = useAtom(themeStore);
@@ -15,8 +15,8 @@ export default function StacksChartFrame() {
   useEffect(() => {
     if (frameRef.current) {
       frameRef.current.contentWindow?.postMessage({
-        type: "$SWITCH_THEME",
         payload: theme.mode,
+        type: "$SWITCH_THEME",
       });
     }
   }, [theme.mode]);

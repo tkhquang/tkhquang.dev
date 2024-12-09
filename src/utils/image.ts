@@ -1,8 +1,8 @@
+import { getExtensionFromMimeType, MimeType } from "@shopify/mime-types";
+import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import { getExtensionFromMimeType, MimeType } from "@shopify/mime-types";
 import sanitize from "sanitize-filename";
-import crypto from "crypto";
 
 interface GetRemoteImageOptions {
   targetPath: string;

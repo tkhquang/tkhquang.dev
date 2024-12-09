@@ -1,6 +1,5 @@
-import React from "react";
 import Image from "next/image";
-
+import React from "react";
 import { fetchGitHubProjects } from "@/services/github";
 
 interface Demo {
@@ -15,37 +14,37 @@ interface Demo {
 // Static demo data
 const demos: Demo[] = [
   {
-    title: "Buggi Tracker",
     description: `A new generation bug tracker with role-based permissions. <br />You can log in with <em>reporter1/passa1</em> to test.`,
-    stacks: ["React", "Firebase"],
-    source: "https://github.com/tkhquang/buggi-tracker",
     live: "https://buggi-tracker.netlify.app",
     preview: "/assets/resources/images/demos/buggi-tracker.png",
+    source: "https://github.com/tkhquang/buggi-tracker",
+    stacks: ["React", "Firebase"],
+    title: "Buggi Tracker",
   },
   {
-    title: "Smart Watch Landing Page",
     description: "Landing Page for Smart Watch Company.",
-    stacks: ["Vue", "SCSS"],
-    source:
-      "https://github.com/tkhquang/demo/tree/master/smart-watch-landing-page",
     live: "https://tkhquang-demo-smart-watch-landing-page.netlify.app",
     preview: "/assets/resources/images/demos/smart-watch.png",
+    source:
+      "https://github.com/tkhquang/demo/tree/master/smart-watch-landing-page",
+    stacks: ["Vue", "SCSS"],
+    title: "Smart Watch Landing Page",
   },
   {
-    title: "React Calculator",
     description: "A simple yet fully functional Javascript calculator.",
-    stacks: ["React", "SCSS"],
-    source: "https://github.com/tkhquang/fcc-reactjs-calculator",
     live: "https://tkhquang.github.io/fcc-reactjs-calculator",
     preview: "/assets/resources/images/demos/calculator.png",
+    source: "https://github.com/tkhquang/fcc-reactjs-calculator",
+    stacks: ["React", "SCSS"],
+    title: "React Calculator",
   },
   {
-    title: "Vue Simple Accordion",
     description: "A simple, easily configurable accordion library for Vue 2.x.",
-    stacks: ["Vue", "SCSS"],
-    source: "https://github.com/tkhquang/vue-simple-accordion",
     live: "https://tkhquang.github.io/vue-simple-accordion",
     preview: "/assets/resources/images/demos/vue-accordion.png",
+    source: "https://github.com/tkhquang/vue-simple-accordion",
+    stacks: ["Vue", "SCSS"],
+    title: "Vue Simple Accordion",
   },
 ];
 

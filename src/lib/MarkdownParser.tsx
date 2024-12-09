@@ -1,26 +1,26 @@
-import * as prod from "react/jsx-runtime";
+import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import fs from "fs";
 import matter from "gray-matter";
+import Image, { ImageProps } from "next/image";
 import path from "path";
-import { unified } from "unified";
-import remarkGfm from "remark-gfm";
-import rehypeSlug from "rehype-slug";
+import * as prod from "react/jsx-runtime";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeExternalLinks from "rehype-external-links";
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeRaw from "rehype-raw";
+import rehypeReact, { Options } from "rehype-react";
+import rehypeSlug from "rehype-slug";
+import rehypeStringify from "rehype-stringify";
+import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import rehypeStringify from "rehype-stringify";
-import rehypePrettyCode from "rehype-pretty-code";
-import rehypeExternalLinks from "rehype-external-links";
-import rehypeExtractToc, { TocEntry } from "@stefanprobst/rehype-extract-toc";
-import remarkFigureCaption from "@ljoss/rehype-figure-caption";
-import rehypeReact, { Options } from "rehype-react";
-import rehypeRaw from "rehype-raw";
-import Image, { ImageProps } from "next/image";
+import { unified } from "unified";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
+import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
 import remarkEmbded from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
-import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
+import rehypeExtractToc, { TocEntry } from "@stefanprobst/rehype-extract-toc";
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
@@ -43,27 +43,27 @@ function getParser() {
     .use(remarkFigureCaption, { allowEmptyCaption: true })
     .use(remarkGfm)
     .use(rehypePrettyCode, {
-      theme: {
-        dark: "solarized-dark",
-        light: "solarized-light",
-      },
-      keepBackground: false,
       defaultLang: {
         block: "plaintext",
         inline: "plaintext",
       },
+      keepBackground: false,
+      theme: {
+        dark: "solarized-dark",
+        light: "solarized-light",
+      },
     })
     .use(rehypeExternalLinks, {
-      rel: ["nofollow", "noopener", "noreferrer"],
-      target: "_blank",
       properties: {
         class: "icon icon-link",
       },
+      rel: ["nofollow", "noopener", "noreferrer"],
+      target: "_blank",
     })
     .use(rehypeCustomNextImage, {
-      targetPath: "./public/uploads/remote",
-      publicFolder: "./public",
       cache: true,
+      publicFolder: "./public",
+      targetPath: "./public/uploads/remote",
     })
     .use(rehypeRaw)
     .use(rehypeStringify)
@@ -76,12 +76,12 @@ function getParser() {
       },
     })
     .use(rehypeReact, {
-      Fragment: prod.Fragment,
-      jsx: prod.jsx,
-      jsxs: prod.jsxs,
       components: {
         "next-image": Image,
       },
+      Fragment: prod.Fragment,
+      jsx: prod.jsx,
+      jsxs: prod.jsxs,
     } as Options);
 }
 
@@ -90,9 +90,9 @@ function getImageParser() {
     .use(remarkParse, { fragment: true })
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeCustomNextImage, {
-      targetPath: "./public/uploads/remote",
-      publicFolder: "./public",
       cache: true,
+      publicFolder: "./public",
+      targetPath: "./public/uploads/remote",
     })
     .use(rehypeStringify);
 }
@@ -119,7 +119,7 @@ export default class MarkdownParser {
       `${decodeURIComponent(slug)}.md`
     );
 
-    const { data, content } = matter(
+    const { content, data } = matter(
       await fs.promises.readFile(fullPath, { encoding: "utf8" })
     ) as unknown as { data: PostsCollection; content: string };
 
@@ -143,9 +143,6 @@ export default class MarkdownParser {
           tagNames: ["next-image", "img"],
         })
         .use(rehypeReact, {
-          Fragment: prod.Fragment,
-          jsx: prod.jsx,
-          jsxs: prod.jsxs,
           components: {
             "next-image": (baseProps: any) => (
               // eslint-disable-next-line jsx-a11y/alt-text
@@ -156,15 +153,18 @@ export default class MarkdownParser {
               />
             ),
           },
+          Fragment: prod.Fragment,
+          jsx: prod.jsx,
+          jsxs: prod.jsxs,
         } as Options)
         .processSync(coverVfile.value).result;
     };
 
     return {
       ...data,
-      slug,
       content,
       renderCoverImage,
+      slug,
     };
   }
 
@@ -184,14 +184,14 @@ export default class MarkdownParser {
       `${decodeURIComponent(slug)}.md`
     );
 
-    const { data, content } = matter(
+    const { content, data } = matter(
       await fs.promises.readFile(fullPath, { encoding: "utf8" })
     );
 
     return {
       ...data,
-      slug,
       content,
+      slug,
     } as MarkdownCategory;
   }
 
