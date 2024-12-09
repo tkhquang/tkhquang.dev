@@ -221,7 +221,9 @@ html {
 
 [data-line] {
   &::before {
-    @apply !mr-4 !w-8 border-r border-gray-500 pr-2;
+    margin-right: 1rem !important;
+    width: 2rem !important;
+    @apply border-r border-gray-500 pr-2;
   }
 }
 
