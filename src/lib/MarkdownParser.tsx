@@ -20,7 +20,7 @@ import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
 import remarkEmbded from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
-import rehypeExtractToc, { TocEntry } from "@stefanprobst/rehype-extract-toc";
+import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
@@ -200,5 +200,27 @@ export default class MarkdownParser {
       getCategoryFiles().map((fileName) => this.getCategoryBySlug(fileName))
     );
     return categories;
+  }
+
+  async getAllTags({ shouldShowHiddenTags = false } = {}): Promise<string[]> {
+    const results = await Promise.all(
+      getPostFiles().map(async (fileName) => {
+        const slug = fileName.replace(/\.md$/, "");
+        const fullPath = path.join(
+          postsDirectory,
+          `${decodeURIComponent(slug)}.md`
+        );
+
+        const { content, data } = matter(
+          await fs.promises.readFile(fullPath, { encoding: "utf8" })
+        ) as unknown as { data: PostsCollection; content: string };
+
+        return data.tags;
+      })
+    );
+
+    return [...new Set(results.flat())].filter(
+      (tag) => tag !== "hidden" || shouldShowHiddenTags
+    );
   }
 }
