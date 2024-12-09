@@ -1,6 +1,12 @@
 import type { Config } from "tailwindcss";
 
 const config = {
+  rules: [
+    {
+      test: /\.scss$/,
+      use: ["style-loader", "css-loader", "sass-loader"],
+    },
+  ],
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
