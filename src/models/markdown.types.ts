@@ -1,4 +1,5 @@
 import { ImageProps } from "next/image";
+import { JSX } from "react";
 import {
   CategoriesCollection,
   PostsCollection,
