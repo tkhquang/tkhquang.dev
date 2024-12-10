@@ -71,15 +71,16 @@ export default async function Post({
             <div className="table-of-content__list sticky top-0 mt-header-height hidden pt-header-height lg:block">
               <h2 className="heading mt-10 text-2xl">Table of Content</h2>
               <ul className="mt-5">
-                {headings!.map((heading: any, index: number) => (
-                  <li key={index} className="my-2">
+                {headings!.map((heading) => (
+                  <li key={heading.id} className="my-2">
                     <a
                       href={`#${heading.id}`}
                       className={`anchor hover:text-theme-primary ${
                         activeAnchor === heading.id ? "anchor--is-active" : ""
                       }`}
                     >
-                      # {heading.value}
+                      <span>#</span>&nbsp;
+                      <span>{heading.value}</span>
                     </a>
                   </li>
                 ))}

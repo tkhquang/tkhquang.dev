@@ -108,7 +108,7 @@ export interface ChartData {
   color: string;
 }
 
-export default async function Stacks(): Promise<JSX.Element> {
+export default async function Stacks() {
   return (
     <section className="stacks">
       <div className="container">
