@@ -1,44 +1,18 @@
 import "./AboutMe.scss";
 import Image from "next/image";
-
-const ABOUT_ME = `<p>
-My full name is Quang Trinh Khac, but you can call me Aleks. I am a
-former student of the Advanced Education Program (AEP) in
-Information System at Ho Chi Minh City University of Information
-Technology. However, for some inexplicable reason, I have not
-finished my degree yet.
-</p>
-
-<p>
-I am a highly motivated, self-starting developer with a good
-understanding of HTML, CSS, JavaScript and its modern libraries and frameworks such
-as React, Vue,... seeking to launch a career building
-web applications and services. The work I provide is of highest
-quality, fully responsive, and well-tested in a wide variety of
-devices. The code I write is easy to maintain because it is clean,
-concise and ordered.
-</p>
-
-<p>
-Do not hesitate to get in touch with me if you are looking for an
-Engineer who can provide:
-</p>
-
-<ul>
-<li>Semantic HTML/Responsive CSS</li>
-<li>JavaScript (Vanilla, ReactJS, VueJS,...)</li>
-<li>High-level user experience</li>
-<li>Best practices</li>
-<li>Git</li>
-<li>Agile/Scrums (Software development)</li>
-</ul>`;
+import { Portfolio } from "@/constants/meta";
+import { getPlaceholderImage } from "@/utils/next-mage";
 
 const RESUME = {
   fileName: "Quang Trinh Khac - Resume.pdf",
   path: "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
 };
 
-const AboutMe = () => {
+const AboutMe = async () => {
+  const aboutImage = await getPlaceholderImage(
+    "/assets/resources/images/Aleks.png"
+  );
+
   return (
     <section className="about">
       <div className="container">
@@ -47,16 +21,18 @@ const AboutMe = () => {
           <div
             className="typography w-full lg:w-2/3"
             dangerouslySetInnerHTML={{
-              __html: ABOUT_ME,
+              __html: Portfolio.METADATA.about,
             }}
           ></div>
           <div className="author flex-center mx-6 my-auto w-10/12 p-6 md:w-8/12 lg:w-1/3">
             <Image
               className="author__image object-cover"
-              src="/assets/resources/images/Aleks.png"
+              src={aboutImage.src}
               width={500}
               height={500}
               alt="Aleks"
+              placeholder="blur"
+              blurDataURL={aboutImage.placeholder}
             />
           </div>
         </div>

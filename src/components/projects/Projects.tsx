@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { fetchGitHubProjects } from "@/services/github";
+import { getPlaceholderImage } from "@/utils/next-mage";
 
 interface Demo {
   title: string;
@@ -134,61 +135,69 @@ const Projects = async () => {
         <div>
           <h3 className="heading my-10 text-2xl">Demos</h3>
           <ul className="grid grid-cols-1 gap-10 md:grid-cols-2">
-            {demos.map((demo) => (
-              <li
-                key={demo.title}
-                className="surface grid grid-flow-row rounded-md px-5 py-8 shadow-box transition-all duration-300 hover:shadow-box-md"
-              >
-                <h4 className="text-center text-lg font-bold">{demo.title}</h4>
-                <div className="my-10 block shadow-inner">
-                  <Image
-                    src={
-                      demo.preview ||
-                      "/assets/resources/images/demos/default.svg"
-                    }
-                    alt={demo.title}
-                    width={1280}
-                    height={720}
-                    className="max-h-[280px] bg-cover bg-center bg-no-repeat object-contain object-center"
-                    style={{
-                      backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
-                    }}
+            {demos.map(async (demo) => {
+              const image = await getPlaceholderImage(demo.preview);
+
+              return (
+                <li
+                  key={demo.title}
+                  className="surface grid grid-flow-row rounded-md px-5 py-8 shadow-box transition-all duration-300 hover:shadow-box-md"
+                >
+                  <h4 className="text-center text-lg font-bold">
+                    {demo.title}
+                  </h4>
+                  <div className="my-10 block shadow-inner">
+                    <Image
+                      src={
+                        image.src ||
+                        "/assets/resources/images/demos/default.svg"
+                      }
+                      alt={demo.title}
+                      width={1280}
+                      height={720}
+                      className="max-h-[280px] bg-cover bg-center bg-no-repeat object-contain object-center"
+                      style={{
+                        backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
+                      }}
+                      placeholder="blur"
+                      blurDataURL={image.placeholder}
+                    />
+                  </div>
+                  <p
+                    className="mx-4"
+                    dangerouslySetInnerHTML={{ __html: demo.description }}
                   />
-                </div>
-                <p
-                  className="mx-4"
-                  dangerouslySetInnerHTML={{ __html: demo.description }}
-                />
-                <ul className="flex-center flex-gap-2 mx-4 my-5">
-                  {demo.stacks.map((stack) => (
-                    <li
-                      key={stack}
-                      className="primary inline-block select-none rounded-md px-4 py-2 shadow-md transition-all duration-300 hover:shadow-lg"
+                  <ul className="flex-center flex-gap-2 mx-4 my-5">
+                    {demo.stacks.map((stack) => (
+                      <li
+                        key={stack}
+                        className="primary inline-block select-none rounded-md px-4 py-2 shadow-md transition-all duration-300 hover:shadow-lg"
+                      >
+                        {stack}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex-center flex-gap-2">
+                    <a
+                      href={demo.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button inline-block"
                     >
-                      {stack}
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex-center flex-gap-2">
-                  <a
-                    href={demo.live}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button inline-block"
-                  >
-                    <span className="flex-center h-full">Live Demo</span>
-                  </a>
-                  <a
-                    href={demo.source}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button inline-block"
-                  >
-                    <span className="flex-center h-full">Source</span>
-                  </a>
-                </div>
-              </li>
-            ))}
+                      <span className="flex-center h-full">Live Demo</span>
+                    </a>
+                    <a
+                      href={demo.source}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="button inline-block"
+                    >
+                      <span className="flex-center h-full">Source</span>
+                    </a>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
