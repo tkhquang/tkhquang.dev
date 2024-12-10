@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext } from "react";
+import { IntlProvider } from "react-intl";
 import { STACKED_LAYER_1 } from "@/components/layout/StackedLayers";
 import StackedLayerProvider from "@/providers/StackedLayerProvider";
 import StoreProvider from "@/providers/StoreProvider";
@@ -14,9 +15,17 @@ export default function AppProvider({
 }) {
   return (
     <StoreProvider>
-      <StackedLayerProvider id={STACKED_LAYER_1}>
-        <AppContext.Provider value={{}}>{children}</AppContext.Provider>
-      </StackedLayerProvider>
+      <IntlProvider
+        messages={{
+          duration: "{minutes, number, ::00}:{seconds, number, ::00}",
+        }}
+        locale="en"
+        defaultLocale="en"
+      >
+        <StackedLayerProvider id={STACKED_LAYER_1}>
+          <AppContext.Provider value={{}}>{children}</AppContext.Provider>
+        </StackedLayerProvider>
+      </IntlProvider>
     </StoreProvider>
   );
 }
