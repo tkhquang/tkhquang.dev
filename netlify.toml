@@ -3,7 +3,12 @@ command = "yarn build"
 publish = ".next"
 
 [functions]
-included_files = ["content/**"]
+included_files = [
+  "content/**",
+  "public/uploads/**",
+  "public/assets/**",
+  'out/**',
+]
 
 [[plugins]]
 package = "@netlify/plugin-nextjs"
