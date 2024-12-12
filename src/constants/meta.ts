@@ -33,8 +33,9 @@ Feel free to get in touch—I’d love to help bring your ideas to life!
 
 export namespace Blog {
   export const METADATA = {
+    author: "Aleks",
     description:
-      "Hello there, I'm Aleks, a Software Engineer who loves open-source products and micro startups. This blog is just a place for me to post random stuff about things I like, interesting stories, and sometimes technical problems.",
+      "Hi, I'm Aleks—a Software Engineer with a passion for open-source projects and micro startups. This blog is my little corner of the internet where I share thoughts on topics I love, interesting stories, and the occasional deep dive into technical challenges.",
     title: {
       default: "Ljóss - The Portal To A Nobody's Inner World",
       template: "%s | Ljóss - The Portal To A Nobody's Inner World",

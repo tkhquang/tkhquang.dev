@@ -1,40 +1,30 @@
 import Image from "next/image";
 import React from "react";
+import { Blog } from "@/constants/meta";
+import { getPlaceholderImage } from "@/utils/next-mage";
 
-interface Metadata {
-  siteOwner: {
-    name: string;
-    description: string;
-  };
-}
+const AUTHOR_IMAGE = "/uploads/images/author.jpg";
 
-const metadata: Metadata = {
-  siteOwner: {
-    description:
-      "<p>Hello there, I'm Aleks, a Software Engineer who loves open-source products and micro startups. This blog is just a place for me to post random stuff about things I like, interesting stories, and sometimes technical problems.</p>",
-    name: "Aleks",
-  },
-};
-
-const Author: React.FC = () => {
-  const imageUrl = "/uploads/images/author.jpg";
+const Author = async () => {
+  const authorImage = await getPlaceholderImage(AUTHOR_IMAGE);
 
   return (
     <div className="author flex-center flex-col text-center">
       <Image
-        alt={metadata.siteOwner.name}
-        src={imageUrl}
+        alt={Blog.METADATA.author}
+        src={authorImage.src}
         className="author__image mb-4 rounded-full shadow-lg"
         width={150}
         height={150}
+        placeholder="blur"
+        blurDataURL={authorImage.placeholder}
       />
       <h1 className="author__site-title mb-4 text-2xl font-bold">
-        {metadata.siteOwner.name}
+        {Blog.METADATA.author}
       </h1>
-      <div
-        className="author__intro text-left italic opacity-75"
-        dangerouslySetInnerHTML={{ __html: metadata.siteOwner.description }}
-      />
+      <div className="author__intro text-left italic opacity-75">
+        <p>{Blog.METADATA.description}</p>
+      </div>
     </div>
   );
 };
