@@ -7,8 +7,7 @@
 /// @param {'dark'|'light'} $theme -
 ///   The theme to which the variables need to adjust to.
 @mixin color-variables($theme) {
-  $list: "tone", "primary", "on-primary", "secondary", "on-secondary", "surface",
-    "on-surface", "background", "on-background", "error", "success", "darken";
+  $list: "tone", "primary", "on-primary", "secondary", "on-secondary", "surface", "on-surface", "background", "on-background", "error", "success", "darken", "code";
   @each $var in $list {
     --#{$var}: var(--#{$var}-#{$theme});
   }
@@ -28,6 +27,5 @@ html {
     @include color-variables("light");
   }
 
-  --code: rgba(0, 0, 0, 0.1);
   --header-height: 60px;
 }
