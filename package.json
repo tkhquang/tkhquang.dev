@@ -17,6 +17,7 @@
     "@ljoss/rehype-figure-caption": "^1.0.0",
     "@netlify/plugin-nextjs": "^5.8.1",
     "@next/third-parties": "^15.0.3",
+    "@radix-ui/react-accordion": "^1.2.10",
     "@radix-ui/react-slot": "^1.1.0",
     "@shopify/mime-types": "^2.3.0",
     "@stefanprobst/rehype-extract-toc": "^2.2.0",
