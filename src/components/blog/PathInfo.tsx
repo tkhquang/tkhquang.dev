@@ -41,7 +41,9 @@ export function PathInfo({
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/blog/${category.slug}`}>{category.title}</Link>
+              <Link href={`/blog/categories/${category.slug}`}>
+                {category.title}
+              </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>

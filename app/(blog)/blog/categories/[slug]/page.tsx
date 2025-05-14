@@ -1,31 +1,25 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 
 export async function generateStaticParams() {
-  const tags = await _MarkdownParser.getAllTags();
+  const categories = await _MarkdownParser.getAllCategories();
 
-  return tags.map((tag) => ({
-    slug: tag.slug,
+  return categories.map((category) => ({
+    slug: category.slug,
   }));
 }
 
 export const dynamic = "force-static";
 export const revalidate = false;
 
-export default async function TagPage({
+export default async function CategoryPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
 
-  const tags = await _MarkdownParser.getAllTags();
   const posts = await _MarkdownParser.getAllPosts();
-
-  const currentTag = tags.find((tag) => tag.slug === slug);
-
-  const filteredPost = posts.filter((post) =>
-    post.tags.includes(currentTag?.title!)
-  );
+  const filteredPost = posts.filter((post) => post.category_slug === slug);
 
   return <NewsFeed posts={filteredPost} />;
 }
