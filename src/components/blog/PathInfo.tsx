@@ -7,7 +7,6 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { MarkdownCategory } from "@/models/markdown.types";
 
 export function PathInfo<
   T extends { title: string; slug: string },

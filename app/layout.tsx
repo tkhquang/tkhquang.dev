@@ -65,6 +65,7 @@ export const metadata: Metadata = {
     version: Date.now(),
   },
   title,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || ""),
 };
 
 export default async function RootLayout({
