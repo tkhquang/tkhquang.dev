@@ -14,6 +14,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import slugify from "slugify";
 import { unified } from "unified";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
@@ -202,7 +203,9 @@ export default class MarkdownParser {
     return categories;
   }
 
-  async getAllTags({ shouldShowHiddenTags = false } = {}): Promise<string[]> {
+  async getAllTags({ shouldShowHiddenTags = false } = {}): Promise<
+    { title: string; slug: string }[]
+  > {
     const results = await Promise.all(
       getPostFiles().map(async (fileName) => {
         const slug = fileName.replace(/\.md$/, "");
@@ -219,8 +222,13 @@ export default class MarkdownParser {
       })
     );
 
-    return [...new Set(results.flat())].filter(
-      (tag) => tag !== "hidden" || shouldShowHiddenTags
-    );
+    return [...new Set(results.flat())]
+      .filter((tag) => tag !== "hidden" || shouldShowHiddenTags)
+      .map((tag) => {
+        return {
+          slug: slugify(tag),
+          title: tag,
+        };
+      });
   }
 }

@@ -9,37 +9,44 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
+import { MarkdownPost } from "@/models/markdown.types";
 
-const Categories = ({
-  categories,
-  groupedPostsByCategorySlug,
-  posts,
+const PostList = <
+  T extends { title: string; slug: string },
+  K extends keyof T,
+>({
+  groupedPostsBySlug,
+  list,
+  listSlugField = "slug" as K,
+  title,
 }: {
-  categories: MarkdownCategory[];
-  posts: MarkdownPost[];
-  groupedPostsByCategorySlug: Record<string, MarkdownPost[]>;
+  title: string;
+  list: T[];
+  groupedPostsBySlug: Record<string, MarkdownPost[]>;
+  listSlugField?: K;
 }) => {
   return (
     <div className="flex-center relative mx-auto my-8 max-w-xl flex-wrap px-4 sm:px-6 lg:max-w-screen-xl lg:px-8">
-      <section className="categories w-full self-start lg:w-3/4">
+      <section className="list w-full self-start lg:w-3/4">
         <div className="mx-auto lg:w-4/5">
           <HorizontalLine className="mb-3 h-2px" />
 
           <h1 className="text-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9">
-            Categories ({categories.length})
+            {title} ({list.length})
           </h1>
 
           <HorizontalLine className="mt-3 h-2px" />
 
           <Accordion type="multiple" className="my-8">
-            {categories.map((category) => {
+            {list.map((item) => {
+              const fieldSlug = item[listSlugField] as string;
+
               return (
-                <AccordionItem value={category.slug} key={category.slug}>
-                  <AccordionTrigger>{category.title}</AccordionTrigger>
+                <AccordionItem value={fieldSlug} key={fieldSlug}>
+                  <AccordionTrigger>{item.title}</AccordionTrigger>
                   <AccordionContent>
                     <ul className="post__list">
-                      {groupedPostsByCategorySlug[category.slug].map((post) => {
+                      {groupedPostsBySlug[fieldSlug].map((post) => {
                         return (
                           <li
                             className="post__item mb-2 grid gap-4 truncate rounded p-2 transition duration-500 hover:bg-theme-secondary hover:text-theme-on-secondary"
@@ -79,4 +86,4 @@ const Categories = ({
   );
 };
 
-export default Categories;
+export default PostList;

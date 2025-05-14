@@ -1,5 +1,5 @@
-import Categories from "@/components/blog/Categories";
-import { MarkdownPost } from "@/models/markdown.types";
+import PostList from "@/components/blog/PostList";
+import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -19,10 +19,11 @@ export default async function CategoriesPage() {
   );
 
   return (
-    <Categories
-      categories={categories}
-      posts={posts}
-      groupedPostsByCategorySlug={groupedPostsByCategorySlug}
+    <PostList<MarkdownCategory, "slug">
+      title="Categories"
+      list={categories}
+      listSlugField="slug"
+      groupedPostsBySlug={groupedPostsByCategorySlug}
     />
   );
 }
