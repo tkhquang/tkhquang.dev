@@ -19,7 +19,16 @@ export default async function CategoryPage({
   const slug = (await params).slug;
 
   const posts = await _MarkdownParser.getAllPosts();
+  const category = await _MarkdownParser.getCategoryBySlug(slug);
   const filteredPost = posts.filter((post) => post.category_slug === slug);
 
-  return <NewsFeed posts={filteredPost} />;
+  return (
+    <NewsFeed
+      posts={filteredPost}
+      pathInfoType="category"
+      item={category}
+      pathSlug="categories"
+      title="Categories"
+    />
+  );
 }

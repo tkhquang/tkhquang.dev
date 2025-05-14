@@ -4,6 +4,7 @@ import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import { Site } from "@/constants/meta";
+import { MarkdownCategory } from "@/models/markdown.types";
 
 export async function generateStaticParams() {
   const posts = await _MarkdownParser.getAllPosts();
@@ -109,7 +110,11 @@ export default async function Post({
               <PostMeta post={post} />
             </div>
             <div className="article__path-info">
-              <PathInfo category={category} />
+              <PathInfo<MarkdownCategory, "slug">
+                item={category}
+                title="Categories"
+                pathSlug="categories"
+              />
             </div>
 
             <div className="article__content typography">{html}</div>

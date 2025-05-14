@@ -27,5 +27,13 @@ export default async function TagPage({
     post.tags.includes(currentTag?.title!)
   );
 
-  return <NewsFeed posts={filteredPost} />;
+  return (
+    <NewsFeed
+      posts={filteredPost}
+      pathInfoType="tag"
+      pathSlug="tags"
+      item={currentTag}
+      title="Tags"
+    />
+  );
 }

@@ -5,16 +5,24 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { MarkdownCategory } from "@/models/markdown.types";
 
-export function PathInfo({
-  category,
+export function PathInfo<
+  T extends { title: string; slug: string },
+  K extends keyof T,
+>({
   className,
+  item,
+  itemSlugField = "slug" as K,
+  pathSlug,
+  title,
 }: {
-  category: MarkdownCategory;
+  title: string;
+  pathSlug: string;
+  item: T;
+  itemSlugField?: K;
   className?: string;
 }) {
   return (
@@ -33,7 +41,7 @@ export function PathInfo({
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/blog/categories">Categories</Link>
+              <Link href="/blog/categories">{title}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>
@@ -41,8 +49,8 @@ export function PathInfo({
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/blog/categories/${category.slug}`}>
-                {category.title}
+              <Link href={`/blog/${pathSlug}/${item[itemSlugField]}`}>
+                {item.title}
               </Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
