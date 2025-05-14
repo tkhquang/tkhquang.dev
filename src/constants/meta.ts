@@ -1,5 +1,11 @@
 import { getYearsOfExperience } from "@/utils/date";
 
+export namespace Site {
+  export const METADATA = {
+    coverImageUrl: "/uploads/images/default.jpg",
+  };
+}
+
 export namespace Portfolio {
   export const METADATA = {
     about: `<p>Hi there! My full name is Quang Trinh Khac, but feel free to call me Aleks. I am a former student of the Advanced Education Program (AEP) in Information Systems at Ho Chi Minh City University of Information Technology. While I haven't yet completed my degree due to unforeseen circumstances, my passion for technology and continuous learning remains unwavering.</p>

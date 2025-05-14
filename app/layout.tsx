@@ -2,7 +2,7 @@ import "@/lib/global";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
 import StackedLayers from "@/components/layout/StackedLayers";
-import { Portfolio } from "@/constants/meta";
+import { Portfolio, Site } from "@/constants/meta";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 const merriweather = Merriweather({
@@ -48,12 +48,23 @@ const SCRIPT_CONTENT = `
 })();
 `;
 
+const { description, title } = Portfolio.METADATA;
+
 export const metadata: Metadata = {
-  description: Portfolio.METADATA.description,
+  description,
+  openGraph: {
+    description,
+    images: [
+      {
+        url: Site.METADATA.coverImageUrl,
+      },
+    ],
+    title,
+  },
   other: {
     version: Date.now(),
   },
-  title: Portfolio.METADATA.title,
+  title,
 };
 
 export default async function RootLayout({

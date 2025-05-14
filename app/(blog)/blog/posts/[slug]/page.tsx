@@ -1,7 +1,9 @@
+import { Metadata } from "next/types";
 import BlogInfo from "@/components/blog/BlogInfo";
 import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
+import { Site } from "@/constants/meta";
 
 export async function generateStaticParams() {
   const posts = await _MarkdownParser.getAllPosts();
@@ -15,10 +17,21 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const slug = (await params).slug;
-  const { title } = await _MarkdownParser.getPostBySlug(slug);
+  const { cover_image, description, title } =
+    await _MarkdownParser.getPostBySlug(slug);
   return {
+    description,
+    openGraph: {
+      description,
+      images: [
+        {
+          url: cover_image || Site.METADATA.coverImageUrl,
+        },
+      ],
+      title,
+    },
     title,
   };
 }
