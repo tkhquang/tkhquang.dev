@@ -1,4 +1,55 @@
 /**
+ * Converts an HSL color string (e.g., 'hsl(200,50%,80%)') to a HEX color string (e.g., '#a3cfff').
+ *
+ * @param {string} hsl - The HSL color string to convert. Format: 'hsl(hue, saturation%, lightness%)'.
+ * @returns {string | null} The HEX color string (e.g., '#a3cfff') if the input is valid, or null if invalid.
+ *
+ * @example
+ *   hslToHex('hsl(200,50%,80%)'); // Returns: '#A3CFFF'
+ *   hslToHex('hsl(0,0%,0%)');     // Returns: '#000000'
+ *   hslToHex('not-a-color');      // Returns: null
+ */
+function hslToHex(hsl: string): string | null {
+  // Match hsl(hue, saturation%, lightness%)
+  const match = hsl
+    .trim()
+    .match(/^hsl\s*\(\s*([0-9.]+)\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*\)$/i);
+  if (!match) return null;
+
+  let [_, h, s, l] = match;
+  let hue = parseFloat(h);
+  let sat = parseFloat(s) / 100;
+  let light = parseFloat(l) / 100;
+
+  // HSL to RGB conversion
+  let c = (1 - Math.abs(2 * light - 1)) * sat;
+  let x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
+  let m = light - c / 2;
+  let r = 0,
+    g = 0,
+    b = 0;
+
+  if (0 <= hue && hue < 60) [r, g, b] = [c, x, 0];
+  else if (60 <= hue && hue < 120) [r, g, b] = [x, c, 0];
+  else if (120 <= hue && hue < 180) [r, g, b] = [0, c, x];
+  else if (180 <= hue && hue < 240) [r, g, b] = [0, x, c];
+  else if (240 <= hue && hue < 300) [r, g, b] = [x, 0, c];
+  else if (300 <= hue && hue < 360) [r, g, b] = [c, 0, x];
+
+  let r255 = Math.round((r + m) * 255);
+  let g255 = Math.round((g + m) * 255);
+  let b255 = Math.round((b + m) * 255);
+
+  return (
+    "#" +
+    ((1 << 24) + (r255 << 16) + (g255 << 8) + b255)
+      .toString(16)
+      .slice(1)
+      .toUpperCase()
+  );
+}
+
+/**
  * Get or set a CSS variable from the body tag.
  *
  * @param {string} name - The name of the CSS variable (e.g., "--primary").
@@ -20,11 +71,13 @@ const getCssVariable = (
     };
   }
 
+  const computedValue = window
+    .getComputedStyle(window.document.body)
+    .getPropertyValue(name)
+    .trim();
+
   return {
-    [name.replace(/^--/, "")]: window
-      .getComputedStyle(window.document.body)
-      .getPropertyValue(name)
-      .trim(),
+    [name.replace(/^--/, "")]: hslToHex(computedValue) ?? computedValue,
   };
 };
 
