@@ -32,7 +32,7 @@
     "gray-matter": "^4.0.3",
     "hast-util-whitespace": "^3.0.0",
     "image-size": "^1.1.1",
-    "jotai": "^2.10.3",
+    "jotai": "^2.12.4",
     "lqip-modern": "^2.2.1",
     "lucide-react": "^0.468.0",
     "mustache": "^4.2.0",
