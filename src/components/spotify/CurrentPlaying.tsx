@@ -57,6 +57,7 @@ const CurrentPlaying = () => {
               src={data?.item.album.images?.[0]?.url}
               alt={data?.item.album.name}
               fill
+              sizes="auto"
               loader={({ src }) => src}
             />
           ) : (

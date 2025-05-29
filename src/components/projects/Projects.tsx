@@ -150,6 +150,7 @@ const Projects = async () => {
                     <div className="relative h-[200px] w-full object-cover object-center md:h-[320px]">
                       <Image
                         fill
+                        sizes="auto"
                         src={
                           image.src ||
                           "/assets/resources/images/demos/default.svg"

@@ -28,6 +28,7 @@ const AboutMe = async () => {
             <div className="relative w-full pb-[100%]">
               <Image
                 fill
+                sizes="auto"
                 className="author__image object-cover object-[20%_50%]"
                 src={aboutImage.src}
                 alt="Aleks"
