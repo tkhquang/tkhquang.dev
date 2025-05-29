@@ -1,2 +1,4 @@
 # Redirect default Netlify subdomain to primary domain
 https://tkhquang.netlify.app/*   https://tkhquang.dev/:splat   301!
+
+/portfolio/*                     https://tkhquang.dev/:splat   301!
