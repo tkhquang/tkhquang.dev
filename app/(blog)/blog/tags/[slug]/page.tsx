@@ -33,7 +33,6 @@ export default async function TagPage({
       pathInfoType="tag"
       pathSlug="tags"
       item={currentTag}
-      title="Tags"
     />
   );
 }

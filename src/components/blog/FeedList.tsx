@@ -1,16 +1,14 @@
 import React from "react";
 import { PathInfo } from "@/components/blog/PathInfo";
-import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
+import { MarkdownPost } from "@/models/markdown.types";
 import PostCard from "./PostCard";
 
 const FeedList = <T,>({
-  title,
   item,
   pathInfoType,
-  posts,
   pathSlug,
+  posts,
 }: {
-  title: string;
   pathSlug: string;
   posts: MarkdownPost[];
   pathInfoType: "category" | "tag" | undefined;
@@ -19,7 +17,11 @@ const FeedList = <T,>({
   return (
     <section className="news-feed w-full lg:w-3/4">
       {pathInfoType && item && (
-        <PathInfo<any, "slug"> item={item} title={title} pathSlug={pathSlug} />
+        <PathInfo<any, "slug">
+          item={item}
+          pathSlug={pathSlug}
+          pathInfoType={pathInfoType}
+        />
       )}
       {posts.length === 0 ? (
         <h1 className="flex-center mt-6 w-full text-2xl font-bold leading-7 sm:text-3xl sm:leading-9">

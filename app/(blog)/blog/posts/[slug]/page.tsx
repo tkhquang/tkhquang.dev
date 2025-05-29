@@ -105,14 +105,13 @@ export default async function Post({
 
         <section className="container !max-w-screen-md">
           <article className="article">
-            {/* Replace below components with actual React equivalents */}
             <div className="article__meta mb-6 mt-3">
               <PostMeta post={post} />
             </div>
             <div className="article__path-info">
               <PathInfo<MarkdownCategory, "slug">
                 item={category}
-                title="Categories"
+                pathInfoType="category"
                 pathSlug="categories"
               />
             </div>

@@ -15,15 +15,47 @@ export function PathInfo<
   className,
   item,
   itemSlugField = "slug" as K,
+  pathInfoType,
   pathSlug,
-  title,
 }: {
-  title: string;
   pathSlug: string;
   item: T;
   itemSlugField?: K;
   className?: string;
+  pathInfoType: "category" | "tag" | undefined;
 }) {
+  const pathTypeSlug = (() => {
+    switch (pathInfoType) {
+      case "category": {
+        return "categories";
+      }
+
+      case "tag": {
+        return "tags";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  })();
+
+  const typeTitle = (() => {
+    switch (pathInfoType) {
+      case "category": {
+        return "Categories";
+      }
+
+      case "tag": {
+        return "Tags";
+      }
+
+      default: {
+        return "";
+      }
+    }
+  })();
+
   return (
     <div className={className}>
       <HorizontalLine className="my-3" />
@@ -40,7 +72,7 @@ export function PathInfo<
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href="/blog/categories">{title}</Link>
+              <Link href={`/blog/${pathTypeSlug}`}>{typeTitle}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator>

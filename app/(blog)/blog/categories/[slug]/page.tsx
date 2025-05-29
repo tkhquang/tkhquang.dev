@@ -28,7 +28,6 @@ export default async function CategoryPage({
       pathInfoType="category"
       item={category}
       pathSlug="categories"
-      title="Categories"
     />
   );
 }

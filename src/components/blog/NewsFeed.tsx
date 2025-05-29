@@ -6,11 +6,9 @@ import { MarkdownPost } from "@/models/markdown.types";
 const NewsFeed = <T,>({
   item,
   pathInfoType,
-  posts,
   pathSlug,
-  title,
+  posts,
 }: {
-  title: string;
   posts: MarkdownPost[];
   pathInfoType?: "category" | "tag" | undefined;
   item?: T;
@@ -22,7 +20,6 @@ const NewsFeed = <T,>({
         posts={posts}
         pathInfoType={pathInfoType}
         item={item}
-        title={title}
         pathSlug={pathSlug}
       />
       <BlogInfo className="mt-8 w-full lg:mt-4 lg:w-1/4" />
