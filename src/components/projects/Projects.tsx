@@ -15,7 +15,7 @@ interface Demo {
 // Static demo data
 const demos: Demo[] = [
   {
-    description: `A new generation bug tracker with role-based permissions. <br />You can log in with <em>reporter1/passa1</em> to test.`,
+    description: `A new generation bug tracker with role-based permissions. <br />You can log in with <em>reporter1</em><em>/</em><em>passa1</em> to test.`,
     live: "https://buggi-tracker.netlify.app",
     preview: "/assets/resources/images/demos/buggi-tracker.png",
     source: "https://github.com/tkhquang/buggi-tracker",
@@ -71,7 +71,7 @@ const Projects = async () => {
         {/* Repositories Section */}
         <div>
           <h3 className="heading my-10 text-2xl">Repositories</h3>
-          <ul className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
             {repositories.map((repo) => (
               <li
                 key={repo.id}
@@ -85,7 +85,7 @@ const Projects = async () => {
                 >
                   <div>
                     <h4 className="font-bold">{repo.name}</h4>
-                    <p className="mt-5 break-all text-sm">{repo.description}</p>
+                    <p className="mt-5 text-sm">{repo.description}</p>
                   </div>
                   <div className="mt-5 flex font-medium">
                     <div className="flex-center">
@@ -134,7 +134,7 @@ const Projects = async () => {
         {/* Demos Section */}
         <div>
           <h3 className="heading my-10 text-2xl">Demos</h3>
-          <ul className="grid grid-cols-1 gap-10 md:grid-cols-2">
+          <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
             {demos.map(async (demo) => {
               const image = await getPlaceholderImage(demo.preview);
 
@@ -147,21 +147,22 @@ const Projects = async () => {
                     {demo.title}
                   </h4>
                   <div className="my-10 block shadow-inner">
-                    <Image
-                      src={
-                        image.src ||
-                        "/assets/resources/images/demos/default.svg"
-                      }
-                      alt={demo.title}
-                      width={1280}
-                      height={720}
-                      className="max-h-[280px] bg-cover bg-center bg-no-repeat object-contain object-center"
-                      style={{
-                        backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
-                      }}
-                      placeholder="blur"
-                      blurDataURL={image.placeholder}
-                    />
+                    <div className="relative h-[200px] w-full object-cover object-center md:h-[320px]">
+                      <Image
+                        fill
+                        src={
+                          image.src ||
+                          "/assets/resources/images/demos/default.svg"
+                        }
+                        alt={demo.title}
+                        className="bg-cover bg-center bg-no-repeat object-cover object-center"
+                        style={{
+                          backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
+                        }}
+                        placeholder="blur"
+                        blurDataURL={image.placeholder}
+                      />
+                    </div>
                   </div>
                   <p
                     className="mx-4"
