@@ -8,31 +8,29 @@ export namespace Site {
 
 export namespace Portfolio {
   export const METADATA = {
-    about: `<p>Hi there! My full name is Quang Trinh Khac, but feel free to call me Aleks. I am a former student of the Advanced Education Program (AEP) in Information Systems at Ho Chi Minh City University of Information Technology. While I haven't yet completed my degree due to unforeseen circumstances, my passion for technology and continuous learning remains unwavering.</p>
+    about: `<p>Hi, I'm Quang Trinh Khac (or just Aleks). I'm an engineer with a genuine curiosity for technology, open source, and the little things that make software work. By day, I build user interfaces with React and modern web tools. By night, I like to explore how things work under the hood, modding games, tinkering with code, and sharing what I learn with others.</p>
 
 <p>
-I am a highly motivated and self-driven developer with a strong understanding of HTML, CSS, JavaScript, and modern frameworks such as React and Vue. My goal is to launch a successful career building high-quality web applications and services. I take pride in delivering work that is fully responsive, thoroughly tested across a wide range of devices, and built with clean, maintainable, and well-organized code.
+I studied in the Advanced Education Program (AEP) in Information Systems at Ho Chi Minh City University of Information Technology (UIT), where I found a real passion for learning, both inside and outside the classroom. While my path hasn't been the most traditional, hands-on experience and continuous improvement have shaped my journey.
 </p>
 
 <p>
-If you're looking for an engineer who can provide exceptional solutions, I'd be thrilled to collaborate. Here’s what I bring to the table:
+I'm grateful for the open source community, where I've learned a lot and enjoy giving back when I can. I sometimes share modding tools for games, contribute to public projects, and experiment with both web and systems-level code. If you appreciate reliable engineering and a bit of creative problem-solving, I'd be happy to connect.
 </p>
 
 <ul>
-  <li>Semantic HTML and responsive CSS</li>
-  <li>Proficiency in JavaScript (Vanilla, ReactJS, VueJS, etc.)</li>
-  <li>Focus on delivering high-level user experiences</li>
-  <li>Adherence to best practices in web development</li>
-  <li>Experience with Git for version control</li>
-  <li>Knowledge of Agile/Scrum methodologies</li>
+  <li>Semantic, accessible HTML & responsive CSS (SCSS, TailwindCSS, CSS-in-JS)</li>
+  <li>JavaScript and TypeScript: React, Vue, Next.js, and more</li>
+  <li>Backend with Elixir/Phoenix, Node.js, API design, and server-side rendering</li>
+  <li>Focus on user experience, performance, and maintainable code</li>
+  <li>Comfortable with Git, collaboration, and Agile environments</li>
+  <li>Some experience in game modding, reverse engineering, and lower-level tech</li>
 </ul>
 
 <p>
-Feel free to get in touch—I’d love to help bring your ideas to life!
+I enjoy working with teams who care about quality and learning. If you'd like to collaborate or just talk shop, feel free to reach out!
 </p>`,
-    description: `Versatile Front-End Engineer with ${getYearsOfExperience(
-      "2019-01-01"
-    )}+ years of experience in designing, developing, and maintaining complex web applications. Specializing in modern JavaScript libraries and frameworks like React and Vue, I am committed to delivering forward-thinking solutions and fostering a collaborative work environment. I aim to leverage my expertise to drive innovative strategies that enhance engagement and increase conversions.`,
+    description: `Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience: front-end by day (React, Vue, Next.js), open source and modding enthusiast by night (C++, Rust, game projects). I like building reliable web apps and tools, and I'm always open to learning new things or taking on creative challenges. Let's connect if you share similar interests!`,
     title: "Aleks's Portfolio",
   };
 }
@@ -41,7 +39,7 @@ export namespace Blog {
   export const METADATA = {
     author: "Aleks",
     description:
-      "Hi, I'm Aleks—a Software Engineer with a passion for open-source projects and micro startups. This blog is my little corner of the internet where I share thoughts on topics I love, interesting stories, and the occasional deep dive into technical challenges.",
+      "Hi, I'm Aleks, a Software Engineer with a passion for open-source projects and micro startups. This blog is my little corner of the internet where I share thoughts on topics I love, interesting stories, and the occasional deep dive into technical challenges.",
     title: {
       default: "Ljóss - The Portal To A Nobody's Inner World",
       template: "%s | Ljóss - The Portal To A Nobody's Inner World",

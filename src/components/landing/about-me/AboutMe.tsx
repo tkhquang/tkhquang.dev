@@ -10,7 +10,7 @@ const RESUME = {
 
 const AboutMe = async () => {
   const aboutImage = await getPlaceholderImage(
-    "/assets/resources/images/Aleks.png"
+    "/assets/resources/images/Aleks-3.jpg"
   );
 
   return (
@@ -24,16 +24,17 @@ const AboutMe = async () => {
               __html: Portfolio.METADATA.about,
             }}
           ></div>
-          <div className="author flex-center mx-6 my-auto w-10/12 p-6 md:w-8/12 lg:w-1/3">
-            <Image
-              className="author__image object-cover"
-              src={aboutImage.src}
-              width={500}
-              height={500}
-              alt="Aleks"
-              placeholder="blur"
-              blurDataURL={aboutImage.placeholder}
-            />
+          <div className="author flex-center mx-6 my-10 w-10/12 p-6 md:w-8/12 lg:w-1/3">
+            <div className="relative w-full pb-[100%]">
+              <Image
+                fill
+                className="author__image object-cover object-[20%_50%]"
+                src={aboutImage.src}
+                alt="Aleks"
+                placeholder="blur"
+                blurDataURL={aboutImage.placeholder}
+              />
+            </div>
           </div>
         </div>
 

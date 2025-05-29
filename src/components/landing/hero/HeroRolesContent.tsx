@@ -4,9 +4,11 @@ import classnames from "classnames";
 import { useEffect, useState } from "react";
 
 const ROLES = [
-  // Force chomp
-  "A Front-End Engineer 💻",
+  "A Software Engineer 💻",
   "A Lifelong Learner 📚",
+  "An Open Source Enthusiast 🌐",
+  "A Game Modder 🎮",
+  "A Team Player 🤝🏻",
 ];
 
 const HeroRolesContent = () => {
