@@ -16,7 +16,8 @@ const nextConfig = {
     },
   },
   outputFileTracingIncludes: {
-    "/blog{,/**/*}": ["./content/**/*"],
+    "/**": ["./public/**"],
+    "/blog{,/**/*}": ["./content/**"],
   },
   outputFileTracingRoot: path.join(__dirname),
   async redirects() {
