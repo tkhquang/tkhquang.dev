@@ -203,14 +203,14 @@ html {
   code[data-theme*=" "],
   code[data-theme*=" "] span {
     color: var(--shiki-dark);
-    background-color: var(--shiki-dark-bg);
+    background-color: var(--code), var(--shiki-dark-bg);
   }
 
   &[data-theme="light"] {
     code[data-theme*=" "],
     code[data-theme*=" "] span {
       color: var(--shiki-light);
-      background-color: var(--shiki-light-bg);
+      background-color: var(--code), var(--shiki-light-bg);
     }
   }
 }

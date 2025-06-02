@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { Metadata } from "next/types";
 import BlogInfo from "@/components/blog/BlogInfo";
 import { PathInfo } from "@/components/blog/PathInfo";
@@ -40,6 +41,12 @@ export async function generateMetadata({
 
 export const dynamic = "force-static";
 export const revalidate = false;
+
+const MERMAIDJS_SCRIPT_CONTENT = `
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({startOnLoad: true});
+  mermaid.contentLoaded();
+`;
 
 export default async function Post({
   params,
@@ -97,6 +104,14 @@ export default async function Post({
             </div>
 
             <div className="article__content typography">{html}</div>
+            <Script
+              id="mermaidjs"
+              type="module"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: MERMAIDJS_SCRIPT_CONTENT,
+              }}
+            />
 
             <div className="article__footer my-6 flex">
               <TagList post={post} />

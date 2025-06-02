@@ -60,3 +60,12 @@ svg[id^="raphael-"] {
     }
   }
 }
+
+.mermaid {
+  @apply transition-opacity;
+
+  opacity: 0;
+  &[data-processed="true"] {
+    opacity: 1;
+  }
+}
