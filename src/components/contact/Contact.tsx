@@ -33,7 +33,7 @@ const Contact = () => {
     setStatus("fetching");
 
     try {
-      await fetch("/__contact_form.html", {
+      await fetch("https://api.web3forms.com/submit", {
         body: encode({
           access_key: process.env.NEXT_PUBLIC_WEB3FORM_ACCESS_KEY || "",
           ...data,
