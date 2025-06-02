@@ -31,8 +31,9 @@ const BlogHeader = ({
             onFocus={(e) => {
               e.target.blur();
             }}
+            tabIndex={-1}
           >
-            <Link href="/blog" passHref>
+            <Link href="/blog" passHref tabIndex={-1}>
               <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
                 {pathName !== "/blog" ? (
                   <>
@@ -42,7 +43,7 @@ const BlogHeader = ({
                     </span>
                     <span
                       className="logo__text relative hidden md:inline-flex"
-                      data-hover="Ljoss"
+                      data-hover="Ljóss"
                     >
                       Home
                     </span>
@@ -50,7 +51,7 @@ const BlogHeader = ({
                 ) : (
                   <span
                     className="logo__text relative inline-flex"
-                    data-hover="Ljoss"
+                    data-hover="Ljóss"
                   >
                     Home
                   </span>
