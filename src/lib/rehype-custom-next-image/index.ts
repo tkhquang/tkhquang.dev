@@ -99,7 +99,7 @@ export default function rehypeCustomNextImage(
             blurDataURL: result?.metadata.dataURIBase64,
             height: height ?? 720,
             placeholder: "blur",
-            src: filePath.includes(targetPath)
+            src: filePath.includes(targetPath.replace(/^\.\//, ""))
               ? `${process.env.NEXT_PUBLIC_BASE_URL}/${finalSrc}`
               : finalSrc,
             width: width ?? 1280,
