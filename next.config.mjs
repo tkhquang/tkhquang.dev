@@ -15,6 +15,9 @@ const nextConfig = {
       fullUrl: true,
     },
   },
+  outputFileTracingIncludes: {
+    "/blog{,/**/*}": ["./content/**/*"],
+  },
   outputFileTracingRoot: path.join(__dirname),
   sassOptions: {
     silenceDeprecations: ["legacy-js-api"],
