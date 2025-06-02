@@ -45,6 +45,7 @@ export async function getRemoteImage(
 
     // Write the file
     await fs.promises.writeFile(filePath, body);
+    console.log(`Remote image downloaded at: ${filePath}`);
 
     return filePath;
   } catch (error: any) {
