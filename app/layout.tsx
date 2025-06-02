@@ -1,4 +1,6 @@
 import "@/lib/global";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
 import StackedLayers from "@/components/layout/StackedLayers";
@@ -52,6 +54,7 @@ const { description, title } = Portfolio.METADATA;
 
 export const metadata: Metadata = {
   description,
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || ""),
   openGraph: {
     description,
     images: [
@@ -65,7 +68,6 @@ export const metadata: Metadata = {
     version: Date.now(),
   },
   title,
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || ""),
 };
 
 export default async function RootLayout({
@@ -86,6 +88,8 @@ export default async function RootLayout({
         </div>
         <StackedLayers />
         <div id="class-keeper" className="hidden" aria-hidden></div>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
