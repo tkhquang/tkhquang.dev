@@ -19,6 +19,15 @@ const nextConfig = {
     "/blog{,/**/*}": ["./content/**/*"],
   },
   outputFileTracingRoot: path.join(__dirname),
+  async redirects() {
+    return [
+      {
+        destination: "/:path*",
+        permanent: false,
+        source: "/portfolio/:path*",
+      },
+    ];
+  },
   sassOptions: {
     silenceDeprecations: ["legacy-js-api"],
   },
