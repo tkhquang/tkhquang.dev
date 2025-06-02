@@ -90,6 +90,8 @@ export default function rehypeCustomNextImage(
             }
           }
 
+          console.log("finalSrc: ", finalSrc);
+
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
           node.properties = {
