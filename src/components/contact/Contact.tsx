@@ -22,28 +22,28 @@ const Contact = () => {
   );
   const [errorMessage, setErrorMessage] = useState("");
 
-  const encode = (data: Record<string, string>) =>
-    Object.keys(data)
-      .map(
-        (key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-      )
-      .join("&");
-
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     setStatus("fetching");
 
     try {
-      await fetch("https://api.web3forms.com/submit", {
-        body: encode({
+      const response = await fetch("https://api.web3forms.com/submit", {
+        body: JSON.stringify({
           access_key: process.env.NEXT_PUBLIC_WEB3FORM_ACCESS_KEY || "",
           ...data,
         }),
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         method: "POST",
       });
 
-      setStatus("success");
-      reset(); // Clear form fields
+      const responseData = await response.json();
+      if (responseData.success === true) {
+        setStatus("success");
+        reset();
+      } else {
+        Promise.reject();
+      }
     } catch (error: any) {
       console.error("Error submitting form:", error);
       setStatus("error");
