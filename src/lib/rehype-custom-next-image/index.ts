@@ -51,8 +51,10 @@ export default function rehypeCustomNextImage(
         let width = properties.width as number | undefined;
         let height = properties.height as number | undefined;
 
+        const isRemoteImage = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(originalSrc);
+
         try {
-          if (/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(originalSrc)) {
+          if (isRemoteImage) {
             // Handle remote images
             const localPath = await getRemoteImage(originalSrc, {
               cache,
@@ -90,8 +92,6 @@ export default function rehypeCustomNextImage(
             }
           }
 
-          console.log("finalSrc: ", finalSrc);
-
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
           node.properties = {
@@ -99,7 +99,9 @@ export default function rehypeCustomNextImage(
             blurDataURL: result?.metadata.dataURIBase64,
             height: height ?? 720,
             placeholder: "blur",
-            src: finalSrc,
+            src: filePath.includes(targetPath)
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}/${finalSrc}`
+              : finalSrc,
             width: width ?? 1280,
           } satisfies ImageProps;
         } catch (err) {

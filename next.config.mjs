@@ -10,13 +10,15 @@ const nextConfig = {
     //   ["@swc-jotai/react-refresh", {}],
     // ],
   },
+  images: {
+    remotePatterns: [{ hostname: "tkhquang.dev" }, { hostname: "localhost" }],
+  },
   logging: {
     fetches: {
       fullUrl: true,
     },
   },
   outputFileTracingIncludes: {
-    "/**": ["./public/**"],
     "/blog{,/**/*}": ["./content/**"],
   },
   outputFileTracingRoot: path.join(__dirname),
