@@ -58,7 +58,7 @@ const PostList = <
                               title={post.description}
                             >
                               <time
-                                className="font-mono"
+                                className="space-x-2 font-mono"
                                 dateTime={post.created_at.toISOString()}
                               >
                                 <span className="hidden md:inline">

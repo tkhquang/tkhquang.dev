@@ -21,6 +21,7 @@ const FeedList = <T,>({
           item={item}
           pathSlug={pathSlug}
           pathInfoType={pathInfoType}
+          className="mx-auto lg:w-4/5"
         />
       )}
       {posts.length === 0 ? (
