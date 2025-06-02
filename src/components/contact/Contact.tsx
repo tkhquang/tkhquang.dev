@@ -35,7 +35,7 @@ const Contact = () => {
     try {
       await fetch("/__contact_form.html", {
         body: encode({
-          "form-name": "portfolio-dev",
+          access_key: process.env.NEXT_PUBLIC_WEB3FORM_ACCESS_KEY || "",
           ...data,
         }),
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
