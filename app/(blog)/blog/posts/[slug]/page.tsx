@@ -3,6 +3,7 @@ import BlogInfo from "@/components/blog/BlogInfo";
 import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
+import TableOfContent from "@/components/blog/TableOfContent";
 import { Site } from "@/constants/meta";
 import { MarkdownCategory } from "@/models/markdown.types";
 
@@ -80,28 +81,7 @@ export default async function Post({
       </h1>
 
       <div className="flex">
-        <section className="table-of-content fixed bottom-0 left-0 z-fg mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100">
-          {headings?.length! > 0 && (
-            <div className="table-of-content__list sticky top-0 mt-header-height hidden pt-header-height lg:block">
-              <h2 className="heading mt-10 text-2xl">Table of Content</h2>
-              <ul className="mt-5">
-                {headings!.map((heading: any) => (
-                  <li key={heading.id} className="my-2">
-                    <a
-                      href={`#${heading.id}`}
-                      className={`anchor hover:text-theme-primary ${
-                        activeAnchor === heading.id ? "anchor--is-active" : ""
-                      }`}
-                    >
-                      <span>#</span>&nbsp;
-                      <span>{heading.value}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
+        <TableOfContent headings={headings} />
 
         <section className="container !max-w-screen-md">
           <article className="article">
