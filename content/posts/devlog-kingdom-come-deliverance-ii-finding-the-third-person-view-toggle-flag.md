@@ -65,29 +65,42 @@ My `initializeGameInterface` function in the mod uses this AOB:
 
 ## Pointer Chasing: Global Context -> CameraManager -> TPV Object -> Flag
 
-With `g_global_context_ptr_address` (`WHGame.DLL+54B23B0`) known, the pointer chase begins:
+With `g_global_context_ptr_address` (pointing to `WHGame.DLL+54B23B0`) identified, the crucial pointer chase to our TPV flag begins. This involves a series of dereferences and offset additions:
 
-1.  **`global_ctx_instance_ptr = *reinterpret_cast<uintptr_t*>(g_global_context_ptr_address);`**
-    This `global_ctx_instance_ptr` (e.g., `0x26A07867760`) is the actual memory address where the global context object *instance* resides.
+1.  **Dereference to get the Global Context Instance:**
+    First, we read the value at `g_global_context_ptr_address` to get the actual memory address of the global context object instance.
+    ```cpp
+    global_ctx_instance_ptr = *reinterpret_cast<uintptr_t*>(g_global_context_ptr_address);
+    ```
+    This `global_ctx_instance_ptr` (e.g., `0x26A07867760` based on earlier traces) is our starting point for navigating the object structure.
 
-2.  **`cam_manager_instance_ptr = *(uintptr_t*)(global_ctx_instance_ptr + OFFSET_ManagerPtrStorage);`**
-    Where `OFFSET_ManagerPtrStorage` is `0x38`.
-    This `cam_manager_instance_ptr` (e.g., `0x26C24C1EA20`) is the address of the `wh::game::C_CameraManager` instance. Confirmation comes from checking its vftable: `*cam_manager_instance_ptr` should point to `wh::game::C_CameraManager::vftable` (which is at `18406adb8`, with its first function being `FUN_1839acf00`).
+2.  **From Global Context to Camera Manager Instance:**
+    An offset of `0x38` (`OFFSET_ManagerPtrStorage`) from the `global_ctx_instance_ptr` leads to where the pointer to the `wh::game::C_CameraManager` instance is stored. We dereference that to get the manager's instance address.
+    ```cpp
+    cam_manager_instance_ptr = *(uintptr_t*)(global_ctx_instance_ptr + OFFSET_ManagerPtrStorage);
+    ```
+    This `cam_manager_instance_ptr` (e.g., `0x26C24C1EA20`) points to the `C_CameraManager` object. We can confirm this by inspecting its virtual function table (vftable): `*cam_manager_instance_ptr` should resolve to `wh::game::C_CameraManager::vftable` (located at `18406adb8` in version 1.3.1).
 
-3.  **`tpv_object_instance_ptr = *(uintptr_t*)(cam_manager_instance_ptr + OFFSET_TpvObjPtrStorage);`**
-    Where `OFFSET_TpvObjPtrStorage` is `0x28`.
-    This `tpv_object_instance_ptr` points to the instance of `wh::game::C_CameraThirdPerson`. The `wh::game::C_CameraManager` constructor (`FUN_180c989b8`) shows that it initializes various camera controller objects, including setting the `wh::game::C_CameraThirdPerson::vftable` at `param_1[0x41]` (where `param_1` is the `this` pointer of the camera manager). The `0x28` offset within the manager instance correctly leads to (a pointer to) this specific TPV controller instance. Its vftable is `wh::game::C_CameraThirdPerson::vftable` (at `183a85220`).
+3.  **From Camera Manager to Third-Person View (TPV) Object Instance:**
+    Next, an offset of `0x28` (`OFFSET_TpvObjPtrStorage`) from the `cam_manager_instance_ptr` gives us the location of the pointer to the `wh::game::C_CameraThirdPerson` instance.
+    ```cpp
+    tpv_object_instance_ptr = *(uintptr_t*)(cam_manager_instance_ptr + OFFSET_TpvObjPtrStorage);
+    ```
+    This `tpv_object_instance_ptr` is the address of the specific TPV camera controller object. Its vftable should match `wh::game::C_CameraThirdPerson::vftable` (at `183a85220`). The `C_CameraManager` constructor (`FUN_180c989b8`) further confirms that the manager initializes and holds references or embedded instances of various camera types, including the TPV one.
 
-4.  **`flag_address = tpv_object_instance_ptr + OFFSET_TpvFlag;`**
-    Where `OFFSET_TpvFlag` is `0x38`.
-    This `flag_address` is the memory location of the 1-byte flag that controls the TPV state, residing *within* the `wh::game::C_CameraThirdPerson` object instance.
+4.  **Locating the TPV Flag within the TPV Object:**
+    Finally, an offset of `0x38` (`OFFSET_TpvFlag`) *within* the `C_CameraThirdPerson` object instance points to the 1-byte flag that controls whether TPV is active.
+    ```cpp
+    flag_address = tpv_object_instance_ptr + OFFSET_TpvFlag;
+    ```
+    This `flag_address` is our ultimate target for the toggle.
 
-The vftables from the disassembly are crucial for this confirmation. For KCD2 v1.3.1:
-*   `wh::game::C_CameraManager::vftable`: at `18406adb8`. (Its constructor is `FUN_180c989b8`).
-*   `wh::game::C_Camera::vftable`: at `18406ab78` (This is the base camera class).
-*   `wh::game::C_CameraFirstPerson::vftable`: at `183a85098` (Index 6, `FUN_181a57310`, returns string "FIRST PERSON").
-*   `wh::game::C_CameraThirdPerson::vftable`: at `183a85220` (Index 6, `FUN_181a574d0`, returns string "THIRD PERSON").
-*   Others like `wh::game::C_CameraDialog::vftable` (`183a85140`), `wh::game::C_CameraRider::vftable` (`183a85290`), and `wh::game::C_CameraUI::vftable` (`183a851b0`) further illustrate the engine's polymorphic camera system. Our TPV flag likely directs the `C_CameraManager` or a related system to use the correct controller's update logic.
+The vftables from the disassembly are indispensable for this process. Key vftables include:
+*   `wh::game::C_CameraManager::vftable`: at `18406adb8`. (Its constructor `FUN_180c989b8` sets up different camera objects).
+*   `wh::game::C_Camera::vftable`: at `18406ab78` (The base class for all cameras).
+*   `wh::game::C_CameraFirstPerson::vftable`: at `183a85098` (Identified by its vftable index 6, `FUN_181a57310`, which returns the string "FIRST PERSON").
+*   `wh::game::C_CameraThirdPerson::vftable`: at `183a85220` (Identified by its vftable index 6, `FUN_181a574d0`, returning "THIRD PERSON").
+*   Others like `wh::game::C_CameraDialog::vftable` (`183a85140`), `wh::game::C_CameraRider::vftable` (`183a85290`), and `wh::game::C_CameraUI::vftable` (`183a851b0`) further paint the picture of a polymorphic camera system where our TPV flag likely instructs the `C_CameraManager` which controller's logic to employ.
 
 <pre class="mermaid flex justify-center">
 graph TD
