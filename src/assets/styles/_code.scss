@@ -15,162 +15,6 @@ $functionColor: #dd4a68;
 // Regex, important, variable
 $regexColor: #ee9900;
 
-// code[class*="language-"],
-// pre[class*="language-"] {
-//   @apply font-mono text-left whitespace-pre break-normal leading-6;
-// 	word-spacing: normal;
-// 	word-wrap: normal;
-
-// 	-moz-tab-size: 4;
-// 	-o-tab-size: 4;
-// 	tab-size: 4;
-
-// 	-webkit-hyphens: none;
-// 	-moz-hyphens: none;
-// 	-ms-hyphens: none;
-// 	hyphens: none;
-// }
-
-// pre[class*="language-"] {
-//   @apply relative px-12 py-2 mb-8 shadow-inner bg-theme-code rounded-b-md overflow-auto;
-
-//   & > code[class*="language-"] {
-//     @apply inline-block min-w-full;
-//     .gridsome-highlight-code-line {
-//       @apply block -mx-12 border-l-4 bg-theme-surface min-w-full shadow-sm;
-//       padding-left: 2.785rem;
-//     }
-//   }
-// }
-
-// @media print {
-// 	code[class*="language-"],
-// 	pre[class*="language-"] {
-// 		text-shadow: none;
-// 	}
-// }
-
-// /* Inline code */
-// :not(pre) > code[data-language] {
-//   @apply whitespace-normal !bg-theme-code px-1 shadow-inner;
-// }
-
-// .token.comment,
-// .token.prolog,
-// .token.doctype,
-// .token.cdata {
-// 	color: $fadedColor;
-// }
-
-// .token.punctuation {
-// 	color: $normalColor;
-// }
-
-// .token.property,
-// .token.tag,
-// .token.boolean,
-// .token.number,
-// .token.constant,
-// .token.symbol,
-// .token.deleted {
-// 	color: $propertyColor;
-// }
-
-// .token.selector,
-// .token.attr-name,
-// .token.string,
-// .token.char,
-// .token.builtin,
-// .token.inserted {
-// 	color: $selectorColor;
-// }
-
-// .token.operator,
-// .token.entity,
-// .token.url,
-// .language-css .token.string,
-// .style .token.string {
-// 	color: $operatorColor;
-// }
-
-// .token.atrule,
-// .token.attr-value,
-// .token.keyword {
-// 	color: $atruleColor;
-// }
-
-// .token.function,
-// .token.class-name {
-// 	color: $functionColor;
-// }
-
-// .token.regex,
-// .token.important,
-// .token.variable {
-// 	color: $regexColor;
-// }
-
-// .token.important,
-// .token.bold {
-//   @apply font-bold;
-// }
-// .token.italic {
-//   font-style: italic;
-// }
-
-// .token.entity {
-//   cursor: help;
-// }
-
-// .namespace {
-//   @apply opacity-75;
-// }
-
-// /* Adjust the position of the line numbers */
-// .gridsome-highlight pre[class*="language-"].line-numbers {
-//   @apply pl-12;
-// }
-
-// .gridsome-code-title {
-//   @apply px-4 py-2 bg-theme-surface font-bold rounded-t-md;
-// }
-
-// .line-numbers .line-numbers-rows {
-//   @apply py-2 mx-2 border-r;
-// }
-
-// .command-line-prompt {
-//   & > span {
-//     @apply font-extrabold;
-//   }
-// }
-
-// .gridsome-highlight {
-
-//   @apply relative;
-
-//   .copy {
-//     background-image: url("/assets/resources/svg/clipboard-add.svg");
-//     background-size: 75% auto;
-
-//     @apply absolute top-0 right-0 w-8 h-8 mr-2 mt-2 opacity-0 rounded bg-no-repeat bg-center bg-theme-surface transition-all duration-500 shadow-md;
-
-//     &--is-success {
-//       background-image: url("/assets/resources/svg/clipboard-success.svg");
-//     }
-
-//     &--is-error {
-//       background-image: url("/assets/resources/svg/clipboard-error.svg");
-//     }
-//   }
-
-//   &:hover {
-//     .copy {
-//       @apply opacity-100;
-//     }
-//   }
-// }
-
 code[data-line-numbers] {
   counter-reset: line;
 }
@@ -212,6 +56,17 @@ html {
       color: var(--shiki-light);
       background-color: var(--code), var(--shiki-light-bg);
     }
+  }
+
+  // Inline
+  span > code:not([data-line-numbers]) {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  pre > code:not([data-line-numbers]) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
 }
 
