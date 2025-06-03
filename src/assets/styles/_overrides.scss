@@ -68,4 +68,8 @@ svg[id^="raphael-"] {
   &[data-processed="true"] {
     opacity: 1;
   }
+
+  > svg {
+    background-color: var(--on-surface-dark);
+  }
 }
