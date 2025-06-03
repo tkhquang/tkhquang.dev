@@ -111,7 +111,7 @@ void CPlayer::UpdateView(SViewParams& viewParams) {
 ```
 
 When it's not a special `CCameraManager` moment, a class like `CPlayerView` is often the real workhorse. This class typically knows how to handle specific camera types:
-1.  **It Prepares (`ViewPreProcess`):** Gathers all the data it needs—player's current position, stance (standing, crouching), etc.
+1.  **It Prepares (`ViewPreProcess`):** Gathers all the data it needs: player's current position, stance (standing, crouching), etc.
 2.  **It Calculates (`ViewProcess`):**
     *   **First-Person View:** Figures out where the camera "eye" should be based on the character model, applies the `m_ViewQuat` for looking around, and adds effects like "head bob" (the slight up-and-down camera movement when walking) to make it feel more immersive. It also ensures your weapon model is drawn correctly.
     *   **Third-Person View:** Calculates the camera's position behind or around the player, often dealing with tricky things like making sure the camera doesn't clip through walls.
