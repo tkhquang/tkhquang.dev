@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
@@ -14,16 +15,16 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     <li className="news-feed__list-item w-full pt-8 lg:w-4/5">
       <PostMeta className="news-feed__list-item__meta" post={post} />
       <h2 className="news-feed__list-item__title heading my-4 text-xl hover:opacity-75 xs:text-2xl sm:text-4xl sm:leading-10">
-        <a
+        <Link
           href={`/blog/posts/${post.slug}`}
           className="news-feed__list-item__link"
         >
           {post.title}
-        </a>
+        </Link>
       </h2>
       {coverImage && (
         <figure>
-          <a
+          <Link
             href={`/blog/posts/${post.slug}`}
             className="news-feed__list-item__link"
           >
@@ -33,7 +34,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
               height: "720",
               width: "1280",
             })}
-          </a>
+          </Link>
           <figcaption></figcaption>
         </figure>
       )}

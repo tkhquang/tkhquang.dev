@@ -73,3 +73,8 @@ svg[id^="raphael-"] {
     background-color: var(--on-surface-dark);
   }
 }
+
+pre.mermaid {
+  overflow: auto;
+  white-space: normal;
+}

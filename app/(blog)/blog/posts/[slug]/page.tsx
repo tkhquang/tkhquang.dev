@@ -5,6 +5,7 @@ import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import TableOfContent from "@/components/blog/TableOfContent";
+import ScriptLoader from "@/components/common/ScriptLoader";
 import { Site } from "@/constants/meta";
 import { MarkdownCategory } from "@/models/markdown.types";
 
@@ -43,9 +44,11 @@ export const dynamic = "force-static";
 export const revalidate = false;
 
 const MERMAIDJS_SCRIPT_CONTENT = `
+<script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.esm.min.mjs";
   mermaid.initialize({startOnLoad: true});
   mermaid.contentLoaded();
+</script>
 `;
 
 export default async function Post({
@@ -104,14 +107,7 @@ export default async function Post({
             </div>
 
             <div className="article__content typography">{html}</div>
-            <Script
-              id="mermaidjs"
-              type="module"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: MERMAIDJS_SCRIPT_CONTENT,
-              }}
-            />
+            <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
 
             <div className="article__footer my-6 flex">
               <TagList post={post} />
