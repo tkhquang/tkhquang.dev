@@ -24,12 +24,12 @@ const AboutMe = async () => {
               __html: Portfolio.METADATA.about,
             }}
           ></div>
-          <div className="author flex-center mx-6 my-10 w-10/12 p-6 md:w-8/12 lg:w-1/3">
+          <div className="author flex-center mx-6 my-10 w-4/5 p-6 xs:w-1/2 lg:w-1/3">
             <div className="relative w-full pb-[100%]">
               <Image
                 fill
                 sizes="auto"
-                className="author__image object-cover object-[20%_50%]"
+                className="author__image object-cover object-[15%_50%]"
                 src={aboutImage.src}
                 alt="Aleks"
                 placeholder="blur"
