@@ -16,7 +16,7 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const slug = (await params).slug;
+  const slug = decodeURIComponent((await params).slug);
 
   const posts = await _MarkdownParser.getAllPosts();
   const category = await _MarkdownParser.getCategoryBySlug(slug);

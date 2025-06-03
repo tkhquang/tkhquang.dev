@@ -16,7 +16,7 @@ export default async function TagPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const slug = (await params).slug;
+  const slug = decodeURIComponent((await params).slug);
 
   const tags = await _MarkdownParser.getAllTags();
   const posts = await _MarkdownParser.getAllPosts();
