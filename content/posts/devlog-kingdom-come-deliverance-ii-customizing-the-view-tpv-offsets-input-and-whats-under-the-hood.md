@@ -35,7 +35,7 @@ Simply flipping the game's TPV flag gives us a third-person perspective, but it 
 
 For this post, we'll zoom in on the camera offset feature. The core challenge is: how do we take user-defined X, Y, and Z offset values and apply them correctly to the game's existing third-person camera so it *feels* right, regardless of where Henry or the camera is looking? This is where 3D math comes into play.
 
-## The Core of Custom Offsets: Hooking `C_CameraThirdPerson::Update()`
+## The Core of Custom Offsets: Hooking the Camera `::Update()`
 
 The game's `wh::game::C_CameraThirdPerson` object (which we identified in the previous RE effort) has an internal update function that is responsible for calculating the TPV camera's position and orientation every frame. Let's call this `TpvCameraUpdateFunc`. My goal was to let the game calculate its default TPV, then take that result and modify the camera's *position* before the game uses it for rendering.
 
