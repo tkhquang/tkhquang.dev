@@ -10,6 +10,7 @@ tags:
   - Camera
   - Reverse Engineering
   - Game Development
+  - C++
 cover_image: /uploads/images/CryEngine.jpg
 description: Unpacking CryEngine's camera system, from raw input signals to the rendered image.
 ---

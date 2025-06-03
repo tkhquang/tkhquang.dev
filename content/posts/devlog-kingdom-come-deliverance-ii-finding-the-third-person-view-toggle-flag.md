@@ -12,6 +12,8 @@ tags:
   - Modding
   - Devlog
   - Reverse Engineering
+  - C++
+  - Camera
 cover_image: /uploads/images/audentis-fortuna-iuvat.png
 description: "A deep dive into Kingdom Come: Deliverance II's memory to enable its built-in (likely debug) third-person view, navigating vftables and pointer chains."
 ---
