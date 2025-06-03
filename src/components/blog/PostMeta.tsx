@@ -21,7 +21,7 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
   return (
     <div
       className={classNames(
-        "text-md font-semibold uppercase tracking-wider text-theme-error opacity-75",
+        "md:text-md text-sm font-semibold uppercase tracking-wider text-theme-error opacity-75",
         className
       )}
     >

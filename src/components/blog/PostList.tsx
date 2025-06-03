@@ -81,7 +81,7 @@ const PostList = <
           </Accordion>
         </div>
       </section>
-      <BlogInfo className="w-full self-start lg:w-1/4" />
+      <BlogInfo className="w-full self-start lg:w-1/4 [&_.author]:!flex-col [&_img]:!size-[150px]" />
     </div>
   );
 };
