@@ -189,11 +189,13 @@
     }
   }
 
-  &:hover &__text {
-    transform: rotateX(90deg) translateY(-22px);
-    &::before {
-      display: block;
-      color: var(--error);
+  @media not all and (pointer: coarse) {
+    &:hover &__text {
+      transform: rotateX(90deg) translateY(-22px);
+      &::before {
+        display: block;
+        color: var(--error);
+      }
     }
   }
 }
