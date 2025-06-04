@@ -7,6 +7,7 @@ import TableOfContent from "@/components/blog/TableOfContent";
 import ScriptLoader from "@/components/common/ScriptLoader";
 import { Site } from "@/constants/meta";
 import { MarkdownCategory } from "@/models/markdown.types";
+import { getPlaceholderImage } from "@/utils/next-mage";
 
 export async function generateStaticParams() {
   const posts = await _MarkdownParser.getAllPosts();
@@ -63,25 +64,28 @@ export default async function Post({
   } = await _MarkdownParser.parseMarkdown(post.content);
 
   const category = await _MarkdownParser.getCategoryBySlug(post.category_slug);
+  const coverPlaceholder = post.cover_image
+    ? (await getPlaceholderImage(post.cover_image as string)).placeholder
+    : null;
 
   return (
     <div>
       <header
-        className="header__wrapper relative flex flex-col overflow-hidden bg-center"
+        className="header__wrapper relative flex flex-col overflow-hidden"
         style={{
           ...((post.cover_image && {
-            "--background-url": `url(${post.cover_image})`,
+            "--background-url": `url(${coverPlaceholder})`,
           }) as React.CSSProperties),
         }}
       >
         {post.cover_image &&
           post.renderCoverImage({
             className: "header__image m-auto block min-h-full w-auto",
+            containerClassName: "",
             height: 720,
             style: {
-              height: "50vh",
-              objectFit: "cover",
-              objectPosition: "center",
+              height: "50vw",
+              maxHeight: "50vh",
             },
             width: 1280,
           })}

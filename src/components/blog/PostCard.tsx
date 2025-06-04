@@ -14,7 +14,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
   return (
     <li className="news-feed__list-item w-full pt-8 lg:w-4/5">
       <PostMeta className="news-feed__list-item__meta" post={post} />
-      <h2 className="news-feed__list-item__title heading my-4 text-xl hover:opacity-75 xs:text-2xl sm:text-4xl sm:leading-10">
+      <h2 className="news-feed__list-item__title heading mb-4 mt-1 text-xl hover:opacity-75 xs:text-2xl sm:text-3xl sm:leading-10">
         <Link
           href={`/blog/posts/${post.slug}`}
           className="news-feed__list-item__link"
@@ -47,7 +47,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <figcaption></figcaption>
         </figure>
       )}
-      <p className="news-feed__list-item__description v-html mt-3 text-lg leading-7">
+      <p className="news-feed__list-item__description text-md mt-3 leading-7">
         {post.description}
       </p>
       <TagList className="news-feed__list-item__tags mt-3" post={post} />
