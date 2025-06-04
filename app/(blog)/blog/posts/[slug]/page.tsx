@@ -65,8 +65,6 @@ export default async function Post({
 
   const category = await _MarkdownParser.getCategoryBySlug(post.category_slug);
 
-  const activeAnchor = "x";
-
   return (
     <div>
       <header
@@ -80,9 +78,12 @@ export default async function Post({
       >
         {post.cover_image &&
           post.renderCoverImage({
-            className:
-              "header__image m-auto block min-h-full w-full object-contain",
+            className: "header__image m-auto block min-h-full w-full",
             height: 720,
+            style: {
+              objectFit: "contain",
+              objectPosition: "center",
+            },
             width: 1280,
           })}
       </header>
