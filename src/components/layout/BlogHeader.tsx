@@ -25,15 +25,8 @@ const BlogHeader = ({
     >
       <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="header__left flex h-full items-center">
-          <button
-            type="button"
-            className="focus:outline-none"
-            onFocus={(e) => {
-              e.target.blur();
-            }}
-            tabIndex={-1}
-          >
-            <Link href="/blog" passHref tabIndex={-1}>
+          <button type="button" className="focus:outline-none">
+            <Link href="/blog" passHref>
               <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
                 {pathName !== "/blog" ? (
                   <>
