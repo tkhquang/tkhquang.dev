@@ -1,4 +1,5 @@
 @use "mixins" as *;
+@use "constants" as *;
 
 .flex-center {
   @apply flex items-center justify-center;
@@ -55,6 +56,18 @@
 
 .background {
   @apply bg-theme-background text-theme-on-background;
+}
+
+html {
+  .background-transparent {
+    background-color: rgba(map-get($colors, "background-dark"), 0.75);
+  }
+
+  &[data-theme="light"] {
+    .background-transparent {
+      background-color: rgba(map-get($colors, "background-light"), 0.75);
+    }
+  }
 }
 
 .surface {

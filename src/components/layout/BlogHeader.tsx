@@ -12,14 +12,14 @@ const BlogHeader = ({
   className,
   ...props
 }: React.ComponentProps<"header">) => {
-  const { isScrolled } = useAtomValue(scrolledStore);
+  // const { isScrolled } = useAtomValue(scrolledStore);
   const pathName = usePathname();
 
   return (
     <header
       {...props}
       className={classNames(
-        "flex-center background sticky inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 shadow-lg transition-all duration-500 ease-in-out",
+        "flex-center background-transparent sticky inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 text-theme-on-background shadow-lg transition-all duration-500 ease-in-out",
         className
       )}
     >
