@@ -150,7 +150,7 @@ export default async function Stacks() {
                     alt={stack.title}
                     width={150}
                     height={150}
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: "contain" }}
                   />
                 </div>
                 <span className="text-xl font-bold leading-loose text-theme-on-surface">
