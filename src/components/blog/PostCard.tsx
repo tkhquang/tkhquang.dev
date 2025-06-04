@@ -6,9 +6,10 @@ import { MarkdownPost } from "@/models/markdown.types";
 
 interface PostCardProps {
   post: MarkdownPost;
+  index: number;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ index, post }) => {
   const coverImage = post.cover_image ? `${post.cover_image}` : "";
 
   return (
@@ -42,6 +43,11 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
                   objectPosition: "center",
                 },
                 width: undefined,
+                ...(index === 0
+                  ? {
+                      loading: "eager",
+                    }
+                  : {}),
               })}
             </div>
           </Link>

@@ -34,8 +34,8 @@ const FeedList = <T,>({
             Latest Posts
           </h1>
           <ul className="news-feed__list flex-center flex-col">
-            {posts.map((post) => (
-              <PostCard key={post.slug} post={post} />
+            {posts.map((post, index) => (
+              <PostCard key={post.slug} post={post} index={index} />
             ))}
           </ul>
           <h1 className="flex-center mx-auto my-6 w-full text-2xl font-bold leading-7 sm:text-3xl sm:leading-9 lg:w-4/5">

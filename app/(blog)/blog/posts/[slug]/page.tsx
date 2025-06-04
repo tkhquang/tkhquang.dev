@@ -83,6 +83,7 @@ export default async function Post({
             className: "header__image m-auto block min-h-full w-auto",
             containerClassName: "",
             height: 720,
+            loading: "eager",
             style: {
               height: "50vw",
               maxHeight: "50vh",
