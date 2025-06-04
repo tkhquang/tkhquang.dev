@@ -106,7 +106,14 @@ export default async function Post({
               />
             </div>
 
-            <div className="article__content typography">{html}</div>
+            <div
+              className="article__content typography"
+              style={{
+                overflowWrap: "break-word",
+              }}
+            >
+              {html}
+            </div>
             <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
 
             <div className="article__footer my-6 flex">
