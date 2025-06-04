@@ -63,6 +63,17 @@ const Projects = async () => {
     })
     .slice(0, 12);
 
+  async function getDemoDataWithImages(demos: Demo[]) {
+    return Promise.all(
+      demos.map(async (demo) => {
+        const image = await getPlaceholderImage(demo.preview);
+        return { ...demo, image };
+      })
+    );
+  }
+
+  const demosWithImages = await getDemoDataWithImages(demos);
+
   return (
     <section className="projects">
       <div className="container">
@@ -135,8 +146,8 @@ const Projects = async () => {
         <div>
           <h3 className="heading my-10 text-2xl">Demos</h3>
           <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-10">
-            {demos.map(async (demo) => {
-              const image = await getPlaceholderImage(demo.preview);
+            {demosWithImages.map((demo) => {
+              const image = demo.image;
 
               return (
                 <li
@@ -147,18 +158,19 @@ const Projects = async () => {
                     {demo.title}
                   </h4>
                   <div className="my-10 block shadow-inner">
-                    <div className="relative h-[200px] w-full object-cover object-center md:h-[320px]">
+                    <div className="relative aspect-[16/9] w-full">
                       <Image
                         fill
-                        sizes="auto"
                         src={
                           image.src ||
                           "/assets/resources/images/demos/default.svg"
                         }
                         alt={demo.title}
-                        className="bg-cover bg-center bg-no-repeat object-cover object-center"
+                        className="bg-cover bg-center bg-no-repeat"
                         style={{
                           backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
+                          objectFit: "contain",
+                          objectPosition: "center",
                         }}
                         placeholder="blur"
                         blurDataURL={image.placeholder}
