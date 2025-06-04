@@ -33,6 +33,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
                 alt: "",
                 className:
                   "news-feed__list-item__image rounded shadow-lg bg-surface bg-cover bg-center bg-no-repeat",
+                containerClassName: "has-frame",
                 fill: true,
                 height: undefined,
                 style: {

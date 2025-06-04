@@ -50,6 +50,7 @@ export default function NextImage(props: ImageProps) {
       className={clsx(
         "image-container size-full overflow-hidden",
         !loaded && "animate-pulse [animation-duration:4s]",
+        !props.fill && "relative",
         containerClassName
       )}
     >
@@ -71,6 +72,7 @@ export default function NextImage(props: ImageProps) {
         priority={loading === "eager"}
         quality={100}
         onLoad={onLoad}
+        sizes="(max-width: 768px) 100vw, 1440px"
         {...rest}
       />
     </div>
