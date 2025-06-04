@@ -59,13 +59,21 @@
 }
 
 html {
-  .background-transparent {
+  .header--blog__background-transparent {
     background-color: rgba(map-get($colors, "background-dark"), 0.75);
   }
 
+  .header--landing__background-transparent {
+    background-color: rgba(map-get($colors, "tone-dark"), 0.75) !important;
+  }
+
   &[data-theme="light"] {
-    .background-transparent {
+    .header--blog__background-transparent {
       background-color: rgba(map-get($colors, "background-light"), 0.75);
+    }
+
+    .header--landing__background-transparent {
+      background-color: rgba(map-get($colors, "tone-light"), 0.75) !important;
     }
   }
 }

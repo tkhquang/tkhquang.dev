@@ -14,7 +14,7 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
       className={classNames(
         "flex-center fixed inset-0 z-header m-0 h-header-height w-full flex-wrap bg-transparent p-0 text-gray-200 transition-all duration-500 ease-in-out",
         {
-          "!bg-theme-tone shadow-lg": isScrolled,
+          "header--landing__background-transparent shadow-lg": isScrolled,
         },
         className
       )}
