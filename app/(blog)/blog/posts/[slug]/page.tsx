@@ -79,8 +79,9 @@ export default async function Post({
             className: "header__image m-auto block min-h-full w-auto",
             height: 720,
             style: {
-              maxHeight: "50vh",
-              minHeight: "480px",
+              height: "50vh",
+              objectFit: "cover",
+              objectPosition: "center",
             },
             width: 1280,
           })}

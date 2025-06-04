@@ -62,7 +62,11 @@ export default function NextImage(props: ImageProps) {
         )}
         src={src}
         alt={alt}
-        style={{ objectFit: "cover", ...style }}
+        style={{
+          backgroundRepeat: "no-repeat",
+          objectFit: "cover",
+          ...style,
+        }}
         loading={loading}
         priority={loading === "eager"}
         quality={100}
