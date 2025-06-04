@@ -1,5 +1,5 @@
-import { ImageProps } from "next/image";
 import { JSX } from "react";
+import { ImageProps } from "@/components/common/NextImage";
 import {
   CategoriesCollection,
   PostsCollection,

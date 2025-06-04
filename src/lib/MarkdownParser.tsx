@@ -1,7 +1,6 @@
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import fs from "fs";
 import matter from "gray-matter";
-import Image, { ImageProps } from "next/image";
 import path from "path";
 import * as prod from "react/jsx-runtime";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -16,6 +15,7 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import slugify from "slugify";
 import { unified } from "unified";
+import Image, { ImageProps } from "@/components/common/NextImage";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
 import remarkEmbded from "@/lib/remark-embed";
@@ -145,14 +145,16 @@ export default class MarkdownParser {
         })
         .use(rehypeReact, {
           components: {
-            "next-image": (baseProps: any) => (
-              // eslint-disable-next-line jsx-a11y/alt-text
-              <Image
-                {...baseProps}
-                blurDataURL={baseProps.blurdataurl}
-                {...props}
-              />
-            ),
+            "next-image": (baseProps: any) => {
+              return (
+                // eslint-disable-next-line jsx-a11y/alt-text
+                <Image
+                  {...baseProps}
+                  blurDataURL={baseProps.blurdataurl}
+                  {...props}
+                />
+              );
+            },
           },
           Fragment: prod.Fragment,
           jsx: prod.jsx,

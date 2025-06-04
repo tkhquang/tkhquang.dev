@@ -1,5 +1,5 @@
 import "./AboutMe.scss";
-import Image from "next/image";
+import Image from "@/components/common/NextImage";
 import { Portfolio } from "@/constants/meta";
 import { getPlaceholderImage } from "@/utils/next-mage";
 

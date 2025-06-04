@@ -1,7 +1,7 @@
 "use client";
 
 import { intervalToDuration } from "date-fns";
-import Image from "next/image";
+import Image from "@/components/common/NextImage";
 import { useEffect, useState } from "react";
 import { SiSpotify } from "react-icons/si";
 import { FormattedMessage } from "react-intl";

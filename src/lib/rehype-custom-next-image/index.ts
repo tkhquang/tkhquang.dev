@@ -1,11 +1,11 @@
 import fs from "fs";
 import { imageSize } from "image-size";
 import lqip, { LqipModernOutput } from "lqip-modern";
-import { ImageProps } from "next/image";
 import path from "path";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 import { promisify } from "util";
+import { ImageProps } from "@/components/common/NextImage";
 import { getRemoteImage } from "@/utils/image";
 import { Element, Root } from "hast";
 

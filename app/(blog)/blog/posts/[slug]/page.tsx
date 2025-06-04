@@ -1,4 +1,3 @@
-import Script from "next/script";
 import { Metadata } from "next/types";
 import BlogInfo from "@/components/blog/BlogInfo";
 import { PathInfo } from "@/components/blog/PathInfo";
@@ -72,17 +71,16 @@ export default async function Post({
         style={{
           ...((post.cover_image && {
             "--background-url": `url(${post.cover_image})`,
-            maxHeight: "50vh",
           }) as React.CSSProperties),
         }}
       >
         {post.cover_image &&
           post.renderCoverImage({
-            className: "header__image m-auto block min-h-full w-full",
+            className: "header__image m-auto block min-h-full w-auto",
             height: 720,
             style: {
-              objectFit: "contain",
-              objectPosition: "center",
+              maxHeight: "50vh",
+              minHeight: "480px",
             },
             width: 1280,
           })}

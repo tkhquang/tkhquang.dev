@@ -28,11 +28,11 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             href={`/blog/posts/${post.slug}`}
             className="news-feed__list-item__link"
           >
-            <div className="relative aspect-[16/9] w-full">
+            <div className="relative mb-4 mt-2 aspect-[16/9] w-full">
               {post.renderCoverImage({
                 alt: "",
                 className:
-                  "news-feed__list-item__image mb-4 mt-2 rounded shadow-lg bg-surface bg-cover bg-center bg-no-repeat",
+                  "news-feed__list-item__image rounded shadow-lg bg-surface bg-cover bg-center bg-no-repeat",
                 fill: true,
                 height: undefined,
                 style: {

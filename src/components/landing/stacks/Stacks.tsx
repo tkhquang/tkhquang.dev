@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "@/components/common/NextImage";
 import StacksChartFrame from "@/components/landing/stacks/StacksChartFrame";
 
 const stacks = [

@@ -22,7 +22,7 @@ const NewsFeed = <T,>({
         item={item}
         pathSlug={pathSlug}
       />
-      <BlogInfo className="mt-8 w-full lg:mt-4 lg:w-1/4 [&_.author]:!flex-col [&_img]:!mb-8 [&_img]:!size-[150px]" />
+      <BlogInfo className="mt-8 w-full lg:mt-4 lg:w-1/4 [&_.author]:!flex-col [&_.image-container]:!mb-8 [&_img]:!size-[150px]" />
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import React from "react";
+import Image from "@/components/common/NextImage";
 import { fetchGitHubProjects } from "@/services/github";
 import { getPlaceholderImage } from "@/utils/next-mage";
 
