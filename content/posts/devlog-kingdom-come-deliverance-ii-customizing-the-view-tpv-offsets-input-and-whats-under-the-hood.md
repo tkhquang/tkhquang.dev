@@ -6,7 +6,6 @@ published: true
 category_slug: technical
 tags:
   - CryEngine
-  - Game Development
   - "Kingdom Come: Deliverance II"
   - KCD2
   - Modding
@@ -42,7 +41,8 @@ The game's `wh::game::C_CameraThirdPerson` object (which we identified in the pr
 ```cpp title="tpv_camera_hook.cpp - Detour_TpvCameraUpdate (Simplified & Explained)"
 // Typedef for the original function
 typedef void(__fastcall *TpvCameraUpdateFunc)(uintptr_t thisPtr_TPVObject, uintptr_t outputPosePtr);
-static TpvCameraUpdateFunc fpTpvCameraUpdateOriginal = nullptr; // Our trampoline to the original
+// Our trampoline to the original
+static TpvCameraUpdateFunc fpTpvCameraUpdateOriginal = nullptr;
 
 // The detour that gets called instead of the game's function
 void __fastcall Detour_TpvCameraUpdate(uintptr_t thisPtr_TPVObject, uintptr_t outputPosePtr) {
@@ -59,7 +59,7 @@ void __fastcall Detour_TpvCameraUpdate(uintptr_t thisPtr_TPVObject, uintptr_t ou
     }
 
     // Only apply our logic if TPV is actually active (via our toggle flag)
-    if (getViewState() != 1) { // getViewState() checks our mod's TPV flag
+    if (getViewState() != 1) {
         return;
     }
 
@@ -73,8 +73,10 @@ void __fastcall Detour_TpvCameraUpdate(uintptr_t thisPtr_TPVObject, uintptr_t ou
     Quaternion* gameRotationPtr = reinterpret_cast<Quaternion*>(outputPosePtr + Constants::TPV_OUTPUT_POSE_ROTATION_OFFSET);
 
     // Read the current camera state calculated by the game
-    Vector3 gameCalculatedPosition = *gamePositionPtr;     // World-space position
-    Quaternion cameraWorldRotation = *gameRotationPtr;   // World-space orientation
+     // World-space position
+    Vector3 gameCalculatedPosition = *gamePositionPtr;
+    // World-space orientation
+    Quaternion cameraWorldRotation = *gameRotationPtr;
 
     // Get the desired *local* offset values (e.g., X=0.5, Y=-1.5, Z=0.1)
     // These are read from the mod's config, an active camera profile, or a current transition.
