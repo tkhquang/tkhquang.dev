@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "mixins" as *;
 @use "constants" as *;
 
@@ -60,20 +61,20 @@
 
 html {
   .header--blog__background-transparent {
-    background-color: rgba(map-get($colors, "background-dark"), 0.75);
+    background-color: rgba(map.get($colors, "background-dark"), 0.75);
   }
 
   .header--landing__background-transparent {
-    background-color: rgba(map-get($colors, "tone-dark"), 0.75) !important;
+    background-color: rgba(map.get($colors, "tone-dark"), 0.75) !important;
   }
 
   &[data-theme="light"] {
     .header--blog__background-transparent {
-      background-color: rgba(map-get($colors, "background-light"), 0.75);
+      background-color: rgba(map.get($colors, "background-light"), 0.75);
     }
 
     .header--landing__background-transparent {
-      background-color: rgba(map-get($colors, "tone-light"), 0.75) !important;
+      background-color: rgba(map.get($colors, "tone-light"), 0.75) !important;
     }
   }
 }
