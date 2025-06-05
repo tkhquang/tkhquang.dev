@@ -10,7 +10,7 @@ const Author = async () => {
 
   return (
     <div className="author flex-center flex-col space-x-0 text-center md:flex-row md:space-x-4">
-      <div className="shrink-0">
+      <div className="author__image--container shrink-0">
         <Image
           alt={Blog.METADATA.author}
           src={authorImage.src}
@@ -19,7 +19,7 @@ const Author = async () => {
           height={150}
           placeholder="blur"
           blurDataURL={authorImage.placeholder}
-          containerClassName="rounded-full mb-4 md:mb-2 "
+          containerClassName="rounded-full"
         />
       </div>
       <div className="author__intro text-left italic opacity-75">

@@ -40,9 +40,9 @@ export default function NextImage(props: ImageProps) {
   return (
     <div
       className={clsx(
-        "image-container size-full translate-x-0 overflow-hidden [animation-duration:4s]",
+        "image-container size-full overflow-hidden [animation-duration:4s]",
         isLoaded ? "animate-none" : "animate-pulse",
-        !props.fill && "relative",
+        props.fill ? "absolute" : "relative",
         containerClassName
       )}
     >
