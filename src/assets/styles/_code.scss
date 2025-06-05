@@ -83,10 +83,28 @@ html {
 }
 
 [data-rehype-pretty-code-figure] {
+  position: relative;
   overflow: auto !important;
   background: var(--code) !important;
 
-  & > pre {
+  // display: grid;
+  // grid-template-columns: 1fr;
+
+  > [data-rehype-pretty-code-title] {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    // grid-row-start: 1;
+    // grid-column-start: 1;
+  }
+
+  > pre {
     @apply min-w-min bg-theme-code py-4 shadow-inner;
+  }
+
+  & div {
+    // grid-row-start: 1;
+    // grid-column-start: 1;
   }
 }
