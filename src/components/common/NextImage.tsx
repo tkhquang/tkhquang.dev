@@ -3,30 +3,7 @@
 import { clsx } from "clsx";
 import type { ImageProps as NextImageProps } from "next/image";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-
-let loadedImages: string[] = [];
-
-// Detecting if the image is already loaded to avoid the blur effect
-// happens every time the component is rendered based on the route pathname
-function useImageLoadedState(src: string) {
-  const pathname = usePathname();
-  const uniqueImagePath = pathname + "__" + src;
-  const [loaded, setLoaded] = useState(() =>
-    loadedImages.includes(uniqueImagePath)
-  );
-
-  return [
-    loaded,
-    () => {
-      if (loaded) return;
-      loadedImages.push(uniqueImagePath);
-      setLoaded(true);
-      console.log("Loaded: ", uniqueImagePath);
-    },
-  ] as const;
-}
+import { useEffect, useRef, useState } from "react";
 
 export interface ImageProps extends Omit<NextImageProps, "src" | "priority"> {
   src: string;
@@ -43,22 +20,37 @@ export default function NextImage(props: ImageProps) {
     style,
     ...rest
   } = props;
-  const [loaded, onLoad] = useImageLoadedState(src);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgElementRef = useRef<HTMLImageElement | null>(null);
+  const handleLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
+    const imgElement = event.currentTarget;
+
+    imgElement.dataset.fetched = String(true);
+    setIsLoaded(true);
+  };
+
+  useEffect(() => {
+    const imgElement = imgElementRef.current;
+    if (imgElement) {
+      imgElement.dataset.fetched = String(imgElement.complete);
+      setIsLoaded(imgElement.complete);
+    }
+  }, []);
 
   return (
     <div
       className={clsx(
-        "image-container size-full overflow-hidden",
-        !loaded && "animate-pulse [animation-duration:4s]",
+        "image-container size-full translate-x-0 overflow-hidden [animation-duration:4s]",
+        isLoaded ? "animate-none" : "animate-pulse",
         !props.fill && "relative",
         containerClassName
       )}
     >
       <Image
+        ref={imgElementRef}
         className={clsx(
           "[transition:filter_500ms_cubic-bezier(.4,0,.2,1)]",
-          "size-full max-h-full object-center",
-          loaded ? "blur-0" : "blur-xl",
+          "size-full max-h-full object-center blur-xl data-[fetched='true']:blur-0",
           className
         )}
         src={src}
@@ -71,8 +63,9 @@ export default function NextImage(props: ImageProps) {
         loading={loading}
         priority={loading === "eager"}
         quality={100}
-        onLoad={onLoad}
+        onLoad={handleLoad}
         sizes="(max-width: 768px) 100vw, 1440px"
+        data-fetched={String(false)}
         {...rest}
       />
     </div>
