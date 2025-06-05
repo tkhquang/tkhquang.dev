@@ -67,15 +67,15 @@ const Subscribe = ({ className }: React.ComponentProps<"div">) => {
         </button>
       </form> */}
       <div className="email-form flex-center relative flex w-full flex-wrap pt-5 text-center">
-        <button type="button" className="button w-32">
-          <a
-            href="https://buttondown.com/ljoss"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <a
+          href="https://buttondown.com/ljoss"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button type="button" className="button w-32">
             Subscribe
-          </a>
-        </button>
+          </button>
+        </a>
       </div>
     </div>
   );

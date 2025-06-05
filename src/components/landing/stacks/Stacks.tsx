@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "@/components/common/NextImage";
 import StacksChartFrame from "@/components/landing/stacks/StacksChartFrame";
 
@@ -55,53 +54,6 @@ const stacks = [
   },
 ];
 
-// Define repository and language types
-interface LanguageNode {
-  id: string;
-  name: string;
-  color: string;
-}
-
-interface LanguageEdge {
-  node: LanguageNode;
-  size: number;
-}
-
-interface RepositoryNode {
-  id: string;
-  name: string;
-  url: string;
-  description: string;
-  isPrivate: boolean;
-  stargazers: { totalCount: number };
-  forkCount: number;
-  primaryLanguage: LanguageNode | null;
-  isFork: boolean;
-  updatedAt: string;
-  languages: { edges: LanguageEdge[] };
-}
-
-interface RepositoryEdge {
-  node: RepositoryNode;
-}
-
-interface GitHubData {
-  viewer: {
-    repositories: {
-      edges: RepositoryEdge[];
-    };
-  };
-}
-
-// Type for the stats object
-interface LanguageStats {
-  id: string;
-  name: string;
-  color: string;
-  size: number;
-  percentage?: number;
-}
-
 export interface ChartData {
   label: string;
   value: number;
@@ -138,7 +90,7 @@ export default async function Stacks() {
         <ul className="stacks-list grid grid-cols-2 gap-10 md:grid-cols-3 md:gap-4 lg:grid-cols-5">
           {stacks.map((stack) => (
             <li key={stack.title} className="mx-auto">
-              <Link
+              <a
                 href={stack.link}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -147,7 +99,7 @@ export default async function Stacks() {
                 <div className="flex-center mx-auto size-24">
                   <Image
                     src={`/assets/resources/svg/stacks/${stack.icon}`}
-                    alt={stack.title}
+                    alt=""
                     width={150}
                     height={150}
                     style={{ objectFit: "contain" }}
@@ -156,7 +108,7 @@ export default async function Stacks() {
                 <span className="text-xl font-bold leading-loose text-theme-on-surface">
                   {stack.title}
                 </span>
-              </Link>
+              </a>
             </li>
           ))}
         </ul>

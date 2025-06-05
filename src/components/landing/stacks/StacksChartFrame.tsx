@@ -37,6 +37,7 @@ export default function StacksChartFrame() {
         <LoaderLines />
       </div>
       <iframe
+        title="stacks-frame"
         src="/charts/stacks"
         width="100%"
         height="535px"

@@ -28,6 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({ index, post }) => {
           <Link
             href={`/blog/posts/${post.slug}`}
             className="news-feed__list-item__link"
+            aria-label={post.title}
           >
             <div className="relative mb-4 mt-2 aspect-[16/9] w-full">
               {post.renderCoverImage({
