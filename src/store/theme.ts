@@ -34,16 +34,29 @@ export const themeStore = atom(
   }
 );
 
-export const scrolledStore = atom<{ isScrolled: boolean }>({
+export const scrolledStore = atom<{ isScrolled: boolean; yOffset: number }>({
   isScrolled: false,
+  yOffset: 0,
 });
 
 scrolledStore.onMount = (set) => {
   const checkIfIsScrolled = debounce(() => {
-    const top = window.scrollY || 0;
+    const scrollPos = window.scrollY || 0;
+    const winHeight = window.innerHeight;
+    const docHeight = window.document.documentElement.scrollHeight;
+    const perc = (100 * scrollPos) / (docHeight - winHeight);
+
+    let yOffset: number;
+
+    if (perc > 100) {
+      yOffset = 100;
+    } else {
+      yOffset = perc;
+    }
 
     set({
-      isScrolled: top > 600 - 96,
+      isScrolled: scrollPos > 600 - 96,
+      yOffset,
     });
   }, 5);
   checkIfIsScrolled();
