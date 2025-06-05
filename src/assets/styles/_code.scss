@@ -56,6 +56,10 @@ html {
       color: var(--shiki-light);
       background-color: var(--code), var(--shiki-light-bg);
     }
+
+    button.rehype-pretty-copy span {
+      filter: invert(50%);
+    }
   }
 
   // Inline
@@ -87,24 +91,14 @@ html {
   overflow: auto !important;
   background: var(--code) !important;
 
-  // display: grid;
-  // grid-template-columns: 1fr;
-
   > [data-rehype-pretty-code-title] {
     position: sticky;
     top: 0;
     left: 0;
     right: 0;
-    // grid-row-start: 1;
-    // grid-column-start: 1;
   }
 
   > pre {
     @apply min-w-min bg-theme-code py-4 shadow-inner;
-  }
-
-  & div {
-    // grid-row-start: 1;
-    // grid-column-start: 1;
   }
 }

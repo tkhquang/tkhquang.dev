@@ -17,10 +17,10 @@ import slugify from "slugify";
 import { unified } from "unified";
 import CopyButton from "@/components/common/CopyButton";
 import Image, { ImageProps } from "@/components/common/NextImage";
+import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
 import remarkEmbded from "@/lib/remark-embed";
-import { transformerCopyButton } from "@/lib/transformers/copy-button";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
@@ -46,7 +46,6 @@ function getParser() {
     .use(remarkFigureCaption, { allowEmptyCaption: true })
     .use(remarkGfm)
     .use(rehypePrettyCode, {
-      bypassInlineCode: true,
       defaultLang: {
         block: "plaintext",
         inline: "plaintext",
@@ -56,12 +55,7 @@ function getParser() {
         dark: "solarized-dark",
         light: "solarized-light",
       },
-      transformers: [
-        transformerCopyButton({
-          feedbackDuration: 3_000,
-          visibility: "hover",
-        }),
-      ],
+      transformers: [],
     })
     .use(rehypeExternalLinks, {
       properties: {
@@ -84,6 +78,10 @@ function getParser() {
         type: "text",
         value: "#",
       },
+    })
+    .use(rehypeCopyCodeButton, {
+      feedbackDuration: 3_000,
+      visibility: "hover",
     })
     .use(rehypeReact, {
       components: {

@@ -13,7 +13,7 @@ const CopyButton = (props: React.ComponentProps<"button">) => {
     );
   };
 
-  return <button {...props} onClick={handleClick} className="hidden" />;
+  return <button {...props} onClick={handleClick} />;
 };
 
 export default CopyButton;
