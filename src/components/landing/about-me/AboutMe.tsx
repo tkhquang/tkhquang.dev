@@ -10,7 +10,7 @@ const RESUME = {
 
 const AboutMe = async () => {
   const aboutImage = await getPlaceholderImage(
-    "/assets/resources/images/Aleks-3.jpg"
+    "/assets/resources/images/Aleks-3.png"
   );
 
   return (
@@ -28,7 +28,8 @@ const AboutMe = async () => {
             <div className="relative w-full pb-[100%]">
               <Image
                 fill
-                className="author__image object-cover object-[15%_50%]"
+                sizes="auto"
+                className="author__image object-cover object-[20%_50%]"
                 src={aboutImage.src}
                 alt="Aleks"
                 placeholder="blur"
@@ -42,14 +43,19 @@ const AboutMe = async () => {
           <a
             className="download__link shadow-md"
             target="_blank"
-            rel="noopener noreferrer"
+            rel=" noopener noreferrer"
             title="View Resume"
             href={RESUME.path}
           >
             <span>Download</span>
             <span>PDF</span>
           </a>
-          <a target="_blank" rel="noopener noreferrer" title="View Resume">
+          <a
+            target="_blank"
+            href={RESUME.path}
+            rel="noopener noreferrer"
+            title="View Resume"
+          >
             {RESUME.fileName}
           </a>
         </div>
