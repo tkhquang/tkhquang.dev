@@ -505,7 +505,8 @@ This two-phase flow, orchestrated by a client-side JavaScript Hook reacting to i
 
 ![The Output](/uploads/images/lqip-example.gif)
 
----
+<br />
+<hr />
 
 The complete working example with these techniques can be found in my Daily Tarot project. I hope this guide helps you implement a similar effect in your own Phoenix LiveView applications!
 
