@@ -10,6 +10,15 @@ const nextConfig = {
     //   ["@swc-jotai/react-refresh", {}],
     // ],
   },
+  async headers() {
+    return [
+      // !! /settings/deployment-protection#options-allowlist configuratioon required
+      {
+        headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+        source: "/assets/styles/external/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [{ hostname: "tkhquang.dev" }, { hostname: "localhost" }],
   },
