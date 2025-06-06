@@ -4,8 +4,8 @@ import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FiArrowLeftCircle } from "react-icons/fi";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 import ReadLineIndicator from "@/components/common/ReadLineIndicator";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const BlogHeader = ({
   className,
@@ -21,10 +21,10 @@ const BlogHeader = ({
         className
       )}
     >
-      <div className="flex-center h-full w-full flex-wrap">
+      <div className="flex-center size-full flex-wrap">
         <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="header__left flex h-full items-center">
-            <Link href="/blog">
+            <Link href="/blog" className="flex flex-col">
               <button type="button" className="focus:outline-none">
                 <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
                   {pathName !== "/blog" ? (
@@ -53,7 +53,7 @@ const BlogHeader = ({
             </Link>
           </div>
           <div className="header__right flex h-full items-center">
-            <div className="ml-4">
+            <div className="ml-4 flex flex-col">
               <ThemeToggle />
             </div>
           </div>

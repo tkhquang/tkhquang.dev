@@ -50,7 +50,7 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
           </button>
         </div>
         <div className="header__right flex h-full items-center space-x-4">
-          <div>
+          <div className="flex flex-col">
             <ThemeToggle />
           </div>
         </div>
