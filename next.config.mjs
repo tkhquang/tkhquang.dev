@@ -14,7 +14,11 @@ const nextConfig = {
     return [
       // !! /settings/deployment-protection#options-allowlist configuratioon required
       {
-        headers: [{ key: "Access-Control-Allow-Origin", value: "*" }],
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type" },
+        ],
         source: "/assets/styles/external/:path*",
       },
     ];

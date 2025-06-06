@@ -74,6 +74,7 @@ export default function Comments({ className, configs }: CommentsProps) {
         theme={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/styles/external/giscus-transparent-${mode}.css`}
         lang={lang}
         loading="lazy"
+        host="https://giscus.app"
       />
     </div>
   );
