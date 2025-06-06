@@ -1,6 +1,4 @@
 import "@/lib/global";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
 import StackedLayers from "@/components/layout/StackedLayers";
@@ -88,8 +86,6 @@ export default async function RootLayout({
         </div>
         <StackedLayers />
         <div id="class-keeper" className="hidden" aria-hidden></div>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

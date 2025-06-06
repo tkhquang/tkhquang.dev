@@ -1,6 +1,8 @@
 import "@/assets/styles/index.scss";
 import { Portal } from "@ariakit/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Footer, Header, Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
 import AppProvider from "@/providers/AppProvider";
@@ -23,6 +25,8 @@ export default async function DefaultLayout({
       <GoogleAnalytics
         gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID as string}
       />
+      <Analytics />
+      <SpeedInsights />
     </AppProvider>
   );
 }
