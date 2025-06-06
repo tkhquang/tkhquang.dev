@@ -1,5 +1,6 @@
 import { Metadata } from "next/types";
 import BlogInfo from "@/components/blog/BlogInfo";
+import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
@@ -129,8 +130,10 @@ export default async function Post({
               <BlogInfo className="md:[&_.author\_\_image--container]:!mb-0" />
             </div>
             <hr className="my-6" />
-            <div className="article-comments w-full rounded p-2 shadow-md"></div>
-            {/* <hr className="my-6" /> */}
+            <div className="article-comments w-full p-2">
+              <Comments />
+            </div>
+            <div className="my-6" />
           </article>
         </section>
 
