@@ -13,6 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.11.10",
     "@ariakit/react": "^0.4.15",
+    "@giscus/react": "^3.1.0",
     "@leafac/rehype-shiki": "^2.2.1",
     "@ljoss/rehype-figure-caption": "^1.0.0",
     "@netlify/plugin-nextjs": "^5.8.1",
