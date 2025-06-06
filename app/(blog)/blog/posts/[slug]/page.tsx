@@ -5,6 +5,7 @@ import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import TableOfContent from "@/components/blog/TableOfContent";
+import ReportView from "@/components/common/ReportView";
 import ScriptLoader from "@/components/common/ScriptLoader";
 import { Site } from "@/constants/meta";
 import { MarkdownCategory } from "@/models/markdown.types";
@@ -92,6 +93,9 @@ export default async function Post({
             width: 1280,
           })}
       </header>
+
+      <ReportView />
+
       <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
         {post.title}
       </h1>
@@ -101,7 +105,7 @@ export default async function Post({
 
         <section className="container !max-w-screen-md">
           <article className="article">
-            <div className="article__meta mb-6 mt-3">
+            <div className="article__meta my-3">
               <PostMeta post={post} />
             </div>
             <div className="article__path-info">
