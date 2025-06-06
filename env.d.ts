@@ -16,6 +16,8 @@ declare global {
       NEXT_PUBLIC_GISCUS_CATEGORY_ID: string;
       NEXT_PUBLIC_GISCUS_REPO: string;
       NEXT_PUBLIC_GISCUS_REPOSITORY_ID: string;
+      UPSTASH_REDIS_REST_URL: string;
+      UPSTASH_REDIS_REST_TOKEN: string;
     }
   }
 }
