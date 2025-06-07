@@ -1,12 +1,12 @@
 import fs from "fs";
 import { imageSize } from "image-size";
-import lqip, { LqipModernOutput } from "lqip-modern";
 import path from "path";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 import { promisify } from "util";
 import { ImageProps } from "@/components/common/NextImage";
 import { getRemoteImage } from "@/utils/image";
+import { getPlaceholderImage } from "@/utils/next-mage";
 import { Element, Root } from "hast";
 
 const sizeOf = promisify(imageSize);
@@ -75,11 +75,11 @@ export default function rehypeCustomNextImage(
               .replace(/\\+/g, "/")}`;
           }
 
-          let result!: LqipModernOutput;
+          let result;
           const filePath = path.join(process.cwd(), "public", finalSrc);
 
           try {
-            result = await lqip(filePath);
+            result = await getPlaceholderImage(originalSrc);
           } catch (error) {
             console.error(error);
           }
@@ -96,7 +96,7 @@ export default function rehypeCustomNextImage(
           node.tagName = "next-image";
           node.properties = {
             alt: originalAlt as string,
-            blurDataURL: result?.metadata.dataURIBase64,
+            blurDataURL: result?.placeholder,
             height: height ?? 720,
             placeholder: "blur",
             src: filePath.includes(targetPath.replace(/^\.\//, ""))

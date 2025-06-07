@@ -5,10 +5,11 @@ const __dirname = path.resolve();
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // swcPlugins: [
-    //   ["@swc-jotai/debug-label", {}],
-    //   ["@swc-jotai/react-refresh", {}],
-    // ],
+    swcPlugins: [
+      // ["@swc-jotai/debug-label", {}],
+      // ["@swc-jotai/react-refresh", {}],
+      ["@swc/plugin-formatjs", {}],
+    ],
   },
   async headers() {
     return [
