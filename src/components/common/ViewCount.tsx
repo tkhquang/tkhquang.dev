@@ -24,7 +24,7 @@ const ViewCount = ({ pathname }: { pathname: string }) => {
     })();
   }, [pathname]);
 
-  return <span>{viewCount || "--"}</span>;
+  return <span>{viewCount || "---"}</span>;
 };
 
 export default ViewCount;

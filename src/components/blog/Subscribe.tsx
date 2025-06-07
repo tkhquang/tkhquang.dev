@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 
 const Subscribe = ({ className }: React.ComponentProps<"div">) => {

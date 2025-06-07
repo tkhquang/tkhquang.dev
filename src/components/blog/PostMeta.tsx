@@ -28,14 +28,11 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         className
       )}
     >
-      <div className="text-muted-foreground space-x-1.5 text-theme-error">
-        <div className="inline-block">
-          <FaCalendarAlt className="inline-block size-3 align-text-bottom md:size-4" />
-        </div>
+      <div className="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-theme-error">
+        <FaCalendarAlt className="size-3 shrink-0 md:size-4" />
         <time className="align-middle" dateTime={post.created_at.toISOString()}>
           {created_at}
         </time>
-
         {updated_at && (
           <span className="align-middle">
             (Updated:{" "}
@@ -47,10 +44,8 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         )}
       </div>
 
-      <div className="text-muted-foreground -translate-x-1 space-x-2 opacity-75">
-        <div className="inline-block">
-          <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
-        </div>
+      <div className="text-muted-foreground flex items-center space-x-2 opacity-75">
+        <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>
     </div>

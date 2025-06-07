@@ -4,8 +4,12 @@ import { Merriweather, Montserrat } from "next/font/google";
 import StackedLayers from "@/components/layout/StackedLayers";
 import { Portfolio, Site } from "@/constants/meta";
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const montserrat = Montserrat({
+  preload: true,
+  subsets: ["latin"],
+});
 const merriweather = Merriweather({
+  preload: true,
   subsets: ["latin"],
   weight: ["400"],
 });
