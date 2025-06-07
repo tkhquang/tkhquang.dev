@@ -1,6 +1,7 @@
 "use server";
 
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
+import { compareDesc } from "date-fns";
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
@@ -217,7 +218,11 @@ class MarkdownParser {
     );
 
     // Only return posts that loaded successfully
-    return posts.filter(Boolean) as MarkdownPost[];
+    return posts
+      .filter(Boolean)
+      .sort((a, b) =>
+        compareDesc(a!.created_at, b!.created_at)
+      ) as MarkdownPost[];
   }
 
   async getCategoryBySlug(fileName: string): Promise<MarkdownCategory> {
