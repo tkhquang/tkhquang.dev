@@ -62,7 +62,6 @@
     "shiki": "^1.24.0",
     "slugify": "^1.6.6",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7",
     "unified": "^11.0.5",
     "unist-util-remove": "^4.0.0",
     "vfile": "^6.0.3"

@@ -7,7 +7,6 @@ const config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: ["selector", '[data-theme="dark"]'],
-  plugins: [],
   rules: [
     {
       test: /\.scss$/,
