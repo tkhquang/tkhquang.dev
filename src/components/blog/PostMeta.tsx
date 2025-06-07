@@ -1,8 +1,10 @@
 import classNames from "classnames";
-import clsx from "clsx";
 import { format, isValid } from "date-fns";
 import React from "react";
-import { FaCalendarAlt, FaEye } from "react-icons/fa";
+import {
+  // FaCalendarAlt,
+  FaEye,
+} from "react-icons/fa";
 import ViewCount from "@/components/common/ViewCount";
 import { MarkdownPost } from "@/models/markdown.types";
 
@@ -24,12 +26,12 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
   return (
     <div
       className={classNames(
-        "md:text-md flex flex-wrap items-center justify-between gap-2 text-xs font-semibold uppercase tracking-wider opacity-75 md:text-sm",
+        "md:text-md grid grid-cols-[1fr_auto] items-end gap-2 text-xs font-semibold uppercase tracking-wider opacity-75 md:text-sm",
         className
       )}
     >
       <div className="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-theme-error">
-        <FaCalendarAlt className="size-3 shrink-0 md:size-4" />
+        {/* <FaCalendarAlt className="size-3 shrink-0 md:size-4" /> */}
         <time className="align-middle" dateTime={post.created_at.toISOString()}>
           {created_at}
         </time>
