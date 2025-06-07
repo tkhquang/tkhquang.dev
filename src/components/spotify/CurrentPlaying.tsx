@@ -1,11 +1,11 @@
 "use client";
 
 import { intervalToDuration } from "date-fns";
-import Image from "@/components/common/NextImage";
 import { useEffect, useState } from "react";
 import { SiSpotify } from "react-icons/si";
 import { FormattedMessage } from "react-intl";
 import LoaderLines from "@/components/common/loader/LoaderLines";
+import Image from "@/components/common/NextImage";
 import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 
 const CurrentPlaying = () => {
@@ -57,7 +57,6 @@ const CurrentPlaying = () => {
               src={data?.item.album.images?.[0]?.url}
               alt={data?.item.album.name}
               fill
-              sizes="auto"
               loader={({ src }) => src}
             />
           ) : (
