@@ -27,7 +27,7 @@ const SocialLinks = (props: React.ComponentProps<"ul">) => {
       </li>
       <li>
         <a
-          href="https://www.linkedin.com/in/quang-trinh-khac-66476517b/"
+          href="https://www.linkedin.com/in/tkhquang"
           target="_blank"
           rel="noopener noreferrer"
           title="LinkedIn"
