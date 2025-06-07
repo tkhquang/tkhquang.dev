@@ -1,12 +1,6 @@
 import { useAtomValue } from "jotai";
-import { animated as baseAnimated, useSpring } from "react-spring";
+import { animated, useSpring } from "react-spring";
 import { ThemeMode, themeStore } from "@/store/theme";
-
-/**
- * TODO: Update this after `react-spring` has been upgraded to React 19
- * @see https://github.com/pmndrs/react-spring/issues/2341
- */
-const animated = baseAnimated as any;
 
 const properties = {
   dark: {

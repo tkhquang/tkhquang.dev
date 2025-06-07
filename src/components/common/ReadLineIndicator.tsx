@@ -1,17 +1,11 @@
 "use client";
 
-import { animated as baseAnimated, useSpring } from "@react-spring/web";
+import { animated, useSpring } from "@react-spring/web";
 import classNames from "classnames";
 import { useAtomValue } from "jotai";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { scrolledStore } from "@/store/theme";
-
-/**
- * TODO: Update this after `react-spring` has been upgraded to React 19
- * @see https://github.com/pmndrs/react-spring/issues/2341
- */
-const animated = baseAnimated as any;
 
 const ReadLineIndicator = ({
   className,
