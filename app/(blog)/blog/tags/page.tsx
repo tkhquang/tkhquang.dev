@@ -1,12 +1,14 @@
 import PostList from "@/components/blog/PostList";
+import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
 export default async function TagsPage() {
-  const tags = await _MarkdownParser.getAllTags();
-  const posts = await _MarkdownParser.getAllPosts();
+  const markdownParser = await getMarkdownParser();
+  const tags = await markdownParser.getAllTags();
+  const posts = await markdownParser.getAllPosts();
 
   const groupedPostsByTagSlug = tags.reduce(
     (acc, tag) => {

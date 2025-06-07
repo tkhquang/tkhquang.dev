@@ -1,4 +1,3 @@
-import "@/lib/global";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
 import StackedLayers from "@/components/layout/StackedLayers";

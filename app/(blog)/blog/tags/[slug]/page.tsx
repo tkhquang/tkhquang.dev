@@ -1,7 +1,9 @@
 import NewsFeed from "@/components/blog/NewsFeed";
+import { getMarkdownParser } from "@/lib/MarkdownParser";
 
 export async function generateStaticParams() {
-  const tags = await _MarkdownParser.getAllTags();
+  const markdownParser = await getMarkdownParser();
+  const tags = await markdownParser.getAllTags();
 
   return tags.map((tag) => ({
     slug: tag.slug,
@@ -18,8 +20,9 @@ export default async function TagPage({
 }) {
   const slug = decodeURIComponent((await params).slug);
 
-  const tags = await _MarkdownParser.getAllTags();
-  const posts = await _MarkdownParser.getAllPosts();
+  const markdownParser = await getMarkdownParser();
+  const tags = await markdownParser.getAllTags();
+  const posts = await markdownParser.getAllPosts();
 
   const currentTag = tags.find((tag) => tag.slug === slug);
 

@@ -1,7 +1,9 @@
 import NewsFeed from "@/components/blog/NewsFeed";
+import { getMarkdownParser } from "@/lib/MarkdownParser";
 
 export async function generateStaticParams() {
-  const categories = await _MarkdownParser.getAllCategories();
+  const markdownParser = await getMarkdownParser();
+  const categories = await markdownParser.getAllCategories();
 
   return categories.map((category) => ({
     slug: category.slug,
@@ -18,8 +20,9 @@ export default async function CategoryPage({
 }) {
   const slug = decodeURIComponent((await params).slug);
 
-  const posts = await _MarkdownParser.getAllPosts();
-  const category = await _MarkdownParser.getCategoryBySlug(slug);
+  const markdownParser = await getMarkdownParser();
+  const posts = await markdownParser.getAllPosts();
+  const category = await markdownParser.getCategoryBySlug(slug);
   const filteredPost = posts.filter((post) => post.category_slug === slug);
 
   return (

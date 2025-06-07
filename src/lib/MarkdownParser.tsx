@@ -1,3 +1,5 @@
+"use server";
+
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import fs from "fs";
 import matter from "gray-matter";
@@ -24,6 +26,11 @@ import remarkEmbded from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
+
+declare global {
+  var markdownParser: MarkdownParser | undefined;
+  var __MARKDOWN_PARSER_INITIALIZED__: boolean;
+}
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
@@ -106,7 +113,23 @@ function getImageParser() {
     .use(rehypeStringify);
 }
 
-export default class MarkdownParser {
+export async function getMarkdownParser(): Promise<MarkdownParser> {
+  if (
+    process.env.NODE_ENV === "development" &&
+    global.__MARKDOWN_PARSER_INITIALIZED__
+  ) {
+    return global.markdownParser!;
+  }
+
+  global.markdownParser = new MarkdownParser();
+  if (process.env.NODE_ENV === "development") {
+    global.__MARKDOWN_PARSER_INITIALIZED__ = true;
+  }
+
+  return global.markdownParser;
+}
+
+class MarkdownParser {
   private parser: ReturnType<typeof getParser>;
   private imageParser: ReturnType<typeof getImageParser>;
 
@@ -179,13 +202,22 @@ export default class MarkdownParser {
     };
   }
 
-  async getAllPosts({ shouldShowHiddenPosts = false } = {}) {
+  async getAllPosts() {
+    const slugs = getPostFiles();
+
     const posts = await Promise.all(
-      getPostFiles().map((slug) => this.getPostBySlug(slug))
+      slugs.map(async (slug) => {
+        try {
+          return await this.getPostBySlug(slug);
+        } catch (error) {
+          console.warn(`Failed to load post: ${slug}`, error);
+          return null;
+        }
+      })
     );
-    return posts
-      .sort((post1, post2) => (post1.created_at > post2.created_at ? -1 : 1))
-      .filter((post) => post.published || shouldShowHiddenPosts);
+
+    // Only return posts that loaded successfully
+    return posts.filter(Boolean) as MarkdownPost[];
   }
 
   async getCategoryBySlug(fileName: string): Promise<MarkdownCategory> {

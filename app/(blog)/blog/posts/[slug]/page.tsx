@@ -8,11 +8,13 @@ import TableOfContent from "@/components/blog/TableOfContent";
 import ReportView from "@/components/common/ReportView";
 import ScriptLoader from "@/components/common/ScriptLoader";
 import { Site } from "@/constants/meta";
+import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import { getPlaceholderImage } from "@/utils/next-mage";
 
 export async function generateStaticParams() {
-  const posts = await _MarkdownParser.getAllPosts();
+  const markdownParser = await getMarkdownParser();
+  const posts = await markdownParser.getAllPosts();
 
   return posts.map((post) => ({
     slug: post.slug,
@@ -25,8 +27,11 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const slug = (await params).slug;
+
+  const markdownParser = await getMarkdownParser();
   const { cover_image, description, title } =
-    await _MarkdownParser.getPostBySlug(slug);
+    await markdownParser.getPostBySlug(slug);
+
   return {
     description,
     openGraph: {
@@ -59,13 +64,15 @@ export default async function Post({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const post = await _MarkdownParser.getPostBySlug(slug);
+
+  const markdownParser = await getMarkdownParser();
+  const post = await markdownParser.getPostBySlug(slug);
   const {
     data: { toc: headings },
     result: html,
-  } = await _MarkdownParser.parseMarkdown(post.content);
+  } = await markdownParser.parseMarkdown(post.content);
 
-  const category = await _MarkdownParser.getCategoryBySlug(post.category_slug);
+  const category = await markdownParser.getCategoryBySlug(post.category_slug);
   const coverPlaceholder = post.cover_image
     ? (await getPlaceholderImage(post.cover_image as string)).placeholder
     : null;
