@@ -11,8 +11,6 @@ async function getIpAdress(): Promise<string> {
   const resolvedHeaders = Object.fromEntries(await headers());
   const FALLBACK_IP_ADDRESS = "0.0.0.0";
 
-  console.log(resolvedHeaders);
-
   const forwardedFor = resolvedHeaders["x-forwarded-for"];
 
   if (forwardedFor) {
@@ -35,7 +33,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!pathname) {
     return new NextResponse("Pathname not found", { status: 400 });
   }
+
+  if (process.env.NODE_ENV !== "production") {
+    return new NextResponse(null, { status: 202 });
+  }
+
   const ip = await getIpAdress();
+
+  // Always increment total
+  await redis.incr(["pageviews", pathname, "total"].join(":"));
 
   if (ip) {
     // Hash the IP in order to not store it directly in db
@@ -47,7 +53,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       .map((b) => b.toString(16).padStart(2, "0"))
       .join("");
 
-    // Deduplicate the IP for each pathname
+    // Deduplicate the IP for each pathname in 24 hours
     const isNew = await redis.set(
       ["deduplicate", hash, pathname].join(":"),
       true,
@@ -61,14 +67,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  await redis.incr(["pageviews", pathname].join(":"));
+  await redis.incr(["pageviews", pathname, "unique"].join(":"));
   return new NextResponse(null, { status: 202 });
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const pathname = request?.nextUrl?.searchParams.get("pathname");
-  const views =
-    (await redis.get<number>(["pageviews", pathname].join(":"))) ?? 0;
 
-  return NextResponse.json({ views });
+  if (!pathname) {
+    return new NextResponse("Pathname not found", { status: 400 });
+  }
+
+  if (process.env.NODE_ENV !== "production") {
+    return NextResponse.json({ total: 1_234, unique: 1_234 });
+  }
+
+  const unique =
+    (await redis.get<number>(["pageviews", pathname, "unique"].join(":"))) ?? 0;
+  const total =
+    (await redis.get<number>(["pageviews", pathname, "total"].join(":"))) ?? 0;
+
+  return NextResponse.json({ total, unique });
 }

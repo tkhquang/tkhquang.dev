@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FormattedNumber } from "react-intl";
 
 const ViewCount = ({ pathname }: { pathname: string }) => {
   const [viewCount, setViewCount] = useState(0);
@@ -17,14 +18,16 @@ const ViewCount = ({ pathname }: { pathname: string }) => {
 
         const data = await response.json();
 
-        setViewCount(data.views);
+        setViewCount(data.unique);
       } catch (error) {
         // TODO: Handle errors
       }
     })();
   }, [pathname]);
 
-  return <span>{viewCount || "---"}</span>;
+  return (
+    <span>{viewCount ? <FormattedNumber value={viewCount} /> : "---"}</span>
+  );
 };
 
 export default ViewCount;
