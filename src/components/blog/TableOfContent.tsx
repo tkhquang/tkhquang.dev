@@ -79,7 +79,7 @@ export default function TableOfContent({ headings }: { headings: any }) {
                   className={`anchor transition-colors duration-200 hover:text-theme-primary ${
                     activeAnchor === heading.id
                       ? "anchor--is-active text-theme-primary"
-                      : "text-gray-600"
+                      : "text-theme-secondary"
                   }`}
                   onClick={(e) => {
                     e.preventDefault();

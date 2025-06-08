@@ -1,11 +1,11 @@
 "use client";
 
 import { animated, useSpring } from "@react-spring/web";
-import classNames from "classnames";
 import { useAtomValue } from "jotai";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { scrolledStore } from "@/store/theme";
+import clsx from "clsx";
 
 const ReadLineIndicator = ({
   className,
@@ -28,7 +28,7 @@ const ReadLineIndicator = ({
   return (
     <animated.div
       {...props}
-      className={classNames(
+      className={clsx(
         "left-0 top-0 h-[4px] w-0 self-start bg-theme-tone opacity-30",
         className
       )}

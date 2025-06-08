@@ -56,14 +56,16 @@ scrolledStore.onMount = (set) => {
 
     set({
       isScrolled: scrollPos > 600 - 96,
-      yOffset,
+      yOffset: yOffset || 0,
     });
-  }, 5);
+  }, 10);
   checkIfIsScrolled();
 
   window.addEventListener("scroll", checkIfIsScrolled);
+  window.addEventListener("load", checkIfIsScrolled);
 
   return () => {
     window.removeEventListener("scroll", checkIfIsScrolled);
+    window.removeEventListener("load", checkIfIsScrolled);
   };
 };
