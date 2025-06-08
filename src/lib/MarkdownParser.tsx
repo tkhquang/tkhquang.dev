@@ -154,56 +154,60 @@ class MarkdownParser {
       postsDirectory,
       `${decodeURIComponent(slug)}.md`
     );
+    try {
+      const { content, data } = matter(
+        await fs.promises.readFile(fullPath, { encoding: "utf8" })
+      ) as unknown as { data: PostsCollection; content: string };
 
-    const { content, data } = matter(
-      await fs.promises.readFile(fullPath, { encoding: "utf8" })
-    ) as unknown as { data: PostsCollection; content: string };
+      const coverVfile = data.cover_image
+        ? await this.imageParser.process(
+            `![Cover Image](${(data as PostsCollection).cover_image})`
+          )
+        : null;
 
-    const coverVfile = data.cover_image
-      ? await this.imageParser.process(
-          `![Cover Image](${(data as PostsCollection).cover_image})`
-        )
-      : null;
+      const renderCoverImage = (props: Partial<ImageProps>) => {
+        if (!coverVfile) {
+          return null;
+        }
 
-    const renderCoverImage = (props: Partial<ImageProps>) => {
-      if (!coverVfile) {
-        return null;
-      }
-
-      return unified()
-        .use(remarkParse, { fragment: true })
-        .use(remarkRehype, { allowDangerousHtml: true })
-        .use(rehypeRaw)
-        .use(rehypeStringify)
-        .use(rehypeUnwrapImage, {
-          tagNames: ["next-image", "img"],
-        })
-        .use(rehypeReact, {
-          components: {
-            "next-image": (baseProps: any) => {
-              return (
-                // eslint-disable-next-line jsx-a11y/alt-text
-                <Image
-                  {...baseProps}
-                  blurDataURL={baseProps.blurdataurl}
-                  {...props}
-                />
-              );
+        return unified()
+          .use(remarkParse, { fragment: true })
+          .use(remarkRehype, { allowDangerousHtml: true })
+          .use(rehypeRaw)
+          .use(rehypeStringify)
+          .use(rehypeUnwrapImage, {
+            tagNames: ["next-image", "img"],
+          })
+          .use(rehypeReact, {
+            components: {
+              "next-image": (baseProps: any) => {
+                return (
+                  // eslint-disable-next-line jsx-a11y/alt-text
+                  <Image
+                    {...baseProps}
+                    blurDataURL={baseProps.blurdataurl}
+                    {...props}
+                  />
+                );
+              },
             },
-          },
-          Fragment: prod.Fragment,
-          jsx: prod.jsx,
-          jsxs: prod.jsxs,
-        } as Options)
-        .processSync(coverVfile.value).result;
-    };
+            Fragment: prod.Fragment,
+            jsx: prod.jsx,
+            jsxs: prod.jsxs,
+          } as Options)
+          .processSync(coverVfile.value).result;
+      };
 
-    return {
-      ...data,
-      content,
-      renderCoverImage,
-      slug,
-    };
+      return {
+        ...data,
+        content,
+        renderCoverImage,
+        slug,
+      };
+    } catch (error) {
+      console.warn(`Missing post file: ${fullPath}`);
+      throw error;
+    }
   }
 
   async getAllPosts({ shouldShowHiddenPosts = false } = {}): Promise<
