@@ -1,7 +1,7 @@
 "use server";
 
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
-import { compareDesc } from "date-fns";
+import { compareDesc, parseISO } from "date-fns";
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
@@ -203,7 +203,9 @@ class MarkdownParser {
     };
   }
 
-  async getAllPosts() {
+  async getAllPosts({ shouldShowHiddenPosts = false } = {}): Promise<
+    MarkdownPost[]
+  > {
     const slugs = getPostFiles();
 
     const posts = await Promise.all(
@@ -217,12 +219,12 @@ class MarkdownParser {
       })
     );
 
-    // Only return posts that loaded successfully
-    return posts
-      .filter(Boolean)
-      .sort((a, b) =>
-        compareDesc(a!.created_at, b!.created_at)
-      ) as MarkdownPost[];
+    return (
+      posts.filter((post) => {
+        if (!post) return false;
+        return post.published || shouldShowHiddenPosts;
+      }) as MarkdownPost[]
+    ).sort((post1, post2) => (post1.created_at > post2.created_at ? -1 : 1));
   }
 
   async getCategoryBySlug(fileName: string): Promise<MarkdownCategory> {
