@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
+import { Suspense } from "react";
+import ClientSideScrollRestorer from "@/components/container/ClientSideScrollRestorer";
 import StackedLayers from "@/components/layout/StackedLayers";
 import { Portfolio, Site } from "@/constants/meta";
 
@@ -90,6 +92,9 @@ export default async function RootLayout({
         <StackedLayers />
         <div id="class-keeper" className="hidden" aria-hidden></div>
       </body>
+      <Suspense>
+        <ClientSideScrollRestorer />
+      </Suspense>
     </html>
   );
 }

@@ -1,17 +1,45 @@
 "use client";
 
 import classNames from "classnames";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { FiArrowLeftCircle } from "react-icons/fi";
 import ReadLineIndicator from "@/components/common/ReadLineIndicator";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useRouterHelper } from "@/hooks/useRouterHelper";
+import { useAsPathValue } from "@/store/router";
 
 const BlogHeader = ({
   className,
   ...props
 }: React.ComponentProps<"header">) => {
-  const pathName = usePathname();
+  const params = useParams();
+  const { matchSegments } = useRouterHelper();
+  const { prevAsPath } = useAsPathValue();
+  const { back, prefetch, push } = useRouter();
+
+  const isHomeBlog = matchSegments(["blog"]);
+  const isInPostPage = matchSegments([
+    "blog",
+    "posts",
+    null, //slug
+  ]);
+
+  const shouldRestoreScrollOnBack = prevAsPath === "/blog";
+
+  const handleBack = () => {
+    if (isInPostPage) {
+      if (shouldRestoreScrollOnBack && params?.slug) {
+        back();
+      }
+    }
+
+    push("/blog");
+  };
+
+  useEffect(() => {
+    prefetch("/blog");
+  }, [prefetch]);
 
   return (
     <header
@@ -24,10 +52,14 @@ const BlogHeader = ({
       <div className="flex-center size-full flex-wrap">
         <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="header__left flex h-full items-center">
-            <Link href="/blog" className="flex flex-col">
-              <button type="button" className="focus:outline-none">
+            <div className="flex flex-col">
+              <button
+                type="button"
+                className="focus:outline-none"
+                onClick={handleBack}
+              >
                 <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
-                  {pathName !== "/blog" ? (
+                  {!isHomeBlog ? (
                     <>
                       <FiArrowLeftCircle className="size-8" />
                       <span className="hidden md:inline-flex">
@@ -44,13 +76,19 @@ const BlogHeader = ({
                     <span
                       className="logo__text relative inline-flex"
                       data-hover="Ljóss"
+                      onClick={() => {
+                        window.scrollTo({
+                          behavior: "smooth",
+                          top: 0,
+                        });
+                      }}
                     >
                       Home
                     </span>
                   )}
                 </div>
               </button>
-            </Link>
+            </div>
           </div>
           <div className="header__right flex h-full items-center">
             <div className="ml-4 flex flex-col">

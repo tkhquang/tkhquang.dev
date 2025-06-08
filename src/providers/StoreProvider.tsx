@@ -3,6 +3,7 @@
 import { Provider, useSetAtom, WritableAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import React, { useEffect } from "react";
+import { useAsPathInitializer } from "@/store/router";
 import { themeStore } from "@/store/theme";
 
 const AtomsHydrator = ({
@@ -19,7 +20,8 @@ const AtomsHydrator = ({
   return children;
 };
 
-const ThemeSetter = () => {
+const StoreSetter = () => {
+  useAsPathInitializer();
   const setTheme = useSetAtom(themeStore);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function StoreProvider({
   return (
     <Provider>
       <AtomsHydrator atomValues={[]}>
-        <ThemeSetter />
+        <StoreSetter />
         {children}
       </AtomsHydrator>
     </Provider>

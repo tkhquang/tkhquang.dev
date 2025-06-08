@@ -36,11 +36,15 @@ const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
 
 function getPostFiles() {
-  return fs.readdirSync(postsDirectory, { encoding: "utf8" });
+  return fs
+    .readdirSync(postsDirectory, { encoding: "utf8" })
+    .filter((files) => files.endsWith(".md"));
 }
 
 function getCategoryFiles() {
-  return fs.readdirSync(categoriesDirectory, { encoding: "utf8" });
+  return fs
+    .readdirSync(categoriesDirectory, { encoding: "utf8" })
+    .filter((files) => files.endsWith(".md"));
 }
 
 function getParser() {

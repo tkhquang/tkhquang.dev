@@ -6038,6 +6038,11 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
+next-scroll-restorer@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/next-scroll-restorer/-/next-scroll-restorer-0.10.2.tgz#4af1625d49f68f1053265c3e3d3a5429cb48199a"
+  integrity sha512-uwVmou6l8DR8yZqMW58eycjz2W1i4F8Lxvor/oAH5YQczQqQ5St6mWeG69WSGl68GkNoRTMbuU1/m6jhvj993A==
+
 next@^15.3.3:
   version "15.3.3"
   resolved "https://registry.yarnpkg.com/next/-/next-15.3.3.tgz#90ee73600af106796989136827a7a40f61dadd1f"
