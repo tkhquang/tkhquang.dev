@@ -1,29 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { FormattedNumber } from "react-intl";
+import { usePageViewsValue } from "@/store/page-views";
 
 const ViewCount = ({ pathname }: { pathname: string }) => {
-  const [viewCount, setViewCount] = useState(0);
+  const pageViews = usePageViewsValue();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch(`/api/views?pathname=${pathname}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        });
-
-        const data = await response.json();
-
-        setViewCount(data.unique);
-      } catch (error) {
-        // TODO: Handle errors
-      }
-    })();
-  }, [pathname]);
+  const viewCount = pageViews[pathname]?.unique || 0;
 
   return (
     <span>{viewCount ? <FormattedNumber value={viewCount} /> : "---"}</span>

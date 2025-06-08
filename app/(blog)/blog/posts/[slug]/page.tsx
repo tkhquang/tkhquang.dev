@@ -1,4 +1,5 @@
 import { Metadata } from "next/types";
+import { Suspense } from "react";
 import BlogInfo from "@/components/blog/BlogInfo";
 import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
@@ -79,6 +80,9 @@ export default async function Post({
 
   return (
     <div>
+      <Suspense>
+        <ReportView />
+      </Suspense>
       <header
         className="header__wrapper relative flex flex-col overflow-hidden"
         style={{
@@ -100,8 +104,6 @@ export default async function Post({
             width: 1280,
           })}
       </header>
-
-      <ReportView />
 
       <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
         {post.title}

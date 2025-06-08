@@ -8,7 +8,7 @@ const ReportView = () => {
 
   useEffect(() => {
     try {
-      fetch("/api/views", {
+      fetch("/api/pageviews", {
         body: JSON.stringify({ pathname }),
         headers: {
           "Content-Type": "application/json",
@@ -17,6 +17,7 @@ const ReportView = () => {
       });
     } catch (error) {
       // TODO: Handle errors
+      console.log(error);
     }
   }, [pathname]);
 

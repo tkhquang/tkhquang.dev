@@ -72,20 +72,44 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const pathname = request?.nextUrl?.searchParams.get("pathname");
+  const url = request.nextUrl;
+  // Support for multiple pathnames: ?pathname=/a&pathname=/b
+  const pathnames = url.searchParams.getAll("pathname");
 
-  if (!pathname) {
+  if (!pathnames.length) {
     return new NextResponse("Pathname not found", { status: 400 });
   }
 
   if (process.env.NODE_ENV !== "production") {
-    return NextResponse.json({ total: 1_234, unique: 1_234 });
+    // Mocked dev response
+    return NextResponse.json(
+      Object.fromEntries(
+        pathnames.map((pathname) => [pathname, { total: 1_234, unique: 1_234 }])
+      )
+    );
   }
 
-  const unique =
-    (await redis.get<number>(["pageviews", pathname, "unique"].join(":"))) ?? 0;
-  const total =
-    (await redis.get<number>(["pageviews", pathname, "total"].join(":"))) ?? 0;
+  // Prepare all redis keys in order: [unique, total, unique, total, ...]
+  const keys: string[] = [];
+  for (const pathname of pathnames) {
+    keys.push(
+      ["pageviews", pathname, "unique"].join(":"),
+      ["pageviews", pathname, "total"].join(":")
+    );
+  }
 
-  return NextResponse.json({ total, unique });
+  // Batch get all values
+  const results = await redis.mget<number[]>(...keys);
+
+  // Build response object
+  const data: Record<string, { unique: number; total: number }> = {};
+  for (let i = 0; i < pathnames.length; i++) {
+    // mget returns results in same order as keys
+    data[pathnames[i]] = {
+      total: results[i * 2 + 1] ?? 0,
+      unique: results[i * 2] ?? 0,
+    };
+  }
+
+  return NextResponse.json(data);
 }
