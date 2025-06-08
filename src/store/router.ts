@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useAtomValue } from "jotai";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -9,7 +9,7 @@ export const asPathAtom = atom<{ prevAsPath?: string; currentAsPath?: string }>(
   }
 );
 
-export const useAsPathValue = () => useAtom(asPathAtom)[0];
+export const useAsPathValue = () => useAtomValue(asPathAtom);
 
 export const useAsPathInitializer = () => {
   const pathname = usePathname();

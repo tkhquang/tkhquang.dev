@@ -1,7 +1,7 @@
-import React from "react";
+import clsx from "clsx";
+import React, { Suspense } from "react";
 import SocialLinks from "@/components/common/SocialLinks";
 import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
-import clsx from "clsx";
 
 const BlogFooter = ({
   children,
@@ -17,15 +17,17 @@ const BlogFooter = ({
       )}
     >
       <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center justify-between gap-2">
-        <SpotifyNowPlaying
-          className={clsx([
-            "text-sm",
-            "[--song-color:theme(colors.gray.200)]",
-            "[--artist-color:theme(colors.gray.400)]",
-          ])}
-          songEffect="underline"
-          showCover
-        />
+        <Suspense>
+          <SpotifyNowPlaying
+            className={clsx([
+              "text-sm",
+              "[--song-color:theme(colors.gray.200)]",
+              "[--artist-color:theme(colors.gray.400)]",
+            ])}
+            songEffect="underline"
+            showCover
+          />
+        </Suspense>
         <SocialLinks
           className="flex-center flex-gap-4 shrink-0 text-2xl"
           entities={["Github"]}

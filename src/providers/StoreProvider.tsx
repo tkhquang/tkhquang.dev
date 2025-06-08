@@ -2,7 +2,7 @@
 
 import { Provider, useSetAtom, WritableAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useAsPathInitializer } from "@/store/router";
 import { themeStore } from "@/store/theme";
 
@@ -40,7 +40,9 @@ export default function StoreProvider({
   return (
     <Provider>
       <AtomsHydrator atomValues={[]}>
-        <StoreSetter />
+        <Suspense>
+          <StoreSetter />
+        </Suspense>
         {children}
       </AtomsHydrator>
     </Provider>

@@ -7,39 +7,32 @@
 "use client";
 
 import { clsx } from "clsx";
+import { intervalToDuration } from "date-fns";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { SiSpotify } from "react-icons/si";
 import Image from "@/components/common/NextImage";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import { MusicWaves } from "@/components/ui/music-waves";
 import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
-import { intervalToDuration } from "date-fns";
 
 const Fallback = ({
   className,
-  content,
   isLoading,
 }: {
   className?: string;
-  content: string;
   isLoading: boolean;
-}) => {
-  return (
-    <div className={clsx(["flex items-center", className])}>
-      <SiSpotify className="h-6 w-6 shrink-0" />
-      <div className="ml-2 inline-flex truncate">
-        <p className="font-medium text-[--song-color]">
-          {isLoading ? "Loading..." : "Not Playing"}
-        </p>
-        {/* <span className="mx-2 text-[--artist-color]">{" – "}</span>
-        <p className="spotify-artist max-w-max truncate text-[--artist-color]">
-          Spotify
-        </p> */}
-      </div>
+}) => (
+  <div className={clsx(["flex items-center", className])}>
+    <SiSpotify className="size-6 shrink-0" />
+    <div className="ml-2 inline-flex truncate">
+      <p className="font-medium text-[--song-color]">
+        {isLoading ? "Loading..." : "Not Playing"}
+      </p>
     </div>
-  );
-};
+  </div>
+);
 
 export default function SpotifyNowPlaying({
   className,
@@ -50,31 +43,54 @@ export default function SpotifyNowPlaying({
   showCover?: boolean;
   songEffect?: "none" | "underline";
 }) {
+  const pathname = usePathname();
   const [data, setData] = useState<CurrentPlayingResponse | null>(null);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch("/api/spotify/current-playing");
+  const durationMs = data?.item?.duration_ms || 0;
+  const progressMs = data?.progress_ms || 0;
+  const remainingPlayingTime =
+    durationMs > 0 ? Math.max(0, durationMs - progressMs) : null;
 
-        const json: CurrentPlayingResponse = await response.json();
-
-        setData(json);
-      } catch (error) {
-        // TODO: Errors handling
+  // --- Fetch logic with abort signal ---
+  const fetchSpotifyData = async (signal?: AbortSignal) => {
+    setData(null);
+    try {
+      const response = await fetch("/api/spotify/current-playing", { signal });
+      if (!response.ok) throw new Error("Failed to fetch");
+      const json: CurrentPlayingResponse = await response.json();
+      setData(json);
+    } catch (error: any) {
+      if (error.name !== "AbortError") {
         console.error(error);
       }
-    })();
-  }, []);
+    }
+  };
+
+  // Fetch on mount & pathname change, with abort logic
+  useEffect(() => {
+    const abortController = new AbortController();
+    fetchSpotifyData(abortController.signal);
+
+    return () => abortController.abort();
+  }, [pathname]);
+
+  // Auto-refetch after track ends, if playing
+  useEffect(() => {
+    if (!remainingPlayingTime || remainingPlayingTime <= 0) return;
+
+    const abortController = new AbortController();
+    const timeout = setTimeout(() => {
+      fetchSpotifyData(abortController.signal);
+    }, remainingPlayingTime + 5_000);
+
+    return () => {
+      clearTimeout(timeout);
+      abortController.abort();
+    };
+  }, [remainingPlayingTime, pathname]);
 
   if (data === null) {
-    return (
-      <Fallback
-        className={className}
-        isLoading={data === null}
-        content={"Loading..."}
-      />
-    );
+    return <Fallback className={className} isLoading={data === null} />;
   }
 
   const trackDuration = intervalToDuration({
@@ -103,7 +119,7 @@ export default function SpotifyNowPlaying({
           />
         </div>
       ) : (
-        <SiSpotify className="h-6 w-6 shrink-0" />
+        <SiSpotify className="size-6 shrink-0" />
       )}
       <div className="ml-2 flex items-center">
         <div className="grid max-w-full grid-cols-[auto_auto_minmax(0,1fr)] items-center truncate">

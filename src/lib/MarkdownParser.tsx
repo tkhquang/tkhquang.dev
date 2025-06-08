@@ -140,7 +140,7 @@ class MarkdownParser {
   constructor() {
     this.parser = getParser();
     this.imageParser = getImageParser();
-    console.info("MarkdownParser instance created");
+    // console.info("MarkdownParser instance created");
   }
 
   async parseMarkdown(content: string) {
