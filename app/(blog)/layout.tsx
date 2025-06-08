@@ -4,6 +4,8 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next/types";
+import { Suspense } from "react";
+import ClientSideScrollRestorer from "@/components/container/ClientSideScrollRestorer";
 import { Footer, Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
 import BlogHeader from "@/components/layout/BlogHeader";
@@ -24,20 +26,27 @@ export default async function BlogLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppProvider>
-      <BlogHeader />
-      <Main className="flex-1">{children}</Main>
-      <Footer />
+    <>
+      <AppProvider>
+        <BlogHeader />
+        <Main className="flex-1">{children}</Main>
+        <Footer />
 
-      <Portal>
-        <BackToTopButton />
-      </Portal>
+        <Portal>
+          <BackToTopButton />
+        </Portal>
 
-      <GoogleAnalytics
-        gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID as string}
-      />
-      <Analytics />
-      <SpeedInsights />
-    </AppProvider>
+        <GoogleAnalytics
+          gaId={
+            process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID as string
+          }
+        />
+        <Analytics />
+        <SpeedInsights />
+      </AppProvider>
+      <Suspense>
+        <ClientSideScrollRestorer />
+      </Suspense>
+    </>
   );
 }
