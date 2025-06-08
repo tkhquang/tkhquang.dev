@@ -1,0 +1,38 @@
+import React from "react";
+import SocialLinks from "@/components/common/SocialLinks";
+import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
+import clsx from "clsx";
+
+const BlogFooter = ({
+  children,
+  className,
+  ...props
+}: React.ComponentProps<"footer">) => {
+  return (
+    <footer
+      {...props}
+      className={clsx(
+        "footer surface mt-auto py-4 text-center shadow-box",
+        className
+      )}
+    >
+      <div className="container grid grid-cols-[minmax(0,1fr)_auto] items-center justify-between gap-2">
+        <SpotifyNowPlaying
+          className={clsx([
+            "text-sm",
+            "[--song-color:theme(colors.gray.200)]",
+            "[--artist-color:theme(colors.gray.400)]",
+          ])}
+          songEffect="underline"
+          showCover
+        />
+        <SocialLinks
+          className="flex-center flex-gap-4 shrink-0 text-2xl"
+          entities={["Github"]}
+        />
+      </div>
+    </footer>
+  );
+};
+
+export default BlogFooter;

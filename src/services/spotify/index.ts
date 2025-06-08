@@ -1,3 +1,5 @@
+"use server";
+
 import querystring from "querystring";
 import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 const {
@@ -55,7 +57,7 @@ export const getNowPlaying = async () => {
       return false;
     }
 
-    const json = await response.json();
+    const json: CurrentPlayingResponse = await response.json();
 
     if (json.currently_playing_type !== "track") {
       return false;

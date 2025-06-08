@@ -1,3 +1,5 @@
+"use server";
+
 import {
   GitHubCommitStatsQuery,
   GitHubProjectsQuery,
