@@ -1,7 +1,6 @@
 "use server";
 
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
-import { compareDesc, parseISO } from "date-fns";
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
