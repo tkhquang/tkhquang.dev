@@ -67,7 +67,7 @@ export default async function Stacks() {
         <h2 className="heading--section my-10 text-4xl">Stacks 📚</h2>
 
         <div className="flex flex-col lg:flex-row">
-          <div className="flex-center mx-auto w-full lg:w-1/3">
+          <div className="flex-center mx-auto w-full md:w-2/3 lg:w-1/3">
             <Image
               src="/assets/resources/svg/Dev.svg"
               alt="Developer"
