@@ -5,8 +5,10 @@ import {
   GitHubProjectsQuery,
 } from "@/graphql/generated/types";
 
+const GITHUB_API_ENDPOINT = "https://api.github.com/graphql";
+
 const fetchGitHubData = async (query: string, revalidate: number = 86400) => {
-  const response = await fetch(`${process.env.GITHUB_API_ENDPOINT}`, {
+  const response = await fetch(`${GITHUB_API_ENDPOINT}`, {
     body: JSON.stringify({ query }),
     cache: "force-cache",
     headers: {

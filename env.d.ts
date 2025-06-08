@@ -4,7 +4,6 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       GITHUB_TOKEN: string;
-      GITHUB_API_ENDPOINT: string;
       NEXT_PUBLIC_COMMENTBOX_PROJECT_ID: string;
       NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID: string;
       SPOTIFY_REFRESH_TOKEN: string;
