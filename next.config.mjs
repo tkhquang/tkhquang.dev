@@ -25,7 +25,22 @@ const nextConfig = {
     ];
   },
   images: {
-    remotePatterns: [{ hostname: "tkhquang.dev" }, { hostname: "localhost" }],
+    remotePatterns: [
+      (() => {
+        const { hostname, protocol } = new URL(
+          process.env.NEXT_PUBLIC_BASE_URL
+        );
+
+        return {
+          protocol: protocol.replace(":", ""),
+          hostname,
+        };
+      })(),
+      {
+        protocol: "https",
+        hostname: "i.scdn.co", // Spotify album covers
+      },
+    ],
   },
   logging: {
     fetches: {
