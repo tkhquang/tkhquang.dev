@@ -78,14 +78,14 @@ export default function SpotifyNowPlaying({
   useEffect(() => {
     if (!remainingPlayingTime || remainingPlayingTime <= 0) return;
 
-    const abortController = new AbortController();
     const timeout = setTimeout(() => {
+      const abortController = new AbortController();
       fetchSpotifyData(abortController.signal);
     }, remainingPlayingTime + 5_000);
 
     return () => {
       clearTimeout(timeout);
-      abortController.abort();
+      // DO NOT abort the controller here, since it's local to the timer callback!
     };
   }, [remainingPlayingTime, pathname]);
 
