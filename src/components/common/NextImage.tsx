@@ -3,7 +3,7 @@
 import { clsx } from "clsx";
 import type { ImageProps as NextImageProps } from "next/image";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export interface ImageProps extends Omit<NextImageProps, "src" | "priority"> {
   src: string;
@@ -20,31 +20,32 @@ export default function NextImage(props: ImageProps) {
     style,
     ...rest
   } = props;
-  const [isLoaded, setIsLoaded] = useState(false);
   const imgElementRef = useRef<HTMLImageElement | null>(null);
+  const containerElementRef = useRef<HTMLDivElement | null>(null);
+
   const handleLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
     const imgElement = event.currentTarget;
 
     imgElement.dataset.fetched = String(true);
-    setIsLoaded(true);
+    containerElementRef.current!.dataset.fetched = String(true);
   };
 
   useEffect(() => {
     const imgElement = imgElementRef.current;
-    if (imgElement) {
-      imgElement.dataset.fetched = String(imgElement.complete);
-      setIsLoaded(imgElement.complete);
+    if (imgElement?.complete) {
+      imgElement.dataset.fetched = String(true);
+      containerElementRef.current!.dataset.fetched = String(true);
     }
   }, []);
 
   return (
     <div
       className={clsx(
-        "image-container size-full overflow-hidden [animation-duration:4s]",
-        isLoaded ? "animate-none" : "animate-pulse",
+        "image-container size-full animate-pulse overflow-hidden [animation-duration:4s] data-[fetched='true']:animate-none",
         props.fill ? "absolute" : "relative",
         containerClassName
       )}
+      ref={containerElementRef}
     >
       <Image
         ref={imgElementRef}
@@ -65,7 +66,6 @@ export default function NextImage(props: ImageProps) {
         quality={100}
         onLoad={handleLoad}
         sizes="(max-width: 768px) 100vw, 1440px"
-        data-fetched={String(false)}
         {...rest}
       />
     </div>
