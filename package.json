@@ -81,7 +81,7 @@
     "@types/react-dom": "^19.1.6",
     "@types/request": "^2.48.12",
     "autoprefixer": "^10",
-    "eslint": "^8",
+    "eslint": "^9.28.0",
     "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
