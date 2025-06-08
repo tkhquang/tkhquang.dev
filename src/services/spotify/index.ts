@@ -6,10 +6,6 @@ const {
   SPOTIFY_REFRESH_TOKEN: refresh_token,
 } = process.env;
 
-if (!client_id || !client_secret || !refresh_token) {
-  throw new Error("Missing Spotify API environment variables");
-}
-
 const basicAuth = Buffer.from(`${client_id}:${client_secret}`).toString(
   "base64"
 );
