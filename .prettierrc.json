@@ -5,5 +5,6 @@
   "singleQuote": false,
   "jsxSingleQuote": false,
   "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindConfig": "./tailwind.config.ts"
+  "tailwindConfig": "./tailwind.config.js",
+  "tailwindFunctions": ["clsx", "classnames", "classNames"]
 }

@@ -1,5 +1,6 @@
-import type { Config } from "tailwindcss";
-
+/**
+ * @type {import('tailwindcss').Config}
+ */
 const config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -26,6 +27,10 @@ const config = {
         "fade-in": "fade-in 0.3s linear",
         "fade-in-forwards": "fade-in 1s forwards",
         "hero-height": "hero-height 1.5s linear",
+        "music-bar-1": "music-bar-1 .8s linear infinite",
+        "music-bar-2": "music-bar-2 .8s linear infinite",
+        "music-bar-3": "music-bar-3 .8s linear infinite",
+        "music-bar-4": "music-bar-4 .8s linear infinite",
         typing: "typing 0.5s steps(20, end) forwards 1s",
       },
       boxShadow: {
@@ -121,6 +126,25 @@ const config = {
             "min-height": "600px",
           },
         },
+        "music-bar-1": {
+          "0%, 100%": { height: "0%" },
+          "50%": { height: "70%" },
+        },
+        "music-bar-2": {
+          "0%, 100%": { height: "50%" },
+          "25%": { height: "0%" },
+          "75%": { height: "100%" },
+        },
+        "music-bar-3": {
+          "0%, 100%": { height: "70%" },
+          "15%": { height: "100%" },
+          "65%": { height: "0%" },
+        },
+        "music-bar-4": {
+          "0%, 100%": { height: "50%" },
+          "35.7%": { height: "0%" },
+          "85.7%": { height: "70%" },
+        },
         typing: {
           from: {
             width: "0",
@@ -142,14 +166,15 @@ const config = {
         "header-height": "var(--header-height)",
       },
       zIndex: {
-        "1": "1",
-        "2": "2",
-        "3": "3",
+        1: "1",
+        2: "2",
+        3: "3",
         bg: "-1",
         fg: "999",
         header: "1000",
       },
     },
   },
-} satisfies Config;
-export default config;
+};
+
+module.exports = config;
