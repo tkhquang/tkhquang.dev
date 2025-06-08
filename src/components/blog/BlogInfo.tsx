@@ -7,8 +7,8 @@ import HorizontalLine from "@/components/common/HorizontalLine";
 
 const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
   return (
-    <section className={classNames("blog-info relative z-10", className)}>
-      <div className="blog-info__content text-on-surface sticky rounded p-8 shadow-md">
+    <section className={classNames("blog-info relative text-sm", className)}>
+      <div className="blog-info__content text-on-surface sticky rounded px-4 py-8 shadow-md">
         <div className="[&_.author\_\_image--container]:mb-4">
           <Author />
           <div className="my-5">
@@ -16,6 +16,7 @@ const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
           </div>
         </div>
         <Subscribe />
+
         <CircuitBoard className="surface absolute inset-0 z-bg rounded shadow-md" />
       </div>
     </section>

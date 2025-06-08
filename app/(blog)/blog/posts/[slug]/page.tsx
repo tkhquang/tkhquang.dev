@@ -138,7 +138,7 @@ export default async function Post({
             </div>
             <hr className="my-6" />
             <div className="w-full">
-              <BlogInfo className="md:[&_.author\_\_image--container]:!mb-0" />
+              <BlogInfo className="[&_.author\_\_image--container]:md:mb-0 [&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8" />
             </div>
             <hr className="my-6" />
             <div className="article-comments w-full p-2">

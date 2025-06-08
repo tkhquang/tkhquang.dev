@@ -6,11 +6,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 import ClientSideScrollRestorer from "@/components/container/ClientSideScrollRestorer";
-import { Footer, Main } from "@/components/layout";
+import { Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
 import BlogHeader from "@/components/layout/BlogHeader";
 import { Blog } from "@/constants/meta";
 import AppProvider from "@/providers/AppProvider";
+import BlogFooter from "@/components/layout/BlogFooter";
 
 export const metadata: Metadata = {
   description: Blog.METADATA.description,
@@ -30,7 +31,7 @@ export default async function BlogLayout({
       <AppProvider>
         <BlogHeader />
         <Main className="flex-1">{children}</Main>
-        <Footer />
+        <BlogFooter />
 
         <Portal>
           <BackToTopButton />

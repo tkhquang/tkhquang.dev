@@ -13,7 +13,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
   const coverImage = post.cover_image ? `${post.cover_image}` : "";
 
   return (
-    <li className="news-feed__list-item w-full pt-8 lg:w-4/5" id={post.slug}>
+    <li className="news-feed__list-item w-full pt-8" id={post.slug}>
       <PostMeta className="news-feed__list-item__meta" post={post} />
       <h2 className="news-feed__list-item__title heading mb-4 mt-1 text-xl hover:opacity-75 xs:text-2xl sm:text-3xl sm:leading-10">
         <Link
