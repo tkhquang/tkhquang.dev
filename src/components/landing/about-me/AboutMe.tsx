@@ -24,7 +24,7 @@ const AboutMe = async () => {
               __html: Portfolio.METADATA.about,
             }}
           ></div>
-          <div className="author flex-center mx-6 my-10 w-4/5 p-6 xs:w-1/2 lg:w-1/3">
+          <div className="author flex-center mx-6 my-10 w-4/5 p-6 xs:w-1/2 md:w-1/3">
             <div className="relative w-full pb-[100%]">
               <Image
                 fill

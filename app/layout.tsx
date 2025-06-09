@@ -22,7 +22,7 @@ const SCRIPT_CONTENT = `
     document.documentElement.setAttribute("data-theme", newTheme);
     window.__onThemeChange(newTheme);
     setTimeout(() => {
-      document.documentElement.classList.add("transition", "duration-500");
+      document.documentElement.classList.add("transition-colors","duration-500");
     }, 0);
   }
 
@@ -88,7 +88,11 @@ export default async function RootLayout({
           {children}
         </div>
         <StackedLayers />
-        <div id="class-keeper" className="hidden" aria-hidden></div>
+        <div
+          id="class-keeper"
+          className="hidden transition-colors duration-500"
+          aria-hidden
+        ></div>
       </body>
     </html>
   );

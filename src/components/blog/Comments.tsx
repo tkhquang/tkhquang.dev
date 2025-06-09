@@ -75,6 +75,7 @@ export default function Comments({ className, configs }: CommentsProps) {
         lang={lang}
         loading="lazy"
         host="https://giscus.app"
+        key={mode}
       />
     </div>
   );

@@ -146,11 +146,13 @@ export default async function Post({
             </div>
             <hr className="my-6" />
             <div className="w-full">
-              <BlogInfo className="[&_.author\_\_image--container]:md:mb-0 [&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8" />
+              <BlogInfo className="[&_.author\_\_image--container]:md:mb-0 [&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 [&_img]:!size-[120px] md:[&_img]:!size-[80px]" />
             </div>
             <hr className="my-6" />
             <div className="article-comments w-full p-2">
-              <Comments />
+              <Suspense>
+                <Comments />
+              </Suspense>
             </div>
             <div className="my-6" />
           </article>
