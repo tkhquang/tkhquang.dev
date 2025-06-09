@@ -50,8 +50,7 @@ export default function NextImage(props: ImageProps) {
       <Image
         ref={imgElementRef}
         className={clsx(
-          "[transition:filter_500ms_cubic-bezier(.4,0,.2,1)]",
-          "size-full max-h-full object-center blur-xl data-[fetched='true']:blur-0",
+          "hardware-accelerate size-full max-h-full object-center blur-xl will-change-transform [transition:filter_500ms_cubic-bezier(.4,0,.2,1)] data-[fetched='true']:blur-0",
           className
         )}
         src={src}
