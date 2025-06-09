@@ -34,6 +34,7 @@ const AboutMe = async () => {
                 alt="Aleks"
                 placeholder="blur"
                 blurDataURL={aboutImage.placeholder}
+                loading="eager"
               />
             </div>
           </div>
