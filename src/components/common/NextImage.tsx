@@ -15,7 +15,7 @@ export default function NextImage(props: ImageProps) {
     alt,
     className,
     containerClassName,
-    loading = "lazy",
+    loading = "eager",
     src,
     style,
     ...rest
