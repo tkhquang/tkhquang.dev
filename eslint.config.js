@@ -13,6 +13,7 @@ export default [
   {
     ignores: [
       "**/.yarn/*",
+      "**/.temp/*",
       "node_modules/*",
       "dist/*",
       "build/*",
