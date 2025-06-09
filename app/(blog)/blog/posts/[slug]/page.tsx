@@ -99,6 +99,7 @@ export default async function Post({
             containerClassName: "",
             height: 720,
             loading: "eager",
+            priority: true,
             style: {
               height: "50vw",
               maxHeight: "50vh",

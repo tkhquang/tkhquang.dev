@@ -47,6 +47,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
                 ...(index === 0
                   ? {
                       loading: "eager",
+                      priority: true,
                     }
                   : {}),
               })}

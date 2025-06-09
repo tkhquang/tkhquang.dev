@@ -5,7 +5,7 @@ import type { ImageProps as NextImageProps } from "next/image";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-export interface ImageProps extends Omit<NextImageProps, "src" | "priority"> {
+export interface ImageProps extends Omit<NextImageProps, "src"> {
   src: string;
   containerClassName?: string;
 }
@@ -62,7 +62,6 @@ export default function NextImage(props: ImageProps) {
           ...style,
         }}
         loading={loading}
-        priority={loading === "eager"}
         quality={100}
         onLoad={handleLoad}
         sizes="(max-width: 768px) 100vw, 1440px"
