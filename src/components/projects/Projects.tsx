@@ -172,7 +172,6 @@ const Projects = async () => {
                           objectFit: "contain",
                           objectPosition: "center",
                         }}
-                        placeholder="blur"
                         blurDataURL={image.placeholder}
                       />
                     </div>
