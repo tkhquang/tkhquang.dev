@@ -1,5 +1,6 @@
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
+import NextImage, { ImageProps } from "@/components/common/NextImage";
 import { MarkdownPost } from "@/models/markdown.types";
 import Link from "next/link";
 import React from "react";
@@ -11,6 +12,25 @@ interface PostCardProps {
 
 const PostCard = ({ index, post }: PostCardProps) => {
   const coverImage = post.cover_image ? `${post.cover_image}` : "";
+
+  const coverProps: Partial<ImageProps> = {
+    alt: "",
+    className: "news-feed__list-item__image rounded shadow-lg",
+    containerClassName: "",
+    fill: true,
+    height: undefined,
+    style: {
+      objectFit: "cover",
+      objectPosition: "center",
+    },
+    width: undefined,
+    ...(index === 0
+      ? {
+          loading: "eager",
+          priority: true,
+        }
+      : {}),
+  };
 
   return (
     <li className="news-feed__list-item w-full pt-8" id={post.slug}>
@@ -31,26 +51,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
             aria-label={post.title}
           >
             <div className="relative mb-4 mt-2 aspect-[16/9] w-full">
-              {post.renderCoverImage({
-                alt: "",
-                className:
-                  "news-feed__list-item__image rounded shadow-lg bg-surface bg-cover bg-center bg-no-repeat",
-                containerClassName: "has-frame",
-                fill: true,
-                height: undefined,
-                style: {
-                  backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
-                  objectFit: "cover",
-                  objectPosition: "center",
-                },
-                width: undefined,
-                ...(index === 0
-                  ? {
-                      loading: "eager",
-                      priority: true,
-                    }
-                  : {}),
-              })}
+              <NextImage {...post.coverData} {...coverProps} />
             </div>
           </Link>
           <figcaption></figcaption>

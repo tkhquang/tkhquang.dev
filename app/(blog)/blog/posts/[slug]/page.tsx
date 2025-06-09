@@ -4,6 +4,7 @@ import { PathInfo } from "@/components/blog/PathInfo";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import TableOfContent from "@/components/blog/TableOfContent";
+import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
 import ScriptLoader from "@/components/common/ScriptLoader";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
@@ -79,6 +80,20 @@ export default async function Post({
     ? (await getPlaceholderImage(post.cover_image as string)).placeholder
     : null;
 
+  const coverProps: Partial<ImageProps> = {
+    className: "header__image m-auto min-h-full w-auto",
+    containerClassName: "",
+    height: 720,
+    loading: "eager",
+    priority: true,
+    style: {
+      height: "50vw",
+      maxHeight: "50vh",
+    },
+    width: 1280,
+    backgroundClassName: "dark:invert-0 invert",
+  };
+
   return (
     <div>
       <Suspense>
@@ -93,19 +108,7 @@ export default async function Post({
           }) as React.CSSProperties),
         }}
       >
-        {post.cover_image &&
-          post.renderCoverImage({
-            className: "header__image m-auto block min-h-full w-auto",
-            containerClassName: "",
-            height: 720,
-            loading: "eager",
-            priority: true,
-            style: {
-              height: "50vw",
-              maxHeight: "50vh",
-            },
-            width: 1280,
-          })}
+        {post.cover_image && <NextImage {...post.coverData!} {...coverProps} />}
       </header>
 
       <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">

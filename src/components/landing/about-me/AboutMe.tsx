@@ -29,7 +29,7 @@ const AboutMe = async () => {
               <Image
                 fill
                 sizes="auto"
-                className="author__image object-cover object-[20%_50%]"
+                className="author__image object-cover object-[15%_50%]"
                 src={aboutImage.src}
                 alt="Aleks"
                 placeholder="blur"

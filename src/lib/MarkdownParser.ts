@@ -8,6 +8,7 @@ import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
 import remarkEmbded from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
+import { getPlaceholderImage } from "@/utils/next-mage";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
@@ -159,49 +160,21 @@ class MarkdownParser {
         await fs.promises.readFile(fullPath, { encoding: "utf8" })
       ) as unknown as { data: PostsCollection; content: string };
 
-      const coverVfile = data.cover_image
-        ? await this.imageParser.process(
-            `![Cover Image](${(data as PostsCollection).cover_image})`
-          )
+      const coverBlurImageUrl = data.cover_image
+        ? (await getPlaceholderImage(data.cover_image))?.placeholder
         : null;
 
-      const renderCoverImage = (props: Partial<ImageProps>) => {
-        if (!coverVfile) {
-          return null;
-        }
-
-        return unified()
-          .use(remarkParse, { fragment: true })
-          .use(remarkRehype, { allowDangerousHtml: true })
-          .use(rehypeRaw)
-          .use(rehypeStringify)
-          .use(rehypeUnwrapImage, {
-            tagNames: ["next-image", "img"],
-          })
-          .use(rehypeReact, {
-            components: {
-              "next-image": (baseProps: any) => {
-                return (
-                  <Image
-                    {...baseProps}
-                    blurDataURL={baseProps.blurdataurl}
-                    {...props}
-                  />
-                );
-              },
-            },
-            Fragment: prod.Fragment,
-            jsx: prod.jsx,
-            jsxs: prod.jsxs,
-          } as Options)
-          .processSync(coverVfile.value).result;
-      };
+      const coverData = {
+        src: data.cover_image,
+        blurDataURL: coverBlurImageUrl,
+        alt: "Cover Image",
+      } as ImageProps;
 
       return {
         ...data,
         content,
-        renderCoverImage,
         slug,
+        coverData,
       };
     } catch (error) {
       console.warn(`Missing post file: ${fullPath}`);

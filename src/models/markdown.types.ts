@@ -8,7 +8,7 @@ import { JSX } from "react";
 export interface MarkdownPost extends PostsCollection {
   slug: string;
   content: string;
-  renderCoverImage: (props: Partial<ImageProps>) => JSX.Element | null;
+  coverData: ImageProps;
 }
 
 export interface MarkdownCategory extends CategoriesCollection {

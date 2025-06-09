@@ -151,17 +151,9 @@ html {
     content: "";
     top: -16px;
     bottom: -16px;
-    left: -16px;
-    right: -16px;
-    background-image: var(--background-url),
-      linear-gradient(
-        to right,
-        var(--darken) 0%,
-        var(--secondary) 30%,
-        var(--secondary) 70%,
-        var(--darken) 100%
-      );
-
+    left: -40px;
+    right: -40px;
+    background-image: var(--background-url);
     background-size: 105% auto;
     background-position: center;
     animation: waves 45s linear infinite alternate both;
@@ -170,9 +162,10 @@ html {
     z-index: -1;
   }
 
+  @apply shadow-2xl;
+
   &:hover,
   &:focus {
-    @apply shadow-2xl;
     .header__waves {
       opacity: 0;
     }
