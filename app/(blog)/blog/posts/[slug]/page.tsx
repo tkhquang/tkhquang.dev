@@ -12,6 +12,7 @@ import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import { getPlaceholderImage } from "@/utils/next-mage";
+import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();
@@ -82,6 +83,7 @@ export default async function Post({
     <div>
       <Suspense>
         <ReportView />
+        <ClientSideGetPageViews pathnames={[`/blog/posts/${post.slug}`]} />
       </Suspense>
       <header
         className="header__wrapper relative flex flex-col overflow-hidden"
