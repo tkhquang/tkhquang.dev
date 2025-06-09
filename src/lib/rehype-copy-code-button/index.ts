@@ -1,7 +1,7 @@
+import { Element, Root } from "hast";
 import { toString as hastToString } from "hast-util-to-string";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
-import { Element, Root } from "hast";
 
 interface CopyButtonOptions {
   feedbackDuration?: number;

@@ -1,6 +1,6 @@
+import { Element, Root } from "hast";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
-import { Element, Root } from "hast";
 
 const DEFAULT_IMAGE_TAG_NAMES = ["img"];
 

@@ -1,8 +1,8 @@
-import Link from "next/link";
-import React from "react";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import { MarkdownPost } from "@/models/markdown.types";
+import Link from "next/link";
+import React from "react";
 
 interface PostCardProps {
   post: MarkdownPost;

@@ -6,16 +6,16 @@
 
 "use client";
 
+import Image from "@/components/common/NextImage";
+import { GrowingUnderline } from "@/components/ui/growing-underline";
+import { MusicWaves } from "@/components/ui/music-waves";
+import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 import { clsx } from "clsx";
 import { intervalToDuration } from "date-fns";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SiSpotify } from "react-icons/si";
-import Image from "@/components/common/NextImage";
-import { GrowingUnderline } from "@/components/ui/growing-underline";
-import { MusicWaves } from "@/components/ui/music-waves";
-import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 
 const Fallback = ({
   className,

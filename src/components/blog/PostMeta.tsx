@@ -1,3 +1,5 @@
+import ViewCount from "@/components/common/ViewCount";
+import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
 import { format, isValid } from "date-fns";
 import React from "react";
@@ -5,8 +7,6 @@ import {
   // FaCalendarAlt,
   FaEye,
 } from "react-icons/fa";
-import ViewCount from "@/components/common/ViewCount";
-import { MarkdownPost } from "@/models/markdown.types";
 
 interface PostDatesProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;

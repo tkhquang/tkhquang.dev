@@ -1,7 +1,7 @@
-import React from "react";
 import Image from "@/components/common/NextImage";
 import { Blog } from "@/constants/meta";
 import { getPlaceholderImage } from "@/utils/next-mage";
+import React from "react";
 
 const AUTHOR_IMAGE = "/uploads/images/author.jpg";
 

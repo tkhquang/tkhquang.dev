@@ -1,6 +1,3 @@
-import { format } from "date-fns";
-import Link from "next/link";
-import React from "react";
 import BlogInfo from "@/components/blog/BlogInfo";
 import HorizontalLine from "@/components/common/HorizontalLine";
 import {
@@ -10,6 +7,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { MarkdownPost } from "@/models/markdown.types";
+import { format } from "date-fns";
+import Link from "next/link";
+import React from "react";
 
 const PostList = <
   T extends { title: string; slug: string },

@@ -1,7 +1,7 @@
 "use client";
 
-import { FormattedNumber } from "react-intl";
 import { usePageViewsValue } from "@/store/page-views";
+import { FormattedNumber } from "react-intl";
 
 const ViewCount = ({ pathname }: { pathname: string }) => {
   const pageViews = usePageViewsValue();

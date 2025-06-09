@@ -1,6 +1,6 @@
+import SocialLinks from "@/components/common/SocialLinks";
 import classNames from "classnames";
 import React from "react";
-import SocialLinks from "@/components/common/SocialLinks";
 
 const Footer = ({
   children,

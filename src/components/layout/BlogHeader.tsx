@@ -1,13 +1,13 @@
 "use client";
 
-import classNames from "classnames";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { FiArrowLeftCircle } from "react-icons/fi";
 import ReadLineIndicator from "@/components/common/ReadLineIndicator";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
+import classNames from "classnames";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { FiArrowLeftCircle } from "react-icons/fi";
 
 const BlogHeader = ({
   className,
@@ -74,6 +74,8 @@ const BlogHeader = ({
                     </>
                   ) : (
                     <span
+                      role="button"
+                      tabIndex={0}
                       className="logo__text relative inline-flex"
                       data-hover="Ljóss"
                       onClick={() => {
@@ -82,6 +84,7 @@ const BlogHeader = ({
                           top: 0,
                         });
                       }}
+                      onKeyDown={() => {}}
                     >
                       Home
                     </span>

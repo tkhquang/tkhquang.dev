@@ -1,13 +1,13 @@
 "use client";
 
+import { ChartData } from "@/components/landing/stacks/Stacks";
+import { themeStore } from "@/store/theme";
 import FusionCharts from "fusioncharts";
 import Pie3D from "fusioncharts/fusioncharts.charts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
 import { useAtomValue } from "jotai";
 import React from "react";
 import ReactFCOriginal from "react-fusioncharts";
-import { ChartData } from "@/components/landing/stacks/Stacks";
-import { themeStore } from "@/store/theme";
 
 // Pass FusionCharts modules to ReactFC
 ReactFCOriginal.fcRoot(FusionCharts, Pie3D, FusionTheme);

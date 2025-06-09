@@ -1,6 +1,15 @@
 "use server";
 
+import CopyButton from "@/components/common/CopyButton";
+import Image, { ImageProps } from "@/components/common/NextImage";
+import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
+import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
+import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
+import remarkEmbded from "@/lib/remark-embed";
+import { PostsCollection } from "@/models/generated/markdown.types";
+import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
+import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
@@ -17,15 +26,6 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import slugify from "slugify";
 import { unified } from "unified";
-import CopyButton from "@/components/common/CopyButton";
-import Image, { ImageProps } from "@/components/common/NextImage";
-import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
-import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
-import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
-import remarkEmbded from "@/lib/remark-embed";
-import { PostsCollection } from "@/models/generated/markdown.types";
-import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
-import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 
 declare global {
   var markdownParser: MarkdownParser | undefined;
@@ -182,7 +182,6 @@ class MarkdownParser {
             components: {
               "next-image": (baseProps: any) => {
                 return (
-                  // eslint-disable-next-line jsx-a11y/alt-text
                   <Image
                     {...baseProps}
                     blurDataURL={baseProps.blurdataurl}

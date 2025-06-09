@@ -1,10 +1,10 @@
 "use client";
 
-import React, { createContext } from "react";
-import { IntlProvider } from "react-intl";
 import { STACKED_LAYER_1 } from "@/components/layout/StackedLayers";
 import StackedLayerProvider from "@/providers/StackedLayerProvider";
 import StoreProvider from "@/providers/StoreProvider";
+import React, { createContext } from "react";
+import { IntlProvider } from "react-intl";
 
 export const AppContext = createContext<Record<string, unknown>>({});
 

@@ -1,7 +1,7 @@
+import { getCssVariables } from "@/utils/helpers";
 import { canUseDOM } from "@ariakit/core/utils/dom";
 import { debounce } from "debounce";
 import { atom } from "jotai";
-import { getCssVariables } from "@/utils/helpers";
 
 const DEFAULT_THEME_MODE = "dark";
 

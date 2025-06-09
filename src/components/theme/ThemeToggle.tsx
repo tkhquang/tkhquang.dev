@@ -1,6 +1,6 @@
+import { ThemeMode, themeStore } from "@/store/theme";
 import { useAtomValue } from "jotai";
 import { animated, useSpring } from "react-spring";
-import { ThemeMode, themeStore } from "@/store/theme";
 
 const properties = {
   dark: {
@@ -92,7 +92,7 @@ const ThemeToggle = () => {
 
   return (
     <button
-      role="button"
+      type="button"
       aria-label="Toggle dark/light"
       className="toggle-theme cursor-pointer border-none bg-transparent hover:opacity-75 focus:outline-none"
       onClick={switchTheme}

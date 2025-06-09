@@ -1,12 +1,12 @@
 "use client";
 
+import LoaderLines from "@/components/common/loader/LoaderLines";
+import Image from "@/components/common/NextImage";
+import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 import { intervalToDuration } from "date-fns";
 import { useEffect, useState } from "react";
 import { SiSpotify } from "react-icons/si";
 import { FormattedMessage } from "react-intl";
-import LoaderLines from "@/components/common/loader/LoaderLines";
-import Image from "@/components/common/NextImage";
-import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 
 const CurrentPlaying = () => {
   const [data, setData] = useState<CurrentPlayingResponse | null>(null);

@@ -1,10 +1,10 @@
 "use client";
 
+import { themeStore } from "@/store/theme";
 import type { BooleanString, InputPosition, Mapping } from "@giscus/react";
 import GiscusComponent from "@giscus/react";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
-import { themeStore } from "@/store/theme";
 
 interface GiscusConfigs {
   themeURL: string;

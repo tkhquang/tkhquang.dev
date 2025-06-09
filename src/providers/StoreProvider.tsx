@@ -1,16 +1,15 @@
 "use client";
 
+import { useAsPathInitializer } from "@/store/router";
+import { themeStore } from "@/store/theme";
 import { Provider, useSetAtom, WritableAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
 import React, { Suspense, useEffect } from "react";
-import { useAsPathInitializer } from "@/store/router";
-import { themeStore } from "@/store/theme";
 
 const AtomsHydrator = ({
   atomValues,
   children,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   atomValues: Iterable<
     readonly [WritableAtom<unknown, [any], unknown>, unknown]
   >;

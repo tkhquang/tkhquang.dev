@@ -1,7 +1,7 @@
-import { Suspense } from "react";
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { Suspense } from "react";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;

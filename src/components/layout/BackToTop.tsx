@@ -1,9 +1,9 @@
 "use client";
 
+import { scrolledStore } from "@/store/theme";
 import { useAtomValue } from "jotai";
 import React from "react";
 import { FaArrowAltCircleUp } from "react-icons/fa";
-import { scrolledStore } from "@/store/theme";
 
 const BackToTopButton = () => {
   const { isScrolled } = useAtomValue(scrolledStore);

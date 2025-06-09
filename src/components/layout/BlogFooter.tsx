@@ -1,7 +1,7 @@
-import clsx from "clsx";
-import React, { Suspense } from "react";
 import SocialLinks from "@/components/common/SocialLinks";
 import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
+import clsx from "clsx";
+import React, { Suspense } from "react";
 
 const BlogFooter = ({
   children,

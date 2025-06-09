@@ -1,7 +1,7 @@
+import Provider from "./Provider";
 import Mustache from "mustache";
 import path from "path";
 import { fileURLToPath } from "url";
-import Provider from "./Provider";
 
 interface YoutubeOptions {
   nocookie?: boolean;

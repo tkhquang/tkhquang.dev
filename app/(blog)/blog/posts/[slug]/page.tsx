@@ -1,5 +1,3 @@
-import { Metadata } from "next/types";
-import { Suspense } from "react";
 import BlogInfo from "@/components/blog/BlogInfo";
 import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
@@ -8,11 +6,13 @@ import TagList from "@/components/blog/PostTag";
 import TableOfContent from "@/components/blog/TableOfContent";
 import ReportView from "@/components/common/ReportView";
 import ScriptLoader from "@/components/common/ScriptLoader";
+import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import { getPlaceholderImage } from "@/utils/next-mage";
-import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
+import { Metadata } from "next/types";
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();

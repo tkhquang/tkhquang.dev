@@ -1,10 +1,10 @@
 import "@/assets/styles/index.scss";
-import { Portal } from "@ariakit/react";
-import { Suspense } from "react";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Footer, Header, Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
 import AppProvider from "@/providers/AppProvider";
+import { Portal } from "@ariakit/react";
+import { Suspense } from "react";
 
 export default async function DefaultLayout({
   children,

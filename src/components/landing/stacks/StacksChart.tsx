@@ -1,8 +1,8 @@
 "use client";
 
+import { ChartData } from "@/components/landing/stacks/Stacks";
 import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
-import { ChartData } from "@/components/landing/stacks/Stacks";
 
 const StacksChartContent = dynamic(
   () => import("@/components/landing/stacks/StacksChartContent"),

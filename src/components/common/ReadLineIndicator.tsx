@@ -1,11 +1,11 @@
 "use client";
 
+import { scrolledStore } from "@/store/theme";
 import { animated, useSpring } from "@react-spring/web";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { scrolledStore } from "@/store/theme";
 
 const ReadLineIndicator = ({
   className,

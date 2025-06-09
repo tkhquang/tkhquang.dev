@@ -1,4 +1,3 @@
-import Link from "next/link";
 import HorizontalLine from "@/components/common/HorizontalLine";
 import {
   Breadcrumb,
@@ -7,6 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import Link from "next/link";
 
 export function PathInfo<
   T extends { title: string; slug: string },

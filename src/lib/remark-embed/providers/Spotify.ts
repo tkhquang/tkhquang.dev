@@ -1,8 +1,8 @@
+import Provider from "./Provider";
 import fs from "fs/promises";
 import Mustache from "mustache";
 import path from "path";
 import { fileURLToPath } from "url";
-import Provider from "./Provider";
 
 interface SpotifyOptions {
   width?: string;

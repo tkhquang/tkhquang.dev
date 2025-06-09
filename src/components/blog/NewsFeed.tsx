@@ -1,7 +1,7 @@
-import React from "react";
 import BlogInfo from "@/components/blog/BlogInfo";
 import FeedList from "@/components/blog/FeedList";
 import { MarkdownPost } from "@/models/markdown.types";
+import React from "react";
 
 const NewsFeed = <T,>({
   item,

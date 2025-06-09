@@ -1,7 +1,7 @@
 "use server";
 
-import querystring from "querystring";
 import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
+import querystring from "querystring";
 const {
   SPOTIFY_CLIENT_ID: client_id,
   SPOTIFY_CLIENT_SECRET: client_secret,

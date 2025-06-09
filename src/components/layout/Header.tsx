@@ -1,9 +1,9 @@
 "use client";
 
-import classNames from "classnames";
-import { useAtomValue } from "jotai";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { scrolledStore } from "@/store/theme";
+import classNames from "classnames";
+import { useAtomValue } from "jotai";
 
 const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
   const { isScrolled } = useAtomValue(scrolledStore);

@@ -1,8 +1,8 @@
+import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
 import Link from "next/link";
 import React from "react";
 import slugify from "slugify";
-import { MarkdownPost } from "@/models/markdown.types";
 
 interface TagListProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;

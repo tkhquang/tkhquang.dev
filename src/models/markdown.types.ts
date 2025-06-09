@@ -1,9 +1,9 @@
-import { JSX } from "react";
 import { ImageProps } from "@/components/common/NextImage";
 import {
   CategoriesCollection,
   PostsCollection,
 } from "@/models/generated/markdown.types";
+import { JSX } from "react";
 
 export interface MarkdownPost extends PostsCollection {
   slug: string;

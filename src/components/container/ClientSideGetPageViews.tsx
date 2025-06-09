@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
 import { useGetPageViews } from "@/store/page-views";
+import { useEffect } from "react";
 
 const ClientSideGetPageViews = ({ pathnames }: { pathnames: string[] }) => {
   const getPageViews = useGetPageViews();
