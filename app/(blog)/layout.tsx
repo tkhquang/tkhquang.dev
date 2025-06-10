@@ -14,6 +14,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
+export const experimental_ppr = true;
+
 export const metadata: Metadata = {
   description: Blog.METADATA.description,
   other: {

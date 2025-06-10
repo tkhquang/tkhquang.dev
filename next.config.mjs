@@ -10,6 +10,7 @@ const nextConfig = {
       // ["@swc-jotai/react-refresh", {}],
       ["@swc/plugin-formatjs", {}],
     ],
+    ppr: "incremental",
   },
   async headers() {
     return [
