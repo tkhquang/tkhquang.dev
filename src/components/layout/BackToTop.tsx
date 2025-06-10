@@ -2,6 +2,7 @@
 
 import { ScrollManager } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
+import clsx from "clsx";
 import gsap from "gsap";
 import { useRef } from "react";
 import { FaArrowAltCircleUp } from "react-icons/fa";
@@ -11,7 +12,7 @@ gsap.registerPlugin(useGSAP);
 
 const ID = "BackToTop";
 
-const BackToTop = () => {
+const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useGSAP(
@@ -47,10 +48,14 @@ const BackToTop = () => {
     <button
       ref={buttonRef}
       type="button"
-      className="fixed bottom-0 right-0 z-10 m-10 size-10 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-none"
+      className={clsx(
+        "fixed bottom-0 right-0 z-10 size-10 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-none",
+        className
+      )}
       title="Scroll To Top"
       onClick={scrollToTop}
       style={{ opacity: 0 }}
+      {...props}
     >
       <FaArrowAltCircleUp className="size-10" />
     </button>

@@ -8,9 +8,6 @@ import BlogHeader from "@/components/layout/BlogHeader";
 import { Blog } from "@/constants/meta";
 import AppProvider from "@/providers/AppProvider";
 import { Portal } from "@ariakit/react";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
@@ -37,17 +34,11 @@ export default async function BlogLayout({
         <Main className="flex-1">{children}</Main>
         <BlogFooter />
 
-        <Portal>
-          <BackToTopButton />
-        </Portal>
-
-        <GoogleAnalytics
-          gaId={
-            process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID as string
-          }
-        />
-        <Analytics />
-        <SpeedInsights />
+        <Suspense>
+          <Portal>
+            <BackToTopButton className="mb-20 mr-10" />
+          </Portal>
+        </Suspense>
       </AppProvider>
       <Suspense>
         <ClientSideScrollRestorer />

@@ -12,7 +12,7 @@ const BlogFooter = ({
     <footer
       {...props}
       className={clsx(
-        "footer surface mt-auto py-4 text-center shadow-box",
+        "footer surface sticky bottom-0 mt-auto w-full py-4 text-center shadow-box",
         className
       )}
     >
