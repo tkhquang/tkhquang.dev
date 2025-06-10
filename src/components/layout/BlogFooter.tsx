@@ -13,7 +13,7 @@ const BlogFooter = ({
       {...props}
       className={clsx(
         "footer sticky bottom-0 mt-auto w-full py-4 text-center shadow-box-md",
-        "header--blog__background-transparent text-theme-on-surface",
+        "header__background-transparent--blog text-theme-on-surface",
         className
       )}
     >

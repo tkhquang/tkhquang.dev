@@ -44,7 +44,7 @@ const BlogHeader = ({
     <header
       {...props}
       className={classNames(
-        "header--blog__background-transparent sticky inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 text-theme-on-background shadow-box-md transition-all duration-500 ease-in-out",
+        "header__background-transparent--blog sticky inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 text-theme-on-background shadow-box-md transition-all duration-500 ease-in-out",
         className
       )}
     >

@@ -6,5 +6,9 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   // @see: https://stackoverflow.com/questions/79411181/theme-does-not-exist-in-your-theme-config
-  "tailwindCSS.lint.invalidConfigPath": "ignore"
+  "tailwindCSS.lint.invalidConfigPath": "ignore",
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.validate": ["css", "scss"]
 }

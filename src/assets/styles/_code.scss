@@ -1,20 +1,3 @@
-// Comment, Prolog, Doctype, CDATA
-$fadedColor: slategray;
-// Punctuation
-$normalColor: var(--primary);
-// Pproperty, tag, boolean, number, constant, symbol, deleted
-$propertyColor: #c71b7b;
-// Selector, attr-name, string, char, builtin, inserted
-$selectorColor: #669900;
-// Operator, entity, url, string
-$operatorColor: var(--primary);
-// @at-rule, attr-value, keyword
-$atruleColor: #20a7e0;
-// function, class-name
-$functionColor: #dd4a68;
-// Regex, important, variable
-$regexColor: #ee9900;
-
 code[data-line-numbers] {
   counter-reset: line;
 }
