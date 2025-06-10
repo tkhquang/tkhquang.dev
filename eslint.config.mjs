@@ -22,6 +22,7 @@ export default [
       "legacy/*",
       "**/generated/*",
       "eslint.config.js",
+      "public",
     ],
   },
   // React core (includes version auto-detection for JSX transform and rules)
