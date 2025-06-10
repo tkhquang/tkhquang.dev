@@ -1,10 +1,9 @@
 "use client";
 
-import { themeStore } from "@/store/theme";
+import { useThemeValue } from "@/store/theme";
 import type { BooleanString, InputPosition, Mapping } from "@giscus/react";
 import GiscusComponent from "@giscus/react";
 import clsx from "clsx";
-import { useAtomValue } from "jotai";
 
 interface GiscusConfigs {
   themeURL: string;
@@ -57,7 +56,7 @@ export default function Comments({ className, configs }: CommentsProps) {
     repositoryId,
   } = { ...defaultConfigs, ...configs };
 
-  const { mode } = useAtomValue(themeStore);
+  const { mode } = useThemeValue();
 
   return (
     <div id="comment" className={clsx("min-h-[150px]", className)}>

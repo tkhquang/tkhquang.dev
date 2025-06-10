@@ -1,6 +1,10 @@
-import { ThemeMode, themeStore } from "@/store/theme";
-import { useAtomValue } from "jotai";
-import { animated, useSpring } from "react-spring";
+import { ThemeMode, useThemeValue } from "@/store/theme";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useRef } from "react";
+
+// Register the hook to avoid React version discrepancies
+gsap.registerPlugin(useGSAP);
 
 const properties = {
   dark: {
@@ -8,41 +12,57 @@ const properties = {
     cy: 4,
     opacity: 0,
     r: 9,
-    transform: "rotate(40deg)",
+    rotation: 40,
   },
   light: {
     cx: 30,
     cy: 0,
     opacity: 1,
     r: 5,
-    transform: "rotate(90deg)",
+    rotation: 90,
   },
-  springConfig: { friction: 35, mass: 4, tension: 250 },
 };
 
 const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
-  const isDarkMode = mode === "dark";
+  const initialProperties = properties[mode];
 
-  const { cx, cy, opacity, r, transform } =
-    properties[isDarkMode ? "dark" : "light"];
+  // Create refs for animated elements
+  const svgRef = useRef(null);
+  const maskedCircleRef = useRef(null);
+  const centerCircleRef = useRef(null);
+  const linesRef = useRef(null);
 
-  const svgContainerProps = useSpring({
-    config: properties.springConfig,
-    transform,
-  });
-  const centerCircleProps: any = useSpring({
-    config: properties.springConfig,
-    r,
-  });
-  const maskedCircleProps: any = useSpring({
-    config: properties.springConfig,
-    cx,
-    cy,
-  });
-  const linesProps = useSpring({ config: properties.springConfig, opacity });
+  useGSAP(() => {
+    const target = properties[mode];
+
+    gsap.to(svgRef.current, {
+      rotation: target.rotation,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+
+    gsap.to(maskedCircleRef.current, {
+      attr: { cx: target.cx, cy: target.cy },
+      duration: 0.5,
+      ease: "power2.out",
+    });
+
+    gsap.to(centerCircleRef.current, {
+      attr: { r: target.r },
+      duration: 0.5,
+      ease: "power2.out",
+    });
+
+    gsap.to(linesRef.current, {
+      opacity: target.opacity,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  }, [mode]);
 
   return (
-    <animated.svg
+    <svg
+      ref={svgRef}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
@@ -54,22 +74,34 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
       stroke="currentColor"
       style={{
         cursor: "pointer",
-        ...svgContainerProps,
+        transform: `rotate(${initialProperties.rotation}deg)`,
       }}
     >
       <mask id="animated-icon-mask-1">
         <rect x="0" y="0" width="100%" height="100%" fill="white" />
-        <animated.circle style={maskedCircleProps} r="9" fill="black" />
+        <circle
+          ref={maskedCircleRef}
+          cx={initialProperties.cx}
+          cy={initialProperties.cy}
+          r="9"
+          fill="black"
+        />
       </mask>
 
-      <animated.circle
+      <circle
+        ref={centerCircleRef}
         cx="12"
         cy="12"
-        style={centerCircleProps}
+        r={initialProperties.r}
         fill="white"
         mask="url(#animated-icon-mask-1)"
       />
-      <animated.g stroke="currentColor" style={linesProps}>
+
+      <g
+        ref={linesRef}
+        stroke="currentColor"
+        style={{ opacity: initialProperties.opacity }}
+      >
         <line x1="12" y1="1" x2="12" y2="3" />
         <line x1="12" y1="21" x2="12" y2="23" />
         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
@@ -78,13 +110,13 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
         <line x1="21" y1="12" x2="23" y2="12" />
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-      </animated.g>
-    </animated.svg>
+      </g>
+    </svg>
   );
 };
 
 const ThemeToggle = () => {
-  const theme = useAtomValue(themeStore);
+  const theme = useThemeValue();
 
   const switchTheme = () => {
     window.__setPreferredTheme(theme.mode === "light" ? "dark" : "light");
