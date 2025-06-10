@@ -23,7 +23,7 @@ export default async function DefaultLayout({
 
         <Suspense>
           <Portal>
-            <BackToTopButton className="mb-10 mr-10" />
+            <BackToTopButton className="mb-20 mr-10" />
           </Portal>
         </Suspense>
       </AppProvider>
