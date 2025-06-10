@@ -11,6 +11,7 @@
 
   margin: calc(-1 * var(--gap));
   overflow: hidden;
+
   & > * {
     margin: var(--gap);
   }
@@ -60,24 +61,30 @@
 }
 
 html {
-  --theme-landing-background-semi-transparent: #{rgba(map.get($colors, "background-dark"), 0.75)};
+  --theme-landing-background-semi-transparent: #{rgba(
+      map.get($colors, "background-dark"),
+      0.75
+    )};
 
-  .header--blog__background-transparent {
+  .header__background-transparent--blog {
     background-color: #{rgba(map.get($colors, "background-dark"), 0.75)};
   }
 
-  .header--landing__background-transparent {
+  .header__background-transparent--landing {
     background-color: #{rgba(map.get($colors, "tone-dark"), 0.75)} !important;
   }
 
   &[data-theme="light"] {
-    --theme-landing-background-semi-transparent: #{rgba(map.get($colors, "tone-light"), 0.75)};
+    --theme-landing-background-semi-transparent: #{rgba(
+        map.get($colors, "tone-light"),
+        0.75
+      )};
 
-    .header--blog__background-transparent {
+    .header__background-transparent--blog {
       background-color: #{rgba(map.get($colors, "background-light"), 0.75)};
     }
 
-    .header--landing__background-transparent {
+    .header__background-transparent--landing {
       background-color: #{rgba(map.get($colors, "tone-light"), 0.75)} !important;
     }
   }
@@ -105,9 +112,11 @@ html {
 
 .button {
   @apply block h-10 rounded border-2 border-theme-secondary bg-theme-secondary px-2 text-theme-on-secondary shadow-md transition-all duration-200;
+
   &:hover {
     @apply bg-theme-primary text-theme-on-primary;
   }
+
   &:disabled {
     @apply pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner outline-none;
   }
@@ -154,10 +163,7 @@ html {
     position: absolute;
     display: block;
     content: "";
-    top: -16px;
-    bottom: -16px;
-    left: -40px;
-    right: -40px;
+    inset: -16px -40px;
     background-image: var(--background-url);
     background-size: 105% auto;
     background-position: center;
@@ -179,10 +185,6 @@ html {
     //   animation-play-state: paused;
     // }
   }
-}
-
-.anchor--is-active {
-  //
 }
 
 .logo {
@@ -211,6 +213,7 @@ html {
   @media not all and (pointer: coarse) {
     &:hover &__text {
       transform: rotateX(90deg) translateY(-22px);
+
       &::before {
         display: block;
         color: var(--error);
@@ -231,7 +234,7 @@ html {
 
 .blog-info {
   &__content {
-    box-shadow: inset 0px 0px 10px 10px var(--surface);
+    box-shadow: inset 0 0 10px 10px var(--surface);
     top: calc(var(--header-height) + 2rem);
   }
 }
@@ -250,9 +253,11 @@ html {
   0% {
     fill-opacity: 0.2;
   }
+
   50% {
     fill-opacity: 0.1;
   }
+
   100% {
     fill-opacity: 0.2;
   }
@@ -261,28 +266,25 @@ html {
 .image-container {
   &.has-frame {
     &::before {
-        display: block;
-        content: " ";
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        right: 3px;
-        bottom: 3px;
+      display: block;
+      content: " ";
+      position: absolute;
+      inset: 3px;
+      border-width: 1px;
 
-        border-width: 1px;
-        /* Try: groove, outset, inset, double, or keep solid */
-        border-style: outset;
-        border-color: var(--surface);
-        background-color: rgba(0, 0, 0, 0.05);
-        border-radius: 4px;
-
-        box-sizing: border-box;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2),
-        inset 1px 1px 3px rgba(0,0,0,0.3), 1px 1px 3px rgba(255,255,255,0.5);
-      }
+      /* Try: groove, outset, inset, double, or keep solid */
+      border-style: outset;
+      border-color: var(--surface);
+      background-color: rgb(0 0 0 / 5%);
+      border-radius: 4px;
+      box-sizing: border-box;
+      box-shadow:
+        2px 2px 5px rgb(0 0 0 / 20%),
+        inset 1px 1px 3px rgb(0 0 0 / 30%),
+        1px 1px 3px rgb(255 255 255 / 50%);
+    }
   }
 }
-
 
 .link {
   font-weight: bold;
@@ -291,6 +293,7 @@ html {
 
   &[target="_blank"]::after {
     content: " ";
+
     // background-image: url('@/assets/resources/svg/external-link.svg');
     background-size: 1em;
     background-size: contain;
@@ -300,11 +303,13 @@ html {
     display: inline-block;
     vertical-align: text-top;
   }
+
   &:hover,
   &:active {
     text-decoration: underline;
     filter: brightness(85%);
   }
+
   &:visited {
     filter: brightness(85%);
   }

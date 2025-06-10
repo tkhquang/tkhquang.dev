@@ -1,17 +1,8 @@
+/* stylelint-disable scss/dollar-variable-pattern */
 @use "sass:color";
 @use "sass:map";
 @use "sass:meta";
 @use "constants" as *;
-
-/// Get the color value from $colors constant
-///
-/// @param {string} $key -
-///   Key name of the color to search in $colors.
-/// @return {color} -
-///   Color value found in $colors based on the key.
-@function get-color($key) {
-  @return map.get($colors, $key);
-}
 
 /// Apply rules on current element based on 'data-theme' attribute of the body tag, default to dark theme.
 ///
@@ -34,7 +25,7 @@
 ///
 /// @param {'XS' | 'SM' | 'MD' | 'LG' | 'XL'} $canvas -
 ///   Screen sizes, in sync with TailwindCSS
-@mixin Responsive($canvas) {
+@mixin responsive($canvas) {
   $XS: 480px; // Custom added
   $SM: 640px;
   $MD: 768px;
@@ -92,7 +83,7 @@
       )
       var(--surface);
     color: (var--on-secondary);
-    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 2px 2px rgb(0 0 0 / 25%);
 
     img {
       width: 100%;
@@ -124,11 +115,13 @@
       display: inline-block;
       vertical-align: text-top;
     }
+
     &:hover,
     &:active {
       text-decoration: underline;
       filter: brightness(85%);
     }
+
     &:visited {
       filter: brightness(85%);
     }
@@ -150,9 +143,9 @@
       opacity: 0;
       position: absolute;
       left: -0.75em;
-      @include Responsive("MD") {
+      @include responsive("MD") {
         left: -1em;
-      };
+      }
     }
 
     &:hover {
@@ -177,59 +170,41 @@
   h1 {
     display: block;
     font-size: 2em;
-    margin-top: 0.67em;
-    margin-bottom: 0.67em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0.67em 0;
     font-weight: bold;
   }
 
   h2 {
     display: block;
     font-size: 1.5em;
-    margin-top: 0.83em;
-    margin-bottom: 0.83em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0.83em 0;
     font-weight: bold;
   }
 
   h3 {
     display: block;
     font-size: 1.17em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 1em 0;
     font-weight: bold;
   }
 
   h4 {
     display: block;
-    margin-top: 1.33em;
-    margin-bottom: 1.33em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 1.33em 0;
     font-weight: bold;
   }
 
   h5 {
     display: block;
     font-size: 0.83em;
-    margin-top: 1.67em;
-    margin-bottom: 1.67em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 1.67em 0;
     font-weight: bold;
   }
 
   h6 {
     display: block;
     font-size: 0.67em;
-    margin-top: 2.33em;
-    margin-bottom: 2.33em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 2.33em 0;
     font-weight: bold;
   }
 
@@ -254,7 +229,7 @@
       font-style: italic;
       font-size: 90%;
       font-weight: 500;
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgb(0 0 0 / 10%);
 
       &::before {
         pointer-events: none;
@@ -306,6 +281,7 @@
     list-style-type: disc;
     margin-left: 1.25em;
     margin-bottom: 1.25em;
+
     li {
       margin-bottom: 0.6em;
     }
@@ -315,6 +291,7 @@
     list-style-type: decimal;
     margin-left: 1.25em;
     margin-bottom: 1.25em;
+
     li {
       margin-bottom: 0.6em;
     }
@@ -337,7 +314,7 @@
   $background-color,
   $moz-size: null
 ) {
-  @if $moz-size == null {
+  @if not $moz-size {
     @if meta.type-of($webkit-size) == number {
       @if $webkit-size <= 8px {
         $moz-size: thin;

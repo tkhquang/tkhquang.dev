@@ -14,7 +14,7 @@ export async function getRemoteImage(
 ): Promise<string> {
   try {
     const hash = crypto.createHash("md5").update(url).digest("hex");
-    let filePath = path.resolve(options.targetPath, sanitize(hash));
+    const filePath = path.resolve(options.targetPath, sanitize(hash));
 
     // Cache check
     if (options.cache && fs.existsSync(filePath)) {

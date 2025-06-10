@@ -12,7 +12,7 @@ body {
 html {
   @apply bg-theme-background font-sans text-sm leading-8 text-theme-on-background antialiased;
 
-  @media screen and (min-width: 640px) {
+  @media screen and (width >= 640px) {
     @apply text-base;
   }
 }
@@ -42,6 +42,7 @@ select:focus {
 
 hr {
   @apply mx-0 h-px w-full border-0;
+
   background-image: linear-gradient(
     to right,
     transparent 0%,

@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 "use server";
 
 import CopyButton from "@/components/common/CopyButton";

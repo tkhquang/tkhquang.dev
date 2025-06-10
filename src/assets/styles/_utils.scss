@@ -35,7 +35,8 @@
 .list-border {
   & > li {
     padding-bottom: 1px;
-    background: linear-gradient(
+    background:
+      linear-gradient(
         to right,
         transparent 0%,
         var(--primary) 30%,
@@ -69,16 +70,5 @@
 @keyframes spin {
   to {
     transform: rotate(1turn);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    height: 0;
-    opacity: 0;
-  }
-  to {
-    height: auto;
-    opacity: 1;
   }
 }
