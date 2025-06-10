@@ -1,10 +1,10 @@
 "use client";
 
 import { useAsPathInitializer } from "@/store/router";
-import { themeStore } from "@/store/theme";
-import { Provider, useSetAtom, WritableAtom } from "jotai";
+import { useThemeInitializer } from "@/store/theme";
+import { Provider, WritableAtom } from "jotai";
 import { useHydrateAtoms } from "jotai/utils";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
 
 const AtomsHydrator = ({
   atomValues,
@@ -20,13 +20,8 @@ const AtomsHydrator = ({
 };
 
 const StoreSetter = () => {
+  useThemeInitializer();
   useAsPathInitializer();
-  const setTheme = useSetAtom(themeStore);
-
-  useEffect(() => {
-    window.__onThemeChange = setTheme;
-    setTheme(window.__theme);
-  }, [setTheme]);
 
   return null;
 };

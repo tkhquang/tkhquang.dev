@@ -1,11 +1,10 @@
 "use client";
 
 import { ChartData } from "@/components/landing/stacks/Stacks";
-import { themeStore } from "@/store/theme";
+import { useThemeValue } from "@/store/theme";
 import FusionCharts from "fusioncharts";
 import Pie3D from "fusioncharts/fusioncharts.charts";
 import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
-import { useAtomValue } from "jotai";
 import React from "react";
 import ReactFCOriginal from "react-fusioncharts";
 
@@ -24,7 +23,7 @@ export default function StacksChartContent({
 }: {
   chartData: ChartData[];
 }) {
-  const { cssVariables } = useAtomValue(themeStore);
+  const { cssVariables } = useThemeValue();
 
   // FusionCharts configuration
   const chartConfigs = {

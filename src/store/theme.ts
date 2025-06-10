@@ -1,9 +1,6 @@
 import { getCssVariables } from "@/utils/helpers";
-import { canUseDOM } from "@ariakit/core/utils/dom";
-import { debounce } from "debounce";
-import { atom } from "jotai";
-
-const DEFAULT_THEME_MODE = "dark";
+import { atom, useAtomValue, useSetAtom } from "jotai";
+import { useEffect } from "react";
 
 export type ThemeMode = "dark" | "light";
 
@@ -34,38 +31,13 @@ export const themeStore = atom(
   }
 );
 
-export const scrolledStore = atom<{ isScrolled: boolean; yOffset: number }>({
-  isScrolled: false,
-  yOffset: 0,
-});
+export const useThemeValue = () => useAtomValue(themeStore);
 
-scrolledStore.onMount = (set) => {
-  const checkIfIsScrolled = debounce(() => {
-    const scrollPos = window.scrollY || 0;
-    const winHeight = window.innerHeight;
-    const docHeight = window.document.documentElement.scrollHeight;
-    const perc = (100 * scrollPos) / (docHeight - winHeight);
+export const useThemeInitializer = () => {
+  const setTheme = useSetAtom(themeStore);
 
-    let yOffset: number;
-
-    if (perc > 100) {
-      yOffset = 100;
-    } else {
-      yOffset = perc;
-    }
-
-    set({
-      isScrolled: scrollPos > 600 - 96,
-      yOffset: yOffset || 0,
-    });
-  }, 10);
-  checkIfIsScrolled();
-
-  window.addEventListener("scroll", checkIfIsScrolled);
-  window.addEventListener("load", checkIfIsScrolled);
-
-  return () => {
-    window.removeEventListener("scroll", checkIfIsScrolled);
-    window.removeEventListener("load", checkIfIsScrolled);
-  };
+  useEffect(() => {
+    window.__onThemeChange = setTheme;
+    setTheme(window.__theme);
+  }, [setTheme]);
 };

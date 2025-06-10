@@ -2,13 +2,12 @@
 
 import LoaderLines from "@/components/common/loader/LoaderLines";
 import { useAfterPaintEffect } from "@/hooks/useAfterPaintEffect";
-import { themeStore } from "@/store/theme";
+import { useThemeValue } from "@/store/theme";
 import clsx from "clsx";
-import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 
 export default function StacksChartFrame() {
-  const [theme, setTheme] = useAtom(themeStore);
+  const theme = useThemeValue();
   const frameRef = useRef<HTMLIFrameElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 

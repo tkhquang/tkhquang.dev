@@ -1,13 +1,12 @@
 "use client";
 
-import ReadLineIndicator from "@/components/common/ReadLineIndicator";
+import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
 import classNames from "classnames";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { FiArrowLeftCircle } from "react-icons/fi";
 
 const BlogHeader = ({
   className,
@@ -61,7 +60,7 @@ const BlogHeader = ({
                 <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
                   {!isHomeBlog ? (
                     <>
-                      <FiArrowLeftCircle className="size-8" />
+                      <BackButtonIcon className="size-8" />
                       <span className="hidden md:inline-flex">
                         &nbsp;Back to&nbsp;
                       </span>
@@ -100,7 +99,6 @@ const BlogHeader = ({
           </div>
         </div>
       </div>
-      <ReadLineIndicator />
     </header>
   );
 };
