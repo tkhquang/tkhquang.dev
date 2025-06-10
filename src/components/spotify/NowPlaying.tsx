@@ -149,7 +149,7 @@ export default function SpotifyNowPlaying({
           )}
           <div className="inline-flex">
             <span className="mx-1 text-[--artist-color]">&middot;</span>
-            <p className="spotify-artist max-w-full truncate text-[--artist-color]">
+            <p className="spotify-artist max-w-full truncate text-[--artist-color] opacity-80">
               {artistName}
             </p>
           </div>

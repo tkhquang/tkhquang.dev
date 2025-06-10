@@ -116,6 +116,7 @@ html {
 .typography {
   @include typography;
 
+  // Workaround for fixed header anchor click
   :target {
     &::before {
       content: "";

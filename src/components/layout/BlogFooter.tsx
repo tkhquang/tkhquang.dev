@@ -12,7 +12,8 @@ const BlogFooter = ({
     <footer
       {...props}
       className={clsx(
-        "footer surface sticky bottom-0 mt-auto w-full py-4 text-center shadow-box",
+        "footer sticky bottom-0 mt-auto w-full py-3 text-center shadow-box-md md:py-4",
+        "header--blog__background-transparent text-theme-on-surface",
         className
       )}
     >
@@ -21,8 +22,8 @@ const BlogFooter = ({
           <SpotifyNowPlaying
             className={clsx([
               "text-sm",
-              "[--song-color:theme(colors.gray.200)]",
-              "[--artist-color:theme(colors.gray.400)]",
+              "[--song-color:theme(colors.theme.on-surface)]",
+              "[--artist-color:theme(colors.theme.on-surface)]",
             ])}
             songEffect="underline"
             showCover

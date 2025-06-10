@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useThemeValue } from "@/store/theme";
+import { useEffect, useMemo, useState } from "react";
 
 export default function TableOfContent({ headings }: { headings: any }) {
   const [activeAnchor, setActiveAnchor] = useState<string>("");
-  const headerHeight = 60;
+  const { cssVariables } = useThemeValue();
+  const headerHeight = useMemo(() => {
+    return parseFloat(String(cssVariables["header-height"])) || 60;
+  }, [cssVariables]);
 
   useEffect(() => {
     if (!headings?.length) return;
@@ -64,12 +68,12 @@ export default function TableOfContent({ headings }: { headings: any }) {
         observer.unobserve(element);
       });
     };
-  }, [headings]);
+  }, [headerHeight, headings]);
 
   return (
-    <section className="table-of-content fixed bottom-0 left-0 z-fg mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100">
+    <section className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100">
       {headings?.length! > 0 && (
-        <div className="table-of-content__list sticky top-[60px] hidden pt-5 lg:block">
+        <div className="table-of-content__list sticky top-header-height hidden pt-5 lg:block">
           <h2 className="heading mt-10 text-2xl">Table of Content</h2>
           <ul className="mt-5">
             {headings!.map((heading: any) => (
