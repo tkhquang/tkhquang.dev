@@ -16,15 +16,15 @@ function hslToHex(hsl: string): string | null {
     .match(/^hsl\s*\(\s*([0-9.]+)\s*,\s*([0-9.]+)%\s*,\s*([0-9.]+)%\s*\)$/i);
   if (!match) return null;
 
-  let [_, h, s, l] = match;
-  let hue = parseFloat(h);
-  let sat = parseFloat(s) / 100;
-  let light = parseFloat(l) / 100;
+  const [_, h, s, l] = match;
+  const hue = parseFloat(h);
+  const sat = parseFloat(s) / 100;
+  const light = parseFloat(l) / 100;
 
   // HSL to RGB conversion
-  let c = (1 - Math.abs(2 * light - 1)) * sat;
-  let x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
-  let m = light - c / 2;
+  const c = (1 - Math.abs(2 * light - 1)) * sat;
+  const x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
+  const m = light - c / 2;
   let r = 0,
     g = 0,
     b = 0;
@@ -36,9 +36,9 @@ function hslToHex(hsl: string): string | null {
   else if (240 <= hue && hue < 300) [r, g, b] = [x, 0, c];
   else if (300 <= hue && hue < 360) [r, g, b] = [c, 0, x];
 
-  let r255 = Math.round((r + m) * 255);
-  let g255 = Math.round((g + m) * 255);
-  let b255 = Math.round((b + m) * 255);
+  const r255 = Math.round((r + m) * 255);
+  const g255 = Math.round((g + m) * 255);
+  const b255 = Math.round((b + m) * 255);
 
   return (
     "#" +

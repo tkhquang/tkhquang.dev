@@ -72,7 +72,7 @@ export default function TableOfContent({ headings }: { headings: any }) {
 
   return (
     <section className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100">
-      {headings?.length! > 0 && (
+      {headings?.length > 0 && (
         <div className="table-of-content__list sticky top-header-height hidden pt-5 lg:block">
           <h2 className="heading mt-10 text-2xl">Table of Content</h2>
           <ul className="mt-5">

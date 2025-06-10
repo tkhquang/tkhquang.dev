@@ -24,10 +24,10 @@ export default async function TagPage({
   const tags = await markdownParser.getAllTags();
   const posts = await markdownParser.getAllPosts();
 
-  const currentTag = tags.find((tag) => tag.slug === slug);
+  const currentTag = tags.find((tag) => tag.slug === slug)!;
 
   const filteredPost = posts.filter((post) =>
-    post.tags.includes(currentTag?.title!)
+    post.tags.includes(currentTag?.title)
   );
 
   return (

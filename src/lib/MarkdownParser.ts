@@ -28,8 +28,10 @@ import slugify from "slugify";
 import { unified } from "unified";
 
 declare global {
-  var markdownParser: MarkdownParser | undefined;
-  var __MARKDOWN_PARSER_INITIALIZED__: boolean;
+  namespace MarkdownParser {
+    let instance: MarkdownParser | undefined;
+    let __INITIALIZED__: boolean;
+  }
 }
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
@@ -120,17 +122,17 @@ function getImageParser() {
 export async function getMarkdownParser(): Promise<MarkdownParser> {
   if (
     process.env.NODE_ENV === "development" &&
-    global.__MARKDOWN_PARSER_INITIALIZED__
+    global.MarkdownParser.__INITIALIZED__
   ) {
-    return global.markdownParser!;
+    return global.MarkdownParser.instance!;
   }
 
-  global.markdownParser = new MarkdownParser();
+  global.MarkdownParser.instance = new MarkdownParser();
   if (process.env.NODE_ENV === "development") {
-    global.__MARKDOWN_PARSER_INITIALIZED__ = true;
+    global.MarkdownParser.__INITIALIZED__ = true;
   }
 
-  return global.markdownParser;
+  return global.MarkdownParser.instance;
 }
 
 class MarkdownParser {
