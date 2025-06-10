@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 // Register the hook to avoid React version discrepancies
 gsap.registerPlugin(useGSAP);
@@ -22,23 +22,20 @@ const BackButtonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
 
   useGSAP(
     () => {
-      if (!isInBlogPost) return;
+      if (!isInBlogPost || !circleRef.current) return;
 
       const circle = circleRef.current;
-
-      // Set initial state: stroke is visible but fully offset (not drawn)
-      gsap.set(circle, {
-        stroke: "currentColor",
-        strokeDasharray: circumference,
-        strokeDashoffset: circumference,
-      });
-
       const scrollManager = new ScrollManager();
+
       scrollManager.subscribe({
         id: ID,
-        callback({ scrollY, scrollProgress }) {
-          const dashOffset = circumference * (1 - scrollProgress);
-          gsap.set(circle, { strokeDashoffset: dashOffset });
+        callback({ scrollProgress }) {
+          const targetDashOffset = circumference * (1 - scrollProgress);
+          gsap.to(circle, {
+            strokeDashoffset: targetDashOffset,
+            duration: 0.1,
+            ease: "none",
+          });
         },
       });
 
@@ -78,6 +75,11 @@ const BackButtonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
         transform="rotate(-90 12 12)"
         stroke="transparent"
         ref={circleRef}
+        style={{
+          stroke: "currentColor",
+          strokeDasharray: circumference,
+          strokeDashoffset: circumference,
+        }}
       />
       <polyline points="12 8 8 12 12 16" />
       <line x1="16" y1="12" x2="8" y2="12" />
