@@ -281,3 +281,30 @@ html {
       }
   }
 }
+
+
+.link {
+  font-weight: bold;
+  color: (var(--on-surface));
+  position: relative;
+
+  &[target="_blank"]::after {
+    content: " ";
+    // background-image: url('@/assets/resources/svg/external-link.svg');
+    background-size: 1em;
+    background-size: contain;
+    margin-left: 3px;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: text-top;
+  }
+  &:hover,
+  &:active {
+    text-decoration: underline;
+    filter: brightness(85%);
+  }
+  &:visited {
+    filter: brightness(85%);
+  }
+}
