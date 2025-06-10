@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 "use server";
 
 import CopyButton from "@/components/common/CopyButton";
@@ -28,10 +29,8 @@ import slugify from "slugify";
 import { unified } from "unified";
 
 declare global {
-  namespace MarkdownParser {
-    let instance: MarkdownParser | undefined;
-    let __INITIALIZED__: boolean;
-  }
+  var markdownParser: MarkdownParser | undefined;
+  var __MARKDOWN_PARSER_INITIALIZED__: boolean;
 }
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
@@ -122,17 +121,17 @@ function getImageParser() {
 export async function getMarkdownParser(): Promise<MarkdownParser> {
   if (
     process.env.NODE_ENV === "development" &&
-    global.MarkdownParser.__INITIALIZED__
+    global.__MARKDOWN_PARSER_INITIALIZED__
   ) {
-    return global.MarkdownParser.instance!;
+    return global.markdownParser!;
   }
 
-  global.MarkdownParser.instance = new MarkdownParser();
+  global.markdownParser = new MarkdownParser();
   if (process.env.NODE_ENV === "development") {
-    global.MarkdownParser.__INITIALIZED__ = true;
+    global.__MARKDOWN_PARSER_INITIALIZED__ = true;
   }
 
-  return global.MarkdownParser.instance;
+  return global.markdownParser;
 }
 
 class MarkdownParser {
