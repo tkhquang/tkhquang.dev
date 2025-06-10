@@ -4,7 +4,6 @@ import CopyButton from "@/components/common/CopyButton";
 import Image, { ImageProps } from "@/components/common/NextImage";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
-import rehypeUnwrapImage from "@/lib/rehype-unwrap-image";
 import remarkEmbded from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
@@ -73,7 +72,7 @@ function getParser() {
       properties: {
         class: "icon icon-link",
       },
-      rel: ["nofollow", "noopener", "noreferrer"],
+      rel: ["nofollow", "noopener"],
       target: "_blank",
     })
     .use(rehypeCustomNextImage, {

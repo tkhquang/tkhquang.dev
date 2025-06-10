@@ -13,9 +13,6 @@ import { Suspense } from "react";
 
 export const metadata: Metadata = {
   description: Blog.METADATA.description,
-  other: {
-    version: Date.now(),
-  },
   title: Blog.METADATA.title,
 };
 
