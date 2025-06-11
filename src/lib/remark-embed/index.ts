@@ -61,8 +61,8 @@ export default function remarkEmbed(options: Options) {
             break;
           }
         }
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error("remarkEmbed: ", error);
       }
 
       if (embedData) {

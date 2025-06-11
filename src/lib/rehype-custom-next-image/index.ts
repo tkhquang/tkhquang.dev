@@ -81,7 +81,7 @@ export default function rehypeCustomNextImage(
           try {
             result = await getPlaceholderImage(originalSrc);
           } catch (error) {
-            console.error(error);
+            console.error("getPlaceholderImage: ", error);
           }
 
           if (fs.existsSync(filePath)) {

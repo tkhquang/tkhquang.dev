@@ -65,7 +65,7 @@ export const getNowPlaying = async () => {
 
     return json;
   } catch (error) {
-    console.error(error);
+    console.error("getNowPlaying: ", error);
     throw error;
   }
 };

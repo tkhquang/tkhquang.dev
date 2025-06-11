@@ -61,7 +61,7 @@ export default function SpotifyNowPlaying({
       setData(json);
     } catch (error: any) {
       if (error.name !== "AbortError") {
-        console.error(error);
+        console.error("fetchSpotifyData: ", error);
       }
     }
   };

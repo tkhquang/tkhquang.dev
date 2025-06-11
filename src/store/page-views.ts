@@ -26,7 +26,7 @@ export const useGetPageViews = () => {
         return { ...prev, ...data };
       });
     } catch (error) {
-      console.error(error);
+      console.error("getPageViews", error);
       // TODO: Handle errors
     }
   };

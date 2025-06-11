@@ -9,6 +9,8 @@ interface FormValues {
   message: string;
 }
 
+const FORM_API_ENDPOINT = "https://api.web3forms.com/submit";
+
 const Contact = () => {
   const {
     formState: { errors, isSubmitting },
@@ -26,7 +28,7 @@ const Contact = () => {
     setStatus("fetching");
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch(FORM_API_ENDPOINT, {
         body: JSON.stringify({
           access_key: process.env.NEXT_PUBLIC_WEB3FORM_ACCESS_KEY || "",
           ...data,
@@ -65,10 +67,7 @@ const Contact = () => {
         <div className="mx-auto w-full md:w-2/3">
           <form
             className="email-form flex-center relative flex w-full flex-wrap overflow-hidden pt-5 text-center"
-            name="portfolio-dev"
-            method="POST"
             onSubmit={handleSubmit(onSubmit)}
-            autoComplete="off"
           >
             {/* Hidden field for bot prevention */}
             <div hidden aria-hidden="true">

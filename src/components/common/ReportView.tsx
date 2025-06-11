@@ -17,7 +17,7 @@ const ReportView = () => {
       });
     } catch (error) {
       // TODO: Handle errors
-      console.log(error);
+      console.error("ReportView", error);
     }
   }, [pathname]);
 
