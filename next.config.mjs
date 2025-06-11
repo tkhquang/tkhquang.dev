@@ -58,6 +58,13 @@ const nextConfig = {
         permanent: false,
         source: "/portfolio/:path*",
       },
+      {
+        source:
+          "/blog/posts/get-access-to-children-s-functions-from-parent-component-with-react-hooks/",
+        destination:
+          "/blog/posts/get-access-to-childrens-functions-from-parent-component-with-react-hooks/",
+        permanent: true,
+      },
     ];
   },
 };
