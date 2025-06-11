@@ -3,13 +3,13 @@ import { Portfolio, Site } from "@/constants/meta";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
 
-export const montserrat = Montserrat({
+const montserrat = Montserrat({
   preload: true,
   subsets: ["latin"],
   display: "swap",
 });
 
-export const merriweather = Merriweather({
+const merriweather = Merriweather({
   preload: true,
   subsets: ["latin"],
   weight: ["400"],
@@ -93,8 +93,11 @@ export default async function RootLayout({
         <StackedLayers />
         <div
           id="class-keeper"
-          className="hidden transition-colors duration-500"
           aria-hidden
+          style={{
+            ...merriweather.style,
+            ...montserrat.style,
+          }}
         ></div>
       </body>
     </html>

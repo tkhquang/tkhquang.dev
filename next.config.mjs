@@ -60,7 +60,7 @@ const nextConfig = {
       },
       {
         source:
-          "/blog/posts/get-access-to-children-s-functions-from-parent-component-with-react-hooks/",
+          "/blog/posts/get-access-to-children-s-functions-from-parent-component-with-react-hooks/:path*",
         destination:
           "/blog/posts/get-access-to-childrens-functions-from-parent-component-with-react-hooks/",
         permanent: true,
