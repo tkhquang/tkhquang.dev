@@ -1,6 +1,5 @@
 "use client";
 
-import Example from "@/components/common/Drawer";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { ScrollManager } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
@@ -87,7 +86,6 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
               </div>
             </a>
           </button>
-          <Example />
         </div>
         <div className="header__right flex h-full items-center space-x-4">
           <div className="flex flex-col">
