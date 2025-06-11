@@ -37,7 +37,7 @@
     "gsap": "^3.13.0",
     "hast-util-to-string": "^3.0.1",
     "hast-util-whitespace": "^3.0.0",
-    "image-size": "^1.1.1",
+    "image-size": "^2.0.2",
     "jotai": "^2.12.5",
     "lucide-react": "^0.468.0",
     "mustache": "^4.2.0",

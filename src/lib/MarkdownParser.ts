@@ -2,18 +2,17 @@
 "use server";
 
 import CopyButton from "@/components/common/CopyButton";
-import Image, { ImageProps } from "@/components/common/NextImage";
+import Image from "@/components/common/NextImage";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import remarkEmbded from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
-import { getPlaceholderImage } from "@/utils/next-mage";
+import { getProcessedImage } from "@/utils/image";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
 import matter from "gray-matter";
-import { imageSize } from "image-size";
 import path from "path";
 import * as prod from "react/jsx-runtime";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -28,14 +27,11 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import slugify from "slugify";
 import { unified } from "unified";
-import { promisify } from "util";
 
 declare global {
   var markdownParser: MarkdownParser | undefined;
   var __MARKDOWN_PARSER_INITIALIZED__: boolean;
 }
-
-const sizeOf = promisify(imageSize);
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
@@ -116,7 +112,6 @@ function getImageParser() {
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeCustomNextImage, {
       cache: true,
-      publicFolder: "./public",
       targetPath: "./public/uploads/remote",
     })
     .use(rehypeStringify);
@@ -137,6 +132,11 @@ export async function getMarkdownParser(): Promise<MarkdownParser> {
 
   return global.markdownParser;
 }
+
+const FALLBACK_DIMENSITION = {
+  WIDTH: 1280,
+  HEIGHT: 720,
+};
 
 class MarkdownParser {
   private parser: ReturnType<typeof getParser>;
@@ -164,40 +164,54 @@ class MarkdownParser {
         await fs.promises.readFile(fullPath, { encoding: "utf8" })
       ) as unknown as { data: PostsCollection; content: string };
 
-      const coverBlurImageUrl = data.cover_image
-        ? (await getPlaceholderImage(data.cover_image))?.placeholder
-        : null;
-
-      let width;
-      let height;
-
-      if (data.cover_image) {
-        const filePath = path.join(process.cwd(), "public", data.cover_image);
-
-        if (fs.existsSync(filePath)) {
-          const dimensions = await sizeOf(filePath);
-          if (dimensions) {
-            width = dimensions.width;
-            height = dimensions.height;
-          }
+      const [coverData, coverDataExtra] = await (async () => {
+        if (!data.cover_image) {
+          return [
+            {
+              src: "",
+              blurDataURL: undefined,
+              alt: "",
+            },
+            {
+              width: undefined,
+              height: undefined,
+            },
+          ];
         }
-      }
 
-      const coverData = {
-        src: data.cover_image,
-        blurDataURL: coverBlurImageUrl,
-        alt: "Cover Image",
-      } as ImageProps;
+        const {
+          placeholder,
+          output,
+          width = FALLBACK_DIMENSITION.WIDTH,
+          height = FALLBACK_DIMENSITION.HEIGHT,
+        } = await getProcessedImage({
+          cache: true,
+          targetPath: "./public/uploads/remote",
+          source: data.cover_image,
+          shouldStore: true,
+        });
+
+        return [
+          {
+            src: output,
+            blurDataURL: placeholder,
+            alt: "Cover Image",
+            width,
+            height,
+          },
+          {
+            width,
+            height,
+          },
+        ];
+      })();
 
       return {
         ...data,
         content,
         slug,
         coverData,
-        coverDataExtra: {
-          width,
-          height,
-        },
+        coverDataExtra: coverDataExtra,
       };
     } catch (error) {
       console.warn(`Missing post file: ${fullPath}`);

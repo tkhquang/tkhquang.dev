@@ -1,30 +1,22 @@
 import { ImageProps } from "@/components/common/NextImage";
-import { getRemoteImage } from "@/utils/image";
-import { getPlaceholderImage } from "@/utils/next-mage";
-import fs from "fs";
+import { getProcessedImage } from "@/utils/image";
 import { Element, Root } from "hast";
-import { imageSize } from "image-size";
-import path from "path";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
-import { promisify } from "util";
-
-const sizeOf = promisify(imageSize);
-
 interface Options {
   targetPath?: string;
-  publicFolder?: string;
   cache?: boolean;
 }
+
+const FALLBACK_DIMENSITION = {
+  WIDTH: 1280,
+  HEIGHT: 720,
+};
 
 export default function rehypeCustomNextImage(
   options: Options = {}
 ): Transformer<Root> {
-  const {
-    cache = true,
-    publicFolder = "./public",
-    targetPath = "./public",
-  } = options;
+  const { cache = true, targetPath = "./public" } = options;
 
   return async function transformer(tree: Root): Promise<Root> {
     const images: Element[] = [];
@@ -42,68 +34,40 @@ export default function rehypeCustomNextImage(
         const properties = node.properties || {};
         const originalAlt = properties.alt || "";
         const originalSrc = properties.src as string;
-        let finalSrc = originalSrc;
 
         if (!originalSrc) {
           return;
         }
 
-        let width = properties.width as number | undefined;
-        let height = properties.height as number | undefined;
-
-        const isRemoteImage = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(originalSrc);
-
         try {
-          if (isRemoteImage) {
-            // Handle remote images
-            const localPath = await getRemoteImage(originalSrc, {
-              cache,
-              targetPath,
-            });
+          const {
+            placeholder,
+            output,
+            width = FALLBACK_DIMENSITION.WIDTH,
+            height = FALLBACK_DIMENSITION.HEIGHT,
+          } = await getProcessedImage({
+            cache,
+            targetPath,
+            source: originalSrc,
+            shouldStore: true,
+          });
 
-            const relativePath = path.relative(
-              path.resolve("./public"),
-              localPath
-            );
-            finalSrc = `/${relativePath.replace(/\\+/g, "/")}`;
-          } else {
-            // Handle local images
-            const localImagePath = path.join(publicFolder, originalSrc);
-
-            finalSrc = `/${path
-              .relative(path.resolve("./public"), localImagePath)
-              .replace(/\\+/g, "/")}`;
-          }
-
-          let result;
-          const filePath = path.join(process.cwd(), "public", finalSrc);
-
-          try {
-            result = await getPlaceholderImage(originalSrc);
-          } catch (error) {
-            console.error("getPlaceholderImage: ", error);
-          }
-
-          if (fs.existsSync(filePath)) {
-            const dimensions = await sizeOf(filePath);
-            if (dimensions) {
-              width = width ?? dimensions.width;
-              height = height ?? dimensions.height;
-            }
-          }
+          const isProcessedImage = output.includes(
+            targetPath.replace(/^\.\//, "")
+          );
 
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
           node.properties = {
             alt: originalAlt as string,
-            blurDataURL: result?.placeholder,
-            height: height ?? 720,
+            blurDataURL: placeholder,
+            height,
             // placeholder: "blur",
-            src: filePath.includes(targetPath.replace(/^\.\//, ""))
-              ? `${process.env.NEXT_PUBLIC_BASE_URL}/${finalSrc}`
-              : finalSrc,
-            width: width ?? 1280,
-            "data-ratio": (width ?? 1280) / (height ?? 720),
+            src: isProcessedImage
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}/${output}`
+              : output,
+            width,
+            "data-ratio": width / height,
           } satisfies ImageProps & { "data-ratio": number };
         } catch (err) {
           console.error(`Failed to process image ${originalSrc}:`, err);

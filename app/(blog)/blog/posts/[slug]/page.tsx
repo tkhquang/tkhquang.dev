@@ -11,7 +11,6 @@ import ClientSideGetPageViews from "@/components/container/ClientSideGetPageView
 import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
-import { getPlaceholderImage } from "@/utils/next-mage";
 import clsx from "clsx";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
@@ -78,9 +77,6 @@ export default async function Post({
   } = await markdownParser.parseMarkdown(post.content);
 
   const category = await markdownParser.getCategoryBySlug(post.category_slug);
-  const coverPlaceholder = post.cover_image
-    ? (await getPlaceholderImage(post.cover_image as string)).placeholder
-    : null;
 
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;
@@ -122,11 +118,11 @@ export default async function Post({
         )}
         style={{
           ...((post.cover_image && {
-            "--background-url": `url(${coverPlaceholder})`,
+            "--background-url": `url(${post.coverData.blurDataURL})`,
           }) as React.CSSProperties),
         }}
       >
-        {post.cover_image && <NextImage {...post.coverData!} {...coverProps} />}
+        {post.cover_image && <NextImage {...post.coverData} {...coverProps} />}
       </header>
 
       <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">

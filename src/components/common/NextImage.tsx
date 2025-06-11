@@ -30,6 +30,21 @@ export default function Image(props: ImageProps) {
   const imgElementRef = useRef<HTMLImageElement | null>(null);
   const containerElementRef = useRef<HTMLDivElement | null>(null);
 
+  const handleLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
+    const imgElement = event.currentTarget;
+
+    imgElement.dataset.fetched = String(true);
+    containerElementRef.current!.dataset.fetched = String(true);
+  };
+
+  useEffect(() => {
+    const imgElement = imgElementRef.current;
+    if (imgElement?.complete) {
+      imgElement.dataset.fetched = String(true);
+      containerElementRef.current!.dataset.fetched = String(true);
+    }
+  }, []);
+
   useEffect(() => {
     let isUnmounted = false;
 
@@ -46,19 +61,16 @@ export default function Image(props: ImageProps) {
         }
 
         // Wait until the image is loaded & decoded
-        if ("decode" in imgElement) {
-          try {
-            await imgElement.decode();
-          } catch (e) {
-            await new Promise((resolve, reject) => {
-              imgElement.onload = resolve;
-              imgElement.onerror = reject;
-            });
+        try {
+          await imgElement.decode?.();
+        } catch (error) {
+          if (imgElement?.complete) {
+            imgElement.dataset.fetched = String(true);
+            containerElementRef.current!.dataset.fetched = String(true);
           }
-        } else {
           await new Promise((resolve, reject) => {
-            (imgElement as HTMLImageElement).onload = resolve;
-            (imgElement as HTMLImageElement).onerror = reject;
+            imgElement.onload = resolve;
+            imgElement.onerror = reject;
           });
         }
 
@@ -110,6 +122,7 @@ export default function Image(props: ImageProps) {
             placeholder,
             blurDataURL,
           })}
+        onLoad={handleLoad}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import Image from "@/components/common/NextImage";
 import { fetchGitHubProjects } from "@/services/github";
-import { getPlaceholderImage } from "@/utils/next-mage";
+import { getProcessedImage } from "@/utils/image";
 import React from "react";
 
 interface Demo {
@@ -66,7 +66,11 @@ const Projects = async () => {
   async function getDemoDataWithImages(demos: Demo[]) {
     return Promise.all(
       demos.map(async (demo) => {
-        const image = await getPlaceholderImage(demo.preview);
+        const image = await getProcessedImage({
+          source: demo.preview,
+          shouldStore: false,
+          cache: true,
+        });
         return { ...demo, image };
       })
     );
@@ -162,7 +166,7 @@ const Projects = async () => {
                       <Image
                         fill
                         src={
-                          image.src ||
+                          image.source ||
                           "/assets/resources/images/demos/default.svg"
                         }
                         alt={demo.title}

@@ -1,17 +1,21 @@
 import "./AboutMe.scss";
 import Image from "@/components/common/NextImage";
 import { Portfolio } from "@/constants/meta";
-import { getPlaceholderImage } from "@/utils/next-mage";
+import { getProcessedImage } from "@/utils/image";
 
 const RESUME = {
   fileName: "Quang Trinh Khac - Resume.pdf",
   path: "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
 };
 
+const ABOUT_ME_IMAGE = "/assets/resources/images/Aleks-3.png";
+
 const AboutMe = async () => {
-  const aboutImage = await getPlaceholderImage(
-    "/assets/resources/images/Aleks-3.png"
-  );
+  const aboutImage = await getProcessedImage({
+    source: ABOUT_ME_IMAGE,
+    shouldStore: false,
+    cache: true,
+  });
 
   return (
     <section className="about">
@@ -30,7 +34,7 @@ const AboutMe = async () => {
                 fill
                 sizes="auto"
                 className="author__image object-cover object-[15%_50%]"
-                src={aboutImage.src}
+                src={aboutImage.source}
                 alt="Aleks"
                 placeholder="blur"
                 blurDataURL={aboutImage.placeholder}
