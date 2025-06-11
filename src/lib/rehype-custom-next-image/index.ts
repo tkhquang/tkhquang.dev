@@ -103,7 +103,8 @@ export default function rehypeCustomNextImage(
               ? `${process.env.NEXT_PUBLIC_BASE_URL}/${finalSrc}`
               : finalSrc,
             width: width ?? 1280,
-          } satisfies ImageProps;
+            "data-ratio": (width ?? 1280) / (height ?? 720),
+          } satisfies ImageProps & { "data-ratio": number };
         } catch (err) {
           console.error(`Failed to process image ${originalSrc}:`, err);
         }

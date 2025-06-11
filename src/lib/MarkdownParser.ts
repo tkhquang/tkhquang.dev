@@ -13,6 +13,7 @@ import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
 import matter from "gray-matter";
+import { imageSize } from "image-size";
 import path from "path";
 import * as prod from "react/jsx-runtime";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -27,11 +28,14 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import slugify from "slugify";
 import { unified } from "unified";
+import { promisify } from "util";
 
 declare global {
   var markdownParser: MarkdownParser | undefined;
   var __MARKDOWN_PARSER_INITIALIZED__: boolean;
 }
+
+const sizeOf = promisify(imageSize);
 
 const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
@@ -164,6 +168,21 @@ class MarkdownParser {
         ? (await getPlaceholderImage(data.cover_image))?.placeholder
         : null;
 
+      let width;
+      let height;
+
+      if (data.cover_image) {
+        const filePath = path.join(process.cwd(), "public", data.cover_image);
+
+        if (fs.existsSync(filePath)) {
+          const dimensions = await sizeOf(filePath);
+          if (dimensions) {
+            width = dimensions.width;
+            height = dimensions.height;
+          }
+        }
+      }
+
       const coverData = {
         src: data.cover_image,
         blurDataURL: coverBlurImageUrl,
@@ -175,6 +194,10 @@ class MarkdownParser {
         content,
         slug,
         coverData,
+        coverDataExtra: {
+          width,
+          height,
+        },
       };
     } catch (error) {
       console.warn(`Missing post file: ${fullPath}`);

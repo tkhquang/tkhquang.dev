@@ -12,6 +12,7 @@ import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import { getPlaceholderImage } from "@/utils/next-mage";
+import clsx from "clsx";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
@@ -81,18 +82,31 @@ export default async function Post({
     ? (await getPlaceholderImage(post.cover_image as string)).placeholder
     : null;
 
+  const coverWidth = post.coverDataExtra?.width;
+  const coverHeight = post.coverDataExtra?.height;
+
   const coverProps: Partial<ImageProps> = {
-    className: "header__image m-auto min-h-full w-auto",
+    className: clsx(
+      "header__image m-auto min-h-full",
+      "size-full max-h-none",
+      "md:h-[50vw] md:max-h-[50vh] md:w-auto"
+    ),
     containerClassName: "",
-    height: 720,
+    shouldShowBackground: true,
+    height: coverHeight ?? 720,
     loading: "eager",
     priority: true,
-    style: {
-      height: "50vw",
-      maxHeight: "50vh",
-    },
-    width: 1280,
+    width: coverWidth ?? 1280,
+    blurDataURL: post.coverData.blurDataURL,
+    placeholder: "blur",
     backgroundClassName: "dark:invert-0 invert",
+    ...(coverWidth && coverHeight
+      ? {
+          style: {
+            aspectRatio: coverWidth / coverHeight,
+          },
+        }
+      : {}),
   };
 
   return (
@@ -102,7 +116,10 @@ export default async function Post({
         <ClientSideGetPageViews pathnames={[`/blog/posts/${post.slug}`]} />
       </Suspense>
       <header
-        className="header__wrapper relative flex flex-col overflow-hidden"
+        className={clsx(
+          "header__wrapper relative flex flex-col overflow-hidden",
+          "before:hidden md:before:block"
+        )}
         style={{
           ...((post.cover_image && {
             "--background-url": `url(${coverPlaceholder})`,

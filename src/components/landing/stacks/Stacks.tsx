@@ -75,6 +75,7 @@ export default async function Stacks() {
               height={500}
               style={{ objectFit: "cover" }}
               shouldShowBackground={false}
+              unoptimized
             />
           </div>
 
@@ -105,6 +106,7 @@ export default async function Stacks() {
                     height={150}
                     style={{ objectFit: "contain" }}
                     shouldShowBackground={false}
+                    unoptimized
                   />
                 </div>
                 <span className="text-xl font-bold leading-loose text-theme-on-surface">
