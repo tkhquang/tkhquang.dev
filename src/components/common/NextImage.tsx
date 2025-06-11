@@ -3,7 +3,7 @@
 import { GritBackground } from "@/components/ui/grit-background";
 import { clsx } from "clsx";
 import type { ImageProps as NextImageProps } from "next/image";
-import Image from "next/image";
+import NextImage from "next/image";
 import { useEffect, useRef } from "react";
 
 export interface ImageProps extends Omit<NextImageProps, "src"> {
@@ -13,7 +13,7 @@ export interface ImageProps extends Omit<NextImageProps, "src"> {
   shouldShowBackground?: boolean;
 }
 
-export default function NextImage(props: ImageProps) {
+export default function Image(props: ImageProps) {
   const {
     alt,
     className,
@@ -87,7 +87,7 @@ export default function NextImage(props: ImageProps) {
       {shouldShowBackground && (
         <GritBackground className={clsx("", className, backgroundClassName)} />
       )}
-      <Image
+      <NextImage
         ref={imgElementRef}
         className={clsx(
           "size-full max-h-full object-center",
