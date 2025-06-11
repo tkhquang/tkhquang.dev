@@ -12,11 +12,23 @@ gsap.registerPlugin(useGSAP);
 
 const ID = "Header";
 
-const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
+const scrolledStyles = {
+  backgroundColor: "var(--theme-landing-background-semi-transparent)",
+  boxShadow:
+    "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
+};
+
+const Header = ({
+  className,
+  useScroll = true,
+  ...props
+}: React.ComponentProps<"header"> & { useScroll?: boolean }) => {
   const headerRef = useRef<HTMLElement>(null);
 
   useGSAP(
     () => {
+      if (!useScroll) return;
+
       const scrollManager = new ScrollManager();
       scrollManager.subscribe({
         id: ID,
@@ -42,7 +54,7 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
         scrollManager.destroy();
       };
     },
-    { scope: headerRef, dependencies: [] }
+    { scope: headerRef, dependencies: [useScroll] }
   );
 
   return (
@@ -52,10 +64,15 @@ const Header = ({ className, ...props }: React.ComponentProps<"header">) => {
         "flex-center fixed inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 text-gray-200 shadow-lg transition-all duration-500 ease-in-out",
         className
       )}
-      style={{
-        backgroundColor: "transparent",
-        boxShadow: "none",
-      }}
+      style={
+        useScroll
+          ? {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            }
+          : scrolledStyles
+      }
+      {...props}
     >
       <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="header__left flex h-full items-center space-x-4">

@@ -52,6 +52,7 @@ export async function generateMetadata({
 
 export const dynamic = "force-static";
 export const revalidate = false;
+export const dynamicParams = false;
 
 const MERMAIDJS_SCRIPT_CONTENT = `
 <script type="module">
