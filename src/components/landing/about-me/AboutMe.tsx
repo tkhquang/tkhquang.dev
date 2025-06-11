@@ -35,6 +35,7 @@ const AboutMe = async () => {
                 placeholder="blur"
                 blurDataURL={aboutImage.placeholder}
                 loading="eager"
+                containerClassName="author__image--border"
               />
             </div>
           </div>

@@ -3,14 +3,17 @@ import { Portfolio, Site } from "@/constants/meta";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat } from "next/font/google";
 
-const montserrat = Montserrat({
+export const montserrat = Montserrat({
   preload: true,
   subsets: ["latin"],
+  display: "swap",
 });
-const merriweather = Merriweather({
+
+export const merriweather = Merriweather({
   preload: true,
   subsets: ["latin"],
   weight: ["400"],
+  display: "swap",
 });
 
 const SCRIPT_CONTENT = `

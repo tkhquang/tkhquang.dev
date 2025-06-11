@@ -83,7 +83,8 @@ const config = {
       },
       fontFamily: {
         sans: [
-          "Montserrat", // Custom added
+          "Montserrat",
+          "Montserrat Fallback",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
@@ -99,13 +100,24 @@ const config = {
           '"Noto Color Emoji"',
         ],
         serif: [
-          "Merriweather", // Custom added
+          "Merriweather",
+          "Merriweather Fallback",
           "Georgia",
           "Cambria",
           '"Times New Roman"',
           "Times",
           "serif",
         ],
+        // mono: [
+        //   "ui-monospace",
+        //   "SFMono-Regular",
+        //   "Menlo",
+        //   "Monaco",
+        //   "Consolas",
+        //   "Liberation Mono",
+        //   "Courier New",
+        //   "monospace",
+        // ],
       },
       keyframes: {
         "fade-in": {

@@ -110,7 +110,7 @@ export default function SpotifyNowPlaying({
   return (
     <div className={clsx(["flex items-center", className])}>
       {showCover && data.item?.album.images?.[0]?.url ? (
-        <div className="relative size-6 shrink-0">
+        <div className="relative size-6 shrink-0 rounded-full">
           <Image
             fill
             src={data.item?.album.images?.[0]?.url}

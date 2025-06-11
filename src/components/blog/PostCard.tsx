@@ -35,14 +35,15 @@ const PostCard = ({ index, post }: PostCardProps) => {
   return (
     <li className="news-feed__list-item w-full pt-8" id={post.slug}>
       <PostMeta className="news-feed__list-item__meta" post={post} />
-      <h2 className="news-feed__list-item__title heading mb-4 mt-1 text-xl hover:opacity-75 xs:text-2xl sm:text-3xl sm:leading-10">
-        <Link
-          href={`/blog/posts/${post.slug}`}
-          className="news-feed__list-item__link"
-        >
+      <Link
+        href={`/blog/posts/${post.slug}`}
+        className="news-feed__list-item__link inline"
+      >
+        <h2 className="news-feed__list-item__title heading mb-4 mt-1 inline text-xl hover:opacity-75 xs:text-2xl sm:text-3xl sm:leading-10">
           {post.title}
-        </Link>
-      </h2>
+        </h2>
+      </Link>
+
       {coverImage && (
         <figure>
           <Link
