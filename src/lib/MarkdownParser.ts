@@ -1,8 +1,8 @@
 /* eslint-disable no-var */
 "use server";
 
-import CopyButton from "@/components/common/CopyButton";
 import Image from "@/components/common/NextImage";
+import { CustomPreWithCopy } from "@/components/common/PreWithCopy";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import remarkEmbded from "@/lib/remark-embed";
@@ -26,7 +26,7 @@ import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import slugify from "slugify";
-import { unified } from "unified";
+import { unified, Processor } from "unified";
 
 declare global {
   var markdownParser: MarkdownParser | undefined;
@@ -48,7 +48,7 @@ function getCategoryFiles() {
     .filter((files) => files.endsWith(".md"));
 }
 
-function getParser() {
+function getProcessor(): Processor {
   return unified()
     .use(remarkParse, { fragment: true })
     .use(remarkEmbded, {
@@ -62,10 +62,10 @@ function getParser() {
         block: "plaintext",
         inline: "plaintext",
       },
-      keepBackground: false,
+      keepBackground: true,
       theme: {
-        dark: "solarized-dark",
-        light: "solarized-light",
+        dark: "github-dark-dimmed",
+        light: "github-light-default",
       },
       transformers: [],
     })
@@ -97,16 +97,17 @@ function getParser() {
     })
     .use(rehypeReact, {
       components: {
-        "copy-button": CopyButton,
+        "rehype-pretty-copy-button-pre": CustomPreWithCopy,
         "next-image": Image,
       },
       Fragment: prod.Fragment,
       jsx: prod.jsx,
       jsxs: prod.jsxs,
+      passNode: true,
     } as Options);
 }
 
-function getImageParser() {
+function getImageProcessor(): Processor {
   return unified()
     .use(remarkParse, { fragment: true })
     .use(remarkRehype, { allowDangerousHtml: true })
@@ -139,12 +140,12 @@ const FALLBACK_DIMENSITION = {
 };
 
 class MarkdownParser {
-  private parser: ReturnType<typeof getParser>;
-  private imageParser: ReturnType<typeof getImageParser>;
+  private parser: ReturnType<typeof getProcessor>;
+  private imageParser: ReturnType<typeof getImageProcessor>;
 
   constructor() {
-    this.parser = getParser();
-    this.imageParser = getImageParser();
+    this.parser = getProcessor();
+    this.imageParser = getImageProcessor();
     // console.info("MarkdownParser instance created");
   }
 
@@ -279,7 +280,7 @@ class MarkdownParser {
           `${decodeURIComponent(slug)}.md`
         );
 
-        const { content, data } = matter(
+        const { content: _content, data } = matter(
           await fs.promises.readFile(fullPath, { encoding: "utf8" })
         ) as unknown as { data: PostsCollection; content: string };
 

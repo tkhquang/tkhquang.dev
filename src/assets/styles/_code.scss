@@ -1,5 +1,8 @@
 code[data-line-numbers] {
   counter-reset: line;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-right: 1em;
 }
 
 code[data-line-numbers] > [data-line]::before {
@@ -27,33 +30,28 @@ code[data-line-numbers-max-digits="4"] > [data-line]::before {
 }
 
 html {
-  code[data-theme*=" "],
-  code[data-theme*=" "] span {
+  code[data-theme*="dark"],
+  code[data-theme*="dark"] span {
     color: var(--shiki-dark);
     background-color: var(--code), var(--shiki-dark-bg);
   }
 
   &[data-theme="light"] {
-    code[data-theme*=" "],
-    code[data-theme*=" "] span {
+    code[data-theme*="light"],
+    code[data-theme*="light"] span {
       color: var(--shiki-light);
       background-color: var(--code), var(--shiki-light-bg);
-    }
-
-    button.rehype-pretty-copy span {
-      filter: invert(50%);
     }
   }
 
   // Inline
   span > code:not([data-line-numbers]) {
-    padding-left: 0.25rem;
-    padding-right: 0.25rem;
+    padding: 0.125em 0.25em;
+    background-color: var(--code) !important;
   }
 
   pre > code:not([data-line-numbers]) {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    padding: 1em;
   }
 }
 
@@ -69,19 +67,22 @@ html {
   }
 }
 
-[data-rehype-pretty-code-figure] {
+figure[data-rehype-pretty-code-figure] {
   position: relative;
-  overflow: auto !important;
-  background: var(--code) !important;
+  background-color: var(--code);
 
   > [data-rehype-pretty-code-title] {
     position: sticky;
     top: 0;
     left: 0;
     right: 0;
+
+    @apply shadow-md;
   }
 
-  > pre {
-    @apply min-w-min bg-theme-code py-4 shadow-inner;
+  &,
+  pre,
+  code {
+    overflow-x: auto;
   }
 }
