@@ -1,7 +1,7 @@
 import StackedLayers from "@/components/layout/StackedLayers";
 import { Portfolio, Site } from "@/constants/meta";
 import type { Metadata } from "next";
-import { Merriweather, Montserrat } from "next/font/google";
+import { Merriweather, Montserrat, Source_Code_Pro } from "next/font/google";
 
 const montserrat = Montserrat({
   preload: true,
@@ -13,6 +13,12 @@ const merriweather = Merriweather({
   preload: true,
   subsets: ["latin"],
   weight: ["400"],
+  display: "swap",
+});
+
+const sourceCodePro = Source_Code_Pro({
+  preload: true,
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -97,6 +103,7 @@ export default async function RootLayout({
           style={{
             ...merriweather.style,
             ...montserrat.style,
+            ...sourceCodePro.style,
           }}
         ></div>
       </body>
