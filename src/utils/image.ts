@@ -117,9 +117,9 @@ export async function getRemoteImage(
 
     // Otherwise, just return the arrayBuffer
     return arrayBuffer;
-  } catch (error: any) {
-    console.error(`Error fetching image: ${url}\n`, error.message || error);
-    throw new Error(`Request Failed. Error: ${error.message || error}`);
+  } catch (error) {
+    console.error(`Error fetching image: ${url}\n`, error);
+    throw new Error(`Request Failed. Error: ${error}`);
   }
 }
 

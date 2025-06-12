@@ -53,7 +53,7 @@ export default function rehypeCustomNextImage(
           });
 
           const isProcessedImage = output.includes(
-            targetPath.replace(/^\.\//, "")
+            targetPath.replace(/^\.\/public/, "")
           );
 
           // Update the <img> node to <next-image>
