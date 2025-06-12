@@ -27,6 +27,7 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import slugify from "slugify";
 import { unified, Processor } from "unified";
+import { VFile } from "vfile";
 
 declare global {
   var markdownParser: MarkdownParser | undefined;
@@ -139,6 +140,10 @@ const FALLBACK_DIMENSITION = {
   HEIGHT: 720,
 };
 
+interface ProcessedVfile extends VFile {
+  result: React.ReactNode;
+}
+
 class MarkdownParser {
   private parser: ReturnType<typeof getProcessor>;
   private imageParser: ReturnType<typeof getImageProcessor>;
@@ -149,9 +154,9 @@ class MarkdownParser {
     // console.info("MarkdownParser instance created");
   }
 
-  async parseMarkdown(content: string) {
+  async parseMarkdown(content: string): Promise<ProcessedVfile> {
     const vfile = await this.parser.process(content);
-    return vfile;
+    return vfile as ProcessedVfile;
   }
 
   async getPostBySlug(fileName: string): Promise<MarkdownPost> {
