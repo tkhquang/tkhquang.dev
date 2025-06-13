@@ -82,11 +82,26 @@ export const PreWithCopy = ({
 
 export const CustomPreWithCopy = (props: PreWithCopyProps) => {
   return (
-    <PreWithCopy
-      {...props}
-      copyIcon="/assets/resources/svg/clipboard-add.svg"
-      successIcon="/assets/resources/svg/clipboard-success.svg"
-    />
+    <>
+      <PreWithCopy
+        {...props}
+        copyIcon="/assets/resources/svg/clipboard-add.svg"
+        successIcon="/assets/resources/svg/clipboard-success.svg"
+      />
+      <style jsx global>{`
+        body {
+          &::after {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            z-index: -1;
+            content: url("/assets/resources/svg/clipboard-add.svg")
+              url("/assets/resources/svg/clipboard-success.svg");
+          }
+        }
+      `}</style>
+    </>
   );
 };
 
