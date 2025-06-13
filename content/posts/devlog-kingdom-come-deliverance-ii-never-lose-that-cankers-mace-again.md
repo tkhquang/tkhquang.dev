@@ -21,10 +21,6 @@ We've all been there after a hectic skirmish: that crucial sword or valuable shi
 
 ![The classic struggle: a dropped weapon nearly invisible in the dense undergrowth.](/uploads/images/loot-beacon-2.webp)
 
-<br />
-<hr />
-<br />
-
 This very frustration led to the "Loot Beacon" mod – a little Lua-scripted helper to ensure Henry (and by extension, me) never misses a valuable drop, a hidden corpse, or an important herb again. With a simple keypress, elusive items become clear.
 
 ![With Loot Beacon enabled, the same weapon is now clearly highlighted and easy to spot.](/uploads/images/loot-beacon-3.webp)
@@ -80,7 +76,7 @@ if LootBeacon_LoadModules() then LootBeacon.Core:initialize() end
 
 ### Detecting What's Worth a Beacon
 
-The `EntityDetector` is where much of the specific game logic comes in. It uses `System.GetEntitiesInSphere(playerPos, radius)` to get all nearby entities, then iterates through them.
+The `EntityDetector` is where much of the specific game logic comes in. It uses `System.GetEntitiesInSphere(playerPos, radius){:lua}` to get all nearby entities, then iterates through them.
 
 ```lua title="Snippet from entity_detector.lua (simplified)" showLineNumbers
 function LootBeacon.EntityDetector:detectEntities()
@@ -121,11 +117,11 @@ function LootBeacon.EntityDetector:processEntity(entity)
 end
 ```
 
-Getting item pickability involves checking `item:CanPickUp(player.id)` and `item:CanSteal(player.id)`. A crucial filter was skipping items with empty UI names (often NPC-only inventory items) or items currently in use. Custom entities like "Nest" or "Stash" (for chests) are handled via a configurable list.
+Getting item pickability involves checking `item:CanPickUp(player.id){:lua}` and `item:CanSteal(player.id){:lua}`. A crucial filter was skipping items with empty UI names (often NPC-only inventory items) or items currently in use. Custom entities like "Nest" or "Stash" (for chests) are handled via a configurable list.
 
 ### Making Things Glow: Particles and Accessibility
 
-The `Highlighter` module takes the detected entities and uses `entity:LoadParticleEffect(-1, effectPath, {})` to attach the visual beacons. These are defined in a `loot_beacon.xml` particle library.
+The `Highlighter` module takes the detected entities and uses `entity:LoadParticleEffect(-1, effectPath, {}){:lua}` to attach the visual beacons. These are defined in a `loot_beacon.xml` particle library.
 
 <pre class="mermaid flex justify-center">
 graph TD
@@ -153,12 +149,27 @@ Initially, my go-to color for items was a bright red particle effect (`loot_beac
 This was a classic oversight on my part. Color accessibility is incredibly important. The user pointed out that red is a common problem for colorblind individuals and suggested purple as a more universally visible alternative, mentioning that some developers use gold and purple together. They also shared a helpful [PDF on Colorblind Safe Color Schemes](https://www.nceas.ucsb.edu/sites/default/files/2022-06/Colorblind%20Safe%20Color%20Schemes.pdf).
 
 Based on this feedback and the guide, I decided to expand the available particle effect colors in `loot_beacon.xml`, creating simple pillar effects for:
-*   <span style="color: red;">red</span>, <span style="color: green;">green</span>, <span style="color: blue;">blue</span>, <span style="color: yellow; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">yellow</span>, <span style="color: cyan; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">cyan</span>, <span style="color: magenta;">magenta</span>, <span style="color: orange;">orange</span>, <span style="color: purple;">purple</span>, <span style="color: white; background-color: #333; padding: 0 2px;">white</span>, <span style="color: lightblue; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">lightblue</span>, <span style="color: pink;">pink</span>, <span style="color: lime; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">lime</span>, <span style="color: teal;">teal</span>.
+
+*   <span style="color: red; background: #111; padding: 0 2px;">red</span>,
+<span style="color: green; background: #111; padding: 0 2px;">green</span>,
+<span style="color: blue; background: #f4f4f4; padding: 0 2px;">blue</span>,
+<span style="color: yellow; background: #111; padding: 0 2px;">yellow</span>,
+<span style="color: cyan; background: #111; padding: 0 2px;">cyan</span>,
+<span style="color: magenta; background: #111; padding: 0 2px;">magenta</span>,
+<span style="color: orange; background: #111; padding: 0 2px;">orange</span>,
+<span style="color: purple; background: #f4f4f4; padding: 0 2px;">purple</span>,
+<span style="color: white; background: #111; padding: 0 2px;">white</span>,
+<span style="color: lightblue; background: #111; padding: 0 2px;">lightblue</span>,
+<span style="color: pink; background: #111; padding: 0 2px;">pink</span>,
+<span style="color: lime; background: #111; padding: 0 2px;">lime</span>,
+<span style="color: teal; background: #f4f4f4; padding: 0 2px;">teal</span>.
+
+
 
 Then, I updated the mod's default color configuration (in `mod.cfg` and settable via console commands) to use a more accessible palette based on common advice for visibility across various color vision deficiencies. For **version 1.4.2+**, the new defaults are:
-*   Pickable Items & Custom Entities: **<span style="color: orange;">Orange</span>** (`loot_beacon.pillar_orange`)
-*   Human Corpses: **<span style="color: cyan; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Cyan</span>** (`loot_beacon.pillar_cyan`)
-*   Animal Carcasses: **<span style="color: blue;">Blue</span>** (`loot_beacon.pillar_blue`)
+*   Pickable Items & Custom Entities: **<span style="color: orange; background: #111; padding: 0 2px;">Orange</span>** (`loot_beacon.pillar_orange`)
+*   Human Corpses: **<span style="color: cyan; background: #111; padding: 0 2px;">Cyan</span>** (`loot_beacon.pillar_cyan`)
+*   Animal Carcasses: **<span style="color: blue; background: #f4f4f4; padding: 0 2px;">Blue</span>** (`loot_beacon.pillar_blue`)
 
 Users can, of course, customize these paths to any of the available "pillar_COLOR" effects or even point to different custom particle effects if they create them. The community feedback was overwhelmingly positive for these changes.
 

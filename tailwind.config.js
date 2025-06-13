@@ -108,16 +108,18 @@ const config = {
           "Times",
           "serif",
         ],
-        // mono: [
-        //   "ui-monospace",
-        //   "SFMono-Regular",
-        //   "Menlo",
-        //   "Monaco",
-        //   "Consolas",
-        //   "Liberation Mono",
-        //   "Courier New",
-        //   "monospace",
-        // ],
+        mono: [
+          "Source Code Pro",
+          "Source Code Pro Fallback",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Monaco",
+          "Consolas",
+          "Liberation Mono",
+          "Courier New",
+          "monospace",
+        ],
       },
       keyframes: {
         "fade-in": {
