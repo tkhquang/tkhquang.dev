@@ -2,7 +2,10 @@ code[data-line-numbers] {
   counter-reset: line;
   padding-top: 1em;
   padding-bottom: 1em;
-  padding-right: 1em;
+
+  > span {
+    padding-right: 1em;
+  }
 }
 
 code[data-line-numbers] > [data-line]::before {
