@@ -53,5 +53,12 @@ hr {
 }
 
 #class-keeper {
-  @apply hidden transition-colors duration-500;
+  @apply transition-colors duration-500;
+
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
 }

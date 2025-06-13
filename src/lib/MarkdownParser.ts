@@ -104,7 +104,6 @@ function getProcessor(): Processor {
       Fragment: prod.Fragment,
       jsx: prod.jsx,
       jsxs: prod.jsxs,
-      passNode: true,
     } as Options);
 }
 
