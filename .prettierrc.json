@@ -6,5 +6,6 @@
   "jsxSingleQuote": false,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindConfig": "./tailwind.config.js",
-  "tailwindFunctions": ["clsx", "classnames", "classNames"]
+  "tailwindFunctions": ["clsx", "classnames", "classNames"],
+  "endOfLine": "auto"
 }
