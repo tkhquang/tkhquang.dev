@@ -72,7 +72,7 @@ export default async function Post({
   const markdownParser = await getMarkdownParser();
   const post = await markdownParser.getPostBySlug(slug);
   const {
-    data: { toc: headings },
+    data: { toc: headings = [] },
     result: html,
   } = await markdownParser.parseMarkdown(post.content);
 
