@@ -1,8 +1,10 @@
+"use server";
+
 import { getMimeTypeFromFilename } from "@shopify/mime-types";
 import chromium from "@sparticuz/chromium";
 import fsPromise from "fs/promises";
 import path from "path";
-import puppeteer, { type Browser, type Page } from "puppeteer";
+import puppeteer, { type Browser, type Page } from "puppeteer-core";
 
 const executablePath = await chromium.executablePath();
 

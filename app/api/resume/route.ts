@@ -6,7 +6,7 @@ import fsPromise from "fs/promises";
 import { compressPDF } from "ghostscript-node";
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
-import type { Browser } from "puppeteer";
+import { type Browser } from "puppeteer-core";
 import { v4 as uuidv4 } from "uuid";
 
 let browser: Browser | null;
