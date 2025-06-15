@@ -19,21 +19,27 @@ const executablePath = await chromium.executablePath();
  * - Designed for running in controlled environments, such as servers or CI pipelines.
  */
 export async function createBrowserInstance(): Promise<Browser> {
+  // const browser = await puppeteer.launch({
+  //   args: [
+  //     "--no-sandbox",
+  //     "--disable-setuid-sandbox",
+  //     "--disable-dev-shm-usage",
+  //     "--disable-gpu",
+  //     "--hide-scrollbars",
+  //     "--disable-web-security",
+  //     "--disable-extensions",
+  //     "--disable-infobars",
+  //     "--disable-notifications",
+  //     "--no-first-run",
+  //     "--disable-background-networking",
+  //     "--disable-background-timer-throttling",
+  //   ],
+  //   headless: true,
+  //   executablePath,
+  // });
+
   const browser = await puppeteer.launch({
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-gpu",
-      "--hide-scrollbars",
-      "--disable-web-security",
-      "--disable-extensions",
-      "--disable-infobars",
-      "--disable-notifications",
-      "--no-first-run",
-      "--disable-background-networking",
-      "--disable-background-timer-throttling",
-    ],
+    args: chromium.args,
     headless: true,
     executablePath,
   });
