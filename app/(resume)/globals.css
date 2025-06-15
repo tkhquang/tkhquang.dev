@@ -1,0 +1,72 @@
+/* stylelint-disable selector-class-pattern */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer utilities {
+  .print\:shadow-none {
+    @media print {
+      box-shadow: none !important;
+    }
+  }
+
+  .print\:break-inside-avoid {
+    @media print {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+  }
+}
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  html,
+  body {
+    /* font-size: 16pt; */
+  }
+
+  @page {
+    size: a4 portrait;
+    margin: 0;
+  }
+
+  .bg-slate-100 {
+    background-color: white !important;
+  }
+
+  .shadow-xl {
+    box-shadow: none !important;
+  }
+
+  /* Apply this class to every component that shouldn't be cut off between to pages of your PDF */
+  .no-break-inside {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Apply this class to every component that should always display on next page */
+  .break-before {
+    break-before: always;
+    page-break-before: always;
+  }
+
+  /* Apply this class to every component that its next content should always display on next page */
+  .break-after {
+    break-after: always;
+    page-break-after: always;
+  }
+}
