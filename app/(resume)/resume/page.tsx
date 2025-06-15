@@ -1,5 +1,5 @@
+import { getFormattedDuration, getYearsOfExperience } from "@/utils/date";
 import clsx from "clsx";
-import { format, intervalToDuration, formatDuration } from "date-fns";
 import {
   Github,
   Linkedin,
@@ -70,38 +70,6 @@ interface WorkExperience {
   url: string | null;
   duration: string;
   projects: Project[];
-}
-
-//================================================================================
-// UTILITY FUNCTIONS
-//================================================================================
-export function getYearsOfExperience(start: Date | number | string): number {
-  const duration = intervalToDuration({
-    start: new Date(start),
-    end: new Date(),
-  });
-  return duration.years || 0;
-}
-
-export interface GetFormattedDurationOptions {
-  startDate: Date | number | string;
-  endDate?: Date | number | string | null;
-}
-
-export function getFormattedDuration({
-  startDate,
-  endDate = null,
-}: GetFormattedDurationOptions): string {
-  const start = new Date(startDate);
-  if (!endDate) {
-    return `${format(start, "MM/yyyy")} - Present`;
-  }
-  const end = new Date(endDate);
-  const duration = intervalToDuration({ start, end });
-  const durationString = formatDuration(duration, {
-    format: ["years", "months"],
-  });
-  return `${format(start, "MM/yyyy")} - ${format(end, "MM/yyyy")} (${durationString})`;
 }
 
 //================================================================================
