@@ -266,7 +266,7 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
             size={300}
             title="Table of Content"
             trigger={<MobileTocTrigger />}
-            className="[&_.drawer\_\_content]:!max-w-[calc(100%-16px)]"
+            className="[&_.drawer\_\_content]:!max-w-[calc(100%-2rem)]"
           >
             <TocList
               headings={headings}
