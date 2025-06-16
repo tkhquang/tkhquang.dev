@@ -49,7 +49,7 @@ const nextConfig = {
   },
   outputFileTracingIncludes: {
     "/blog{,/**/*}": ["./content/**"],
-    "/api/resume{,/**/*}": [
+    "/api/pdf{,/**/*}": [
       "node_modules/@sparticuz/chromium/**/*",
       "node_modules/puppeteer-core/**/*",
     ],
@@ -71,7 +71,6 @@ const nextConfig = {
       },
     ];
   },
-  serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium"],
 };
 
 export default nextConfig;
