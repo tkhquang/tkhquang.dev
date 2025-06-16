@@ -1,5 +1,6 @@
 import "./AboutMe.scss";
 import Image from "@/components/common/NextImage";
+import PDFDownloadButton from "@/components/common/PDFDownloadButton";
 import { Portfolio } from "@/constants/meta";
 import { getProcessedImage } from "@/utils/image";
 
@@ -45,26 +46,35 @@ const AboutMe = async () => {
           </div>
         </div>
 
-        <div className="download-container flex-center my-2 flex-col">
-          <a
+        <PDFDownloadButton
+          url={`${process.env.NEXT_PUBLIC_BASE_URL}/resume`}
+          filename="Quang_Trinh_Khac-Resume"
+          loading={
+            <>
+              <div
+                className="download__link shadow-md"
+                rel=" noopener noreferrer"
+                title="View Resume"
+              >
+                <span>Loading...</span>
+                <span>Loading...</span>
+              </div>
+              <div className="link">{RESUME.fileName}</div>
+            </>
+          }
+          className="download-container flex-center mx-auto my-2 flex-col"
+          title="View Resume"
+        >
+          <div
             className="download__link shadow-md"
-            target="_blank"
             rel=" noopener noreferrer"
             title="View Resume"
-            href={RESUME.path}
           >
             <span>Download</span>
             <span>PDF</span>
-          </a>
-          <a
-            target="_blank"
-            href={RESUME.path}
-            rel="noopener noreferrer"
-            title="View Resume"
-          >
-            {RESUME.fileName}
-          </a>
-        </div>
+          </div>
+          <div className="link">{RESUME.fileName}</div>
+        </PDFDownloadButton>
       </div>
     </section>
   );
