@@ -49,6 +49,10 @@ const nextConfig = {
   },
   outputFileTracingIncludes: {
     "/blog{,/**/*}": ["./content/**"],
+    "/api/resume{,/**/*}": [
+      "node_modules/@sparticuz/chromium/**/*",
+      "node_modules/puppeteer-core/**/*",
+    ],
   },
   outputFileTracingRoot: path.join(__dirname),
   async redirects() {
