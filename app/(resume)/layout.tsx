@@ -10,11 +10,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Quang's Resume",
+  title: "Quang Trinh Khac - Resume",
   description: "Private resume page",
   robots: "noindex, nofollow, noarchive, nosnippet",
   openGraph: {
-    title: "Quang's Resume",
+    title: "Quang Trinh Khac - Resume",
     description: "Private resume page",
     type: "profile",
   },
