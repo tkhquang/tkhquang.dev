@@ -6,8 +6,6 @@ import fsPromise from "fs/promises";
 import path from "path";
 import puppeteer, { type Browser, type Page } from "puppeteer-core";
 
-const executablePath = await chromium.executablePath();
-
 /**
  * Creates and launches a new Puppeteer browser instance with predefined configurations.
  *
@@ -38,8 +36,24 @@ export async function createBrowserInstance(): Promise<Browser> {
   //   executablePath,
   // });
 
+  const executablePath = await chromium.executablePath();
+
   const browser = await puppeteer.launch({
-    args: chromium.args,
+    args: [
+      ...chromium.args,
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--hide-scrollbars",
+      "--disable-web-security",
+      "--disable-extensions",
+      "--disable-infobars",
+      "--disable-notifications",
+      "--no-first-run",
+      "--disable-background-networking",
+      "--disable-background-timer-throttling",
+    ],
     headless: true,
     executablePath,
   });
