@@ -59,7 +59,7 @@ const AboutMe = async () => {
                 <span>Loading...</span>
                 <span>Loading...</span>
               </div>
-              <div className="link">{RESUME.fileName}</div>
+              <div className="link text-theme-primary">{RESUME.fileName}</div>
             </>
           }
           className="download-container flex-center mx-auto my-2 flex-col"
@@ -73,7 +73,7 @@ const AboutMe = async () => {
             <span>Download</span>
             <span>PDF</span>
           </div>
-          <div className="link">{RESUME.fileName}</div>
+          <div className="link text-theme-primary">{RESUME.fileName}</div>
         </PDFDownloadButton>
       </div>
     </section>

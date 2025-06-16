@@ -33,7 +33,7 @@ select::-ms-expand {
   display: none;
 }
 
-button:focus,
+button:not(.interactive):focus,
 textarea:focus,
 input:focus,
 select:focus {

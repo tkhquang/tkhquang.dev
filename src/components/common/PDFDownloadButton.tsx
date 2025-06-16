@@ -46,7 +46,12 @@ export default function PDFDownloadButton({
     <button
       onClick={handleDownload}
       disabled={isGenerating}
-      className={clsx(isGenerating && "cursor-not-allowed", className)}
+      className={clsx(
+        "interactive",
+        isGenerating && "cursor-not-allowed",
+        className
+      )}
+      aria-label="Download PDF"
       {...props}
     >
       {isGenerating ? loading : children}
