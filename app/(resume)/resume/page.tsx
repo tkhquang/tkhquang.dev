@@ -590,15 +590,10 @@ export const revalidate = 86400;
 
 export default function ResumePage() {
   return (
-    <div
-      className={clsx(
-        "min-h-screen bg-slate-100 p-6 antialiased",
-        "font-sans-inter"
-      )}
-    >
+    <div className={clsx("bg-slate-100 antialiased", "font-sans-inter")}>
       <div
         className={clsx(
-          "mx-auto max-w-3xl bg-white px-6 pt-6 shadow-xl print:shadow-none"
+          "mx-auto max-w-3xl bg-white px-10 pt-10 shadow-xl print:shadow-none"
         )}
       >
         <ResumeHeader />
