@@ -598,7 +598,7 @@ export default function ResumePage() {
     >
       <div
         className={clsx(
-          "mx-auto max-w-3xl bg-white px-6 py-10 shadow-xl print:shadow-none"
+          "mx-auto max-w-3xl bg-white px-6 pt-6 shadow-xl print:shadow-none"
         )}
       >
         <ResumeHeader />
