@@ -1,18 +1,5 @@
 import { getFormattedDuration, getYearsOfExperience } from "@/utils/date";
 import clsx from "clsx";
-import {
-  Github,
-  Linkedin,
-  Globe,
-  Mail,
-  Phone,
-  MapPin,
-  ExternalLink,
-  Award,
-  Calendar,
-  Users,
-} from "lucide-react";
-import type React from "react";
 
 //================================================================================
 // TYPESCRIPT INTERFACES
@@ -27,20 +14,6 @@ interface Info {
 interface Skill {
   name: string;
   subskills: string[];
-}
-
-interface Link {
-  title: string;
-  content: string;
-  url: string;
-  Icon: React.ElementType;
-}
-
-interface Contact {
-  title: string;
-  content: string;
-  url?: string | null;
-  Icon: React.ElementType;
 }
 
 interface Certificate {
@@ -78,8 +51,8 @@ interface WorkExperience {
 const INFO: Info = {
   firstName: "Quang",
   lastName: "Trinh Khac",
-  title: "Senior Front-End Engineer",
-  summary: `Accomplished Senior Front-End Engineer with ${getYearsOfExperience("2019-01-01")}+ years of expertise in architecting, developing, and deploying scalable web applications using modern JavaScript frameworks. Acknowledged expert in React and Vue, with a proven ability to lead technical initiatives, enhance user experience, and drive business objectives. Passionate about clean code, performance optimization, and collaborative problem-solving.`,
+  title: "Senior Frontend Engineer",
+  summary: `Accomplished Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years of expertise in architecting, developing, and deploying scalable web applications using modern JavaScript frameworks. Acknowledged expert in React and Vue, with a proven ability to lead technical initiatives, enhance user experience, and drive business objectives. Passionate about clean code, performance optimization, and collaborative problem-solving.`,
 };
 
 const SKILLS: Skill[] = [
@@ -139,48 +112,6 @@ const SKILLS: Skill[] = [
   },
 ];
 
-const LINKS: Link[] = [
-  {
-    title: "Portfolio",
-    content: "tkhquang.dev",
-    url: "https://tkhquang.dev/",
-    Icon: Globe,
-  },
-  {
-    title: "LinkedIn",
-    content: "linkedin.com/in/tkhquang",
-    url: "https://www.linkedin.com/in/quang-trinh-khac-66476517b/",
-    Icon: Linkedin,
-  },
-  {
-    title: "GitHub",
-    content: "github.com/tkhquang",
-    url: "https://github.com/tkhquang",
-    Icon: Github,
-  },
-];
-
-const CONTACTS: Contact[] = [
-  {
-    title: "Phone",
-    content: "+84 8585 33839",
-    url: "tel:+84858533839",
-    Icon: Phone,
-  },
-  {
-    title: "Email",
-    content: "khacquang.trinh@gmail.com",
-    url: "mailto:khacquang.trinh@gmail.com",
-    Icon: Mail,
-  },
-  {
-    title: "Location",
-    content: "District 1, HCMC, Vietnam",
-    url: null,
-    Icon: MapPin,
-  },
-];
-
 const CERTIFICATIONS: CertificateGroup[] = [
   {
     organization: "Wizeline Academy",
@@ -236,7 +167,7 @@ const CERTIFICATIONS: CertificateGroup[] = [
 
 const WORK_EXPERIENCE: WorkExperience[] = [
   {
-    title: "Senior Front-End Engineer",
+    title: "Senior Frontend Engineer",
     company: "Care",
     url: "https://www.wearecare.sg/",
     duration: getFormattedDuration({ startDate: "2023-08-07" }),
@@ -244,13 +175,13 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Health Screening Report Generation System",
         summary:
-          "Architected and single-handedly developed a mission-critical service for generating dynamic PDF health reports from complex lab data. This system streamlined clinical workflows and established a foundation for future data products.",
+          "Architected and led the development of a mission-critical service for generating dynamic PDF health reports from complex lab data, guiding a small frontend team. This system streamlined clinical workflows and established a foundation for future data products.",
         teamSize: 4,
         url: null,
         tasks: [
           "Engineered a scalable microservice using Next.js API routes, integrating Puppeteer for precise server-side PDF rendering and Recharts for data visualization.",
           "Defined and implemented the complete project architecture, coding standards, and CI/CD pipeline, ensuring a maintainable and high-quality codebase.",
-          "Orchestrated a seamless integration with front-end teams, accelerating feature delivery and enabling new platform capabilities.",
+          "Orchestrated a seamless integration with frontend teams, accelerating feature delivery and enabling new platform capabilities.",
         ],
         stacks: [
           "Next.js",
@@ -264,13 +195,13 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Enterprise Wellness Platform",
         summary:
-          "Spearheaded front-end development for a partner-facing wellness platform, delivering advanced customization and mobile-integrated features that measurably improved partner engagement.",
+          "Spearheaded frontend development for a partner-facing wellness platform, delivering advanced customization and mobile-integrated features that measurably improved partner engagement.",
         teamSize: 10,
         url: null,
         tasks: [
           "Developed highly responsive and accessible user interfaces using React and TypeScript, meeting ambitious deadlines while fulfilling all business requirements.",
           "Engineered a flawless webview integration for the core Flutter application, ensuring a consistent and fluid user experience across both Android and iOS.",
-          "Architected and executed a monorepo strategy for four front-end repositories, significantly reducing code duplication and standardizing component usage.",
+          "Architected and executed a monorepo strategy for four frontend repositories, significantly reducing code duplication and standardizing component usage.",
           "Integrated analytics and event tracking to provide actionable data insights, leading to data-driven improvements in the user experience.",
         ],
         stacks: [
@@ -307,16 +238,16 @@ const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Full-Stack Engineer",
     company: "Deliany",
-    url: "https://eats.deliany.co/",
+    url: "https://eats.deliany.co/en",
     duration: getFormattedDuration({
       startDate: "2020-10-21",
       endDate: "2023-07-28",
     }),
     projects: [
       {
-        name: "SaaS Food Ordering Platform",
+        name: "Multi-tenant Restaurant Cloud Platform",
         summary:
-          "Progressed from a Front-End to a pivotal Full-Stack role, where I led the architecture of a new POS system and established a company-wide UI library, driving major improvements in developer productivity and product cohesion.",
+          "Progressed from a Frontend to a pivotal Full-Stack role, where I led the architecture of a new POS system and established a company-wide UI library, driving major improvements in developer productivity and product cohesion.",
         teamSize: 8,
         url: null,
         tasks: [
@@ -340,7 +271,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     ],
   },
   {
-    title: "Front-End Engineer (Freelance)",
+    title: "Frontend Engineer (Freelance)",
     company: "Multiple Clients",
     url: null,
     duration: getFormattedDuration({
@@ -351,7 +282,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Logistics & Package Tracking Platform",
         summary:
-          "Developed a complete front-end solution for a shipping logistics platform with real-time package tracking, focusing on high performance and component reusability.",
+          "Developed a complete frontend solution for a shipping logistics platform with real-time package tracking, focusing on high performance and component reusability.",
         teamSize: 3,
         url: null,
         tasks: [
@@ -367,7 +298,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         teamSize: 2,
         url: null,
         tasks: [
-          "Performed comprehensive testing and debugging of both front-end and back-end coding challenges, ensuring functional accuracy and educational value.",
+          "Performed comprehensive testing and debugging of both frontend and back-end coding challenges, ensuring functional accuracy and educational value.",
           "Collaborated with platform authors to refine challenge specifications and enhance the user feedback system.",
         ],
         stacks: ["React", "Vue.js", "Node.js", "Firebase", "TailwindCSS"],
@@ -382,7 +313,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
           "Led a large-scale migration from a legacy Vue/Parcel architecture to a modern React/Webpack stack, resulting in a 30% performance boost and improved maintainability.",
           "Integrated WebRTC to enable reliable, low-latency video communication.",
         ],
-        stacks: ["React", "Redux", "WebRTC", "Webpack"],
+        stacks: ["React", "Vue", "Redux", "WebRTC", "Webpack"],
       },
     ],
   },
@@ -427,7 +358,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         tasks: [
           "Contributed to the full software development lifecycle, from database design with GORM and PostgreSQL to API development with Golang (Gin).",
           "Developed and tested RESTful API endpoints for all core application functionalities.",
-          "Built the entire administrative front-end using React and Tailwind CSS, focusing on a clean and intuitive user experience.",
+          "Built the entire administrative frontend using React and Tailwind CSS, focusing on a clean and intuitive user experience.",
         ],
         stacks: ["Golang", "PostgreSQL", "RESTful API", "React", "TailwindCSS"],
       },
@@ -435,15 +366,21 @@ const WORK_EXPERIENCE: WorkExperience[] = [
   },
 ];
 
-//================================================================================
-// COMPONENTS
-//================================================================================
+const EDUCATION = [
+  {
+    program: "Advanced Education Program (AEP), Information Systems",
+    university:
+      "Ho Chi Minh City University of Information Technology (UIT) - VNUHCM",
+  },
+];
+
+// Section component for consistent section layout
 const Section: React.FC<{
   title: string;
   children: React.ReactNode;
   className?: string;
 }> = ({ title, children, className = "" }) => (
-  <section className={`mb-6 ${className}`}>
+  <section className={clsx("mb-6", className)}>
     <h2 className="mb-3 border-b border-slate-300 pb-1 text-sm font-bold uppercase tracking-wide text-slate-800">
       {title}
     </h2>
@@ -451,48 +388,68 @@ const Section: React.FC<{
   </section>
 );
 
+//================================================================================
+// COMPONENTS
+//================================================================================
 const ResumeHeader: React.FC = () => (
   <header className="mb-6 border-b border-slate-200 pb-4">
-    <div className="text-center">
+    <div className="mb-2 text-center">
       <h1 className="text-3xl font-bold tracking-tight text-slate-900">
         {INFO.firstName} {INFO.lastName}
       </h1>
-      <h2 className="mt-1 text-lg font-semibold text-blue-600">{INFO.title}</h2>
     </div>
+    <div className="mx-auto max-w-2xl">
+      <div className="grid grid-cols-3 gap-x-8 gap-y-1 text-xs text-slate-700">
+        <div className="flex whitespace-nowrap">
+          <span className="font-semibold">Phone:</span>
+          <a
+            href="tel:+84858533839"
+            className="ml-1 text-blue-600 hover:underline"
+          >
+            +84 8585 33839
+          </a>
+        </div>
+        <div className="flex whitespace-nowrap">
+          <span className="font-semibold">Portfolio:</span>
+          <a
+            href="https://tkhquang.dev/"
+            className="ml-1 text-blue-600 hover:underline"
+          >
+            tkhquang.dev
+          </a>
+        </div>
+        <div className="flex whitespace-nowrap">
+          <span className="font-semibold">GitHub:</span>
+          <a
+            href="https://github.com/tkhquang"
+            className="ml-1 text-blue-600 hover:underline"
+          >
+            github.com/tkhquang
+          </a>
+        </div>
 
-    <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1 text-xs text-slate-600">
-      <div className="space-y-1">
-        {CONTACTS.map(({ title, content, url, Icon }) => (
-          <div key={title} className="flex items-center">
-            <Icon className="mr-2 size-3.5 shrink-0 text-slate-500" />
-            {url ? (
-              <a
-                href={url}
-                className="transition-colors hover:text-blue-600 hover:underline"
-              >
-                {content}
-              </a>
-            ) : (
-              <span>{content}</span>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="space-y-1">
-        {LINKS.map(({ title, content, url, Icon }) => (
-          <div key={title} className="flex items-center">
-            <Icon className="mr-2 size-3.5 shrink-0 text-slate-500" />
-            <a
-              href={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center transition-colors hover:text-blue-600 hover:underline"
-            >
-              {content}
-              <ExternalLink className="ml-1 size-3" />
-            </a>
-          </div>
-        ))}
+        <div className="flex whitespace-nowrap">
+          <span className="font-semibold">Email:</span>
+          <a
+            href="mailto:khacquang.trinh@gmail.com"
+            className="ml-1 text-blue-600 hover:underline"
+          >
+            khacquang.trinh@gmail.com
+          </a>
+        </div>
+        <div className="flex whitespace-nowrap">
+          <span className="font-semibold">LinkedIn:</span>
+          <a
+            href="https://www.linkedin.com/in/tkhquang/"
+            className="ml-1 text-blue-600 hover:underline"
+          >
+            linkedin.com/in/tkhquang
+          </a>
+        </div>
+        <div className="flex whitespace-nowrap">
+          <span className="font-semibold">Location:</span>
+          <span className="ml-1">District 1, HCMC, Vietnam</span>
+        </div>
       </div>
     </div>
   </header>
@@ -501,37 +458,30 @@ const ResumeHeader: React.FC = () => (
 const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
   experience,
 }) => (
-  <div className="mb-5 last:mb-0">
-    <div className="mb-2 flex items-start justify-between gap-4">
-      <div>
-        <h3 className="text-base font-bold text-slate-900">
-          {experience.title}
-        </h3>
-        <div className="flex items-center gap-2">
-          {experience.url ? (
-            <a
-              href={experience.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center text-sm font-semibold text-blue-600 transition-colors hover:underline"
-            >
-              {experience.company}
-              <ExternalLink className="ml-1 size-3" />
-            </a>
-          ) : (
-            <span className="text-sm font-semibold text-blue-600">
-              {experience.company}
-            </span>
-          )}
-        </div>
+  <div className="mb-4 last:mb-0">
+    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-wrap items-baseline gap-x-2">
+        <span className="font-bold text-slate-900">{experience.title}</span>
+        {experience.url ? (
+          <a
+            href={experience.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-blue-600 hover:underline"
+          >
+            @ {experience.company}
+          </a>
+        ) : (
+          <span className="text-sm font-semibold text-blue-600">
+            @ {experience.company}
+          </span>
+        )}
       </div>
-      <div className="flex items-center whitespace-nowrap font-mono text-xs text-slate-500">
-        <Calendar className="mr-1 size-3" />
+      <span className="font-mono text-xs text-slate-500">
         {experience.duration}
-      </div>
+      </span>
     </div>
-
-    <div className="space-y-4">
+    <div className="space-y-3">
       {experience.projects.map((project, index) => (
         <ProjectItem key={index} project={project} />
       ))}
@@ -541,86 +491,95 @@ const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
 
 const ProjectItem: React.FC<{ project: Project }> = ({ project }) => (
   <div className="ml-4 border-l-2 border-slate-200 pl-4">
-    <div className="mb-1 flex items-start justify-between gap-2">
-      <h4 className="text-sm font-semibold text-slate-800">{project.name}</h4>
-      <div className="flex items-center whitespace-nowrap text-xs text-slate-500">
-        <Users className="mr-1 size-3" />
-        Team of {project.teamSize}
-      </div>
+    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+      <span className="font-semibold text-slate-800">{project.name}</span>
+      <span className="text-xs text-slate-500">Team of {project.teamSize}</span>
     </div>
-
-    <p className="mb-2 text-sm leading-relaxed text-slate-700">
+    <p className="mb-1 text-sm leading-relaxed text-slate-700">
       {project.summary}
     </p>
-
-    <ul className="mb-3 list-inside list-disc space-y-1 text-sm text-slate-700">
+    <ul className="mb-1 list-inside list-disc space-y-1 text-sm text-slate-700">
       {project.tasks.map((task, taskIndex) => (
         <li key={taskIndex} className="list-item">
           <span className="leading-relaxed">{task}</span>
         </li>
       ))}
     </ul>
-
-    <div className="flex flex-wrap gap-1.5">
-      {project.stacks.map((stack) => (
-        <span
-          key={stack}
-          className="rounded border border-slate-200 bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700"
-        >
-          {stack}
-        </span>
-      ))}
+    <div className="mt-1 text-xs italic text-slate-500">
+      {project.stacks.join(", ")}
     </div>
   </div>
 );
 
+const SKILL_LABELS: Record<string, string> = {
+  "Programming Languages": "Languages",
+  "Frontend Frameworks & Libraries": "Frontend",
+  "Styling & UI": "Styling/UI",
+  "State Management": "State",
+  "API Integration": "API",
+  "Backend & Databases": "Backend",
+  "Tooling & DevOps": "DevOps",
+};
+
 const SkillsSection: React.FC = () => (
-  <div className="space-y-3">
+  <dl className="space-y-1 text-sm text-slate-800">
     {SKILLS.map((skill) => (
-      <div key={skill.name} className="grid grid-cols-5 items-start gap-3">
-        <div className="col-span-2 text-sm font-semibold text-slate-800">
-          {skill.name}
-        </div>
-        <div className="col-span-3 text-sm text-slate-700">
+      <div key={skill.name} className="flex flex-row flex-wrap">
+        <dt className="min-w-[80px] font-semibold">
+          {SKILL_LABELS[skill.name] || skill.name}:
+        </dt>
+        <dd className="ml-2 flex-1 text-slate-700">
           {skill.subskills.join(", ")}
-        </div>
+        </dd>
       </div>
     ))}
-  </div>
+  </dl>
 );
 
 const CertificationsSection: React.FC = () => (
-  <div className="space-y-3">
+  <div className="space-y-2">
     {CERTIFICATIONS.map((group) => (
-      <div key={group.organization} className="">
-        <h3 className="mb-1 flex items-center text-sm font-semibold text-slate-800">
-          <Award className="mr-1 size-4 text-blue-600" />
-          {group.organization}
-        </h3>
-        <ul className="ml-5 space-y-1">
-          {group.certificates.map((cert) => (
-            <li key={cert.name} className="text-sm text-slate-700">
+      <div key={group.organization} className="flex">
+        <span className="min-w-[160px] text-sm font-semibold text-slate-800">
+          {group.organization}:
+        </span>
+        <span className="flex-1 text-sm text-slate-700">
+          {group.certificates.map((cert, idx) => (
+            <span key={cert.name}>
               {cert.url ? (
                 <a
                   href={cert.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center transition-colors hover:text-blue-600 hover:underline"
+                  className="text-blue-600 hover:underline"
                 >
                   {cert.name}
-                  <ExternalLink className="ml-1 size-3" />
                 </a>
               ) : (
                 <span>{cert.name}</span>
               )}
               {cert.issueDate && (
-                <span className="ml-2 text-xs text-slate-500">
+                <span className="ml-1 text-xs text-slate-500">
                   ({cert.issueDate} - {cert.expirationDate})
                 </span>
               )}
-            </li>
+              {idx < group.certificates.length - 1 && <span>, </span>}
+            </span>
           ))}
-        </ul>
+        </span>
+      </div>
+    ))}
+  </div>
+);
+
+const EducationSection: React.FC = () => (
+  <div className="space-y-2">
+    {EDUCATION.map((edu, idx) => (
+      <div key={idx}>
+        <div className="text-sm font-semibold text-slate-800">
+          {edu.program}
+        </div>
+        <div className="text-sm text-slate-700">{edu.university}</div>
       </div>
     ))}
   </div>
@@ -639,13 +598,12 @@ export default function ResumePage() {
     >
       <div
         className={clsx(
-          "mx-auto bg-white shadow-xl print:shadow-none",
-          "px-6 py-10"
+          "mx-auto max-w-3xl bg-white px-6 py-10 shadow-xl print:shadow-none"
         )}
       >
         <ResumeHeader />
 
-        <main className="space-y-5">
+        <main className="space-y-6">
           <Section title="Professional Summary">
             <p className="text-sm leading-relaxed text-slate-700">
               {INFO.summary}
@@ -656,7 +614,7 @@ export default function ResumePage() {
             <SkillsSection />
           </Section>
 
-          <Section title="Professional Experience" className="">
+          <Section title="Professional Experience">
             {WORK_EXPERIENCE.map((exp, index) => (
               <ExperienceItem key={index} experience={exp} />
             ))}
@@ -664,6 +622,17 @@ export default function ResumePage() {
 
           <Section title="Certifications & Professional Development">
             <CertificationsSection />
+          </Section>
+
+          <Section title="Education">
+            <EducationSection />
+          </Section>
+
+          <Section title="Languages">
+            <div className="text-sm text-slate-800">
+              <span className="font-semibold">Vietnamese:</span> Native,{" "}
+              <span className="font-semibold">English:</span> Fluent
+            </div>
           </Section>
         </main>
       </div>
