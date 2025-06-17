@@ -1,3 +1,4 @@
+import { getIpAddress } from "@/utils/server";
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -47,11 +48,46 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
   }
 
+  // Update page views before fetching
+  if (process.env.NODE_ENV === "production") {
+    const ip = await getIpAddress();
+
+    // Always increment total
+    await redis.incr(["pageviews", pathname, "total"].join(":"));
+
+    if (ip && ip !== "0.0.0.0") {
+      // Hash the IP in order to not store it directly in db
+      const buf = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(ip)
+      );
+      const hash = Array.from(new Uint8Array(buf))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      // Deduplicate the IP for each pathname in 24 hours
+      const isNew = await redis.set(
+        ["deduplicate", hash, pathname].join(":"),
+        true,
+        {
+          ex: 24 * 60 * 60, // 24 hours
+          nx: true, // Only set if not exists
+        }
+      );
+      if (isNew) {
+        await redis.incr(["pageviews", pathname, "unique"].join(":"));
+      }
+    }
+  }
+
   let count: number | string = 0;
 
   if (process.env.NODE_ENV !== "production") {
     // Mocked dev response
-    count = type === "unique" ? 1234 : 4567;
+    count =
+      type === "unique"
+        ? Math.floor(Math.random() * 500) + 100
+        : Math.floor(Math.random() * 5000) + 1000;
   } else {
     const redisKey = ["pageviews", pathname, type].join(":");
     const result = await redis.get<number>(redisKey);
@@ -72,7 +108,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   return new NextResponse(svg, {
     headers: {
       "Content-Type": "image/svg+xml",
-      "Cache-Control": "no-cache, no-store, must-revalidate", // Prevent caching
+      "Cache-Control": "no-cache, no-store, must-revalidate, proxy-revalidate", // Prevent caching
     },
     status: 200,
   });

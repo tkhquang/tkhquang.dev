@@ -1,24 +1,11 @@
+import { getIpAddress } from "@/utils/server";
 import { Redis } from "@upstash/redis";
-import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 const redis = Redis.fromEnv();
 export const config = {
   runtime: "edge",
 };
-
-async function getIpAdress(): Promise<string> {
-  const resolvedHeaders = Object.fromEntries(await headers());
-  const FALLBACK_IP_ADDRESS = "0.0.0.0";
-
-  const forwardedFor = resolvedHeaders["x-forwarded-for"];
-
-  if (forwardedFor) {
-    return forwardedFor.split(",")[0] ?? FALLBACK_IP_ADDRESS;
-  }
-
-  return resolvedHeaders["x-real-ip"] ?? FALLBACK_IP_ADDRESS;
-}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   if (request.headers.get("Content-Type") !== "application/json") {
@@ -38,7 +25,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return new NextResponse(null, { status: 202 });
   }
 
-  const ip = await getIpAdress();
+  const ip = await getIpAddress();
 
   // Always increment total
   await redis.incr(["pageviews", pathname, "total"].join(":"));
