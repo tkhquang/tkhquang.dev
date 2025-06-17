@@ -22,6 +22,14 @@ const nextConfig = {
         ],
         source: "/assets/styles/external/:path*",
       },
+      {
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: "*" },
+          { key: "Access-Control-Allow-Methods", value: "GET, OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type" },
+        ],
+        source: "/api/pageviews/badge",
+      },
     ];
   },
   images: {
