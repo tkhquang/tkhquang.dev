@@ -380,7 +380,7 @@ const Section: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ title, children, className = "" }) => (
-  <section className={clsx("mb-6", className)}>
+  <section className={clsx("", className)}>
     <h2 className="mb-3 border-b border-slate-300 pb-1 text-sm font-bold uppercase tracking-wide text-slate-800">
       {title}
     </h2>
