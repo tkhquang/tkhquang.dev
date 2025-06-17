@@ -108,7 +108,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   return new NextResponse(svg, {
     headers: {
       "Content-Type": "image/svg+xml",
-      "Cache-Control": "no-cache, no-store, must-revalidate, proxy-revalidate", // Prevent caching
+      "Cache-Control": "no-cache, private",
+      Expires: "Sat, 01 Jan 2000 00:00:00 GMT",
+      Pragma: "no-cache",
     },
     status: 200,
   });
