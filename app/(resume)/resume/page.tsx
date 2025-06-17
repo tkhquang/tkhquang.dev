@@ -66,8 +66,8 @@ const SKILLS: Skill[] = [
       "React.js",
       "Vue.js",
       "Next.js",
-      "LiveView (Elixir/Phoenix)",
       "Gridsome",
+      "LiveView (Elixir/Phoenix)",
       "Jest",
       "Cypress",
     ],
@@ -96,7 +96,7 @@ const SKILLS: Skill[] = [
   },
   {
     name: "Backend & Databases",
-    subskills: ["Node.js", "Elixir/Phoenix", "PostgreSQL"],
+    subskills: ["Elixir/Phoenix", "Node.js", "PostgreSQL"],
   },
   {
     name: "Tooling & DevOps",
@@ -286,7 +286,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         teamSize: 3,
         url: null,
         tasks: [
-          "Engineered a modular Vue.js component library that cut new feature implementation time by 40%.",
+          "Engineered a modular Vue.js component library, reducing feature implementation time by 40%.",
           "Achieved a 200% improvement in page load times by implementing advanced code-splitting, lazy loading, and dependency optimization techniques.",
         ],
         stacks: ["Vue.js", "Vuex", "Bootstrap"],
@@ -500,7 +500,7 @@ const ProjectItem: React.FC<{ project: Project }> = ({ project }) => (
     </p>
     <ul className="mb-1 list-inside list-disc space-y-1 text-sm text-slate-700">
       {project.tasks.map((task, taskIndex) => (
-        <li key={taskIndex} className="list-item">
+        <li key={taskIndex} className="no-break-inside list-item">
           <span className="leading-relaxed">{task}</span>
         </li>
       ))}
@@ -515,17 +515,17 @@ const SKILL_LABELS: Record<string, string> = {
   "Programming Languages": "Languages",
   "Frontend Frameworks & Libraries": "Frontend",
   "Styling & UI": "Styling/UI",
-  "State Management": "State",
-  "API Integration": "API",
+  "State Management": "State Management",
+  "API Integration": "API Integration",
   "Backend & Databases": "Backend",
-  "Tooling & DevOps": "DevOps",
+  "Tooling & DevOps": "Tooling & DevOps",
 };
 
 const SkillsSection: React.FC = () => (
   <dl className="space-y-1 text-sm text-slate-800">
     {SKILLS.map((skill) => (
       <div key={skill.name} className="flex flex-row flex-wrap">
-        <dt className="min-w-[80px] font-semibold">
+        <dt className="min-w-[140px] font-semibold">
           {SKILL_LABELS[skill.name] || skill.name}:
         </dt>
         <dd className="ml-2 flex-1 text-slate-700">
@@ -593,7 +593,7 @@ export default function ResumePage() {
     <div className={clsx("bg-slate-100 antialiased", "font-sans-inter")}>
       <div
         className={clsx(
-          "mx-auto max-w-3xl bg-white px-10 pt-10 shadow-xl print:shadow-none"
+          "mx-auto max-w-3xl bg-white px-8 pt-10 shadow-xl print:shadow-none"
         )}
       >
         <ResumeHeader />
