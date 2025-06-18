@@ -1,12 +1,11 @@
 import "./AboutMe.scss";
 import Image from "@/components/common/NextImage";
-import PDFDownloadButton from "@/components/common/PDFDownloadButton";
 import { Portfolio } from "@/constants/meta";
 import { getProcessedImage } from "@/utils/image";
 
 const RESUME = {
   fileName: "Quang Trinh Khac - Resume.pdf",
-  path: "https://github.com/tkhquang/tkhquang-resume/raw/main/output/Quang_Trinh_Khac-Resume.pdf",
+  path: "https://tkhquang.dev/assets/resources/pdf/Quang_Trinh_Khac-Resume.pdf",
 };
 
 const ABOUT_ME_IMAGE = "/assets/resources/images/Aleks-3.png";
@@ -46,35 +45,26 @@ const AboutMe = async () => {
           </div>
         </div>
 
-        <PDFDownloadButton
-          url={`${process.env.NEXT_PUBLIC_BASE_URL}/resume`}
-          filename="Quang_Trinh_Khac-Resume"
-          loading={
-            <>
-              <div
-                className="download__link shadow-md"
-                rel=" noopener noreferrer"
-                title="View Resume"
-              >
-                <span>Loading...</span>
-                <span>Loading...</span>
-              </div>
-              <div className="link text-theme-primary">{RESUME.fileName}</div>
-            </>
-          }
-          className="download-container flex-center mx-auto my-2 flex-col"
-          title="View Resume"
-        >
-          <div
+        <div className="download-container flex-center my-2 flex-col">
+          <a
             className="download__link shadow-md"
+            target="_blank"
             rel=" noopener noreferrer"
             title="View Resume"
+            href={RESUME.path}
           >
             <span>Download</span>
             <span>PDF</span>
-          </div>
-          <div className="link text-theme-primary">{RESUME.fileName}</div>
-        </PDFDownloadButton>
+          </a>
+          <a
+            target="_blank"
+            href={RESUME.path}
+            rel="noopener noreferrer"
+            title="View Resume"
+          >
+            {RESUME.fileName}
+          </a>
+        </div>
       </div>
     </section>
   );
