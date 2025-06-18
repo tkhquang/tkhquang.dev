@@ -1,12 +1,8 @@
 import "./AboutMe.scss";
 import Image from "@/components/common/NextImage";
+import ResumeDownload from "@/components/landing/about-me/ResumeDowload";
 import { Portfolio } from "@/constants/meta";
 import { getProcessedImage } from "@/utils/image";
-
-const RESUME = {
-  fileName: "Quang Trinh Khac - Resume.pdf",
-  path: "https://tkhquang.dev/assets/resources/pdf/Quang_Trinh_Khac-Resume.pdf",
-};
 
 const ABOUT_ME_IMAGE = "/assets/resources/images/Aleks-3.png";
 
@@ -16,20 +12,6 @@ const AboutMe = async () => {
     shouldStore: false,
     cache: true,
   });
-
-  const handleResumeDownload = () => {
-    try {
-      if (typeof window !== "undefined") {
-        window.gtag?.("event", "download_resume", {
-          event_category: "engagement",
-          event_label: RESUME.fileName,
-          value: 1,
-        });
-      }
-    } catch (_e) {
-      // fail silently
-    }
-  };
 
   return (
     <section className="about">
@@ -59,28 +41,7 @@ const AboutMe = async () => {
           </div>
         </div>
 
-        <div className="download-container flex-center my-2 flex-col">
-          <a
-            className="download__link shadow-md"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="View Resume"
-            href={RESUME.path}
-            onClick={handleResumeDownload}
-          >
-            <span>Download</span>
-            <span>PDF</span>
-          </a>
-          <a
-            target="_blank"
-            href={RESUME.path}
-            rel="noopener noreferrer"
-            title="View Resume"
-            onClick={handleResumeDownload}
-          >
-            {RESUME.fileName}
-          </a>
-        </div>
+        <ResumeDownload />
       </div>
     </section>
   );
