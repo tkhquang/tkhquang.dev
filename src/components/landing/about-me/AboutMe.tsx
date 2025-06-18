@@ -17,6 +17,20 @@ const AboutMe = async () => {
     cache: true,
   });
 
+  const handleResumeDownload = () => {
+    try {
+      if (typeof window !== "undefined") {
+        window.gtag?.("event", "download_resume", {
+          event_category: "engagement",
+          event_label: RESUME.fileName,
+          value: 1,
+        });
+      }
+    } catch (_e) {
+      // fail silently
+    }
+  };
+
   return (
     <section className="about">
       <div className="container">
@@ -49,9 +63,10 @@ const AboutMe = async () => {
           <a
             className="download__link shadow-md"
             target="_blank"
-            rel=" noopener noreferrer"
+            rel="noopener noreferrer"
             title="View Resume"
             href={RESUME.path}
+            onClick={handleResumeDownload}
           >
             <span>Download</span>
             <span>PDF</span>
@@ -61,6 +76,7 @@ const AboutMe = async () => {
             href={RESUME.path}
             rel="noopener noreferrer"
             title="View Resume"
+            onClick={handleResumeDownload}
           >
             {RESUME.fileName}
           </a>
