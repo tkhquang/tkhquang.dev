@@ -141,7 +141,7 @@ graph TD
 
 ## Deconstructing the 3D Math: Vectors, Quaternions, and Transforms
 
-Related: <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">[CryEngine] Eye of the Engine: The Camera</a>
+Related: <a href="/blog/posts/cryengine-eye-of-the-engine-the-camera" target="_blank" rel="noopener noreferrer">[CryEngine] Eye of the Engine: The Camera</a>
 
 To truly grasp how the offset works, let's touch on the 3D math components involved:
 
