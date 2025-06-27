@@ -6,6 +6,8 @@ import AppProvider from "@/providers/AppProvider";
 import { Portal } from "@ariakit/react";
 import { Suspense } from "react";
 
+export const experimental_ppr = true;
+
 export default async function DefaultLayout({
   children,
 }: {
