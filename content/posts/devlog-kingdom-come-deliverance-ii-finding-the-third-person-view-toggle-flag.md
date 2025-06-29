@@ -6,7 +6,6 @@ published: true
 category_slug: gaming
 tags:
   - CryEngine
-  - Game Development
   - "Kingdom Come: Deliverance II"
   - KCD2
   - Modding

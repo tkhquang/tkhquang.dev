@@ -5,12 +5,12 @@ updated_at: 2025-04-21T00:00:00.000Z
 published: true
 category_slug: technical
 tags:
+  - CryEngine
   - "Kingdom Come: Deliverance II"
   - KCD2
   - Modding
   - Devlog
   - Lua
-  - CryEngine
 cover_image: /uploads/images/loot-beacon-1.png
 description: "The story behind creating the Loot Beacon mod for Kingdom Come: Deliverance II – from a frustrating search for a mace to Lua scripting and color accessibility."
 ---
