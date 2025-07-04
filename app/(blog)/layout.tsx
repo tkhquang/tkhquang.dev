@@ -11,6 +11,8 @@ import { Portal } from "@ariakit/react";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
+export const experimental_ppr = true;
+
 export const metadata: Metadata = {
   description: Blog.METADATA.description,
   title: Blog.METADATA.title,
