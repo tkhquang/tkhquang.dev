@@ -170,7 +170,10 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     title: "Senior Frontend Engineer",
     company: "Care",
     url: "https://www.wearecare.sg/",
-    duration: getFormattedDuration({ startDate: "2023-08-07" }),
+    duration: getFormattedDuration({
+      startDate: "2023-08-07",
+      endDate: "2025-06-06",
+    }),
     projects: [
       {
         name: "Health Screening Report Generation System",
