@@ -58,11 +58,6 @@ const nextConfig = {
     },
   },
   outputFileTracingIncludes: {
-    "/*": [
-      "node_modules/sharp/**/*",
-      "node_modules/rimraf/**/*",
-      "node_modules/del/**/*",
-    ],
     "/blog{,/**/*}": ["./content/**"],
     "/api/pdf{,/**/*}": [
       "node_modules/@sparticuz/chromium/**/*",
