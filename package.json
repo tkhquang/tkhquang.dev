@@ -129,7 +129,8 @@
       "sharp",
       "unified",
       "unist-util-remove",
-      "unist-util-visit"
+      "unist-util-visit",
+      "unrs-resolver"
     ]
   }
 }
