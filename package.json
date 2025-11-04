@@ -38,7 +38,6 @@
     "graphql": "^16.9.0",
     "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
-    "hast": "^1.0.0",
     "hast-util-to-string": "^3.0.1",
     "hast-util-whitespace": "^3.0.0",
     "image-size": "^2.0.2",
