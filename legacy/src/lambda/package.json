@@ -1,7 +1,0 @@
-{
-  "name": "functions",
-  "description": "functions",
-  "dependencies": {
-    "axios": "^0.21.2"
-  }
-}

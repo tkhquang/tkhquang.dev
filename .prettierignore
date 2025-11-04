@@ -5,6 +5,5 @@ dist/*
 build/*
 out/*
 .next/*
-legacy/*
 
 **/generated/*

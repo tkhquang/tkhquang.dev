@@ -27,7 +27,6 @@ const config = [
       "build/*",
       "out/*",
       ".next/*",
-      "legacy/*",
       "**/generated/*",
       "eslint.config.js",
       "public",
