@@ -3,7 +3,6 @@ import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 const redis = Redis.fromEnv();
-export const runtime = "edge";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   if (request.headers.get("Content-Type") !== "application/json") {

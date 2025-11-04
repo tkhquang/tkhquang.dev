@@ -3,7 +3,6 @@ import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 const redis = Redis.fromEnv();
-export const runtime = "edge";
 
 // Updated SVG_TEMPLATE to use placeholders for dynamic values
 const SVG_TEMPLATE = `
