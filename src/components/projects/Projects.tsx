@@ -1,7 +1,6 @@
 import Image from "@/components/common/NextImage";
 import { fetchGitHubProjects } from "@/services/github";
 import { getProcessedImage } from "@/utils/image";
-import React from "react";
 
 interface Demo {
   title: string;

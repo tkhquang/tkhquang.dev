@@ -56,7 +56,11 @@ export default function SpotifyNowPlaying({
     setData(null);
     try {
       const response = await fetch("/api/spotify/current-playing", { signal });
-      if (!response.ok) throw new Error("Failed to fetch");
+      if (!response.ok) {
+        // throw new Error("Failed to fetch");
+        console.warn("Failed to fetch");
+        return;
+      }
       const json: CurrentPlayingResponse = await response.json();
       setData(json);
     } catch (error: any) {

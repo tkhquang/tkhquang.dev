@@ -33,7 +33,7 @@ svg[id^="raphael-"] {
   background-color: transparent !important;
 
   & g[class*="-legendGroup"] text {
-    transform: translateY(-0.4rem) !important;
+    transform: translateY(0.15rem) !important;
     font-size: calc(8px + 1vw) !important;
   }
 

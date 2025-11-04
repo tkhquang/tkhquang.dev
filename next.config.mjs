@@ -4,6 +4,7 @@ const __dirname = path.resolve();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactCompiler: true,
   experimental: {
     swcPlugins: [
       // ["@swc-jotai/debug-label", {}],
@@ -33,6 +34,7 @@ const nextConfig = {
     ];
   },
   images: {
+    qualities: [25, 50, 75, 100],
     remotePatterns: [
       (() => {
         const { hostname, protocol } = new URL(
