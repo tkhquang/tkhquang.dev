@@ -12,8 +12,8 @@ export function GritBackground({ className }: React.ComponentProps<"div">) {
       className={clsx([
         "absolute inset-0 size-full",
         "bg-cover bg-center",
-        '[background-image:url("/assets/resources/images/background/black-grit.png")]',
-        'dark:[background-image:url("/assets/resources/images/background/white-grit.png")]',
+        'bg-[url("/assets/resources/images/background/black-grit.png")]',
+        'dark:bg-[url("/assets/resources/images/background/white-grit.png")]',
         className,
       ])}
     />

@@ -132,7 +132,7 @@ export default async function Post({
       <div className="flex">
         <TableOfContent headings={headings} />
 
-        <section className="container !max-w-screen-md">
+        <section className="container max-w-(--breakpoint-md)!">
           <article className="article">
             <div className="article__meta my-3">
               <PostMeta post={post} />
@@ -160,7 +160,7 @@ export default async function Post({
             </div>
             <hr className="my-6" />
             <div className="w-full">
-              <BlogInfo className="[&_.author\_\_image--container]:md:mb-0 [&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 [&_img]:!size-[120px] md:[&_img]:!size-[80px]" />
+              <BlogInfo className="md:[&_.author\_\_image--container]:mb-0 [&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 [&_img]:size-[120px]! md:[&_img]:size-[80px]!" />
             </div>
             <hr className="my-6" />
             <div className="article-comments w-full p-2">

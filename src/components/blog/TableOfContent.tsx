@@ -228,7 +228,7 @@ const TocList = ({
 const MobileTocTrigger = () => (
   <Portal>
     <BsFillMenuButtonWideFill
-      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-none lg:hidden"
+      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-hidden lg:hidden"
       aria-label="Open table of contents"
     />
   </Portal>
@@ -266,7 +266,7 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
             size={300}
             title="Table of Content"
             trigger={<MobileTocTrigger />}
-            className="[&_.drawer\_\_content]:!max-w-[calc(100%-2rem)]"
+            className="[&_.drawer\_\_content]:max-w-[calc(100%-2rem)]!"
           >
             <TocList
               headings={headings}

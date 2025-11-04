@@ -155,61 +155,67 @@ const Projects = async () => {
               return (
                 <li
                   key={demo.title}
-                  className="surface grid grid-flow-row rounded-md px-5 py-8 shadow-box transition-all duration-300 hover:shadow-box-md"
+                  className="surface shadow-box hover:shadow-box-md flex h-full flex-col rounded-md px-5 py-8 transition-all duration-300"
                 >
-                  <h4 className="text-center text-lg font-bold">
-                    {demo.title}
-                  </h4>
-                  <div className="my-10 block shadow-inner">
-                    <div className="relative aspect-[16/9] w-full">
-                      <Image
-                        fill
-                        src={
-                          image.source ||
-                          "/assets/resources/images/demos/default.svg"
-                        }
-                        alt={demo.title}
-                        className="bg-cover bg-center bg-no-repeat"
-                        style={{
-                          backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
-                          objectFit: "contain",
-                          objectPosition: "center",
-                        }}
-                        blurDataURL={image.placeholder}
-                      />
+                  <div className="flex flex-col gap-4">
+                    <h4 className="text-center text-lg font-bold">
+                      {demo.title}
+                    </h4>
+                    <div className="my-10 block shadow-inner">
+                      <div className="relative aspect-video w-full">
+                        <Image
+                          fill
+                          src={
+                            image.source ||
+                            "/assets/resources/images/demos/default.svg"
+                          }
+                          alt={demo.title}
+                          className="bg-cover bg-center bg-no-repeat"
+                          style={{
+                            backgroundImage: `linear-gradient(to top right, var(--secondary) 0%, var(--darken) 100%)`,
+                            objectFit: "contain",
+                            objectPosition: "center",
+                          }}
+                          blurDataURL={image.placeholder}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <p
-                    className="mx-4"
-                    dangerouslySetInnerHTML={{ __html: demo.description }}
-                  />
-                  <ul className="flex-center flex-gap-2 mx-4 my-5">
-                    {demo.stacks.map((stack) => (
-                      <li
-                        key={stack}
-                        className="primary inline-block select-none rounded-md px-4 py-2 shadow-md transition-all duration-300 hover:shadow-lg"
-                      >
-                        {stack}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="flex-center flex-gap-2">
-                    <a
-                      href={demo.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="button inline-block"
-                    >
-                      <span className="flex-center h-full">Live Demo</span>
-                    </a>
-                    <a
-                      href={demo.source}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="button inline-block"
-                    >
-                      <span className="flex-center h-full">Source</span>
-                    </a>
+                  <div className="flex flex-1 flex-col justify-between gap-4">
+                    <p
+                      className="mx-4"
+                      dangerouslySetInnerHTML={{ __html: demo.description }}
+                    />
+                    <div className="flex flex-col gap-4">
+                      <ul className="flex-center flex-gap-2 mx-4 my-5">
+                        {demo.stacks.map((stack) => (
+                          <li
+                            key={stack}
+                            className="primary inline-block rounded-md px-4 py-2 shadow-md transition-all duration-300 select-none hover:shadow-lg"
+                          >
+                            {stack}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex-center flex-gap-2">
+                        <a
+                          href={demo.live}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="button inline-block"
+                        >
+                          <span className="flex-center h-full">Live Demo</span>
+                        </a>
+                        <a
+                          href={demo.source}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="button inline-block"
+                        >
+                          <span className="flex-center h-full">Source</span>
+                        </a>
+                      </div>
+                    </div>
                   </div>
                 </li>
               );

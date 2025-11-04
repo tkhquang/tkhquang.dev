@@ -53,7 +53,7 @@ const CurrentPlaying = () => {
         <div className="relative size-16">
           {data?.is_playing ? (
             <Image
-              className="w-16 shadow-sm"
+              className="w-16 shadow-xs"
               src={data?.item.album.images?.[0]?.url}
               alt={data?.item.album.name}
               fill

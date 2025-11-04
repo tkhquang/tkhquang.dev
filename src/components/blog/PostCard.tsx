@@ -15,7 +15,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
 
   const coverProps: Partial<ImageProps> = {
     alt: "",
-    className: "news-feed__list-item__image rounded shadow-lg",
+    className: "news-feed__list-item__image rounded-sm shadow-lg",
     containerClassName: "",
     fill: true,
     height: undefined,
@@ -51,7 +51,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
             className="news-feed__list-item__link"
             aria-label={post.title}
           >
-            <div className="relative mb-4 mt-2 aspect-[16/9] w-full">
+            <div className="relative mb-4 mt-2 aspect-video w-full">
               <NextImage {...post.coverData} {...coverProps} />
             </div>
           </Link>

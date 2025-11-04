@@ -18,7 +18,7 @@ const BreadcrumbList = React.forwardRef<
   <ol
     ref={ref}
     className={cn(
-      "path-info flex flex-wrap items-center break-words font-bold italic text-theme-primary",
+      "path-info flex flex-wrap items-center wrap-break-word font-bold italic text-theme-primary",
       className
     )}
     {...props}

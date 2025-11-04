@@ -26,8 +26,8 @@ const PostList = <
   listSlugField?: K;
 }) => {
   return (
-    <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-screen-xl lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
-      <section className="w-full max-w-screen-sm lg:w-[640px]">
+    <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
+      <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
         <HorizontalLine className="mb-3 h-2px" />
 
         <h1 className="text-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9">
@@ -48,7 +48,7 @@ const PostList = <
                     {groupedPostsBySlug[fieldSlug].map((post) => {
                       return (
                         <li
-                          className="post__item mb-2 grid gap-4 truncate rounded p-2 transition duration-500 hover:bg-theme-secondary hover:text-theme-on-secondary"
+                          className="post__item mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500 hover:bg-theme-secondary hover:text-theme-on-secondary"
                           key={post.slug}
                         >
                           <Link
@@ -79,7 +79,7 @@ const PostList = <
           })}
         </Accordion>
       </section>
-      <BlogInfo className="mt-8 w-full lg:mt-4 lg:max-w-[240px] [&_.author]:!mx-4 [&_.author]:!flex-col [&_img]:!size-[120px]" />
+      <BlogInfo className="mt-8 w-full lg:mt-4 lg:max-w-[240px] [&_.author]:mx-4! [&_.author]:flex-col! [&_img]:size-[120px]!" />
     </div>
   );
 };

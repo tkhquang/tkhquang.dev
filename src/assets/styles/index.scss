@@ -1,28 +1,16 @@
 // - BASE
-@use "tailwindcss/base" as *;
-
-// Any of my own custom base styles go here
 @use "variables" as *;
 @use "base" as *;
-
 // - BASE
 
 // - COMPONENTS
-@use "tailwindcss/components" as *;
-
-// Any of my own custom component styles go here
 @use "components" as *;
-
 // - COMPONENTS
 
 // - UTILITIES
-@use "tailwindcss/utilities" as *;
-
-// Any of my own custom utilities go here
 @use "utils" as *;
 @use "code" as *;
 @use "pagination" as *;
-
 // - UTILITIES
 
 // - THIRD PARTY
@@ -31,5 +19,4 @@
 
 // - OVERRIDES
 @use "overrides" as *;
-
 // - OVERRIDES

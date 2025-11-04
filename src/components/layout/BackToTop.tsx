@@ -49,7 +49,7 @@ const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
       ref={buttonRef}
       type="button"
       className={clsx(
-        "fixed bottom-0 right-0 z-10 size-10 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-none",
+        "fixed bottom-0 right-0 z-10 size-10 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-hidden",
         className
       )}
       title="Scroll To Top"

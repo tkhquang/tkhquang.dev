@@ -393,7 +393,7 @@ export default function Drawer({
           >
             <div className="drawer__header">
               <DialogHeading className="drawer__title">{title}</DialogHeading>
-              <DialogDismiss className="size-8 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-none">
+              <DialogDismiss className="size-8 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-hidden">
                 <IoIosCloseCircleOutline className="size-8" />
               </DialogDismiss>
             </div>

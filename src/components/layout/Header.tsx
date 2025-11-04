@@ -96,9 +96,9 @@ const Header = ({
             </svg>
           </div>
           <div className="h-4 w-px bg-gray-200"></div>
-          <button type="button" className="focus:outline-none">
+          <button type="button" className="focus:outline-hidden">
             <a href="/blog" target="_blank" rel="noopener noreferrer">
-              <div className="flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
+              <div className="flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-hidden">
                 Blog
               </div>
             </a>

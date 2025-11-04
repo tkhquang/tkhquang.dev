@@ -22,8 +22,8 @@ const BlogFooter = ({
           <SpotifyNowPlaying
             className={clsx([
               "text-sm",
-              "[--song-color:theme(colors.theme.on-surface)]",
-              "[--artist-color:theme(colors.theme.on-surface)]",
+              "[--song-color:var(--color-theme-on-surface)]",
+              "[--artist-color:var(--color-theme-on-surface)]",
             ])}
             songEffect="underline"
             showCover

@@ -54,10 +54,10 @@ const BlogHeader = ({
             <div className="flex flex-col">
               <button
                 type="button"
-                className="focus:outline-none"
+                className="focus:outline-hidden"
                 onClick={handleBack}
               >
-                <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
+                <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-hidden">
                   {!isHomeBlog ? (
                     <>
                       <BackButtonIcon className="size-8" />

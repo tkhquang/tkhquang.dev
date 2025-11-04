@@ -1,55 +1,71 @@
-*,
-*::before,
-*::after {
-  @apply box-border border-theme-primary;
-}
+@use 'tailwindcss';
 
-html,
-body {
-  @apply m-0 p-0;
-}
+@config '../../../tailwind.config.js';
 
-html {
-  @apply bg-theme-background font-sans text-sm leading-8 text-theme-on-background antialiased;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
 
-  @media screen and (width >= 640px) {
-    @apply text-base;
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply box-border border-theme-primary;
   }
-}
 
-a:not(.button) {
-  @apply transition-all duration-200;
-}
+  html,
+  body {
+    @apply m-0 p-0;
+  }
 
-img {
-  @apply max-w-full;
-}
+  html {
+    @apply bg-theme-background font-sans text-sm leading-8 text-theme-on-background antialiased;
 
-select {
-  appearance: none;
-}
+    @media screen and (width >= 640px) {
+      @apply text-base;
+    }
+  }
 
-select::-ms-expand {
-  display: none;
-}
+  a:not(.button) {
+    @apply transition-all duration-200;
+  }
 
-button:not(.interactive):focus,
-textarea:focus,
-input:focus,
-select:focus {
-  outline: none;
-}
+  img {
+    @apply max-w-full;
+  }
 
-hr {
-  @apply mx-0 h-px w-full border-0;
+  select {
+    appearance: none;
+  }
 
-  background-image: linear-gradient(
-    to right,
-    transparent 0%,
-    var(--primary) 30%,
-    var(--primary) 70%,
-    transparent 100%
-  );
+  select::-ms-expand {
+    display: none;
+  }
+
+  button:not(.interactive):focus,
+  textarea:focus,
+  input:focus,
+  select:focus {
+    outline: none;
+  }
+
+  hr {
+    @apply mx-0 h-px w-full border-0;
+
+    background-image: linear-gradient(
+      to right,
+      transparent 0%,
+      var(--primary) 30%,
+      var(--primary) 70%,
+      transparent 100%
+    );
+  }
 }
 
 #class-keeper {
