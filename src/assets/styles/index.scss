@@ -1,22 +1,12 @@
-// - BASE
 @use "variables" as *;
 @use "base" as *;
-// - BASE
 
-// - COMPONENTS
 @use "components" as *;
-// - COMPONENTS
 
-// - UTILITIES
 @use "utils" as *;
 @use "code" as *;
 @use "pagination" as *;
-// - UTILITIES
 
 // - THIRD PARTY
-// ..
-// - THIRD PARTY
 
-// - OVERRIDES
 @use "overrides" as *;
-// - OVERRIDES
