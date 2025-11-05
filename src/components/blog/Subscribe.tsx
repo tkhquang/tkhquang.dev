@@ -49,7 +49,7 @@ const Subscribe = ({ className }: React.ComponentProps<"div">) => {
           }
         }}
       >
-        <label htmlFor="bd-email" className="absolute inset-0 z-bg opacity-0">
+        <label htmlFor="bd-email" className="absolute inset-0 z-(--z-bg) opacity-0">
           Your email
         </label>
         <input

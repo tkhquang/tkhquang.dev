@@ -44,7 +44,7 @@ const BlogHeader = ({
     <header
       {...props}
       className={classNames(
-        "header__background-transparent--blog sticky inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 text-theme-on-background shadow-box-md transition-all duration-500 ease-in-out",
+        "header__background-transparent--blog z-(--z-header) sticky inset-0 m-0 h-header-height w-full flex-wrap p-0 text-theme-on-background shadow-box-md transition-all duration-500 ease-in-out",
         className
       )}
     >
@@ -57,7 +57,7 @@ const BlogHeader = ({
                 className="focus:outline-hidden"
                 onClick={handleBack}
               >
-                <div className="logo flip-animate flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-hidden">
+                <div className="logo flip-animate flex-center whitespace-no-wrap no-underine focus:outline-hidden select-none font-extrabold uppercase">
                   {!isHomeBlog ? (
                     <>
                       <BackButtonIcon className="size-8" />

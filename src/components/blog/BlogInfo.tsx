@@ -17,7 +17,7 @@ const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
         </div>
         <Subscribe />
 
-        <CircuitBoard className="surface absolute inset-0 z-bg rounded-sm shadow-md" />
+        <CircuitBoard className="surface z-(--z-bg) absolute inset-0 rounded-sm shadow-md" />
       </div>
     </section>
   );

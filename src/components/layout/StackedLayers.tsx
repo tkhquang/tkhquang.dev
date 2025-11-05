@@ -9,7 +9,7 @@ const StackedLayers = () => {
       <div id={STACKED_LAYER_1} className="relative z-1"></div>
       <div id={STACKED_LAYER_2} className="relative z-2"></div>
       <div id={STACKED_LAYER_3} className="relative z-3"></div>
-      <div id={STACKED_LAYER_4} className="relative z-4"></div>
+      <div id={STACKED_LAYER_4} className="z-4 relative"></div>
     </>
   );
 };

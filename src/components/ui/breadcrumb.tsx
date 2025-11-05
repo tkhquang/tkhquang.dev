@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/css";
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import * as React from "react";
@@ -18,7 +18,7 @@ const BreadcrumbList = React.forwardRef<
   <ol
     ref={ref}
     className={cn(
-      "path-info flex flex-wrap items-center wrap-break-word font-bold italic text-theme-primary",
+      "path-info text-theme-primary flex flex-wrap items-center font-bold wrap-break-word italic",
       className
     )}
     {...props}

@@ -4,8 +4,7 @@
   "rsc": false,
   "tsx": true,
   "tailwind": {
-    "config": "tailwind.config.js",
-    "css": "app/index.css",
+    "css": "src/assets/styles/_third_party.scss",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""

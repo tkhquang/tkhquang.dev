@@ -120,7 +120,7 @@ html {
   }
 
   &:disabled {
-    @apply pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner outline-hidden;
+    @apply outline-hidden pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner;
   }
 }
 
