@@ -67,7 +67,9 @@ export default function rehypeCustomNextImage(
             blurDataURL: placeholder,
             height,
             // placeholder: "blur",
-            src: normalizedOutput,
+            src: isProcessedImage
+              ? `${process.env.NEXT_PUBLIC_BASE_URL}${normalizedOutput}`
+              : normalizedOutput,
             width,
             "data-ratio": width / height,
           } satisfies ImageProps & { "data-ratio": number };
