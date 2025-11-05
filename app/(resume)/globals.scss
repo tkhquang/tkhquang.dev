@@ -1,7 +1,6 @@
+/* stylelint-disable property-no-deprecated */
 /* stylelint-disable selector-class-pattern */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "tailwindcss";
 
 @layer base {
   html {

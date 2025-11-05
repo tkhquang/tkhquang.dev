@@ -56,6 +56,14 @@ export default function rehypeCustomNextImage(
             targetPath.replace(/^\.\/public/, "")
           );
 
+          const normalizedOutput = output.startsWith("/")
+            ? output
+            : `/${output}`;
+
+          const src = isProcessedImage
+            ? `${process.env.NEXT_PUBLIC_BASE_URL}${normalizedOutput}`
+            : normalizedOutput;
+
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
           node.properties = {
@@ -63,9 +71,7 @@ export default function rehypeCustomNextImage(
             blurDataURL: placeholder,
             height,
             // placeholder: "blur",
-            src: isProcessedImage
-              ? `${process.env.NEXT_PUBLIC_BASE_URL}/${output}`
-              : output,
+            src,
             width,
             "data-ratio": width / height,
           } satisfies ImageProps & { "data-ratio": number };

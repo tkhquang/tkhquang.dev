@@ -45,8 +45,10 @@ svg[id^="raphael-"] {
 
   & g[class*="-labels"] text {
     font-size: calc(8px + 0.75vw) !important;
-    @screen md {
-      font-size: calc(10px + 0.75vw) !important;
+    @media (min-width: theme(--breakpoint-md)) {
+      body {
+        font-size: calc(10px + 0.75vw) !important;
+      }
     }
   }
 }

@@ -20,7 +20,7 @@
     &.active,
     &.active:hover,
     &.active:focus {
-      @apply z-20 cursor-default bg-theme-primary text-theme-on-primary outline-none;
+      @apply z-20 cursor-default bg-theme-primary text-theme-on-primary outline-hidden;
     }
 
     &.disabled,

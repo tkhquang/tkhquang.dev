@@ -29,7 +29,7 @@
   @include flex-gap(2);
 }
 
-.heading {
+@utility heading {
   @apply relative font-bold leading-tight tracking-tight text-theme-primary;
 }
 
@@ -48,15 +48,15 @@
   }
 }
 
-.primary {
+@utility primary {
   @apply bg-theme-primary text-theme-on-primary;
 }
 
-.secondary {
+@utility secondary {
   @apply bg-theme-secondary text-theme-on-secondary;
 }
 
-.background {
+@utility background {
   @apply bg-theme-background text-theme-on-background;
 }
 
@@ -90,13 +90,15 @@ html {
   }
 }
 
-.surface {
+@utility surface {
   @apply bg-theme-surface text-theme-on-surface;
 }
 
-.input {
+@utility input {
   @apply inline-block rounded border-2 border-theme-secondary bg-theme-background text-theme-on-background shadow-inner;
+}
 
+.input {
   &:focus {
     @apply border-theme-tone;
   }
@@ -118,7 +120,7 @@ html {
   }
 
   &:disabled {
-    @apply pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner outline-none;
+    @apply outline-hidden pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner;
   }
 }
 

@@ -27,7 +27,7 @@ const Fallback = ({
   <div className={clsx(["flex items-center", className])}>
     <SiSpotify className="size-6 shrink-0" />
     <div className="ml-2 inline-flex truncate">
-      <p className="font-medium text-[--song-color]">
+      <p className="font-medium text-(--song-color)">
         {isLoading ? "Loading..." : "Not Playing"}
       </p>
     </div>
@@ -132,7 +132,7 @@ export default function SpotifyNowPlaying({
               <MusicWaves className="mr-2" />
               <Link
                 href={data.item.external_urls.spotify}
-                className="max-w-full shrink-0 truncate font-medium text-[--song-color]"
+                className="max-w-full shrink-0 truncate font-medium text-(--song-color)"
                 title={`${data.item.name} - ${artistName}`}
                 target="_blank"
                 rel="noopener noreferer"
@@ -149,11 +149,11 @@ export default function SpotifyNowPlaying({
               </Link>
             </>
           ) : (
-            <span className="font-medium text-[--song-color]">Not Playing</span>
+            <span className="font-medium text-(--song-color)">Not Playing</span>
           )}
           <div className="inline-flex">
-            <span className="mx-1 text-[--artist-color]">&middot;</span>
-            <p className="spotify-artist max-w-full truncate text-[--artist-color] opacity-80">
+            <span className="mx-1 text-(--artist-color)">&middot;</span>
+            <p className="spotify-artist max-w-full truncate text-(--artist-color) opacity-80">
               {artistName}
             </p>
           </div>

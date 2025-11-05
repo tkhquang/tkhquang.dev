@@ -103,7 +103,7 @@ export default function Image(props: ImageProps) {
         ref={imgElementRef}
         className={clsx(
           "size-full max-h-full object-center",
-          "blur-xl [transition:filter_500ms_cubic-bezier(.4,0,.2,1)] data-[fetched='true']:blur-0",
+          "blur-xl [transition:filter_500ms_cubic-bezier(.4,0,.2,1)] data-[fetched='true']:blur-none",
           className
         )}
         src={src}

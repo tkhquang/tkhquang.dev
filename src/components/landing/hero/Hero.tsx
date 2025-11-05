@@ -10,7 +10,7 @@ const Hero = () => {
       className={clsx(
         "flex-center relative min-h-[600px] overflow-hidden text-theme-on-primary-light",
         "transform-gpu animate-hero-height will-change-[min-height]",
-        "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:block before:h-full before:min-h-screen before:bg-gradient-to-br before:from-theme-tone before:to-theme-on-background-light before:content-['']"
+        "before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:block before:h-full before:min-h-screen before:bg-linear-to-br before:from-theme-tone before:to-theme-on-background-light before:content-['']"
       )}
     >
       <div className="flex-center h-full flex-col items-center justify-center pb-24 transition-all duration-500">

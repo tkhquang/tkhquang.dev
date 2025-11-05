@@ -61,7 +61,7 @@ const Header = ({
     <header
       ref={headerRef}
       className={classNames(
-        "flex-center fixed inset-0 z-header m-0 h-header-height w-full flex-wrap p-0 text-gray-200 shadow-lg transition-all duration-500 ease-in-out",
+        "flex-center z-(--z-header) fixed inset-0 m-0 h-header-height w-full flex-wrap p-0 text-gray-200 shadow-lg transition-all duration-500 ease-in-out",
         className
       )}
       style={
@@ -96,9 +96,9 @@ const Header = ({
             </svg>
           </div>
           <div className="h-4 w-px bg-gray-200"></div>
-          <button type="button" className="focus:outline-none">
+          <button type="button" className="focus:outline-hidden">
             <a href="/blog" target="_blank" rel="noopener noreferrer">
-              <div className="flex-center whitespace-no-wrap no-underine select-none font-extrabold uppercase focus:outline-none">
+              <div className="flex-center whitespace-no-wrap no-underine focus:outline-hidden select-none font-extrabold uppercase">
                 Blog
               </div>
             </a>

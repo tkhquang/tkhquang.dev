@@ -15,7 +15,7 @@ const TagList = ({ className, post }: TagListProps) => {
         <li key={tag} className="tag-list__item my-2 flex">
           <Link
             href={`/blog/tags/${slugify(tag)}`}
-            className="tag-list__item__link secondary mr-3 rounded-sm px-2 py-1 text-sm no-underline hover:shadow-inner"
+            className="tag-list__item__link secondary mr-3 rounded-xs px-2 py-1 text-sm no-underline hover:shadow-inner"
           >
             # {tag}
           </Link>

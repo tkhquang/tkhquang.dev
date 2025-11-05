@@ -15,7 +15,7 @@ const FeedList = <T,>({
   item?: T;
 }) => {
   return (
-    <section className="news-feed w-full max-w-screen-sm">
+    <section className="news-feed w-full max-w-(--breakpoint-sm)">
       {pathInfoType && item && (
         <PathInfo<any, "slug">
           item={item}
