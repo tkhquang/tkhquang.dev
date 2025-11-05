@@ -21,7 +21,7 @@ In this example we will create a simple counter application with the 2 individua
 
 In case the above link no longer works:
 
-![Preview Counter App](https://i.postimg.cc/prKj4tBr/Counter.png)
+![Preview Counter App](/uploads/images/Counter.png)
 
 Let's start with creating a basic counter component, which is very simple.
 
