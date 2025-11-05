@@ -58,7 +58,7 @@ const nextConfig = {
     },
   },
   outputFileTracingIncludes: {
-    "/blog{,/**/*}": ["./content/**", "./public/uploads/**"],
+    "/blog{,/**/*}": ["./content/**"],
     "/api/pdf{,/**/*}": [
       "node_modules/@sparticuz/chromium/**/*",
       "node_modules/puppeteer-core/**/*",
