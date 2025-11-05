@@ -1,33 +1,44 @@
-// TODO: Update this hook later after we migrate to Tailwind CSS v4
-// import tailwindConfig from "/tailwind.config";
-// import { useEffect, useState } from "react";
-// import resolveConfig from "tailwindcss/resolveConfig";
+import { useEffect, useState } from "react";
 
-// const fullConfig = resolveConfig(tailwindConfig);
+const useUpBreakpoint = (query: string): boolean => {
+  const [isMatch, setMatch] = useState<boolean>(false);
+  const [screens, setScreens] = useState<Record<string, string>>({});
 
-// const {
-//   theme: { screens },
-// } = fullConfig;
+  useEffect(() => {
+    const runtimeScreens = Object.entries({
+      ...window.getComputedStyle(document.body),
+    })
+      .filter(([_, value]) => (value as string).startsWith("--breakpoint-"))
+      .map(([_, value]) => value as string)
+      .reduce(
+        (obj, cssVar) =>
+          Object.assign(obj, {
+            [cssVar.replace("--breakpoint-", "")]: window
+              .getComputedStyle(document.body)
+              .getPropertyValue(cssVar as string),
+          }),
+        {}
+      );
 
-// const useUpBreakpoint = (query: keyof typeof screens): boolean => {
-//   const [isMatch, setMatch] = useState<boolean>(false);
+    setScreens(runtimeScreens);
+  }, []);
 
-//   useEffect(() => {
-//     const mediaQuery = `(min-width: ${screens[query]})`;
-//     const matchQueryList = window.matchMedia(mediaQuery);
-//     setMatch(matchQueryList.matches);
+  useEffect(() => {
+    const mediaQuery = `(min-width: ${screens[query]})`;
+    const matchQueryList = window.matchMedia(mediaQuery);
+    setMatch(matchQueryList.matches);
 
-//     const handleChange = (e: MediaQueryListEvent) => {
-//       setMatch(e.matches);
-//     };
+    const handleChange = (e: MediaQueryListEvent) => {
+      setMatch(e.matches);
+    };
 
-//     matchQueryList.addEventListener("change", handleChange);
-//     return () => {
-//       matchQueryList.removeEventListener("change", handleChange);
-//     };
-//   }, [query]);
+    matchQueryList.addEventListener("change", handleChange);
+    return () => {
+      matchQueryList.removeEventListener("change", handleChange);
+    };
+  }, [query, screens]);
 
-//   return isMatch;
-// };
+  return isMatch;
+};
 
-// export default useUpBreakpoint;
+export default useUpBreakpoint;
