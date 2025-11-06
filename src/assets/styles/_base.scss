@@ -222,7 +222,7 @@ $breakpoint-3xl: 120rem;
   ::before,
   ::backdrop,
   ::file-selector-button {
-    @apply box-border border-theme-primary;
+    @apply border-theme-primary box-border;
   }
 
   html,
@@ -231,7 +231,7 @@ $breakpoint-3xl: 120rem;
   }
 
   html {
-    @apply bg-theme-background font-sans text-sm leading-8 text-theme-on-background antialiased;
+    @apply bg-theme-background text-theme-on-background font-sans text-sm leading-8 antialiased;
 
     @media screen and (width >= 640px) {
       @apply text-base;

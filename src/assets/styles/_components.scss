@@ -30,7 +30,7 @@
 }
 
 @utility heading {
-  @apply relative font-bold leading-tight tracking-tight text-theme-primary;
+  @apply text-theme-primary relative leading-tight font-bold tracking-tight;
 }
 
 .heading--section {
@@ -95,7 +95,7 @@ html {
 }
 
 @utility input {
-  @apply inline-block rounded border-2 border-theme-secondary bg-theme-background text-theme-on-background shadow-inner;
+  @apply border-theme-secondary bg-theme-background text-theme-on-background inline-block rounded border-2 shadow-inner;
 }
 
 .input {
@@ -113,14 +113,14 @@ html {
 }
 
 .button {
-  @apply block h-10 rounded border-2 border-theme-secondary bg-theme-secondary px-2 text-theme-on-secondary shadow-md transition-all duration-200;
+  @apply border-theme-secondary bg-theme-secondary text-theme-on-secondary block h-10 rounded border-2 px-2 shadow-md transition-all duration-200;
 
   &:hover {
     @apply bg-theme-primary text-theme-on-primary;
   }
 
   &:disabled {
-    @apply outline-hidden pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner;
+    @apply pointer-events-none cursor-not-allowed border-gray-500 bg-gray-600 text-white shadow-inner outline-hidden;
   }
 }
 

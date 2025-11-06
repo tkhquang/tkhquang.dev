@@ -60,7 +60,7 @@ html {
 
 [data-line] {
   &[data-highlighted-line] {
-    @apply min-w-full border-l-4 !bg-theme-surface shadow-sm;
+    @apply bg-theme-surface! min-w-full border-l-4 shadow-sm;
   }
 
   &:not([data-highlighted-line]) {
