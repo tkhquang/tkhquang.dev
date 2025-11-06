@@ -1,0 +1,211 @@
+:root {
+  /* Breakpoints */
+  --breakpoint-xs: 30rem;
+  --breakpoint-2xl: 100rem;
+  --breakpoint-3xl: 120rem;
+
+  /* The original colors */
+  --tone-1: hsl(220deg 100% 50%);
+  --tone-2: hsl(200deg 100% 50%);
+  --tone-3: hsl(360deg 100% 50%);
+
+  /* Light Theme */
+  --tone-light: hsl(220deg 100% 50%);
+  --background-light: hsl(220deg 50% 95%);
+  /* Fallback for browsers that don't support color-mix */
+  --darken-light: hsl(220deg 50% 19%);
+  /* Modern browsers will use this color-mix value */
+  --darken-light: color-mix(in srgb, black 80%, hsl(220deg 50% 95%));
+  --on-background-light: hsl(220deg 40% 30%);
+  --primary-light: hsl(220deg 50% 50%);
+  --on-primary-light: hsl(220deg 50% 95%);
+  --secondary-light: hsl(220deg 45% 75%);
+  --on-secondary-light: hsl(220deg 45% 20%);
+  --surface-light: hsl(220deg 50% 90%);
+  --on-surface-light: hsl(220deg 50% 35%);
+  --error-light: hsl(360deg 50% 40%);
+  --success-light: hsl(120deg 50% 40%);
+  --code-light: rgb(0 0 0 / 8%);
+  --accent-light: hsl(280deg 60% 60%);
+  --on-accent-light: hsl(280deg 60% 15%);
+  --neutral-light: hsl(220deg 10% 85%);
+
+  /* Dark Theme */
+  --tone-dark: hsl(200deg 100% 50%);
+  --background-dark: hsl(200deg 50% 15%);
+  /* Fallback for browsers that don't support color-mix */
+  --darken-dark: hsl(200deg 50% 3%);
+  /* Modern browsers will use this color-mix value */
+  --darken-dark: color-mix(in srgb, black 80%, hsl(200deg 50% 15%));
+  --on-background-dark: hsl(200deg 50% 80%);
+  --primary-dark: hsl(200deg 50% 70%);
+  --on-primary-dark: hsl(200deg 50% 10%);
+  --secondary-dark: hsl(200deg 60% 25%);
+  --on-secondary-dark: hsl(200deg 20% 85%);
+  --surface-dark: hsl(200deg 50% 18%);
+  --on-surface-dark: hsl(200deg 50% 85%);
+  --error-dark: hsl(360deg 50% 70%);
+  --success-dark: hsl(120deg 50% 60%);
+  --code-dark: rgb(0 0 0 / 8%);
+  --accent-dark: hsl(280deg 70% 70%);
+  --on-accent-dark: hsl(280deg 70% 10%);
+  --neutral-dark: hsl(200deg 10% 25%);
+}
+
+html {
+  /* Default dark theme */
+  --tone: var(--tone-dark);
+  --primary: var(--primary-dark);
+  --on-primary: var(--on-primary-dark);
+  --secondary: var(--secondary-dark);
+  --on-secondary: var(--on-secondary-dark);
+  --surface: var(--surface-dark);
+  --on-surface: var(--on-surface-dark);
+  --background: var(--background-dark);
+  --on-background: var(--on-background-dark);
+  --error: var(--error-dark);
+  --success: var(--success-dark);
+  --darken: var(--darken-dark);
+  --code: var(--code-dark);
+  --accent: var(--accent-dark);
+  --on-accent: var(--on-accent-dark);
+  --neutral: var(--neutral-dark);
+  --header-height: 60px;
+}
+
+html[data-theme="light"] {
+  --tone: var(--tone-light);
+  --primary: var(--primary-light);
+  --on-primary: var(--on-primary-light);
+  --secondary: var(--secondary-light);
+  --on-secondary: var(--on-secondary-light);
+  --surface: var(--surface-light);
+  --on-surface: var(--on-surface-light);
+  --background: var(--background-light);
+  --on-background: var(--on-background-light);
+  --error: var(--error-light);
+  --success: var(--success-light);
+  --darken: var(--darken-light);
+  --code: var(--code-light);
+  --accent: var(--accent-light);
+  --on-accent: var(--on-accent-light);
+  --neutral: var(--neutral-light);
+}
+
+@theme {
+  --breakpoint-xs: 30rem;
+  --breakpoint-2xl: 100rem;
+  --breakpoint-3xl: 120rem;
+
+  /* Colors */
+  --color-theme-background: var(--background);
+  --color-theme-background-dark: var(--background-dark);
+  --color-theme-background-light: var(--background-light);
+  --color-theme-code: var(--code);
+  --color-theme-code-dark: var(--code-dark);
+  --color-theme-code-light: var(--code-light);
+  --color-theme-darken: var(--darken);
+  --color-theme-darken-dark: var(--darken-dark);
+  --color-theme-darken-light: var(--darken-light);
+  --color-theme-error: var(--error);
+  --color-theme-error-dark: var(--error-dark);
+  --color-theme-error-light: var(--error-light);
+  --color-theme-on-background: var(--on-background);
+  --color-theme-on-background-dark: var(--on-background-dark);
+  --color-theme-on-background-light: var(--on-background-light);
+  --color-theme-on-primary: var(--on-primary);
+  --color-theme-on-primary-dark: var(--on-primary-dark);
+  --color-theme-on-primary-light: var(--on-primary-light);
+  --color-theme-on-secondary: var(--on-secondary);
+  --color-theme-on-secondary-dark: var(--on-secondary-dark);
+  --color-theme-on-secondary-light: var(--on-secondary-light);
+  --color-theme-on-surface: var(--on-surface);
+  --color-theme-on-surface-dark: var(--on-surface-dark);
+  --color-theme-on-surface-light: var(--on-surface-light);
+  --color-theme-primary: var(--primary);
+  --color-theme-primary-dark: var(--primary-dark);
+  --color-theme-primary-light: var(--primary-light);
+  --color-theme-secondary: var(--secondary);
+  --color-theme-secondary-dark: var(--secondary-dark);
+  --color-theme-secondary-light: var(--secondary-light);
+  --color-theme-success: var(--success);
+  --color-theme-success-dark: var(--success-dark);
+  --color-theme-success-light: var(--success-light);
+  --color-theme-surface: var(--surface);
+  --color-theme-surface-dark: var(--surface-dark);
+  --color-theme-surface-light: var(--surface-light);
+  --color-theme-tone: var(--tone);
+  --color-theme-tone-1: var(--tone-1);
+  --color-theme-tone-2: var(--tone-2);
+  --color-theme-tone-3: var(--tone-3);
+
+  /* Font Families */
+  --font-sans:
+    "Montserrat", "Montserrat Fallback", system-ui, -apple-system,
+    blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial,
+    "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --font-sans-inter:
+    "Inter", "Inter Fallback", system-ui, -apple-system, blinkmacsystemfont,
+    "Segoe UI", roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-serif:
+    "Merriweather", "Merriweather Fallback", georgia, cambria,
+    "Times New Roman", times, serif;
+  --font-mono:
+    "Source Code Pro", "Source Code Pro Fallback", ui-monospace, sfmono-regular,
+    menlo, monaco, consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Box Shadows */
+  --shadow-box: 0 1px 10px 0 rgb(0 0 0 / 20%);
+  --shadow-box-md: 0 1px 10px 2px rgb(0 0 0 / 30%);
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.3s linear;
+  @keyframes fade-in {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+
+    to {
+      height: auto;
+      opacity: 1;
+    }
+  }
+
+  --animate-fade-in-forwards: fade-in 1s forwards;
+  --animate-hero-height: hero-height 1.5s linear;
+  @keyframes hero-height {
+    0%,
+    50% {
+      min-height: calc(100vh + 6rem);
+    }
+
+    100% {
+      min-height: 600px;
+    }
+  }
+
+  --animate-typing: typing 0.5s steps(20, end) forwards 1s;
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+
+    to {
+      width: 100%;
+    }
+  }
+
+  /* Spacing */
+  --spacing-2px: 2px;
+  --spacing-4px: 4px;
+  --spacing-5px: 5px;
+  --spacing-header-height: var(--header-height);
+
+  /* Z-Index */
+  --z-bg: -1;
+  --z-fg: 999;
+  --z-header: 1000;
+}

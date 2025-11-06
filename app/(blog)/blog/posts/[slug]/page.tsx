@@ -106,7 +106,7 @@ export default async function Post({
   };
 
   return (
-    <div>
+    <div className="code-container">
       <Suspense>
         <ReportView />
         <ClientSideGetPageViews pathnames={[`/blog/posts/${post.slug}`]} />

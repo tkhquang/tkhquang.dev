@@ -1,9 +1,16 @@
-.flex-center {
-  @apply flex items-center justify-center;
+#class-keeper {
+  @apply transition-colors duration-500;
+
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
 }
 
-@utility heading {
-  @apply text-theme-primary relative leading-tight font-bold tracking-tight;
+.flex-center {
+  @apply flex items-center justify-center;
 }
 
 .heading--section {
@@ -19,18 +26,6 @@
     opacity: 0.25;
     background-color: var(--primary);
   }
-}
-
-@utility primary {
-  @apply bg-theme-primary text-theme-on-primary;
-}
-
-@utility secondary {
-  @apply bg-theme-secondary text-theme-on-secondary;
-}
-
-@utility background {
-  @apply bg-theme-background text-theme-on-background;
 }
 
 html {
@@ -57,20 +52,6 @@ html {
     .header__background-transparent--landing {
       background-color: rgb(var(--tone-light), 0.75) !important;
     }
-  }
-}
-
-@utility surface {
-  @apply bg-theme-surface text-theme-on-surface;
-}
-
-@utility input {
-  @apply border-theme-secondary bg-theme-background text-theme-on-background inline-block rounded border-2 shadow-inner;
-}
-
-.input {
-  &:focus {
-    @apply border-theme-tone;
   }
 }
 
@@ -520,5 +501,80 @@ html {
 
   &:visited {
     filter: brightness(85%);
+  }
+}
+
+.container {
+  @apply max-w-[1280px];
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.5s;
+}
+
+.fade-enter-active {
+  transition-delay: 0.5s;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+.quick-fade-enter-active,
+.quick-fade-leave-active {
+  transition-property: opacity;
+  transition-duration: 0.2s;
+}
+
+.quick-fade-enter-active {
+  transition-delay: 0.2s;
+}
+
+.quick-fade-enter,
+.quick-fade-leave-active {
+  opacity: 0;
+}
+
+.list-border {
+  & > li {
+    padding-bottom: 1px;
+    background:
+      linear-gradient(
+        to right,
+        transparent 0%,
+        var(--primary) 30%,
+        var(--primary) 70%,
+        transparent 100%
+      ),
+      linear-gradient(
+        to right,
+        transparent 0%,
+        var(--primary) 30%,
+        var(--primary) 70%,
+        transparent 100%
+      );
+    background-size: 100% 1px;
+    background-position:
+      bottom 0 left 0,
+      bottom 1px left 0;
+    background-repeat: no-repeat;
+
+    &:first-of-type {
+      background-size: 100% 2px;
+      background-position:
+        top 0 left 0,
+        bottom 0 left 0;
+      padding-top: 1px;
+      padding-bottom: 1px;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
   }
 }

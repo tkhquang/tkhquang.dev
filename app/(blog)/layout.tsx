@@ -1,4 +1,5 @@
 import "@/assets/styles/index.css";
+import "@/assets/styles/(blog)/index.css";
 import ClientSideScrollRestorer from "@/components/container/ClientSideScrollRestorer";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Main } from "@/components/layout";

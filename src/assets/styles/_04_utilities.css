@@ -1,0 +1,46 @@
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  @media (width >= theme(--breakpoint-xs)) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+}
+
+@utility heading {
+  @apply text-theme-primary relative leading-tight font-bold tracking-tight;
+}
+
+@utility primary {
+  @apply bg-theme-primary text-theme-on-primary;
+}
+
+@utility secondary {
+  @apply bg-theme-secondary text-theme-on-secondary;
+}
+
+@utility background {
+  @apply bg-theme-background text-theme-on-background;
+}
+
+@utility surface {
+  @apply bg-theme-surface text-theme-on-surface;
+}
+
+@utility input {
+  @apply border-theme-secondary bg-theme-background text-theme-on-background inline-block rounded border-2 shadow-inner;
+}
+
+.input {
+  &:focus {
+    @apply border-theme-tone;
+  }
+}
