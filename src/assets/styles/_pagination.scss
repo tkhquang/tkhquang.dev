@@ -2,7 +2,7 @@
   @apply inline-flex w-full items-center justify-center rounded-sm py-12 pl-0;
 
   & > a {
-    @apply relative float-left flex cursor-pointer border bg-theme-background px-4 py-2 leading-6 text-theme-on-background no-underline;
+    @apply bg-theme-background text-theme-on-background relative float-left flex cursor-pointer border px-4 py-2 leading-6 no-underline;
 
     &:first-of-type {
       @apply rounded-l;
@@ -14,13 +14,13 @@
 
     &:hover,
     &:focus {
-      @apply z-10 bg-theme-secondary text-theme-on-secondary;
+      @apply bg-theme-secondary text-theme-on-secondary z-10;
     }
 
     &.active,
     &.active:hover,
     &.active:focus {
-      @apply z-20 cursor-default bg-theme-primary text-theme-on-primary outline-hidden;
+      @apply bg-theme-primary text-theme-on-primary z-20 cursor-default outline-hidden;
     }
 
     &.disabled,
