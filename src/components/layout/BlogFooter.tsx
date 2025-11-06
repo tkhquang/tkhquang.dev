@@ -12,7 +12,7 @@ const BlogFooter = ({
     <footer
       {...props}
       className={clsx(
-        "footer sticky bottom-0 mt-auto w-full py-4 text-center shadow-box-md",
+        "footer shadow-box-md sticky bottom-0 mt-auto w-full py-4 text-center",
         "header__background-transparent--blog text-theme-on-surface",
         className
       )}
@@ -30,7 +30,7 @@ const BlogFooter = ({
           />
         </Suspense>
         <SocialLinks
-          className="flex-center flex-gap-4 shrink-0 text-2xl"
+          className="flex-center shrink-0 gap-1 text-2xl"
           entities={["Github"]}
         />
       </div>

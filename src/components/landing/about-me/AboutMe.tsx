@@ -1,4 +1,4 @@
-import "./AboutMe.scss";
+import "./AboutMe.css";
 import Image from "@/components/common/NextImage";
 import ResumeDownload from "@/components/landing/about-me/ResumeDowload";
 import { Portfolio } from "@/constants/meta";
@@ -17,14 +17,14 @@ const AboutMe = async () => {
     <section className="about">
       <div className="container">
         <h2 className="heading--section my-10 text-4xl">About Me 🙋🏻‍♂️</h2>
-        <div className="flex-center flex-gap-8 flex-col-reverse lg:flex-row">
+        <div className="flex-center flex-col-reverse gap-2 lg:flex-row">
           <div
             className="typography w-full lg:w-2/3"
             dangerouslySetInnerHTML={{
               __html: Portfolio.METADATA.about,
             }}
           ></div>
-          <div className="author flex-center mx-6 my-10 w-4/5 p-6 xs:w-1/2 md:w-1/3">
+          <div className="author flex-center xs:w-1/2 mx-6 my-10 w-4/5 p-6 md:w-1/3">
             <div className="relative w-full pb-[100%]">
               <Image
                 fill

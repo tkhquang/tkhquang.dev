@@ -1,5 +1,5 @@
-import "@/assets/styles/(frames)/index.scss";
-import "@/assets/styles/index.scss";
+import "@/assets/styles/(frames)/index.css";
+import "@/assets/styles/index.css";
 import { Main } from "@/components/layout";
 import AppProvider from "@/providers/AppProvider";
 

@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@import "./_variables.css";
+@import "./_base.css";
+@import "./_components.css";
+@import "./_utils.css";
+@import "./_code.css";
+@import "./_pagination.css";
+@import "./_external.css";
+@import "./_overrides.css";

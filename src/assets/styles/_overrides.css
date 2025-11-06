@@ -1,0 +1,123 @@
+html,
+body {
+  /* Webkit based browsers */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--primary-dark);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--primary-dark) 20%, black);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2e3645;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background-color: #2e3645;
+  }
+
+  /* For Internet Explorer */
+  scrollbar-face-color: var(--primary-dark);
+  scrollbar-track-color: #2e3645;
+
+  /* For Firefox */
+  scrollbar-color: var(--primary-dark) #2e3645;
+  scrollbar-width: auto;
+
+  &[data-theme="light"] {
+    /* Webkit based browsers */
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-light);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: color-mix(in srgb, var(--primary-light) 20%, black);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #2e3645;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background-color: #2e3645;
+    }
+
+    /* For Internet Explorer */
+    scrollbar-face-color: var(--primary-light);
+    scrollbar-track-color: #2e3645;
+
+    /* For Firefox */
+    scrollbar-color: var(--primary-light) #2e3645;
+    scrollbar-width: auto;
+  }
+}
+
+@keyframes bar-progress {
+  0% {
+    background-position: 0% 0;
+  }
+
+  100% {
+    background-position: 125% 0;
+  }
+}
+
+/* For fusioncharts */
+svg[id^="raphael-"] {
+  & > g:not([class*="-parentgroup"]) {
+    display: none !important;
+  }
+
+  background-color: transparent !important;
+
+  & g[class*="-legendGroup"] text {
+    transform: translateY(0.15rem) !important;
+    font-size: calc(8px + 1vw) !important;
+  }
+
+  & g[class*="-caption"] text:last-of-type {
+    font-style: italic !important;
+    font-size: small !important;
+    transform: translateY(-0.4rem) !important;
+  }
+
+  & g[class*="-labels"] text {
+    font-size: calc(8px + 0.75vw) !important;
+
+    /* @media (min-width: theme(--breakpoint-md)) {
+      body {
+        font-size: calc(10px + 0.75vw) !important;
+      }
+    } */
+  }
+}
+
+.mermaid {
+  @apply transition-opacity;
+
+  opacity: 0;
+
+  &[data-processed="true"] {
+    opacity: 1;
+  }
+
+  > svg {
+    background-color: var(--on-surface-dark);
+  }
+}
+
+pre.mermaid {
+  overflow: auto;
+  white-space: normal;
+}

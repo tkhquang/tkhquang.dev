@@ -1,4 +1,4 @@
-import "@/assets/styles/index.scss";
+import "@/assets/styles/index.css";
 import ClientSideScrollRestorer from "@/components/container/ClientSideScrollRestorer";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Main } from "@/components/layout";
@@ -33,7 +33,7 @@ export default async function BlogLayout({
 
         <Suspense>
           <Portal>
-            <BackToTopButton className="mb-20 mr-10" />
+            <BackToTopButton className="mr-10 mb-20" />
           </Portal>
         </Suspense>
       </AppProvider>

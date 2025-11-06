@@ -1,4 +1,4 @@
-import "@/assets/styles/index.scss";
+import "@/assets/styles/index.css";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Footer, Header, Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
@@ -23,7 +23,7 @@ export default async function DefaultLayout({
 
         <Suspense>
           <Portal>
-            <BackToTopButton className="mb-20 mr-10" />
+            <BackToTopButton className="mr-10 mb-20" />
           </Portal>
         </Suspense>
       </AppProvider>

@@ -47,7 +47,7 @@ html {
     }
   }
 
-  // Inline
+  /* Inline */
   span > code:not([data-line-numbers]) {
     padding: 0.125em 0.25em;
     background-color: var(--code) !important;
