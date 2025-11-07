@@ -15,8 +15,8 @@ const ResumeDownload = () => {
           value: 1,
         });
       }
-    } catch (_e) {
-      // fail silently
+    } catch (e) {
+      console.warn("Error tracking resume download:", e);
     }
   };
 
