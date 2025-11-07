@@ -1,4 +1,4 @@
-import { debounce } from "debounce";
+import { debounce } from "es-toolkit";
 
 /**
  * Retrieves the current root font size (in pixels) from the document's root element (`<html>`).
