@@ -157,11 +157,11 @@ const Projects = async () => {
                   key={demo.title}
                   className="surface shadow-box hover:shadow-box-md flex h-full flex-col rounded-md px-5 py-8 transition-all duration-300"
                 >
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col">
                     <h4 className="text-center text-lg font-bold">
                       {demo.title}
                     </h4>
-                    <div className="my-10 block shadow-inner">
+                    <div className="my-4 block shadow-inner">
                       <div className="relative aspect-video w-full">
                         <Image
                           fill
@@ -181,17 +181,17 @@ const Projects = async () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-1 flex-col justify-between gap-4">
+                  <div className="flex flex-1 flex-col justify-between">
                     <p
-                      className="mx-4"
+                      className="mx-4 leading-normal"
                       dangerouslySetInnerHTML={{ __html: demo.description }}
                     />
-                    <div className="flex flex-col gap-4">
-                      <ul className="flex-center mx-4 my-5 gap-0.5">
+                    <div className="flex flex-col">
+                      <ul className="flex-center mx-4 my-4 gap-0.5">
                         {demo.stacks.map((stack) => (
                           <li
                             key={stack}
-                            className="primary inline-block rounded-md px-4 py-2 shadow-md transition-all duration-300 select-none hover:shadow-lg"
+                            className="primary inline-block rounded-md px-4 py-2 leading-normal shadow-md transition-all duration-300 select-none hover:shadow-lg"
                           >
                             {stack}
                           </li>
