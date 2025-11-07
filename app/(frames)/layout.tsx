@@ -1,5 +1,4 @@
 import "@/assets/styles/(frames)/index.css";
-import "@/assets/styles/index.css";
 import { Main } from "@/components/layout";
 import AppProvider from "@/providers/AppProvider";
 

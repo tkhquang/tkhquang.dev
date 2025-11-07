@@ -1,6 +1,17 @@
-/* stylelint-disable property-no-deprecated */
 /* stylelint-disable selector-class-pattern */
-@use "tailwindcss";
+@import "../_00_core.css";
+@import "../_01_theme.css";
+@import "../_02_base.css";
+
+@layer theme {
+  @theme {
+    /* Font Families */
+    --font-sans-inter:
+      "Inter", "Inter Fallback", system-ui, -apple-system, blinkmacsystemfont,
+      "Segoe UI", roboto, "Helvetica Neue", arial, "Noto Sans", sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+}
 
 @layer base {
   html {

@@ -1,4 +1,4 @@
-import "@/assets/styles/index.css";
+import "@/assets/styles/(default)/index.css";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Footer, Header, Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";

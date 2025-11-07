@@ -8,6 +8,12 @@
   }
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
 .author__image--border {
   border-radius: 35% 63% 59% 41% / 68% 69% 31% 58%;
 }
