@@ -10,5 +10,11 @@
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
-  "stylelint.validate": ["css", "scss"]
+  "stylelint.validate": ["css", "scss"],
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
