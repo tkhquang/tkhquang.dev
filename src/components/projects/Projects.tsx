@@ -187,7 +187,7 @@ const Projects = async () => {
                       dangerouslySetInnerHTML={{ __html: demo.description }}
                     />
                     <div className="flex flex-col gap-4">
-                      <ul className="flex-center flex-gap-2 mx-4 my-5">
+                      <ul className="flex-center mx-4 my-5 gap-0.5">
                         {demo.stacks.map((stack) => (
                           <li
                             key={stack}
@@ -197,7 +197,7 @@ const Projects = async () => {
                           </li>
                         ))}
                       </ul>
-                      <div className="flex-center flex-gap-2">
+                      <div className="flex-center gap-0.5">
                         <a
                           href={demo.live}
                           target="_blank"

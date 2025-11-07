@@ -11,7 +11,7 @@ const Footer = ({
     <footer
       {...props}
       className={classNames(
-        "footer surface mt-auto py-4 text-center shadow-box",
+        "footer surface shadow-box mt-auto py-4 text-center",
         className
       )}
     >
@@ -19,7 +19,7 @@ const Footer = ({
         <div className="font-semibold">
           Copyright © {new Date().getFullYear()}
         </div>
-        <SocialLinks className="flex-center flex-gap-4 text-2xl" />
+        <SocialLinks className="flex-center gap-1 text-2xl" />
       </div>
     </footer>
   );

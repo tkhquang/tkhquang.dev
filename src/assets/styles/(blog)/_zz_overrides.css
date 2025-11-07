@@ -1,0 +1,20 @@
+@layer overrides {
+  .mermaid {
+    @apply transition-opacity;
+
+    opacity: 0;
+
+    &[data-processed="true"] {
+      opacity: 1;
+    }
+
+    > svg {
+      background-color: var(--on-surface-dark);
+    }
+  }
+
+  pre.mermaid {
+    overflow: auto;
+    white-space: normal;
+  }
+}

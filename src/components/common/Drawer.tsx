@@ -1,4 +1,4 @@
-import "./Drawer.scss";
+import "./Drawer.css";
 import useForkRef from "@/hooks/useForkRef";
 import {
   Dialog,

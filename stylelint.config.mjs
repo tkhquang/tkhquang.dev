@@ -1,11 +1,6 @@
 const config = {
-  extends: [
-    "stylelint-config-recommended-scss",
-    "stylelint-config-standard-scss",
-    "stylelint-config-prettier-scss",
-    "stylelint-config-tailwindcss",
-  ],
-  plugins: ["stylelint-scss", "stylelint-prettier"],
+  extends: ["stylelint-config-tailwindcss"],
+  plugins: ["stylelint-prettier"],
   rules: {
     "prettier/prettier": true,
     "at-rule-no-unknown": null,
@@ -26,22 +21,6 @@ const config = {
     "color-no-invalid-hex": true,
     "no-descending-specificity": null,
     "selector-pseudo-element-no-unknown": [true, {}],
-    "scss/at-rule-no-unknown": [
-      true,
-      {
-        ignoreAtRules: [
-          "tailwind",
-          "apply",
-          "variants",
-          "responsive",
-          "screen",
-          "config",
-          "utility",
-          "layer",
-          "theme",
-        ],
-      },
-    ],
   },
 };
 

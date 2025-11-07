@@ -1,4 +1,4 @@
-import "@/assets/styles/index.scss";
+import "@/assets/styles/index.css";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Footer, Header, Main } from "@/components/layout";
 import AppProvider from "@/providers/AppProvider";

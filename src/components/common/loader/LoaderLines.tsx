@@ -1,4 +1,4 @@
-import "./LoaderLines.scss";
+import "./LoaderLines.css";
 import React from "react";
 
 const LoaderLines = () => {

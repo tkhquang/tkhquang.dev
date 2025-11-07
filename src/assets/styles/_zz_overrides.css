@@ -1,0 +1,50 @@
+@layer overrides {
+  /* For fusioncharts */
+  svg[id^="raphael-"] {
+    & > g:not([class*="-parentgroup"]) {
+      display: none !important;
+    }
+
+    background-color: transparent !important;
+
+    & g[class*="-legendGroup"] text {
+      transform: translateY(0.15rem) !important;
+      font-size: calc(8px + 1vw) !important;
+    }
+
+    & g[class*="-caption"] text:last-of-type {
+      font-style: italic !important;
+      font-size: small !important;
+      transform: translateY(-0.4rem) !important;
+    }
+
+    & g[class*="-labels"] text {
+      font-size: calc(8px + 0.75vw) !important;
+
+      @media (min-width: theme(--breakpoint-md)) {
+        body {
+          font-size: calc(10px + 0.75vw) !important;
+        }
+      }
+    }
+  }
+
+  .mermaid {
+    @apply transition-opacity;
+
+    opacity: 0;
+
+    &[data-processed="true"] {
+      opacity: 1;
+    }
+
+    > svg {
+      background-color: var(--on-surface-dark);
+    }
+  }
+
+  pre.mermaid {
+    overflow: auto;
+    white-space: normal;
+  }
+}

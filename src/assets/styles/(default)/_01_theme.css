@@ -1,0 +1,41 @@
+@layer theme {
+  @theme {
+    /* Animations */
+    --animate-fade-in: fade-in 0.3s linear;
+    @keyframes fade-in {
+      from {
+        height: 0;
+        opacity: 0;
+      }
+
+      to {
+        height: auto;
+        opacity: 1;
+      }
+    }
+
+    --animate-fade-in-forwards: fade-in 1s forwards;
+    --animate-hero-height: hero-height 1.5s linear;
+    @keyframes hero-height {
+      0%,
+      50% {
+        min-height: calc(100vh + 6rem);
+      }
+
+      100% {
+        min-height: 600px;
+      }
+    }
+
+    --animate-typing: typing 0.5s steps(20, end) forwards 1s;
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+  }
+}

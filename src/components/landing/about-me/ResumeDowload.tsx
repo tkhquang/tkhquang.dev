@@ -21,7 +21,7 @@ const ResumeDownload = () => {
   };
 
   return (
-    <div className="download-container flex-center my-2 flex-col">
+    <div className="download-container typography flex-center my-2 flex-col">
       <a
         className="download__link shadow-md"
         target="_blank"

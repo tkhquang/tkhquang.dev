@@ -106,7 +106,7 @@ export default async function Post({
   };
 
   return (
-    <div>
+    <div className="code-container">
       <Suspense>
         <ReportView />
         <ClientSideGetPageViews pathnames={[`/blog/posts/${post.slug}`]} />
@@ -160,7 +160,7 @@ export default async function Post({
             </div>
             <hr className="my-6" />
             <div className="w-full">
-              <BlogInfo className="md:[&_.author\_\_image--container]:mb-0 [&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 [&_img]:size-[120px]! md:[&_img]:size-[80px]!" />
+              <BlogInfo className="[&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 md:[&_.author\_\_image--container]:mb-0 [&_img]:size-[120px]! md:[&_img]:size-[80px]!" />
             </div>
             <hr className="my-6" />
             <div className="article-comments w-full p-2">

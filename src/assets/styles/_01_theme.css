@@ -1,0 +1,78 @@
+@layer theme {
+  @theme {
+    --breakpoint-xs: 30rem;
+    --breakpoint-2xl: 100rem;
+    --breakpoint-3xl: 120rem;
+
+    /* Colors */
+    --color-theme-background: var(--background);
+    --color-theme-background-dark: var(--background-dark);
+    --color-theme-background-light: var(--background-light);
+    --color-theme-code: var(--code);
+    --color-theme-code-dark: var(--code-dark);
+    --color-theme-code-light: var(--code-light);
+    --color-theme-darken: var(--darken);
+    --color-theme-darken-dark: var(--darken-dark);
+    --color-theme-darken-light: var(--darken-light);
+    --color-theme-error: var(--error);
+    --color-theme-error-dark: var(--error-dark);
+    --color-theme-error-light: var(--error-light);
+    --color-theme-on-background: var(--on-background);
+    --color-theme-on-background-dark: var(--on-background-dark);
+    --color-theme-on-background-light: var(--on-background-light);
+    --color-theme-on-primary: var(--on-primary);
+    --color-theme-on-primary-dark: var(--on-primary-dark);
+    --color-theme-on-primary-light: var(--on-primary-light);
+    --color-theme-on-secondary: var(--on-secondary);
+    --color-theme-on-secondary-dark: var(--on-secondary-dark);
+    --color-theme-on-secondary-light: var(--on-secondary-light);
+    --color-theme-on-surface: var(--on-surface);
+    --color-theme-on-surface-dark: var(--on-surface-dark);
+    --color-theme-on-surface-light: var(--on-surface-light);
+    --color-theme-primary: var(--primary);
+    --color-theme-primary-dark: var(--primary-dark);
+    --color-theme-primary-light: var(--primary-light);
+    --color-theme-secondary: var(--secondary);
+    --color-theme-secondary-dark: var(--secondary-dark);
+    --color-theme-secondary-light: var(--secondary-light);
+    --color-theme-success: var(--success);
+    --color-theme-success-dark: var(--success-dark);
+    --color-theme-success-light: var(--success-light);
+    --color-theme-surface: var(--surface);
+    --color-theme-surface-dark: var(--surface-dark);
+    --color-theme-surface-light: var(--surface-light);
+    --color-theme-tone: var(--tone);
+    --color-theme-tone-1: var(--tone-1);
+    --color-theme-tone-2: var(--tone-2);
+    --color-theme-tone-3: var(--tone-3);
+
+    /* Font Families */
+    --font-sans:
+      "Montserrat", "Montserrat Fallback", system-ui, -apple-system,
+      blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial,
+      "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
+    --font-serif:
+      "Merriweather", "Merriweather Fallback", georgia, cambria,
+      "Times New Roman", times, serif;
+    --font-mono:
+      "Source Code Pro", "Source Code Pro Fallback", ui-monospace,
+      sfmono-regular, menlo, monaco, consolas, "Liberation Mono", "Courier New",
+      monospace;
+
+    /* Box Shadows */
+    --shadow-box: 0 1px 10px 0 rgb(0 0 0 / 20%);
+    --shadow-box-md: 0 1px 10px 2px rgb(0 0 0 / 30%);
+
+    /* Spacing */
+    --spacing-2px: 2px;
+    --spacing-4px: 4px;
+    --spacing-5px: 5px;
+    --spacing-header-height: var(--header-height);
+
+    /* Z-Index */
+    --z-bg: -1;
+    --z-fg: 999;
+    --z-header: 1000;
+  }
+}

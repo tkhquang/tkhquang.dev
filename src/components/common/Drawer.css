@@ -1,4 +1,4 @@
-// Drawer base styles
+/* Drawer base styles */
 .drawer {
   --drawer-border-radius: 0px;
 
@@ -7,15 +7,15 @@
     inset: 0;
     z-index: 1000;
 
-    // Use Ariakit's dialog viewport height variable for mobile keyboards
+    /* Use Ariakit's dialog viewport height variable for mobile keyboards */
     max-height: var(--dialog-viewport-height, 100dvh);
 
-    // Ensure the dialog itself doesn't block clicks
+    /* Ensure the dialog itself doesn't block clicks */
     pointer-events: none;
   }
 
-  // Position-specific styles
-  &--top {
+  /* Position-specific styles */
+  &.drawer--top {
     .drawer__content {
       top: 0;
       left: 0;
@@ -33,7 +33,7 @@
     }
   }
 
-  &--bottom {
+  &.drawer--bottom {
     .drawer__content {
       bottom: 0;
       left: 0;
@@ -51,7 +51,7 @@
     }
   }
 
-  &--left {
+  &.drawer--left {
     .drawer__content {
       top: 0;
       left: 0;
@@ -69,7 +69,7 @@
     }
   }
 
-  &--right {
+  &.drawer--right {
     .drawer__content {
       top: 0;
       right: 0;
@@ -87,23 +87,25 @@
     }
   }
 
-  // Backdrop (passed as prop to Dialog)
-  &__backdrop {
+  /* Backdrop (passed as prop to Dialog) */
+  .drawer__backdrop {
     position: fixed;
     inset: 0;
     background-color: rgb(0 0 0 / 20%);
     backdrop-filter: blur(1px);
     cursor: pointer;
-    opacity: 0; // Start transparent, GSAP will animate it
-    // Ensure backdrop can receive clicks
+    opacity: 0;
+
+    /* Start transparent, GSAP will animate it
+       Ensure backdrop can receive clicks */
     pointer-events: auto;
     z-index: 1;
   }
 
-  // Content container
-  &__content {
+  /* Content container */
+  .drawer__content {
     position: absolute;
-    background-color: var(--surface,);
+    background-color: var(--surface);
     color: var(--on-surface);
     box-shadow: 0 10px 25px rgb(0 0 0 / 15%);
     display: flex;
@@ -112,11 +114,11 @@
     touch-action: none;
     user-select: none;
 
-    // Ensure content can receive clicks and is above backdrop
+    /* Ensure content can receive clicks and is above backdrop */
     pointer-events: auto;
     z-index: 2;
 
-    // Drag handle indicator
+    /* Drag handle indicator */
     &::before {
       content: "";
       position: absolute;
@@ -126,8 +128,8 @@
     }
   }
 
-  // Header
-  &__header {
+  /* Header */
+  .drawer__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -137,14 +139,14 @@
     flex-shrink: 0;
   }
 
-  &__title {
+  .drawer__title {
     font-size: 18px;
     font-weight: 600;
     margin: 0;
     color: var(--on-surface);
   }
 
-  &__close {
+  .drawer__close {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -164,21 +166,21 @@
       color: var(--on-primary);
     }
 
-    // Use Ariakit's data-active attribute for active states
+    /* Use Ariakit's data-active attribute for active states */
     &:active,
     &[data-active] {
       transform: scale(0.95);
     }
 
-    // Use Ariakit's data-focus-visible for focus styles
+    /* Use Ariakit's data-focus-visible for focus styles */
     &[data-focus-visible] {
       outline: 2px solid var(--primary);
       outline-offset: 2px;
     }
   }
 
-  // Description
-  &__description {
+  /* Description */
+  .drawer__description {
     padding: 0 24px 16px;
     color: var(--on-surface);
     font-size: 14px;
@@ -187,8 +189,8 @@
     flex-shrink: 0;
   }
 
-  // Body
-  &__body {
+  /* Body */
+  .drawer__body {
     flex: 1;
     padding: 0 24px 24px;
     overflow-y: auto;
@@ -196,7 +198,7 @@
   }
 }
 
-// Trigger button
+/* Trigger button */
 .drawer-trigger {
   display: inline-flex;
   align-items: center;
@@ -215,52 +217,48 @@
     background-color: var(--secondary);
   }
 
-  // Use Ariakit's data-active attribute for active states
+  /* Use Ariakit's data-active attribute for active states */
   &:active,
   &[data-active] {
     transform: scale(0.98);
   }
 
-  // Use Ariakit's data-focus-visible for focus styles
+  /* Use Ariakit's data-focus-visible for focus styles */
   &[data-focus-visible] {
     outline: 2px solid var(--on-primary);
     outline-offset: 2px;
   }
 }
 
-// Responsive adjustments
+/* Responsive adjustments */
 @media (width <= 640px) {
   .drawer {
-    // Use Ariakit's dialog viewport height for mobile
+    /* Use Ariakit's dialog viewport height for mobile */
     &[data-dialog] {
       max-height: var(--dialog-viewport-height, 100dvh);
     }
 
-    &--left,
-    &--right {
-      .drawer__content {
-        width: calc(100vw - 40px) !important;
-        max-width: 320px;
-      }
+    &.drawer--left .drawer__content,
+    &.drawer--right .drawer__content {
+      width: calc(100vw - 40px) !important;
+      max-width: 320px;
     }
 
-    &--top,
-    &--bottom {
-      .drawer__content {
-        height: calc(var(--dialog-viewport-height, 100dvh) - 40px) !important;
-        max-height: 400px;
-      }
+    &.drawer--top .drawer__content,
+    &.drawer--bottom .drawer__content {
+      height: calc(var(--dialog-viewport-height, 100dvh) - 40px) !important;
+      max-height: 400px;
     }
 
-    &__header {
+    .drawer__header {
       padding: 16px 20px 12px;
     }
 
-    &__body {
+    .drawer__body {
       padding: 0 20px 20px;
     }
 
-    &__description {
+    .drawer__description {
       padding: 0 20px 12px;
     }
   }

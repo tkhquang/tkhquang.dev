@@ -1,0 +1,122 @@
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply border-theme-primary box-border;
+  }
+
+  html,
+  body {
+    @apply m-0 p-0;
+  }
+
+  html {
+    @apply bg-theme-background text-theme-on-background font-sans text-sm leading-8 antialiased;
+
+    @media screen and (width >= 640px) {
+      @apply text-base;
+    }
+  }
+
+  a:not(.button) {
+    @apply transition-all duration-200;
+  }
+
+  img {
+    @apply max-w-full;
+  }
+
+  select {
+    appearance: none;
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+
+  button:not(.interactive):focus,
+  textarea:focus,
+  input:focus,
+  select:focus {
+    outline: none;
+  }
+
+  hr {
+    @apply mx-0 h-px w-full border-0;
+
+    background-image: linear-gradient(
+      to right,
+      transparent 0%,
+      var(--primary) 30%,
+      var(--primary) 70%,
+      transparent 100%
+    );
+  }
+
+  html,
+  body {
+    /* Webkit based browsers */
+    &::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--primary-dark);
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: color-mix(in srgb, var(--primary-dark) 20%, black);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #2e3645;
+    }
+
+    &::-webkit-scrollbar-corner {
+      background-color: #2e3645;
+    }
+
+    /* For Internet Explorer */
+    scrollbar-face-color: var(--primary-dark);
+    scrollbar-track-color: #2e3645;
+
+    /* For Firefox */
+    scrollbar-color: var(--primary-dark) #2e3645;
+    scrollbar-width: auto;
+
+    &[data-theme="light"] {
+      /* Webkit based browsers */
+      &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--primary-light);
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: color-mix(in srgb, var(--primary-light) 20%, black);
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #2e3645;
+      }
+
+      &::-webkit-scrollbar-corner {
+        background-color: #2e3645;
+      }
+
+      /* For Internet Explorer */
+      scrollbar-face-color: var(--primary-light);
+      scrollbar-track-color: #2e3645;
+
+      /* For Firefox */
+      scrollbar-color: var(--primary-light) #2e3645;
+      scrollbar-width: auto;
+    }
+  }
+}
