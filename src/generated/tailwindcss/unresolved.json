@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2025-11-07T02:00:17.138Z",
+  "source": "../../assets/styles/index.css",
+  "version": "0.1.0",
+  "summary": {
+    "total": 14,
+    "external": 0,
+    "selfReferential": 0,
+    "unknown": 14
+  },
+  "unresolved": [
+    {
+      "variableName": "--color-theme-background",
+      "originalValue": "var(--background)",
+      "referencedVariable": "--background",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-code",
+      "originalValue": "var(--code)",
+      "referencedVariable": "--code",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-darken",
+      "originalValue": "var(--darken)",
+      "referencedVariable": "--darken",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-error",
+      "originalValue": "var(--error)",
+      "referencedVariable": "--error",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-on-background",
+      "originalValue": "var(--on-background)",
+      "referencedVariable": "--on-background",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-on-primary",
+      "originalValue": "var(--on-primary)",
+      "referencedVariable": "--on-primary",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-on-secondary",
+      "originalValue": "var(--on-secondary)",
+      "referencedVariable": "--on-secondary",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-on-surface",
+      "originalValue": "var(--on-surface)",
+      "referencedVariable": "--on-surface",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-primary",
+      "originalValue": "var(--primary)",
+      "referencedVariable": "--primary",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-secondary",
+      "originalValue": "var(--secondary)",
+      "referencedVariable": "--secondary",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-success",
+      "originalValue": "var(--success)",
+      "referencedVariable": "--success",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-surface",
+      "originalValue": "var(--surface)",
+      "referencedVariable": "--surface",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--color-theme-tone",
+      "originalValue": "var(--tone)",
+      "referencedVariable": "--tone",
+      "source": "theme",
+      "likelyCause": "unknown"
+    },
+    {
+      "variableName": "--spacing-header-height",
+      "originalValue": "var(--header-height)",
+      "referencedVariable": "--header-height",
+      "source": "theme",
+      "likelyCause": "unknown"
+    }
+  ]
+}

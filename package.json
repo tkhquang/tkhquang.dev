@@ -9,7 +9,8 @@
     "lint": "next lint",
     "fix:style": "npx stylelint src/**/*.css --fix",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",
-    "codegen:yml": "tsc --outDir dist scripts/generateTypes.ts && node dist/generateTypes.js"
+    "codegen:yml": "tsc --outDir dist scripts/generateTypes.ts && node dist/generateTypes.js",
+    "codegen:css": "tailwind-resolver -i src/assets/styles/index.css -o src/generated"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.17",
@@ -107,6 +108,7 @@
     "stylelint": "^16.20.0",
     "stylelint-config-tailwindcss": "^1.0.0",
     "stylelint-prettier": "^5.0.3",
+    "tailwind-resolver": "^0.3.3",
     "tailwindcss": "^4.1.16",
     "ts-node": "^10.9.2",
     "typescript": "^5",
