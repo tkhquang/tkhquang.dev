@@ -44,7 +44,7 @@ const BlogHeader = ({
     <header
       {...props}
       className={classNames(
-        "header__background-transparent--blog z-(--z-header) sticky inset-0 m-0 h-header-height w-full flex-wrap p-0 text-theme-on-background shadow-box-md transition-all duration-500 ease-in-out",
+        "header__background-transparent--blog h-header-height text-theme-on-background shadow-box-md sticky inset-0 z-(--z-header) m-0 w-full flex-wrap p-0 transition-all duration-500 ease-in-out",
         className
       )}
     >
@@ -54,10 +54,10 @@ const BlogHeader = ({
             <div className="flex flex-col">
               <button
                 type="button"
-                className="focus:outline-hidden"
+                className="cursor-pointer focus:outline-hidden"
                 onClick={handleBack}
               >
-                <div className="logo flip-animate flex-center whitespace-no-wrap no-underine focus:outline-hidden select-none font-extrabold uppercase">
+                <div className="logo flip-animate flex-center whitespace-no-wrap no-underine font-extrabold uppercase select-none focus:outline-hidden">
                   {!isHomeBlog ? (
                     <>
                       <BackButtonIcon className="size-8" />
