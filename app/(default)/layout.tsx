@@ -13,9 +13,6 @@ export default async function DefaultLayout({
 }) {
   return (
     <>
-      <Suspense>
-        <ClientSideTracking />
-      </Suspense>
       <AppProvider>
         <Header />
         <Main className="flex-1">{children}</Main>
@@ -27,6 +24,9 @@ export default async function DefaultLayout({
           </Portal>
         </Suspense>
       </AppProvider>
+      <Suspense>
+        <ClientSideTracking />
+      </Suspense>
     </>
   );
 }

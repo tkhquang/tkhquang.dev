@@ -16,14 +16,14 @@ export default async function NotFoundLayout({
 }) {
   return (
     <>
-      <Suspense>
-        <ClientSideTracking />
-      </Suspense>
       <AppProvider>
         <Header useScroll={false} />
         <Main className="flex-1">{children}</Main>
         <Footer />
       </AppProvider>
+      <Suspense>
+        <ClientSideTracking />
+      </Suspense>
     </>
   );
 }

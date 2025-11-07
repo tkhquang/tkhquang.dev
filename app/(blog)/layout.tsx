@@ -23,9 +23,6 @@ export default async function BlogLayout({
 }) {
   return (
     <>
-      <Suspense>
-        <ClientSideTracking />
-      </Suspense>
       <AppProvider>
         <BlogHeader />
         <Main className="flex-1">{children}</Main>
@@ -39,6 +36,9 @@ export default async function BlogLayout({
       </AppProvider>
       <Suspense>
         <ClientSideScrollRestorer />
+      </Suspense>
+      <Suspense>
+        <ClientSideTracking />
       </Suspense>
     </>
   );
