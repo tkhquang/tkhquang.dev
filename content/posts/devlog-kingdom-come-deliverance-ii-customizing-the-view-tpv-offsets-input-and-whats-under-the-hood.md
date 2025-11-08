@@ -23,6 +23,7 @@ The community feedback was clear: greater control over the TPV was desired. Comm
 
 If you're looking for the mod itself, it's available here:
 *   **NexusMods:** [Third Person View (TPV Camera) Enabler](https://www.nexusmods.com/kingdomcomedeliverance2/mods/1550)
+
 And for the code that powers these features:
 *   **GitHub:** [KCD2Tools](https://github.com/tkhquang/KCD2Tools)
 
