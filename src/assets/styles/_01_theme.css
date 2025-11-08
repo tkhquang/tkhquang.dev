@@ -1,5 +1,8 @@
 @layer theme {
   @theme {
+    --breakpoint-4xs: 10rem;
+    --breakpoint-3xs: 20rem;
+    --breakpoint-2xs: 23.4375rem;
     --breakpoint-xs: 30rem;
     --breakpoint-2xl: 100rem;
     --breakpoint-3xl: 120rem;

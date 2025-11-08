@@ -65,6 +65,18 @@ const nextConfig = {
     ],
   },
   outputFileTracingRoot: path.join(__dirname),
+  async rewrites() {
+    return [
+      {
+        destination: "/blog/page/1",
+        source: "/blog",
+      },
+      {
+        destination: "/blog/page/1",
+        source: "/blog/",
+      },
+    ];
+  },
   async redirects() {
     return [
       {

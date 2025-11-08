@@ -8,11 +8,15 @@ const NewsFeed = <T,>({
   pathInfoType,
   pathSlug,
   posts,
+  totalPages,
+  currentPage,
 }: {
   posts: MarkdownPost[];
   pathInfoType?: "category" | "tag" | undefined;
   item?: T;
   pathSlug: string;
+  totalPages?: number;
+  currentPage?: number;
 }) => {
   return (
     <div className="relative mx-auto my-12 flex max-w-xl flex-wrap px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:space-x-16 lg:px-8">
@@ -21,6 +25,8 @@ const NewsFeed = <T,>({
         pathInfoType={pathInfoType}
         item={item}
         pathSlug={pathSlug}
+        totalPages={totalPages}
+        currentPage={currentPage}
       />
       <BlogInfo className="mt-8 w-full lg:mt-4 lg:max-w-[240px] [&_.author]:mx-4! [&_.author]:flex-col! [&_img]:size-[120px]!" />
     </div>

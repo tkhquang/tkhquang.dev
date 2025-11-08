@@ -19,6 +19,7 @@
     "@ljoss/rehype-figure-caption": "^1.0.0",
     "@next/third-parties": "16.0.1",
     "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",
     "@sparticuz/chromium": "^137.0.1",
     "@stefanprobst/rehype-extract-toc": "^2.2.0",

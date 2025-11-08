@@ -3,16 +3,21 @@
 import { STACKED_LAYER_1 } from "@/components/layout/StackedLayers";
 import StackedLayerProvider from "@/providers/StackedLayerProvider";
 import StoreProvider from "@/providers/StoreProvider";
+import { useSelectedLayoutSegments } from "next/navigation";
 import React, { createContext } from "react";
 import { IntlProvider } from "react-intl";
 
-export const AppContext = createContext<Record<string, unknown>>({});
+export const AppContext = createContext<
+  { segments?: string[] } & Record<string, unknown>
+>({});
 
 export default function AppProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const segments = useSelectedLayoutSegments();
+
   return (
     <StoreProvider>
       <IntlProvider
@@ -23,7 +28,9 @@ export default function AppProvider({
         defaultLocale="en"
       >
         <StackedLayerProvider id={STACKED_LAYER_1}>
-          <AppContext.Provider value={{}}>{children}</AppContext.Provider>
+          <AppContext.Provider value={{ segments }}>
+            {children}
+          </AppContext.Provider>
         </StackedLayerProvider>
       </IntlProvider>
     </StoreProvider>

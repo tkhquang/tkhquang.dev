@@ -17,7 +17,7 @@ const BlogHeader = ({
   const { prevAsPath } = useAsPathValue();
   const { back, prefetch, push } = useRouter();
 
-  const isHomeBlog = matchSegments(["blog"]);
+  const isHomeBlog = matchSegments(["blog", "page", null]);
   const isInPostPage = matchSegments([
     "blog",
     "posts",
