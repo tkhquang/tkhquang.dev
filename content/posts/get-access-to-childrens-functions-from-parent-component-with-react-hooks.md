@@ -7,8 +7,7 @@ category_slug: technical
 tags:
   - React
 cover_image: /uploads/images/useimperativehandle.png
-description: |
-  One way to expose Children Components in React.
+description: "One way to expose Children Components in React."
 ---
 
 Generally, this is **not** the way to go about handling things in React. Usually what you want to do is hoist the states and the functions to the parent and pass data down as props ([Lifting State Up](https://reactjs.org/docs/lifting-state-up.html)).

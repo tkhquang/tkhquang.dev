@@ -36,7 +36,7 @@ Along the way, I've picked up a solid toolkit and a few specialties:
 I enjoy working with teams who care about quality and learning. If you'd like to collaborate or just talk shop, feel free to reach out!
 </p>
 `,
-    description: `Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience: front-end by day (React, Vue, Next.js), open source and modding enthusiast by night (C++, Rust, game projects). I like building reliable web apps and tools, and I'm always open to learning new things or taking on creative challenges. Let's connect if you share similar interests!`,
+    description: `Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience: front-end by day, open source and modding enthusiast by night.`,
     title: "Aleks's Portfolio",
   };
 }
