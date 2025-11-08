@@ -1,3 +1,113 @@
+:root {
+  --radius: 0.625rem;
+  /* --background: var(--background); */
+  --foreground: var(--on-background);
+  --card: var(--surface);
+  --card-foreground: var(--on-surface);
+  --popover: var(--surface);
+  --popover-foreground: var(--on-surface);
+  /* --primary: var(--primary); */
+  --primary-foreground: var(--on-primary);
+  /* --secondary: var(--secondary); */
+  --secondary-foreground: var(--on-secondary);
+  --muted: var(--neutral);
+  --muted-foreground: var(--on-surface);
+  /* --accent: var(--accent); */
+  --accent-foreground: var(--on-accent);
+  --destructive: var(--error);
+  --border: var(--neutral);
+  --input: var(--neutral);
+  --ring: var(--primary);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--on-surface);
+  /* --sidebar-primary: var(--primary); */
+  --sidebar-primary-foreground: var(--on-primary);
+  /* --sidebar-accent: var(--accent); */
+  --sidebar-accent-foreground: var(--on-accent);
+  --sidebar-border: var(--neutral);
+  --sidebar-ring: var(--primary);
+}
+
+@variant dark {
+  :root {
+    /* --background: var(--background); */
+    --foreground: var(--on-background);
+    --card: var(--surface);
+    --card-foreground: var(--on-surface);
+    --popover: var(--surface);
+    --popover-foreground: var(--on-surface);
+    /* --primary: var(--primary); */
+    --primary-foreground: var(--on-primary);
+    /* --secondary: var(--secondary); */
+    --secondary-foreground: var(--on-secondary);
+    --muted: var(--neutral);
+    --muted-foreground: var(--on-surface);
+    /* --accent: var(--accent); */
+    --accent-foreground: var(--on-accent);
+    --destructive: var(--error);
+    --border: var(--neutral);
+    --input: var(--neutral);
+    --ring: var(--primary);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: var(--surface);
+    --sidebar-foreground: var(--on-surface);
+    /* --sidebar-primary: var(--primary); */
+    --sidebar-primary-foreground: var(--on-primary);
+    /* --sidebar-accent: var(--accent); */
+    --sidebar-accent-foreground: var(--on-accent);
+    --sidebar-border: var(--neutral);
+    --sidebar-ring: var(--primary);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--tone);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
 @layer utilities {
   /* Placeholder for third party styles */
 }
