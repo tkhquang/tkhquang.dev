@@ -1,6 +1,6 @@
 "use server";
 
-import { getMimeTypeFromFilename } from "@shopify/mime-types";
+import { lookup } from "mime-types";
 import chromium from "@sparticuz/chromium";
 import fsPromise from "fs/promises";
 import path from "path";
@@ -189,7 +189,7 @@ export const attachResourceInterception = async (page: Page) => {
       if (fileContent) {
         request.respond({
           body: fileContent,
-          contentType: getMimeTypeFromFilename(filePath),
+          contentType: lookup(filePath) || "application/octet-stream",
           headers: {
             ...request.headers(),
             "Cache-Control": "max-age=600, stale-while-revalidate=300",
