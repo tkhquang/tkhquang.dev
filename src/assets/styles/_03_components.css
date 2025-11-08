@@ -1,4 +1,5 @@
 @layer components {
+  /* Can be updated to use `@source inline();` later */
   #class-keeper {
     @apply transition-colors duration-500;
 
