@@ -1,6 +1,5 @@
 import "@/assets/styles/(default)/index.css";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
-import { Footer, Header, Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
 import AppProvider from "@/providers/AppProvider";
 import { Portal } from "@ariakit/react";
@@ -14,9 +13,7 @@ export default async function DefaultLayout({
   return (
     <>
       <AppProvider>
-        <Header />
-        <Main className="flex-1">{children}</Main>
-        <Footer />
+        {children}
 
         <Suspense>
           <Portal>

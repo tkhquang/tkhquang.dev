@@ -17,6 +17,9 @@ declare global {
       NEXT_PUBLIC_GISCUS_CATEGORY_ID: string;
       NEXT_PUBLIC_GISCUS_REPO: string;
       NEXT_PUBLIC_GISCUS_REPOSITORY_ID: string;
+
+      NEXT_PUBLIC_SUPABASE_URL: string;
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: string;
     }
   }
 }
