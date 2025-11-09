@@ -12,6 +12,7 @@
   --secondary-foreground: var(--on-secondary);
   --muted: var(--neutral);
   --muted-foreground: var(--on-surface);
+  --muted-foreground: color-mix(in srgb, var(--on-surface) 30%, var(--neutral));
   /* --accent: var(--accent); */
   --accent-foreground: var(--on-accent);
   --destructive: var(--error);
@@ -47,6 +48,11 @@
     --secondary-foreground: var(--on-secondary);
     --muted: var(--neutral);
     --muted-foreground: var(--on-surface);
+    --muted-foreground: color-mix(
+      in srgb,
+      var(--on-surface) 30%,
+      var(--neutral)
+    );
     /* --accent: var(--accent); */
     --accent-foreground: var(--on-accent);
     --destructive: var(--error);

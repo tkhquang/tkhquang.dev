@@ -26,11 +26,11 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
   return (
     <div
       className={classNames(
-        "md:text-md grid grid-cols-[1fr_auto] items-end gap-2 text-xs font-semibold uppercase tracking-wider opacity-75 md:text-sm",
+        "md:text-md grid grid-cols-[1fr_auto] items-end gap-2 text-xs font-semibold tracking-wider uppercase opacity-75 md:text-sm",
         className
       )}
     >
-      <div className="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-theme-error">
+      <div className="text-theme-error flex flex-wrap items-center gap-x-1.5 gap-y-1">
         {/* <FaCalendarAlt className="size-3 shrink-0 md:size-4" /> */}
         <time className="align-middle" dateTime={post.created_at.toISOString()}>
           {created_at}
@@ -46,7 +46,7 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         )}
       </div>
 
-      <div className="text-muted-foreground flex items-center space-x-2 opacity-75">
+      <div className="text-theme-on-surface flex items-center space-x-2 opacity-75">
         <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>
