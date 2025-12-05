@@ -306,7 +306,7 @@
         }
       }
 
-      & > p:last-of-type {
+      & > p:last-of-type:not(:first-of-type) {
         margin: 0.5em 0.5em 0 0;
         text-align: right;
         font-size: 90%;
