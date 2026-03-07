@@ -51,5 +51,5 @@ export namespace Blog {
       template: "%s | Ljóss - The Portal To A Nobody's Inner World",
     },
   };
-  export const POSTS_PER_PAGE = 10;
+  export const POSTS_PER_PAGE = 20;
 }
