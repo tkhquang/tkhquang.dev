@@ -4,7 +4,7 @@ import ResumeDownload from "@/components/landing/about-me/ResumeDowload";
 import { Portfolio } from "@/constants/meta";
 import { getProcessedImage } from "@/utils/image";
 
-const ABOUT_ME_IMAGE = "/assets/resources/images/Aleks-3.png";
+const ABOUT_ME_IMAGE = "/assets/resources/images/Aleks-2.jpg";
 
 const AboutMe = async () => {
   const aboutImage = await getProcessedImage({
