@@ -1,6 +1,6 @@
 ---
 title: "31: Notes on a Year-Long Merge Conflict"
-created_at: 2026-01-21T00:00:00.000Z
+created_at: 2026-01-22T00:00:00.000Z
 updated_at: ""
 published: true
 category_slug: the-inner-crisis
@@ -24,6 +24,8 @@ But the universe apparently has a twisted sense of humor. Amidst all that profes
 > 🎶 "She's a cold front, giving me a heatstroke, she's a hit song, ending on a weak note..."
 >
 > <cite><a href="https://open.spotify.com/track/6UX5LsQp3rdWs8x73wXrtF" target="_blank" rel="noopener noreferrer">Capital Lights (Coldfront Heatstroke)</a></cite>
+>
+https://open.spotify.com/track/6UX5LsQp3rdWs8x73wXrtF
 
 There's a quiet melody that has been playing in the background of my life for years. For so long, my main strategy was to try and change the station, turn up the volume on other songs, or just fill the air with any noise I could find to drown it out. This year, I think I finally stopped fighting it. I've started to accept that some songs become part of your personal soundtrack forever, even if they only ever play softly in the background.
 
@@ -52,6 +54,8 @@ So, what's the outlook for the year ahead? No bold declarations, no grand resolu
 > 🎵 "The sky is so so blue and I am so so too..."
 >
 > <cite><a href="https://www.youtube.com/watch?v=mUdeIRWcn-Q" target="_blank" rel="noopener noreferrer">Fly By Midnight (The Weather)</a></cite>
+
+https://www.youtube.com/watch?v=mUdeIRWcn-Q
 
 That lyric has been on my mind, capturing this new state of just *being*. It's not happiness, not sadness, just a quiet neutrality after all the emotional static has finally faded. In that newfound quiet, I finally have the space to focus. The plan is to get back to the things that actually recharge my batteries, to nurture the modding work that brought me so much satisfaction, and maybe, just maybe, start dusting off some of those other postponed plans.
 
