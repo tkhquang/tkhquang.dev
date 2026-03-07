@@ -1,6 +1,6 @@
 @layer components {
   .logo {
-    perspective: 1000px;
+    /* perspective: 1000px; */
   }
 
   .logo__text {

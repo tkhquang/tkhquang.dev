@@ -5,7 +5,7 @@ import Image from "@/components/common/NextImage";
 import { CustomPreWithCopy } from "@/components/common/PreWithCopy";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
-import remarkEmbded from "@/lib/remark-embed";
+import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import { getProcessedImage } from "@/utils/image";
@@ -52,7 +52,7 @@ function getCategoryFiles() {
 function getProcessor(): Processor {
   return unified()
     .use(remarkParse, { fragment: true })
-    .use(remarkEmbded, {
+    .use(remarkEmbed, {
       enabledProviders: ["Youtube", "Spotify"],
     })
     .use(remarkRehype, { allowDangerousHtml: true })
