@@ -1,5 +1,7 @@
 import NewsFeed from "@/components/blog/NewsFeed";
+import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();
@@ -27,11 +29,18 @@ export default async function CategoryPage({
   const filteredPost = posts.filter((post) => post.category_slug === slug);
 
   return (
-    <NewsFeed
-      posts={filteredPost}
-      pathInfoType="category"
-      item={category}
-      pathSlug="categories"
-    />
+    <>
+      <NewsFeed
+        posts={filteredPost}
+        pathInfoType="category"
+        item={category}
+        pathSlug="categories"
+      />
+      <Suspense>
+        <ClientSideGetPageViews
+          pathnames={filteredPost.map((post) => `/blog/posts/${post.slug}`)}
+        />
+      </Suspense>
+    </>
   );
 }

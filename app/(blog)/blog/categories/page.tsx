@@ -1,8 +1,6 @@
-import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import PostList from "@/components/blog/PostList";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
-import { Suspense } from "react";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -23,18 +21,11 @@ export default async function CategoriesPage() {
   );
 
   return (
-    <>
-      <PostList<MarkdownCategory, "slug">
-        title="Categories"
-        list={categories}
-        listSlugField="slug"
-        groupedPostsBySlug={groupedPostsByCategorySlug}
-      />
-      <Suspense>
-        <ClientSideGetPageViews
-          pathnames={posts.map((post) => `/blog/posts/${post.slug}`)}
-        />
-      </Suspense>
-    </>
+    <PostList<MarkdownCategory, "slug">
+      title="Categories"
+      list={categories}
+      listSlugField="slug"
+      groupedPostsBySlug={groupedPostsByCategorySlug}
+    />
   );
 }
