@@ -15,15 +15,27 @@
     }
 
     --animate-fade-in-forwards: fade-in 1s forwards;
-    --animate-hero-height: hero-height 1.5s linear;
-    @keyframes hero-height {
+    --animate-hero-collapse: hero-collapse 1.5s linear;
+    @keyframes hero-collapse {
       0%,
       50% {
-        min-height: calc(100vh + 6rem);
+        padding-bottom: calc(100vh + 6rem - 600px);
       }
 
       100% {
-        min-height: 600px;
+        padding-bottom: 0;
+      }
+    }
+
+    --animate-hero-content-slide: hero-content-slide 1.5s linear;
+    @keyframes hero-content-slide {
+      0%,
+      50% {
+        transform: translateY(calc((100vh + 6rem - 600px) / 2));
+      }
+
+      100% {
+        transform: translateY(0);
       }
     }
 

@@ -9,11 +9,11 @@ const Hero = () => {
     <section
       className={clsx(
         "flex-center text-theme-on-primary-light relative min-h-[600px] overflow-hidden",
-        "animate-hero-height transform-gpu will-change-[min-height]",
+        "box-content animate-hero-collapse",
         "before:from-theme-tone before:to-theme-on-background-light before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:block before:h-full before:min-h-screen before:bg-linear-to-br before:content-['']"
       )}
     >
-      <div className="flex-center h-full flex-col items-center justify-center pb-24 transition-all duration-500">
+      <div className="flex-center h-full flex-col items-center justify-center pb-24 transition-all duration-500 animate-hero-content-slide transform-gpu will-change-transform">
         <HeroLeading className="mx-auto" />
         <HeroRoles />
         <SocialLinks
