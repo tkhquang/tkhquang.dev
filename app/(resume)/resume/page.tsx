@@ -1,9 +1,6 @@
 import { getFormattedDuration, getYearsOfExperience } from "@/utils/date";
 import clsx from "clsx";
 
-//================================================================================
-// TYPESCRIPT INTERFACES
-//================================================================================
 interface Info {
   firstName: string;
   lastName: string;
@@ -32,7 +29,7 @@ interface Project {
   name: string;
   url: string | null;
   summary: string;
-  teamSize: number;
+  teamSize: number | null;
   tasks: string[];
   stacks: string[];
 }
@@ -40,19 +37,17 @@ interface Project {
 interface WorkExperience {
   title: string;
   company: string;
+  note?: string;
   url: string | null;
   duration: string;
   projects: Project[];
 }
 
-//================================================================================
-// 3. PROFESSIONALLY REWRITTEN & COMPLETE DATA
-//================================================================================
 const INFO: Info = {
   firstName: "Quang",
   lastName: "Trinh Khac",
   title: "Senior Frontend Engineer",
-  summary: `Accomplished Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years of expertise in architecting, developing, and deploying scalable web applications using modern JavaScript frameworks. Acknowledged expert in React and Vue, with a proven ability to lead technical initiatives, enhance user experience, and drive business objectives. Passionate about clean code, performance optimization, and collaborative problem-solving.`,
+  summary: `Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience building and scaling web applications in React and Vue. Strong track record of architecting frontend systems end-to-end, from design systems and monorepo strategies to full-stack product features. Leverages AI-assisted tooling to accelerate delivery while owning technical direction, mentoring engineers, and shipping products that drive business outcomes. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
 };
 
 const SKILLS: Skill[] = [
@@ -66,7 +61,6 @@ const SKILLS: Skill[] = [
       "React.js",
       "Vue.js",
       "Next.js",
-      "Gridsome",
       "LiveView (Elixir/Phoenix)",
       "Jest",
       "Cypress",
@@ -75,20 +69,20 @@ const SKILLS: Skill[] = [
   {
     name: "Styling & UI",
     subskills: [
-      "HTML5",
-      "CSS3",
+      "HTML/CSS",
       "SCSS/Sass",
       "Tailwind CSS",
       "CSS-in-JS",
       "styled-components",
-      "Headless UI",
       "Ant Design",
-      "Bootstrap",
+      "Headless UI",
+      "Responsive Design",
+      "Accessibility (a11y)",
     ],
   },
   {
     name: "State Management",
-    subskills: ["Redux", "Zustand", "Recoil", "Jotai", "Vuex", "Context API"],
+    subskills: ["Redux", "Zustand", "Jotai", "Vuex", "Context API"],
   },
   {
     name: "API Integration",
@@ -102,6 +96,7 @@ const SKILLS: Skill[] = [
     name: "Tooling & DevOps",
     subskills: [
       "Git",
+      "CI/CD",
       "Webpack",
       "Turbopack",
       "Puppeteer",
@@ -168,7 +163,67 @@ const CERTIFICATIONS: CertificateGroup[] = [
 const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Senior Frontend Engineer",
+    company: "TruckerPath",
+    note: "Moatable Inc. · Employer of Record: PERSOL Vietnam",
+    url: "https://truckerpath.com/",
+    duration: getFormattedDuration({
+      startDate: "2025-10-13",
+    }),
+    projects: [
+      {
+        name: "NavPro v2: Fleet TMS & Navigation Platform",
+        summary:
+          "Shaped early technical direction for NavPro v2, a cloud-based TMS and navigation tool for commercial truck fleets, within a distributed international team.",
+        teamSize: 12,
+        url: null,
+        tasks: [
+          "Defined coding conventions, project structure, and shared patterns for the v2 codebase, setting the foundation for consistent contributions across the team.",
+          "Ported v1 modules to v2, preserving core logic while enhancing UX and aligning with the new design system, leveraging AI-assisted tooling (Cursor, Claude Code) to accelerate delivery.",
+          "Rebuilt the interactive map layer from scratch on Google Maps API (replacing HERE Maps), enabling complex multi-stop fleet routing.",
+          "Established a review workflow across PRDs, Figma specs, and frontend PRs that improved code quality and delivery speed.",
+        ],
+        stacks: [
+          "React",
+          "TypeScript",
+          "Redux Toolkit",
+          "TailwindCSS",
+          "shadcn/ui",
+          "React Hook Form",
+          "Zod",
+          "Google Maps API",
+        ],
+      },
+      {
+        name: "Truckloads Carrier Page Enhancement",
+        summary:
+          "Built carrier-facing features for TruckLoads, a free load board connecting owner-operators with 150,000+ daily freight listings.",
+        teamSize: 5,
+        url: null,
+        tasks: [
+          "Shipped the Docs Pro subscription feature end-to-end, including document scanning, signing, and management with an upgrade flow that opened a new recurring revenue stream.",
+          "Created a WEX factoring signup form that achieved a 20% conversion rate, driving freight invoice financing enrollment.",
+          "Expanded Mixpanel instrumentation across load search and carrier flows, giving the product team data that shaped iteration priorities.",
+        ],
+        stacks: ["React", "SCSS", "RxJS", "Ant Design", "Mixpanel"],
+      },
+      {
+        name: "Back Office: POI Data Management",
+        summary:
+          "Expanded the back office for managing the places database (50K+ POIs) that powers truck navigation.",
+        teamSize: 6,
+        url: null,
+        tasks: [
+          "Implemented POI management features for truck stops, weigh stations, and fuel stations, covering requirements through QA sign-off.",
+          "Unified Mixpanel tracking across modules and stripped PII from event properties to meet data compliance requirements.",
+        ],
+        stacks: ["Vue", "SCSS", "single-spa (micro frontend)"],
+      },
+    ],
+  },
+  {
+    title: "Senior Frontend Engineer",
     company: "Care",
+    note: "Employer of Record: Talent Matrix VN → Remote.com",
     url: "https://www.wearecare.sg/",
     duration: getFormattedDuration({
       startDate: "2023-08-07",
@@ -178,16 +233,17 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Health Screening Report Generation System",
         summary:
-          "Architected and led the development of a mission-critical service for generating dynamic PDF health reports from complex lab data, guiding a small frontend team. This system streamlined clinical workflows and established a foundation for future data products.",
+          "Architected a service that cut PDF health report generation from 1-2 hours (manual) to under 60 seconds, leading a 4-person frontend team.",
         teamSize: 4,
         url: null,
         tasks: [
-          "Engineered a scalable microservice using Next.js API routes, integrating Puppeteer for precise server-side PDF rendering and Recharts for data visualization.",
-          "Defined and implemented the complete project architecture, coding standards, and CI/CD pipeline, ensuring a maintainable and high-quality codebase.",
-          "Orchestrated a seamless integration with frontend teams, accelerating feature delivery and enabling new platform capabilities.",
+          "Designed the system architecture from scratch and set up coding standards, CI/CD pipelines, and review processes for the team.",
+          "Developed a Next.js + Puppeteer microservice for server-side PDF rendering, turning complex lab data into clinician-ready reports with Recharts visualizations.",
+          "Aligned frontend, backend, and data teams on integration contracts, unblocking downstream feature work and launching health reports as a new platform capability.",
         ],
         stacks: [
           "Next.js",
+          "Turbopack",
           "Puppeteer",
           "Recharts",
           "TypeScript",
@@ -198,14 +254,14 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Enterprise Wellness Platform",
         summary:
-          "Spearheaded frontend development for a partner-facing wellness platform, delivering advanced customization and mobile-integrated features that measurably improved partner engagement.",
+          "Led frontend development for a partner-facing wellness platform with mobile-integrated features.",
         teamSize: 10,
         url: null,
         tasks: [
-          "Developed highly responsive and accessible user interfaces using React and TypeScript, meeting ambitious deadlines while fulfilling all business requirements.",
-          "Engineered a flawless webview integration for the core Flutter application, ensuring a consistent and fluid user experience across both Android and iOS.",
-          "Architected and executed a monorepo strategy for four frontend repositories, significantly reducing code duplication and standardizing component usage.",
-          "Integrated analytics and event tracking to provide actionable data insights, leading to data-driven improvements in the user experience.",
+          "Shipped accessible UIs across multiple product modules, coordinating with backend and mobile teams.",
+          "Engineered webview integration for the Flutter app, resolving cross-platform edge cases on Android and iOS.",
+          "Consolidated four frontend repositories into a monorepo, eliminating duplicated components and cutting onboarding time.",
+          "Added event tracking across key user flows, surfacing usage patterns that informed UX redesigns.",
         ],
         stacks: [
           "React",
@@ -220,12 +276,12 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Membership Management Module",
         summary:
-          "Enhanced the core membership system and partner back-office, focusing on UX improvements and third-party integrations to boost user satisfaction and streamline data collection.",
+          "Enhanced the core membership system and partner back-office with UX improvements and third-party integrations.",
         teamSize: 12,
         url: null,
         tasks: [
-          "Collaborated within a cross-functional team to design and implement user-centric interfaces, ensuring strict alignment with the company's comprehensive design system.",
-          "Led a research initiative to evaluate and integrate third-party form-builder frameworks (form.io, BEEKAI), presenting a POC that demonstrated a path to faster client onboarding.",
+          "Led frontend delivery alongside product, design, and backend, ensuring all interfaces matched the design system and passed accessibility reviews.",
+          "Evaluated form-builder frameworks (form.io, BEEKAI) and delivered a validated POC projected to reduce form-related code duplication by 70%.",
         ],
         stacks: [
           "React",
@@ -241,7 +297,8 @@ const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Full-Stack Engineer",
     company: "Deliany",
-    url: "https://eats.deliany.co/en",
+    note: "Rebranded: Deliany → Cloud Food System → Norra · norra.ai",
+    url: "https://norra.ai/",
     duration: getFormattedDuration({
       startDate: "2020-10-21",
       endDate: "2023-07-28",
@@ -250,15 +307,15 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Multi-tenant Restaurant Cloud Platform",
         summary:
-          "Progressed from a Frontend to a pivotal Full-Stack role, where I led the architecture of a new POS system and established a company-wide UI library, driving major improvements in developer productivity and product cohesion.",
+          "Grew from Frontend to Full-Stack, leading the architecture of a new POS system and a company-wide UI library.",
         teamSize: 8,
         url: null,
         tasks: [
-          "Architected and delivered a feature-rich Point-of-Sale system using an Elixir/Phoenix backend and React frontend for complex real-time order management.",
-          "Created and governed a comprehensive React UI component library based on Headless UI, which was adopted as the company-wide design standard.",
-          "Drove a 20% increase in key conversion rates by leveraging user analytics to optimize UI layouts and critical user flows.",
-          "Reduced technical debt across multiple codebases through systematic refactoring, resulting in a measurable increase in team velocity and application performance.",
-          "Mentored two junior developers through structured code reviews and pair programming, measurably improving their technical proficiency and autonomy.",
+          "Architected and delivered a real-time POS system (Elixir/Phoenix + React), owning decisions from data modeling to frontend state management.",
+          "Created the company-wide React component library on Headless UI, adopted as the standard design system across all product teams.",
+          "Drove a 20% increase in checkout and signup conversion rates by optimizing UI flows based on user behavior data.",
+          "Ran targeted refactors across multiple codebases, reducing build times and simplifying the contribution path for new engineers.",
+          "Mentored two junior developers through code reviews and pair programming, growing them into independent contributors within six months.",
         ],
         stacks: [
           "Elixir/Phoenix",
@@ -283,40 +340,24 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     }),
     projects: [
       {
-        name: "Logistics & Package Tracking Platform",
+        name: "",
         summary:
-          "Developed a complete frontend solution for a shipping logistics platform with real-time package tracking, focusing on high performance and component reusability.",
-        teamSize: 3,
+          "Built frontend solutions across client projects in shipping logistics and real-time video communication.",
+        teamSize: null,
         url: null,
         tasks: [
-          "Engineered a modular Vue.js component library, reducing feature implementation time by 40%.",
-          "Achieved a 200% improvement in page load times by implementing advanced code-splitting, lazy loading, and dependency optimization techniques.",
+          "Restructured a Vue.js frontend for a package tracking platform into a modular component library, cutting feature implementation time by 40% and improving page load times by 200% through code-splitting and lazy loading.",
+          "Solely responsible for migrating a video communication app from Vue/Parcel to React/Webpack, delivering a 30% performance boost and integrating WebRTC for reliable, low-latency video.",
         ],
-        stacks: ["Vue.js", "Vuex", "Bootstrap"],
-      },
-      {
-        name: "practice.dev - Developer Education Platform",
-        summary:
-          "Served as a key contributor to an educational platform for developers, responsible for quality assurance and the technical correctness of coding challenges.",
-        teamSize: 2,
-        url: null,
-        tasks: [
-          "Performed comprehensive testing and debugging of both frontend and back-end coding challenges, ensuring functional accuracy and educational value.",
-          "Collaborated with platform authors to refine challenge specifications and enhance the user feedback system.",
+        stacks: [
+          "React",
+          "Vue.js",
+          "Redux",
+          "Vuex",
+          "WebRTC",
+          "Webpack",
+          "Bootstrap",
         ],
-        stacks: ["React", "Vue.js", "Node.js", "Firebase", "TailwindCSS"],
-      },
-      {
-        name: "Real-Time Video Communication Application",
-        summary:
-          "Orchestrated the architectural migration and feature development for a video chat application, enhancing performance and ensuring cross-platform stability.",
-        teamSize: 5,
-        url: null,
-        tasks: [
-          "Led a large-scale migration from a legacy Vue/Parcel architecture to a modern React/Webpack stack, resulting in a 30% performance boost and improved maintainability.",
-          "Integrated WebRTC to enable reliable, low-latency video communication.",
-        ],
-        stacks: ["React", "Vue", "Redux", "WebRTC", "Webpack"],
       },
     ],
   },
@@ -325,45 +366,30 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     company: "Dwarves Foundation",
     url: "https://dwarves.foundation/",
     duration: getFormattedDuration({
-      startDate: "2019-06-01",
+      startDate: "2019-04-01",
       endDate: "2019-09-06",
     }),
     projects: [
       {
-        name: "TelemetryTV Digital Signage Platform",
+        name: "",
         summary:
-          "Contributed core features to an enterprise-grade digital signage platform, focusing on a major architectural migration and developing rich, interactive features.",
-        teamSize: 5,
-        url: "https://www.telemetrytv.com/",
-        tasks: [
-          "Migrated dozens of business-critical components to a new architectural framework, enhancing both system performance and developer experience.",
-          "Translated complex Figma designs into pixel-perfect, interactive user experiences that demonstrably increased user engagement metrics.",
-        ],
-        stacks: ["Vue.js", "Vuex", "Gridsome", "GraphQL", "TailwindCSS"],
-      },
-    ],
-  },
-  {
-    title: "Software Engineer Intern",
-    company: "Dwarves Foundation",
-    url: "https://dwarves.foundation/",
-    duration: getFormattedDuration({
-      startDate: "2019-04-01",
-      endDate: "2019-06-01",
-    }),
-    projects: [
-      {
-        name: "DATCOM Internal Application",
-        summary:
-          "Acquired comprehensive full-stack experience by building an internal lunch-ordering system from the ground up within an Agile team.",
-        teamSize: 5,
+          "Contributed frontend and full-stack work across client-facing and internal projects.",
+        teamSize: null,
         url: null,
         tasks: [
-          "Contributed to the full software development lifecycle, from database design with GORM and PostgreSQL to API development with Golang (Gin).",
-          "Developed and tested RESTful API endpoints for all core application functionalities.",
-          "Built the entire administrative frontend using React and Tailwind CSS, focusing on a clean and intuitive user experience.",
+          'Migrated dozens of legacy Vue components to a Gridsome-based architecture for <a href="https://www.telemetrytv.com/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">TelemetryTV</a>, an enterprise digital signage platform.',
+          "Developed a full-stack internal lunch-ordering system as part of the DATCOM internship program, covering PostgreSQL schema, Golang REST APIs (Gin/GORM), and a React admin frontend.",
         ],
-        stacks: ["Golang", "PostgreSQL", "RESTful API", "React", "TailwindCSS"],
+        stacks: [
+          "Vue.js",
+          "Vuex",
+          "Gridsome",
+          "GraphQL",
+          "Golang",
+          "PostgreSQL",
+          "React",
+          "TailwindCSS",
+        ],
       },
     ],
   },
@@ -384,16 +410,13 @@ const Section: React.FC<{
   className?: string;
 }> = ({ title, children, className = "" }) => (
   <section className={clsx("", className)}>
-    <h2 className="mb-3 border-b border-slate-300 pb-1 text-sm font-bold uppercase tracking-wide text-slate-800">
+    <h2 className="mb-3 border-b border-slate-300 pb-1 text-sm font-bold tracking-wide text-slate-800 uppercase">
       {title}
     </h2>
     {children}
   </section>
 );
 
-//================================================================================
-// COMPONENTS
-//================================================================================
 const ResumeHeader: React.FC = () => (
   <header className="mb-6 border-b border-slate-200 pb-4">
     <div className="mb-2 text-center">
@@ -484,6 +507,11 @@ const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
         {experience.duration}
       </span>
     </div>
+    {experience.note && (
+      <p className="-mt-0.5 mb-2 text-xs text-slate-400 italic">
+        {experience.note}
+      </p>
+    )}
     <div className="space-y-3">
       {experience.projects.map((project, index) => (
         <ProjectItem key={index} project={project} />
@@ -494,21 +522,32 @@ const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
 
 const ProjectItem: React.FC<{ project: Project }> = ({ project }) => (
   <div className="ml-4 border-l-2 border-slate-200 pl-4">
-    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-      <span className="font-semibold text-slate-800">{project.name}</span>
-      <span className="text-xs text-slate-500">Team of {project.teamSize}</span>
-    </div>
+    {(project.name || project.teamSize) && (
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+        {project.name && (
+          <span className="font-semibold text-slate-800">{project.name}</span>
+        )}
+        {project.teamSize && (
+          <span className="text-xs text-slate-500">
+            Team of {project.teamSize}
+          </span>
+        )}
+      </div>
+    )}
     <p className="mb-1 text-sm leading-relaxed text-slate-700">
       {project.summary}
     </p>
     <ul className="mb-1 list-inside list-disc space-y-1 text-sm text-slate-700">
       {project.tasks.map((task, taskIndex) => (
         <li key={taskIndex} className="no-break-inside list-item">
-          <span className="leading-relaxed">{task}</span>
+          <span
+            className="leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: task }}
+          />
         </li>
       ))}
     </ul>
-    <div className="mt-1 text-xs italic text-slate-500">
+    <div className="mt-1 text-xs text-slate-500 italic">
       {project.stacks.join(", ")}
     </div>
   </div>
@@ -603,9 +642,10 @@ export default function ResumePage() {
 
         <main className="space-y-6">
           <Section title="Professional Summary">
-            <p className="text-sm leading-relaxed text-slate-700">
-              {INFO.summary}
-            </p>
+            <p
+              className="text-sm leading-relaxed text-slate-700"
+              dangerouslySetInnerHTML={{ __html: INFO.summary }}
+            />
           </Section>
 
           <Section title="Technical Skills">
