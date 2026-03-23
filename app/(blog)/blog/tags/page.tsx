@@ -1,6 +1,8 @@
+import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import PostList from "@/components/blog/PostList";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
+import { Suspense } from "react";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -25,11 +27,18 @@ export default async function TagsPage() {
   );
 
   return (
-    <PostList<(typeof tags)[0], "slug">
-      title="Tags"
-      list={tags}
-      listSlugField="slug"
-      groupedPostsBySlug={groupedPostsByTagSlug}
-    />
+    <>
+      <PostList<(typeof tags)[0], "slug">
+        title="Tags"
+        list={tags}
+        listSlugField="slug"
+        groupedPostsBySlug={groupedPostsByTagSlug}
+      />
+      <Suspense>
+        <ClientSideGetPageViews
+          pathnames={posts.map((post) => `/blog/posts/${post.slug}`)}
+        />
+      </Suspense>
+    </>
   );
 }
