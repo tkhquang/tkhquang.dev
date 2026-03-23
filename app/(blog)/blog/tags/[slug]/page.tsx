@@ -1,5 +1,7 @@
 import NewsFeed from "@/components/blog/NewsFeed";
+import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();
@@ -32,11 +34,18 @@ export default async function TagPage({
   );
 
   return (
-    <NewsFeed
-      posts={filteredPost}
-      pathInfoType="tag"
-      pathSlug="tags"
-      item={currentTag}
-    />
+    <>
+      <NewsFeed
+        posts={filteredPost}
+        pathInfoType="tag"
+        pathSlug="tags"
+        item={currentTag}
+      />
+      <Suspense>
+        <ClientSideGetPageViews
+          pathnames={filteredPost.map((post) => `/blog/posts/${post.slug}`)}
+        />
+      </Suspense>
+    </>
   );
 }
