@@ -3,7 +3,7 @@ title: "[CryEngine] Kingdom Come: Deliverance II To The Rescue?"
 created_at: 2025-03-20T00:00:00.000Z
 updated_at: ""
 published: true
-category_slug: technical
+category_slug: gaming
 tags:
   - CryEngine
   - Game Development
