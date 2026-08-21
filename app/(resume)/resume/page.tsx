@@ -236,7 +236,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Senior Frontend Engineer",
     company: "Care",
-    note: "Singapore digital health and employee wellness platform · Employer of Record: Talent Matrix VN → Remote.com",
+    note: "Singapore digital health and employee wellness platform · Employer of Record: Talent Matrix VN -> Remote.com",
     url: "https://www.wearecare.sg/",
     duration: getFormattedDuration({
       startDate: "2023-08-07",
@@ -310,7 +310,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Full-Stack Engineer",
     company: "Deliany",
-    note: "Restaurant POS and management SaaS · Rebranded: Deliany → Cloud Food System → Norra (norra.ai)",
+    note: "Restaurant POS and management SaaS · Rebranded: Deliany -> Cloud Food System -> Norra (norra.ai)",
     url: "https://norra.ai/",
     duration: getFormattedDuration({
       startDate: "2020-10-21",
