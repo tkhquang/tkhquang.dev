@@ -16,10 +16,20 @@
 @layer base {
   html {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+
+    /*
+     * The shared base layer paints `html` with the site theme background
+     * (a light blue-grey). Puppeteer prints with `printBackground: true`, so
+     * that colour bleeds through any part of a page the resume card does not
+     * cover. Neutralise it here for the resume route only.
+     */
+    background-color: var(--color-slate-100);
   }
 
   body {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+
+    background-color: var(--color-slate-100);
   }
 }
 
@@ -54,6 +64,8 @@
     margin: 0;
   }
 
+  html,
+  body,
   .bg-slate-100 {
     background-color: white !important;
   }
