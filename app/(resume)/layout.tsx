@@ -5,6 +5,7 @@ import type React from "react";
 
 const inter = Inter({
   subsets: ["latin"],
+  style: ["normal", "italic"],
   display: "swap",
   variable: "--font-inter",
 });

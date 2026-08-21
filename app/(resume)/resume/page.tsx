@@ -47,7 +47,7 @@ const INFO: Info = {
   firstName: "Quang",
   lastName: "Trinh Khac",
   title: "Senior Frontend Engineer",
-  summary: `Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience building and scaling web applications in React and Vue. Strong track record of architecting frontend systems end-to-end, from design systems and monorepo strategies to full-stack product features. Leverages AI-assisted tooling to accelerate delivery while owning technical direction, mentoring engineers, and shipping products that drive business outcomes. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
+  summary: `Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years building and scaling web applications in React and Vue, and comfortable working down the stack in Elixir/Phoenix and Node.js. Owns frontend architecture end-to-end, from design systems and monorepo strategy to shipped product features, sets technical direction, mentors engineers, and uses AI-assisted tooling to move faster. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
 };
 
 const SKILLS: Skill[] = [
@@ -62,6 +62,9 @@ const SKILLS: Skill[] = [
       "Vue.js",
       "Next.js",
       "LiveView (Elixir/Phoenix)",
+      "React Hook Form",
+      "Zod",
+      "RxJS",
       "Jest",
       "Cypress",
     ],
@@ -76,17 +79,25 @@ const SKILLS: Skill[] = [
       "styled-components",
       "Ant Design",
       "Headless UI",
+      "shadcn/ui",
       "Responsive Design",
       "Accessibility (a11y)",
     ],
   },
   {
     name: "State Management",
-    subskills: ["Redux", "Zustand", "Jotai", "Vuex", "Context API"],
+    subskills: [
+      "Redux",
+      "Redux Toolkit",
+      "Zustand",
+      "Jotai",
+      "Vuex",
+      "Context API",
+    ],
   },
   {
     name: "API Integration",
-    subskills: ["GraphQL", "REST APIs"],
+    subskills: ["GraphQL", "REST APIs", "Google Maps API"],
   },
   {
     name: "Backend & Databases",
@@ -97,6 +108,8 @@ const SKILLS: Skill[] = [
     subskills: [
       "Git",
       "CI/CD",
+      "Monorepo",
+      "Micro Frontends",
       "Webpack",
       "Turbopack",
       "Puppeteer",
@@ -163,8 +176,8 @@ const CERTIFICATIONS: CertificateGroup[] = [
 const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Senior Frontend Engineer",
-    company: "TruckerPath",
-    note: "Moatable Inc. · Employer of Record: PERSOL Vietnam",
+    company: "Trucker Path",
+    note: "North America's #1 truck navigation (Truck GPS) · Moatable Inc. · Employer of Record: PERSOL Vietnam",
     url: "https://truckerpath.com/",
     duration: getFormattedDuration({
       startDate: "2025-10-13",
@@ -177,16 +190,16 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         teamSize: 12,
         url: null,
         tasks: [
-          "Defined coding conventions, project structure, and shared patterns for the v2 codebase, setting the foundation for consistent contributions across the team.",
-          "Ported v1 modules to v2, preserving core logic while enhancing UX and aligning with the new design system, leveraging AI-assisted tooling (Cursor, Claude Code) to accelerate delivery.",
+          "Defined coding conventions, project structure, and shared patterns for the v2 codebase so a distributed team could contribute consistently.",
+          "Ported v1 modules to v2 with AI-assisted tooling (Cursor, Claude Code), preserving core logic while enhancing UX and aligning with the new design system.",
           "Rebuilt the interactive map layer from scratch on Google Maps API (replacing HERE Maps), enabling complex multi-stop fleet routing.",
-          "Established a review workflow across PRDs, Figma specs, and frontend PRs that improved code quality and delivery speed.",
+          "Established a review workflow across PRDs, Figma specs, and frontend PRs, improving code quality and delivery speed.",
         ],
         stacks: [
           "React",
           "TypeScript",
           "Redux Toolkit",
-          "TailwindCSS",
+          "Tailwind CSS",
           "shadcn/ui",
           "React Hook Form",
           "Zod",
@@ -194,13 +207,13 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         ],
       },
       {
-        name: "Truckloads Carrier Page Enhancement",
+        name: "Truckloads: Carrier-Facing Features",
         summary:
-          "Built carrier-facing features for TruckLoads, a free load board connecting owner-operators with 150,000+ daily freight listings.",
+          "Shipped features for Truckloads, a free load board connecting owner-operators with 150,000+ daily freight listings.",
         teamSize: 5,
         url: null,
         tasks: [
-          "Shipped the Docs Pro subscription feature end-to-end, including document scanning, signing, and management with an upgrade flow that opened a new recurring revenue stream.",
+          "Shipped the Docs Pro subscription end-to-end, covering document scanning, signing, and management, with an upgrade flow that opened a new recurring revenue stream.",
           "Created a WEX factoring signup form that achieved a 20% conversion rate, driving freight invoice financing enrollment.",
           "Expanded Mixpanel instrumentation across load search and carrier flows, giving the product team data that shaped iteration priorities.",
         ],
@@ -209,21 +222,21 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Back Office: POI Data Management",
         summary:
-          "Expanded the back office for managing the places database (50K+ POIs) that powers truck navigation.",
+          "Extended the back office managing the 50K+ POI database behind truck navigation.",
         teamSize: 6,
         url: null,
         tasks: [
           "Implemented POI management features for truck stops, weigh stations, and fuel stations, covering requirements through QA sign-off.",
-          "Unified Mixpanel tracking across modules and stripped PII from event properties to meet data compliance requirements.",
+          "Unified Mixpanel tracking across modules and stripped PII from events to meet compliance requirements.",
         ],
-        stacks: ["Vue", "SCSS", "single-spa (micro frontend)"],
+        stacks: ["Vue.js", "SCSS", "single-spa (micro frontends)"],
       },
     ],
   },
   {
     title: "Senior Frontend Engineer",
     company: "Care",
-    note: "Employer of Record: Talent Matrix VN → Remote.com",
+    note: "Singapore digital health and employee wellness platform · Employer of Record: Talent Matrix VN → Remote.com",
     url: "https://www.wearecare.sg/",
     duration: getFormattedDuration({
       startDate: "2023-08-07",
@@ -247,7 +260,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
           "Puppeteer",
           "Recharts",
           "TypeScript",
-          "TailwindCSS",
+          "Tailwind CSS",
           "Docker",
         ],
       },
@@ -269,7 +282,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
           "Zustand",
           "Next.js",
           "SCSS",
-          "TailwindCSS",
+          "Tailwind CSS",
           "Ant Design",
         ],
       },
@@ -281,14 +294,14 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         url: null,
         tasks: [
           "Led frontend delivery alongside product, design, and backend, ensuring all interfaces matched the design system and passed accessibility reviews.",
-          "Evaluated form-builder frameworks (form.io, BEEKAI) and delivered a validated POC projected to reduce form-related code duplication by 70%.",
+          "Evaluated form-builder frameworks (form.io, BEEKAI) and built a POC showing a path to cutting form-related code duplication by 70%.",
         ],
         stacks: [
           "React",
           "TypeScript",
           "Zustand",
           "Next.js",
-          "TailwindCSS",
+          "Tailwind CSS",
           "Ant Design",
         ],
       },
@@ -297,7 +310,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
   {
     title: "Full-Stack Engineer",
     company: "Deliany",
-    note: "Rebranded: Deliany → Cloud Food System → Norra · norra.ai",
+    note: "Restaurant POS and management SaaS · Rebranded: Deliany → Cloud Food System → Norra (norra.ai)",
     url: "https://norra.ai/",
     duration: getFormattedDuration({
       startDate: "2020-10-21",
@@ -307,14 +320,14 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Multi-tenant Restaurant Cloud Platform",
         summary:
-          "Grew from Frontend to Full-Stack, leading the architecture of a new POS system and a company-wide UI library.",
+          "Promoted from frontend to full-stack engineer, leading the architecture of a new POS system and a company-wide UI library.",
         teamSize: 8,
         url: null,
         tasks: [
           "Architected and delivered a real-time POS system (Elixir/Phoenix + React), owning decisions from data modeling to frontend state management.",
           "Created the company-wide React component library on Headless UI, adopted as the standard design system across all product teams.",
           "Drove a 20% increase in checkout and signup conversion rates by optimizing UI flows based on user behavior data.",
-          "Ran targeted refactors across multiple codebases, reducing build times and simplifying the contribution path for new engineers.",
+          "Ran targeted refactors across multiple codebases, cutting build times and lowering the barrier to entry for new engineers.",
           "Mentored two junior developers through code reviews and pair programming, growing them into independent contributors within six months.",
         ],
         stacks: [
@@ -340,30 +353,35 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     }),
     projects: [
       {
-        name: "",
+        name: "Logistics & Package Tracking Platform",
         summary:
-          "Built frontend solutions across client projects in shipping logistics and real-time video communication.",
-        teamSize: null,
+          "Rebuilt the frontend of a shipping platform with real-time package tracking.",
+        teamSize: 3,
         url: null,
         tasks: [
-          "Restructured a Vue.js frontend for a package tracking platform into a modular component library, cutting feature implementation time by 40% and improving page load times by 200% through code-splitting and lazy loading.",
-          "Solely responsible for migrating a video communication app from Vue/Parcel to React/Webpack, delivering a 30% performance boost and integrating WebRTC for reliable, low-latency video.",
+          "Restructured the Vue.js frontend into a modular component library, cutting feature implementation time by 40%.",
+          "Improved page load times by 200% through code-splitting, lazy loading, and dependency optimization.",
         ],
-        stacks: [
-          "React",
-          "Vue.js",
-          "Redux",
-          "Vuex",
-          "WebRTC",
-          "Webpack",
-          "Bootstrap",
+        stacks: ["Vue.js", "Vuex", "SCSS", "Bootstrap"],
+      },
+      {
+        name: "Real-Time Video Communication App",
+        summary:
+          "Owned the architectural migration and feature work for a browser-based video chat product.",
+        teamSize: 5,
+        url: null,
+        tasks: [
+          "Single-handedly migrated the app from Vue/Parcel to React/Webpack, delivering a 30% performance boost and a maintainable module structure.",
+          "Integrated WebRTC for reliable, low-latency peer-to-peer video across browsers.",
         ],
+        stacks: ["React", "Redux", "WebRTC", "Webpack"],
       },
     ],
   },
   {
     title: "Software Engineer",
     company: "Dwarves Foundation",
+    note: "Software consultancy building products for international clients",
     url: "https://dwarves.foundation/",
     duration: getFormattedDuration({
       startDate: "2019-04-01",
@@ -371,25 +389,28 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     }),
     projects: [
       {
-        name: "",
+        name: "TelemetryTV: Digital Signage Platform",
         summary:
-          "Contributed frontend and full-stack work across client-facing and internal projects.",
-        teamSize: null,
+          'Contributed features to <a href="https://www.telemetrytv.com/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">TelemetryTV</a>, an enterprise digital signage platform, during a major architectural migration.',
+        teamSize: 5,
         url: null,
         tasks: [
-          'Migrated dozens of legacy Vue components to a Gridsome-based architecture for <a href="https://www.telemetrytv.com/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">TelemetryTV</a>, an enterprise digital signage platform.',
-          "Developed a full-stack internal lunch-ordering system as part of the DATCOM internship program, covering PostgreSQL schema, Golang REST APIs (Gin/GORM), and a React admin frontend.",
+          "Migrated dozens of legacy Vue components to a Gridsome-based architecture, improving build performance and developer experience.",
+          "Translated Figma designs into pixel-accurate, interactive marketing pages.",
         ],
-        stacks: [
-          "Vue.js",
-          "Vuex",
-          "Gridsome",
-          "GraphQL",
-          "Golang",
-          "PostgreSQL",
-          "React",
-          "TailwindCSS",
+        stacks: ["Vue.js", "Vuex", "Gridsome", "GraphQL", "Tailwind CSS"],
+      },
+      {
+        name: "DATCOM Internal Ordering System",
+        summary:
+          "Built an internal lunch-ordering system end-to-end as part of the DATCOM internship program.",
+        teamSize: 5,
+        url: null,
+        tasks: [
+          "Designed the PostgreSQL schema and built REST APIs in Golang (Gin/GORM).",
+          "Built the React and Tailwind CSS admin frontend covering the full ordering and reporting flow.",
         ],
+        stacks: ["Golang", "PostgreSQL", "GORM", "React", "Tailwind CSS"],
       },
     ],
   },
@@ -410,7 +431,7 @@ const Section: React.FC<{
   className?: string;
 }> = ({ title, children, className = "" }) => (
   <section className={clsx("", className)}>
-    <h2 className="mb-3 border-b border-slate-300 pb-1 text-sm font-bold tracking-wide text-slate-800 uppercase">
+    <h2 className="mb-2 border-b border-slate-300 pb-1 text-sm font-bold tracking-wide text-slate-800 uppercase">
       {title}
     </h2>
     {children}
@@ -484,10 +505,12 @@ const ResumeHeader: React.FC = () => (
 const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
   experience,
 }) => (
-  <div className="mb-4 last:mb-0">
-    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+  <div className="mb-5 last:mb-0">
+    <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
       <div className="flex flex-wrap items-baseline gap-x-2">
-        <span className="font-bold text-slate-900">{experience.title}</span>
+        <span className="text-base font-bold text-slate-900">
+          {experience.title}
+        </span>
         {experience.url ? (
           <a
             href={experience.url}
@@ -498,7 +521,7 @@ const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
             @ {experience.company}
           </a>
         ) : (
-          <span className="text-sm font-semibold text-blue-600">
+          <span className="text-sm font-semibold text-slate-700">
             @ {experience.company}
           </span>
         )}
@@ -508,9 +531,7 @@ const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
       </span>
     </div>
     {experience.note && (
-      <p className="-mt-0.5 mb-2 text-xs text-slate-400 italic">
-        {experience.note}
-      </p>
+      <p className="mb-3 text-xs text-slate-500 italic">{experience.note}</p>
     )}
     <div className="space-y-3">
       {experience.projects.map((project, index) => (
@@ -520,42 +541,58 @@ const ExperienceItem: React.FC<{ experience: WorkExperience }> = ({
   </div>
 );
 
-const ProjectItem: React.FC<{ project: Project }> = ({ project }) => (
-  <div className="ml-4 border-l-2 border-slate-200 pl-4">
-    {(project.name || project.teamSize) && (
-      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-        {project.name && (
-          <span className="font-semibold text-slate-800">{project.name}</span>
-        )}
-        {project.teamSize && (
-          <span className="text-xs text-slate-500">
-            Team of {project.teamSize}
-          </span>
-        )}
-      </div>
-    )}
-    <p className="mb-1 text-sm leading-relaxed text-slate-700">
-      {project.summary}
-    </p>
-    <ul className="mb-1 list-inside list-disc space-y-1 text-sm text-slate-700">
-      {project.tasks.map((task, taskIndex) => (
-        <li key={taskIndex} className="no-break-inside list-item">
-          <span
-            className="leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: task }}
-          />
-        </li>
-      ))}
-    </ul>
-    <div className="mt-1 text-xs text-slate-500 italic">
-      {project.stacks.join(", ")}
-    </div>
-  </div>
+const TaskList: React.FC<{ tasks: string[] }> = ({ tasks }) => (
+  <ul className="mb-1 list-outside list-disc space-y-1 pl-4 text-sm text-slate-700">
+    {tasks.map((task, taskIndex) => (
+      <li key={taskIndex} className="no-break-inside">
+        <span
+          className="leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: task }}
+        />
+      </li>
+    ))}
+  </ul>
 );
+
+const ProjectItem: React.FC<{ project: Project }> = ({ project }) => {
+  // A project title stranded at the foot of a page reads as a broken layout, so
+  // the heading and its summary print as one unbreakable block. Binding only
+  // those two keeps the block short enough to usually still fit on the current
+  // page, so the break costs little or no trailing whitespace; the bullets are
+  // free to flow onto the next page.
+  return (
+    <div className="ml-4 border-l-2 border-slate-200 pl-4">
+      <div className="no-break-inside">
+        {(project.name || project.teamSize) && (
+          <div className="mb-1 flex flex-wrap items-center justify-between gap-2 leading-normal">
+            {project.name && (
+              <span className="font-semibold text-slate-800">
+                {project.name}
+              </span>
+            )}
+            {project.teamSize && (
+              <span className="text-xs text-slate-500">
+                Team of {project.teamSize}
+              </span>
+            )}
+          </div>
+        )}
+        <p
+          className="mb-1 text-sm leading-relaxed text-slate-700"
+          dangerouslySetInnerHTML={{ __html: project.summary }}
+        />
+      </div>
+      <TaskList tasks={project.tasks} />
+      <div className="mt-1 text-xs text-slate-500 italic">
+        {project.stacks.join(", ")}
+      </div>
+    </div>
+  );
+};
 
 const SKILL_LABELS: Record<string, string> = {
   "Programming Languages": "Languages",
-  "Frontend Frameworks & Libraries": "Frontend",
+  "Frontend Frameworks & Libraries": "Frontend & Testing",
   "Styling & UI": "Styling/UI",
   "State Management": "State Management",
   "API Integration": "API Integration",
@@ -564,7 +601,7 @@ const SKILL_LABELS: Record<string, string> = {
 };
 
 const SkillsSection: React.FC = () => (
-  <dl className="space-y-1 text-sm text-slate-800">
+  <dl className="space-y-1.5 text-sm text-slate-800">
     {SKILLS.map((skill) => (
       <div key={skill.name} className="flex flex-row flex-wrap">
         <dt className="min-w-[140px] font-semibold">
@@ -579,7 +616,7 @@ const SkillsSection: React.FC = () => (
 );
 
 const CertificationsSection: React.FC = () => (
-  <div className="space-y-2">
+  <div className="space-y-1.5">
     {CERTIFICATIONS.map((group) => (
       <div key={group.organization} className="flex">
         <span className="min-w-[160px] text-sm font-semibold text-slate-800">
@@ -632,10 +669,15 @@ export const revalidate = 86400;
 
 export default function ResumePage() {
   return (
-    <div className={clsx("bg-slate-100 antialiased", "font-sans-inter")}>
+    <div
+      className={clsx(
+        "min-h-screen bg-slate-100 antialiased",
+        "font-sans-inter"
+      )}
+    >
       <div
         className={clsx(
-          "mx-auto max-w-3xl bg-white px-8 pt-10 shadow-xl print:shadow-none"
+          "mx-auto max-w-3xl bg-white px-8 pt-10 pb-10 shadow-xl print:shadow-none"
         )}
       >
         <ResumeHeader />
