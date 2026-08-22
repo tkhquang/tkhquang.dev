@@ -47,7 +47,7 @@ const INFO: Info = {
   firstName: "Quang",
   lastName: "Trinh Khac",
   title: "Senior Frontend Engineer",
-  summary: `Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years building and scaling web applications in React and Vue, and comfortable working down the stack in Elixir/Phoenix and Node.js. Owns frontend architecture end-to-end, from design systems and monorepo strategy to shipped product features, sets technical direction, mentors engineers, and uses AI-assisted tooling to move faster. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
+  summary: `Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years building and scaling web applications in React and Vue, and comfortable working down the stack in Elixir/Phoenix and Node.js. Owns frontend architecture end-to-end, from design systems and monorepo strategy to shipped product features, sets technical direction, mentors engineers, and uses AI-assisted tooling to move faster, shipping products that drive business outcomes. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
 };
 
 const SKILLS: Skill[] = [
@@ -190,7 +190,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         teamSize: 12,
         url: null,
         tasks: [
-          "Defined coding conventions, project structure, and shared patterns for the v2 codebase so a distributed team could contribute consistently.",
+          "Helped define coding conventions, project structure, and shared patterns for the v2 codebase so a distributed team could contribute consistently.",
           "Ported v1 modules to v2 with AI-assisted tooling (Cursor, Claude Code), preserving core logic while enhancing UX and aligning with the new design system.",
           "Rebuilt the interactive map layer from scratch on Google Maps API (replacing HERE Maps), enabling complex multi-stop fleet routing.",
           "Established a review workflow across PRDs, Figma specs, and frontend PRs, improving code quality and delivery speed.",
@@ -213,7 +213,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
         teamSize: 5,
         url: null,
         tasks: [
-          "Shipped the Docs Pro subscription end-to-end, covering document scanning, signing, and management, with an upgrade flow that opened a new recurring revenue stream.",
+          "Built the frontend for the Docs Pro subscription and its upgrade flow, opening a new recurring revenue stream around document scanning, signing, and management.",
           "Created a WEX factoring signup form that achieved a 20% conversion rate, driving freight invoice financing enrollment.",
           "Expanded Mixpanel instrumentation across load search and carrier flows, giving the product team data that shaped iteration priorities.",
         ],
@@ -246,12 +246,12 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Health Screening Report Generation System",
         summary:
-          "Architected a service that cut PDF health report generation from 1-2 hours (manual) to under 60 seconds, leading a 4-person frontend team.",
+          "Architected a service that cut PDF health report generation from 1-2 hours (manual) to under 60 seconds, leading a 4-person frontend team. The system streamlined clinical workflows and laid a foundation for future data products.",
         teamSize: 4,
         url: null,
         tasks: [
-          "Designed the system architecture from scratch and set up coding standards, CI/CD pipelines, and review processes for the team.",
-          "Developed a Next.js + Puppeteer microservice for server-side PDF rendering, turning complex lab data into clinician-ready reports with Recharts visualizations.",
+          "Designed the system architecture from scratch and set up coding standards and CI/CD pipelines.",
+          "Developed server-side PDF rendering on Next.js API routes (serverless functions) with Puppeteer, turning complex lab data into clinician-ready reports with Recharts visualizations.",
           "Aligned frontend, backend, and data teams on integration contracts, unblocking downstream feature work and launching health reports as a new platform capability.",
         ],
         stacks: [
@@ -267,11 +267,11 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Enterprise Wellness Platform",
         summary:
-          "Led frontend development for a partner-facing wellness platform with mobile-integrated features.",
+          "Led frontend development for a partner-facing wellness platform with advanced customization and mobile-integrated features.",
         teamSize: 10,
         url: null,
         tasks: [
-          "Shipped accessible UIs across multiple product modules, coordinating with backend and mobile teams.",
+          "Shipped responsive, accessible UIs in React and TypeScript across multiple product modules, coordinating with backend and mobile teams.",
           "Engineered webview integration for the Flutter app, resolving cross-platform edge cases on Android and iOS.",
           "Consolidated four frontend repositories into a monorepo, eliminating duplicated components and cutting onboarding time.",
           "Added event tracking across key user flows, surfacing usage patterns that informed UX redesigns.",
@@ -289,12 +289,12 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Membership Management Module",
         summary:
-          "Enhanced the core membership system and partner back-office with UX improvements and third-party integrations.",
+          "Enhanced the core membership system and partner back-office with UX improvements and third-party integrations that boosted user satisfaction and streamlined data collection.",
         teamSize: 12,
         url: null,
         tasks: [
-          "Led frontend delivery alongside product, design, and backend, ensuring all interfaces matched the design system and passed accessibility reviews.",
-          "Evaluated form-builder frameworks (form.io, BEEKAI) and built a POC showing a path to cutting form-related code duplication by 70%.",
+          "Collaborated with product, design, and backend on user-facing interfaces, keeping them aligned with the design system and passing accessibility reviews.",
+          "Evaluated form-builder frameworks (form.io, BEEKAI) and built a POC showing a path to cutting form-related code duplication by 70% and speeding up client onboarding.",
         ],
         stacks: [
           "React",
@@ -320,15 +320,15 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Multi-tenant Restaurant Cloud Platform",
         summary:
-          "Promoted from frontend to full-stack engineer, leading the architecture of a new POS system and a company-wide UI library.",
+          "Transitioned from frontend to full-stack engineer, leading the architecture of a new POS system and a company-wide UI library.",
         teamSize: 8,
         url: null,
         tasks: [
-          "Architected and delivered a real-time POS system (Elixir/Phoenix + React), owning decisions from data modeling to frontend state management.",
-          "Created the company-wide React component library on Headless UI, adopted as the standard design system across all product teams.",
+          "Architected and delivered a real-time POS system (Elixir/Phoenix + React) for complex order management, owning decisions from data modeling to frontend state management.",
+          "Created the React component library on Headless UI, adopted as the company-wide design standard.",
           "Drove a 20% increase in checkout and signup conversion rates by optimizing UI flows based on user behavior data.",
-          "Ran targeted refactors across multiple codebases, cutting build times and lowering the barrier to entry for new engineers.",
-          "Mentored two junior developers through code reviews and pair programming, growing them into independent contributors within six months.",
+          "Ran targeted refactors across multiple codebases, cutting build times and technical debt.",
+          "Mentored two junior developers through code reviews and pair programming.",
         ],
         stacks: [
           "Elixir/Phoenix",
@@ -355,7 +355,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Logistics & Package Tracking Platform",
         summary:
-          "Rebuilt the frontend of a shipping platform with real-time package tracking.",
+          "Rebuilt the frontend of a shipping platform with real-time package tracking, focusing on performance and component reusability.",
         teamSize: 3,
         url: null,
         tasks: [
@@ -391,23 +391,23 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "TelemetryTV: Digital Signage Platform",
         summary:
-          'Contributed features to <a href="https://www.telemetrytv.com/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">TelemetryTV</a>, an enterprise digital signage platform, during a major architectural migration.',
+          'Contributed core features to <a href="https://www.telemetrytv.com/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">TelemetryTV</a>, an enterprise digital signage platform, during a major architectural migration.',
         teamSize: 5,
         url: null,
         tasks: [
           "Migrated dozens of legacy Vue components to a Gridsome-based architecture, improving build performance and developer experience.",
-          "Translated Figma designs into pixel-accurate, interactive marketing pages.",
+          "Translated Figma designs into pixel-accurate, interactive application UIs.",
         ],
         stacks: ["Vue.js", "Vuex", "Gridsome", "GraphQL", "Tailwind CSS"],
       },
       {
         name: "DATCOM Internal Ordering System",
         summary:
-          "Built an internal lunch-ordering system end-to-end as part of the DATCOM internship program.",
+          "Built an internal lunch-ordering system end-to-end in an Agile team, gaining full-stack experience during the DATCOM internship program.",
         teamSize: 5,
         url: null,
         tasks: [
-          "Designed the PostgreSQL schema and built REST APIs in Golang (Gin/GORM).",
+          "Designed the PostgreSQL schema and built and tested REST API endpoints in Golang (Gin/GORM).",
           "Built the React and Tailwind CSS admin frontend covering the full ordering and reporting flow.",
         ],
         stacks: ["Golang", "PostgreSQL", "GORM", "React", "Tailwind CSS"],
