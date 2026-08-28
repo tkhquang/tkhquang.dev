@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-"use server";
+import "server-only";
 
 import Image from "@/components/common/NextImage";
 import { CustomPreWithCopy } from "@/components/common/PreWithCopy";
