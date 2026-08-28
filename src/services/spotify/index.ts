@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 
 import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 import querystring from "querystring";

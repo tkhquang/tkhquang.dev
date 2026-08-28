@@ -1,4 +1,4 @@
-"use server";
+import "server-only";
 
 import { lookup } from "mime-types";
 import chromium from "@sparticuz/chromium";
