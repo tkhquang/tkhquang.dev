@@ -8,10 +8,13 @@ import "@/assets/styles/(resume)/index.css";
  * every glyph is drawn as a vector path. That is why the resume PDF used to
  * contain zero /FontFile2 entries and 27 Type3 fonts.
  *
- * `next/font/google` cannot avoid it. It is hardcoded to the css2 endpoint
- * (get-google-fonts-url.js), and css2 serves the variable file for any family
- * that has one; the `weight` option only pins the @font-face descriptor, so all
- * weights still resolve to the same variable file.
+ * `next/font/google` could not avoid it here. It is hardcoded to the css2
+ * endpoint (get-google-fonts-url.js), and although pinned weights are encoded
+ * into that URL, whether css2 answers with static instances is Google's
+ * per-family call: for Inter it served the same variable file (fvar confirmed)
+ * for every pinned weight, while Merriweather 400 comes back static in the
+ * same pipeline. The `weight` option itself only pins the @font-face
+ * descriptor.
  *
  * @fontsource publishes the static per-weight instances under the real family
  * names ("Inter", "Source Code Pro"), which is what --font-sans-inter and

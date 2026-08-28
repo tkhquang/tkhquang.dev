@@ -1,5 +1,10 @@
 import StacksChart from "@/components/landing/stacks/StacksChart";
 import { fetchGitHubCommitStats } from "@/services/github";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  robots: "noindex, nofollow, noarchive, nosnippet",
+};
 
 interface LanguageStats {
   id: string;

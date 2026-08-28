@@ -1,4 +1,5 @@
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { max } from "date-fns";
 import type { MetadataRoute } from "next";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -12,6 +13,13 @@ async function getAllBlogPosts() {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = await getAllBlogPosts();
+
+  // The newest post activity, so /blog does not claim a change on every build
+  const postDates = posts
+    .map((post) => post.updated_at || post.created_at)
+    .filter(Boolean)
+    .map((date) => new Date(date));
+  const latestPostDate = postDates.length ? max(postDates) : undefined;
 
   const blogPostSiteMap = posts.map(({ slug, created_at, updated_at }) => {
     return {
@@ -31,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${BASE_URL}/blog`,
-      lastModified: new Date(),
+      lastModified: latestPostDate || new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
     },
