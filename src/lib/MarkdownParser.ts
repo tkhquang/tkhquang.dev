@@ -9,6 +9,7 @@ import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import { getProcessedImage } from "@/utils/image";
+import { slugifyTag } from "@/utils/slug";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
@@ -25,7 +26,6 @@ import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import slugify from "slugify";
 import { unified, Processor } from "unified";
 import { VFile } from "vfile";
 
@@ -296,7 +296,7 @@ class MarkdownParser {
       .filter((tag) => tag !== "hidden" || shouldShowHiddenTags)
       .map((tag) => {
         return {
-          slug: slugify(tag),
+          slug: slugifyTag(tag),
           title: tag,
         };
       });

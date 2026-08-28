@@ -58,7 +58,10 @@ const nextConfig = {
     },
   },
   outputFileTracingIncludes: {
-    "/blog{,/**/*}": ["./content/**"],
+    "/blog{,/**/*}": [
+      "./content/**",
+      "./src/lib/remark-embed/templates/**",
+    ],
     "/api/pdf{,/**/*}": [
       "node_modules/@sparticuz/chromium/**/*",
       "node_modules/puppeteer-core/**/*",
