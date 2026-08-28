@@ -1,7 +1,6 @@
 import Provider from "./Provider";
 import Mustache from "mustache";
 import path from "path";
-import { fileURLToPath } from "url";
 
 interface YoutubeOptions {
   nocookie?: boolean;
@@ -11,15 +10,18 @@ interface YoutubeOptions {
   [key: string]: any;
 }
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 class Youtube extends Provider {
   constructor(options: YoutubeOptions) {
     super(options);
 
     this.regexp =
       /(?:https?:)?(?:\/\/)(?:www\.)?(?:(?:youtube(?:-nocookie)?\.com\/(?:(?:(?:watch|embed)(?:\?v=|\/)((?!videoseries)[\w-]{11}))|(?:playlist|embed\/videoseries)\?list=([\w-]{34}))|youtu.be\/([\w-]{11})))[?=&+%\w.-]*/i;
-    this.template = path.resolve(__dirname, "../templates/Youtube.mustache");
+    // cwd-anchored like the content/ reads in MarkdownParser — import.meta.url
+    // points at Turbopack's relocated module path (under .next on Windows dev)
+    this.template = path.join(
+      process.cwd(),
+      "src/lib/remark-embed/templates/Youtube.mustache"
+    );
     this.idPosition = 1;
 
     const alignment = options.align || "auto";

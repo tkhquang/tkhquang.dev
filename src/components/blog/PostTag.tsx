@@ -1,8 +1,8 @@
 import { MarkdownPost } from "@/models/markdown.types";
+import { slugifyTag } from "@/utils/slug";
 import classNames from "classnames";
 import Link from "next/link";
 import React from "react";
-import slugify from "slugify";
 
 interface TagListProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;
@@ -14,7 +14,7 @@ const TagList = ({ className, post }: TagListProps) => {
       {post.tags.map((tag) => (
         <li key={tag} className="tag-list__item my-2 flex">
           <Link
-            href={`/blog/tags/${slugify(tag)}`}
+            href={`/blog/tags/${slugifyTag(tag)}`}
             className="tag-list__item__link secondary mr-3 rounded-xs px-2 py-1 text-sm no-underline hover:shadow-inner"
           >
             # {tag}

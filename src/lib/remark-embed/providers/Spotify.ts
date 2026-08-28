@@ -2,15 +2,12 @@ import Provider from "./Provider";
 import fs from "fs/promises";
 import Mustache from "mustache";
 import path from "path";
-import { fileURLToPath } from "url";
 
 interface SpotifyOptions {
   width?: string;
   height?: string;
   [key: string]: any; // Additional options
 }
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 class Spotify extends Provider {
   regexp: RegExp;
@@ -23,7 +20,12 @@ class Spotify extends Provider {
 
     this.regexp =
       /^https:\/\/open\.spotify\.com\/(user\/[A-Za-z0-9-_]*\/playlist|track|artist|album)\/([A-Za-z0-9-_?=]+)/i;
-    this.template = path.resolve(__dirname, "../templates/Spotify.mustache");
+    // cwd-anchored like the content/ reads in MarkdownParser — import.meta.url
+    // points at Turbopack's relocated module path (under .next on Windows dev)
+    this.template = path.join(
+      process.cwd(),
+      "src/lib/remark-embed/templates/Spotify.mustache"
+    );
     this.idPosition = 2;
 
     // Set default options
