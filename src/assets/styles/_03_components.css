@@ -110,8 +110,69 @@
     }
 
     table {
+      display: block;
+      width: max-content;
+      max-width: 100%;
+
+      margin-inline: auto;
+      overflow-x: auto;
       background-color: var(--surface);
       color: var(--on-surface);
+      font-size: 0.889em;
+
+      line-height: 1.5;
+
+      border-width: 1px;
+      border-color: rgb(128 128 128 / 25%);
+      border-color: color-mix(in srgb, var(--on-surface) 20%, transparent);
+      border-radius: 7px;
+      box-shadow: 0 0 2px 2px rgb(0 0 0 / 25%);
+      box-shadow: 0 0 2px 2px color-mix(in srgb, black 25%, transparent);
+
+      th,
+      td {
+        padding: 0.5em 0.75em;
+        vertical-align: top;
+        border-bottom: 1px solid rgb(128 128 128 / 25%);
+        border-bottom: 1px solid
+          color-mix(in srgb, var(--on-surface) 20%, transparent);
+        border-inline-end: 1px solid rgb(128 128 128 / 25%);
+        border-inline-end: 1px solid
+          color-mix(in srgb, var(--on-surface) 20%, transparent);
+
+        &:last-child {
+          border-inline-end: none;
+        }
+      }
+
+      thead {
+        background: linear-gradient(
+            90deg,
+            var(--background) 0%,
+            var(--surface) 20%,
+            var(--surface) 50%,
+            var(--surface) 80%,
+            var(--background) 100%
+          )
+          var(--surface);
+      }
+
+      thead th {
+        text-align: start;
+        font-weight: 600;
+
+        white-space: nowrap;
+        border-bottom: 2px solid rgb(128 128 128 / 40%);
+        border-bottom: 2px solid
+          color-mix(in srgb, var(--primary) 40%, transparent);
+      }
+
+      tbody tr:last-child {
+        th,
+        td {
+          border-bottom: none;
+        }
+      }
     }
 
     figure {
