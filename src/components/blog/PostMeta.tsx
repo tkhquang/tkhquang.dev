@@ -46,7 +46,7 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         )}
       </div>
 
-      <div className="text-theme-on-surface flex items-center space-x-2 opacity-75">
+      <div className="text-theme-on-surface flex items-center space-x-2">
         <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>

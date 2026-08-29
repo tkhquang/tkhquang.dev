@@ -8,7 +8,7 @@ import React from "react";
 const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
   return (
     <section className={classNames("blog-info relative text-sm", className)}>
-      <div className="blog-info__content text-on-surface sticky rounded-sm px-4 py-8 shadow-md">
+      <div className="blog-info__content text-theme-on-surface sticky rounded-sm px-4 py-8 shadow-md">
         <div className="[&_.author\_\_image--container]:mb-4">
           <Author />
           <div className="my-5">

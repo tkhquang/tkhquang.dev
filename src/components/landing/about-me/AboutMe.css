@@ -62,9 +62,18 @@
 }
 
 .download__link {
+  /* Paper look drawn from the theme: near-white in light, dimmed in dark */
+  --paper: #ffffff;
+  --paper: color-mix(in srgb, white 82%, var(--background));
+  --paper-hover: #e2e8f0;
+  --paper-hover: color-mix(in srgb, white 65%, var(--background));
+  --paper-active: #dae0e8;
+  --paper-active: color-mix(in srgb, white 55%, var(--background));
+
   padding: 1rem 0;
-  background: #ffffff;
-  border: solid 1px #e6e6e6;
+  background: var(--paper);
+  border: solid 1px rgb(128 128 128 / 25%);
+  border: solid 1px color-mix(in srgb, var(--on-surface) 20%, transparent);
   border-radius: 2px;
   display: inline-block;
   height: 100px;
@@ -95,8 +104,8 @@
 
   &::before,
   &::after {
-    background: #ffffff;
-    border: solid 3px #9fb4cc;
+    background: var(--paper);
+    border: solid 3px var(--secondary);
     border-radius: 4px;
     content: "";
     display: block;
@@ -112,16 +121,16 @@
 
   &:hover::before,
   &:hover::after {
-    background: #e2e8f0;
+    background: var(--paper-hover);
   }
 
   &:hover {
-    background: #e2e8f0;
-    border-color: #9fb4cc;
+    background: var(--paper-hover);
+    border-color: var(--secondary);
   }
 
   &:active {
-    background: #dae0e8;
+    background: var(--paper-active);
     box-shadow: inset 0 2px 2px rgb(0 0 0 / 25%);
   }
 

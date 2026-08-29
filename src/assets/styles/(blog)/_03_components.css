@@ -193,6 +193,11 @@
     position: relative;
     background-color: var(--code);
 
+    /* Near-white panel: the light Shiki theme's tokens are designed for white */
+    @variant light {
+      background-color: hsl(220deg 40% 98%);
+    }
+
     > [data-rehype-pretty-code-title] {
       @apply shadow-md;
     }

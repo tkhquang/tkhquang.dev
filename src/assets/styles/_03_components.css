@@ -56,9 +56,10 @@
     }
 
     &[data-theme="light"] {
+      /* Lapis, not the raw hero hue: the palette's own blue for the banner */
       --theme-landing-background-semi-transparent: color-mix(
         in srgb,
-        var(--tone-light) 75%,
+        var(--primary-light) 88%,
         transparent
       );
 
@@ -223,10 +224,17 @@
        */
       &[target="_blank"]::after {
         content: "\00a0";
-        background-image: url("/assets/resources/svg/external-link.svg");
-        background-size: contain;
-        background-position: right center;
-        background-repeat: no-repeat;
+
+        /* Masked with currentColor so the icon follows the link color in both themes */
+        background-color: currentColor;
+        -webkit-mask-image: url("/assets/resources/svg/external-link.svg");
+        mask-image: url("/assets/resources/svg/external-link.svg");
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: right center;
+        mask-position: right center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
         padding-inline-end: 1em;
       }
 
@@ -427,8 +435,8 @@
     background-image: linear-gradient(
       to right,
       transparent 0%,
-      var(--primary) 30%,
-      var(--primary) 70%,
+      var(--hairline) 30%,
+      var(--hairline) 70%,
       transparent 100%
     );
   }
@@ -527,15 +535,15 @@
         linear-gradient(
           to right,
           transparent 0%,
-          var(--primary) 30%,
-          var(--primary) 70%,
+          var(--hairline) 30%,
+          var(--hairline) 70%,
           transparent 100%
         ),
         linear-gradient(
           to right,
           transparent 0%,
-          var(--primary) 30%,
-          var(--primary) 70%,
+          var(--hairline) 30%,
+          var(--hairline) 70%,
           transparent 100%
         );
       background-size: 100% 1px;

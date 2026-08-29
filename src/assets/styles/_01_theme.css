@@ -18,6 +18,7 @@
     --color-theme-darken-dark: var(--darken-dark);
     --color-theme-darken-light: var(--darken-light);
     --color-theme-error: var(--error);
+    --color-theme-hairline: var(--hairline);
     --color-theme-error-dark: var(--error-dark);
     --color-theme-error-light: var(--error-light);
     --color-theme-on-background: var(--on-background);
