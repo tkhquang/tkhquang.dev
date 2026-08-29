@@ -96,23 +96,6 @@
       background-color: var(--surface);
     }
   }
-
-  #circuit-path {
-    animation: pulse 3s infinite;
-  }
-  @keyframes pulse {
-    0% {
-      fill-opacity: 0.2;
-    }
-
-    50% {
-      fill-opacity: 0.1;
-    }
-
-    100% {
-      fill-opacity: 0.2;
-    }
-  }
 }
 
 .code-container {
