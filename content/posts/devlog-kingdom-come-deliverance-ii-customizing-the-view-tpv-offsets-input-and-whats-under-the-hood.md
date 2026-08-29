@@ -1,7 +1,7 @@
 ---
 title: "[Devlog] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood"
 created_at: 2025-05-7T00:00:00.000Z
-updated_at: ""
+updated_at: 2026-08-28T00:00:00.000Z
 published: true
 category_slug: technical
 tags:
@@ -167,12 +167,12 @@ To truly grasp how the offset works, let's touch on the 3D math components invol
 3.  **No Explicit Matrix Math in *This Specific* Detour, but It's Implied:**
     *   While my detour `Detour_TpvCameraUpdate` primarily uses `Vector3` and `Quaternion` logic for the offset, the underlying game structures (like the one `outputPosePtr` points to, or player/entity transforms such as `GameStructures::Matrix34f m_worldTransform;`) use 3x4 matrices (`Matrix34f`) to store full transformations (rotation and translation).
     *   A `Matrix34f` typically stores:
-        *   The first 3x3 part is the rotation matrix (representing the object's X, Y, and Z axes in world space).
+        *   The first 3x3 part is the rotation matrix, holding the object's X, Y, and Z axes in world space *in its columns* (Right = col0, Forward = col1, Up = col2).
         *   The last column (or often, specific elements like `m[0][3], m[1][3], m[2][3]`) is the translation (position) vector.
     *   Our `cameraWorldRotation` (Quaternion) is essentially the rotational component of the camera's full view matrix. The game would use this quaternion (or convert it to a 3x3 rotation matrix) along with `gameCalculatedPosition` to build the final view matrix for the renderer.
     *   My `Quaternion::LookRotation` is an example of building a quaternion from direction vectors, similar to how a view matrix is constructed. It uses `DirectX::XMMatrixLookToRH` (creates a view matrix) then inverts it to get a world orientation matrix, and finally extracts the quaternion from that. This shows the close relationship.
 
-![Matrix34f Structure (Conceptual - CryEngine Row-Major)](/uploads/images/Matrix34f.svg)
+![Matrix34f Structure (CryEngine: row-major storage, with the axis basis in the columns)](/uploads/images/blog/tpv-camera-matrix34f.svg)
 
 By letting the game compute `gameCalculatedPosition` and `cameraWorldRotation` first, we respect its core TPV logic (like its default distance from Henry or any rudimentary collision handling it might do). We then just nudge that final position by applying our `localOffset` transformed into the correct `worldOffset` using the camera's own orientation.
 

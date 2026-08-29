@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" width="960" height="540" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="A viewer looks at the screen from the top. Below it, the root stacking context lists the four portal slots at z-index 1 to 4 and the whole application at 0. A magnified inset shows that inside the application there is a separate scale, where a modal at 999999, a header at 1000 and a tooltip at 50 are ordered only against each other.">
+  <rect width="960" height="540" rx="8" fill="#282a36"/>
+
+  <!-- ================= VIEWER AND SCREEN ================= -->
+  <path d="M 100 58 Q 122 40 144 58 Q 122 76 100 58 Z" fill="none" stroke="#f8f8f2" stroke-width="1.8"/>
+  <circle cx="122" cy="58" r="5.5" fill="#f8f8f2"/>
+  <text x="156" y="64" fill="#f8f8f2" font-size="17">you, looking at the page</text>
+
+  <line x1="88" y1="98" x2="470" y2="98" stroke="#6272a4" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="478" y="103" fill="#6272a4" font-size="15">the screen</text>
+
+  <!-- ================= ROOT SCALE ================= -->
+  <line x1="122" y1="128" x2="122" y2="444" stroke="#6272a4" stroke-width="1.5"/>
+  <path d="M 122 116 L 115 130 L 129 130 Z" fill="#6272a4"/>
+  <text x="136" y="126" fill="#6272a4" font-size="14">nearer to you</text>
+
+  <!-- level 4 -->
+  <text x="106" y="176" fill="#6272a4" font-size="17" text-anchor="end">4</text>
+  <rect x="146" y="146" width="324" height="44" rx="5" fill="#ffb86c" fill-opacity="0.12" stroke="#ffb86c" stroke-width="1.5"/>
+  <text x="164" y="176" fill="#ffb86c" font-size="17">#stacked-layer-4</text>
+  <text x="454" y="176" fill="#6272a4" font-size="14" text-anchor="end">toasts</text>
+
+  <!-- level 3 -->
+  <text x="106" y="244" fill="#6272a4" font-size="17" text-anchor="end">3</text>
+  <rect x="146" y="214" width="324" height="44" rx="5" fill="#bd93f9" fill-opacity="0.12" stroke="#bd93f9" stroke-width="1.5"/>
+  <text x="164" y="244" fill="#bd93f9" font-size="17">#stacked-layer-3</text>
+  <text x="454" y="244" fill="#6272a4" font-size="14" text-anchor="end">modals</text>
+
+  <!-- level 2 -->
+  <text x="106" y="312" fill="#6272a4" font-size="17" text-anchor="end">2</text>
+  <rect x="146" y="282" width="324" height="44" rx="5" fill="#50fa7b" fill-opacity="0.12" stroke="#50fa7b" stroke-width="1.5"/>
+  <text x="164" y="312" fill="#50fa7b" font-size="17">#stacked-layer-2</text>
+  <text x="454" y="312" fill="#6272a4" font-size="14" text-anchor="end">sheets</text>
+
+  <!-- level 1 -->
+  <text x="106" y="380" fill="#6272a4" font-size="17" text-anchor="end">1</text>
+  <rect x="146" y="350" width="324" height="44" rx="5" fill="#8be9fd" fill-opacity="0.12" stroke="#8be9fd" stroke-width="1.5"/>
+  <text x="164" y="380" fill="#8be9fd" font-size="17">#stacked-layer-1</text>
+  <text x="454" y="380" fill="#6272a4" font-size="14" text-anchor="end">dropdowns</text>
+
+  <!-- level 0: the whole app -->
+  <text x="106" y="448" fill="#6272a4" font-size="17" text-anchor="end">0</text>
+  <rect x="146" y="418" width="324" height="44" rx="5" fill="#f8f8f2" fill-opacity="0.06" stroke="#f8f8f2" stroke-width="2"/>
+  <text x="164" y="448" fill="#f8f8f2" font-size="17" font-weight="600">#_next</text>
+  <text x="454" y="448" fill="#6272a4" font-size="14" text-anchor="end">the whole app</text>
+
+  <text x="122" y="492" fill="#6272a4" font-size="15">one scale: five entries, and the app is just one of them</text>
+
+  <!-- ================= ZOOM WEDGE ================= -->
+  <path d="M 470 418 L 556 132 L 556 486 L 470 462 Z" fill="#f8f8f2" fill-opacity="0.03" stroke="#44475a" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- ================= PRIVATE SCALE ================= -->
+  <rect x="556" y="132" width="356" height="354" rx="6" fill="#f8f8f2" fill-opacity="0.02" stroke="#44475a" stroke-width="1"/>
+  <text x="582" y="172" fill="#f8f8f2" font-size="18" font-weight="600">Inside #_next</text>
+  <text x="582" y="196" fill="#6272a4" font-size="14">a scale of its own</text>
+
+  <line x1="596" y1="230" x2="596" y2="414" stroke="#6272a4" stroke-width="1.5"/>
+  <path d="M 596 218 L 589 232 L 603 232 Z" fill="#6272a4"/>
+
+  <rect x="616" y="222" width="272" height="44" rx="5" fill="#ff5555" fill-opacity="0.1" stroke="#ff5555" stroke-width="1.5"/>
+  <text x="634" y="252" fill="#ff5555" font-size="17">.modal</text>
+  <text x="872" y="252" fill="#ff5555" font-size="15" text-anchor="end">999999</text>
+
+  <rect x="616" y="290" width="272" height="44" rx="5" fill="#6272a4" fill-opacity="0.1" stroke="#6272a4" stroke-width="1.5"/>
+  <text x="634" y="320" fill="#f8f8f2" font-size="17">.site-header</text>
+  <text x="872" y="320" fill="#6272a4" font-size="15" text-anchor="end">1000</text>
+
+  <rect x="616" y="358" width="272" height="44" rx="5" fill="#6272a4" fill-opacity="0.1" stroke="#6272a4" stroke-width="1.5"/>
+  <text x="634" y="388" fill="#f8f8f2" font-size="17">.tooltip</text>
+  <text x="872" y="388" fill="#6272a4" font-size="15" text-anchor="end">50</text>
+
+  <text x="582" y="448" fill="#6272a4" font-size="15">these three are ranked against each other,</text>
+  <text x="582" y="468" fill="#6272a4" font-size="15">never against the five above</text>
+</svg>

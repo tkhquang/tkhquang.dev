@@ -14,7 +14,7 @@ tags:
   - C++
   - Camera
 cover_image: /uploads/images/audentis-fortuna-iuvat.png
-description: "A deep dive into Kingdom Come: Deliverance II's memory to enable its built-in (likely debug) third-person view, navigating vftables and pointer chains."
+description: "Enabling Kingdom Come: Deliverance II's hidden third-person view: a walk through memory, vftables, and pointer chains."
 ---
 
 Alright folks, it's time for another dive under the hood, this time with **Kingdom Come: Deliverance II** (KCD2). This post has now been **updated to reflect the memory addresses and details for game version 1.3.1**. My initial explorations were with an earlier build, but with the latest patch out, it was time to re-verify. My immediate impressions of KCD2 remain the same: the sheer scale and detail Warhorse has achieved is remarkable. Naturally, the engine itself beckoned further investigation with these new addresses. KCD2 is, through and through, a deeply immersive first-person RPG. However, a third-person perspective (TPV) offers distinct advantages: a better view of character equipment, broader environmental awareness, a different tactical feel, and for some players, a more comfortable viewing experience less prone to motion sickness.

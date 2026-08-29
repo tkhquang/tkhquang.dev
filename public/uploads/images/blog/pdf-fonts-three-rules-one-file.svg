@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" width="960" height="500" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Three @font-face rules for Inter, at font-weight 400, 600 and 700, each with a src pointing at the same woff2 file. Arrows from all three converge on a single file whose table directory contains cmap, glyf, hmtx, GPOS, GSUB and an fvar table covering weights 100 to 900, marked as still the variable font, with a default instance of Thin 100. Caption: the weight option wrote three descriptors, the build downloaded one file.">
+  <rect width="960" height="500" rx="8" fill="#282a36"/>
+
+  <!-- ================= RULE 1: w=400 ================= -->
+  <rect x="48" y="56" width="352" height="100" rx="5" fill="#8be9fd" fill-opacity="0.07" stroke="#8be9fd" stroke-width="1.5"/>
+  <text x="68" y="82" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">@font-face {</text>
+  <text x="68" y="103" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">  font-family: "Inter"; font-weight: <tspan fill="#8be9fd" font-weight="600">400</tspan>;</text>
+  <text x="68" y="124" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">  src: url(<tspan fill="#8be9fd">…3a6ba036.woff2</tspan>); }</text>
+
+  <!-- ================= RULE 2: w=600 ================= -->
+  <rect x="48" y="180" width="352" height="100" rx="5" fill="#50fa7b" fill-opacity="0.07" stroke="#50fa7b" stroke-width="1.5"/>
+  <text x="68" y="206" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">@font-face {</text>
+  <text x="68" y="227" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">  font-family: "Inter"; font-weight: <tspan fill="#50fa7b" font-weight="600">600</tspan>;</text>
+  <text x="68" y="248" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">  src: url(<tspan fill="#50fa7b">…3a6ba036.woff2</tspan>); }</text>
+
+  <!-- ================= RULE 3: w=700 ================= -->
+  <rect x="48" y="304" width="352" height="100" rx="5" fill="#ffb86c" fill-opacity="0.07" stroke="#ffb86c" stroke-width="1.5"/>
+  <text x="68" y="330" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">@font-face {</text>
+  <text x="68" y="351" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">  font-family: "Inter"; font-weight: <tspan fill="#ffb86c" font-weight="600">700</tspan>;</text>
+  <text x="68" y="372" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">  src: url(<tspan fill="#ffb86c">…3a6ba036.woff2</tspan>); }</text>
+
+  <!-- ================= CONVERGING ARROWS ================= -->
+  <path d="M 400 106 C 480 106 480 200 546 218" fill="none" stroke="#8be9fd" stroke-width="1.5"/>
+  <path d="M 554 220 L 541 224 L 545 212 Z" fill="#8be9fd"/>
+  <path d="M 400 230 C 470 230 480 232 546 234" fill="none" stroke="#50fa7b" stroke-width="1.5"/>
+  <path d="M 554 234 L 542 240 L 542 228 Z" fill="#50fa7b"/>
+  <path d="M 400 354 C 480 354 480 268 546 250" fill="none" stroke="#ffb86c" stroke-width="1.5"/>
+  <path d="M 554 248 L 545 257 L 541 245 Z" fill="#ffb86c"/>
+
+  <!-- ================= THE ONE FILE ================= -->
+  <rect x="560" y="110" width="352" height="248" rx="6" fill="#ff5555" fill-opacity="0.05" stroke="#ff5555" stroke-width="2"/>
+  <text x="582" y="142" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">83afe278b6a6bb3c-s.p.3a6ba036.woff2</text>
+  <text x="582" y="170" fill="#6272a4" font-size="13">table directory:</text>
+  <text x="582" y="196" fill="#f8f8f2" font-size="14" font-family="Consolas, Menlo, monospace">cmap  glyf  hmtx  GPOS  GSUB</text>
+  <rect x="574" y="212" width="324" height="34" rx="4" fill="#ff5555" fill-opacity="0.12"/>
+  <text x="582" y="234" fill="#ff5555" font-size="14" font-weight="600" font-family="Consolas, Menlo, monospace">fvar  wght 100..900</text>
+  <text x="898" y="234" fill="#ff5555" font-size="13" text-anchor="end">still the variable font</text>
+  <text x="582" y="276" fill="#ffb86c" font-size="14" font-family="Consolas, Menlo, monospace">default instance: Thin (100)</text>
+  <text x="582" y="304" fill="#6272a4" font-size="13">which is the name Skia will give it,</text>
+  <text x="582" y="322" fill="#6272a4" font-size="13">and the reason my probe PDFs say Inter-Thin</text>
+
+  <text x="480" y="450" fill="#6272a4" font-size="15" text-anchor="middle">weight: ["400", "600", "700"] wrote three descriptors. The build downloaded one file.</text>
+</svg>

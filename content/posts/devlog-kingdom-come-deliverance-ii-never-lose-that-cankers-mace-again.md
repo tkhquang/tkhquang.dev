@@ -12,7 +12,7 @@ tags:
   - Devlog
   - Lua
 cover_image: /uploads/images/loot-beacon-1.png
-description: "The story behind creating the Loot Beacon mod for Kingdom Come: Deliverance II – from a frustrating search for a mace to Lua scripting and color accessibility."
+description: "How losing a mace in Kingdom Come: Deliverance II turned into the Loot Beacon mod, from Lua scripting to color accessibility."
 ---
 
 Alright folks, time for another peek into the modding workshop. This time, our subject is the magnificent, sprawling world of **Kingdom Come: Deliverance II** (KCD2). My latest adventure wasn't chasing down memory addresses for a TPV toggle, but rather scratching a very practical itch: the eternal struggle of finding loot. And yeah, the specific catalyst was spending an entire, rather frustrating, day combing the Bohemian countryside for that damned **"Canker's Mace."** 🤣 There had to be a better way.

@@ -6,6 +6,8 @@ published: true
 category_slug: technical
 tags:
   - React
+  - React Hooks
+  - Web Development
 cover_image: /uploads/images/useimperativehandle.png
 description: "One way to expose Children Components in React."
 ---

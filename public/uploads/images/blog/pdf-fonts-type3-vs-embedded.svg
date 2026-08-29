@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Two PDFs side by side. In the shipped one, 363,666 bytes, the text stream points at a Type3 font that is Inter in name only, whose CharProcs are inline vector drawings, one per glyph, across 27 fonts, and there is no FontFile2. In the fixed one, 125,272 bytes, the recoded text stream points at a Type0 font backed by an embedded, subset FontFile2 font program, and there are zero Type3 fonts.">
+  <rect width="960" height="560" rx="8" fill="#282a36"/>
+
+  <!-- ================= LEFT PANEL: what shipped ================= -->
+  <rect x="32" y="36" width="432" height="492" rx="6" fill="#f8f8f2" fill-opacity="0.02" stroke="#44475a" stroke-width="1"/>
+  <text x="56" y="72" fill="#ff5555" font-size="18" font-weight="600">the PDF that shipped</text>
+  <text x="440" y="72" fill="#6272a4" font-size="14" text-anchor="end">363,666 bytes</text>
+
+  <!-- text stream -->
+  <rect x="64" y="96" width="368" height="44" rx="5" fill="#f8f8f2" fill-opacity="0.06" stroke="#f8f8f2" stroke-width="1.5"/>
+  <text x="82" y="124" fill="#f8f8f2" font-size="15" font-family="Consolas, Menlo, monospace">&lt;563482&gt; Tj</text>
+  <text x="414" y="124" fill="#6272a4" font-size="13" text-anchor="end">the text, one byte per glyph</text>
+
+  <line x1="248" y1="140" x2="248" y2="166" stroke="#6272a4" stroke-width="1.5"/>
+  <path d="M 248 172 L 242 162 L 254 162 Z" fill="#6272a4"/>
+
+  <!-- Type3 font -->
+  <rect x="64" y="176" width="368" height="58" rx="5" fill="#ffb86c" fill-opacity="0.1" stroke="#ffb86c" stroke-width="1.5"/>
+  <text x="82" y="200" fill="#ffb86c" font-size="15" font-family="Consolas, Menlo, monospace">/Type3  AAAAAA+Inter-Regular</text>
+  <text x="82" y="222" fill="#6272a4" font-size="13">Inter in name only</text>
+
+  <line x1="248" y1="234" x2="248" y2="260" stroke="#6272a4" stroke-width="1.5"/>
+  <path d="M 248 266 L 242 256 L 254 256 Z" fill="#6272a4"/>
+
+  <!-- CharProcs -->
+  <rect x="64" y="270" width="368" height="196" rx="5" fill="#ff5555" fill-opacity="0.06" stroke="#ff5555" stroke-width="1.5"/>
+  <text x="82" y="296" fill="#ff5555" font-size="15" font-family="Consolas, Menlo, monospace">/CharProcs</text>
+
+  <!-- glyph cell 1: Inter's actual Q outline (extracted from the font), with its real TrueType points -->
+  <rect x="84" y="310" width="104" height="112" rx="4" fill="#282a36" stroke="#6272a4" stroke-width="1"/>
+  <path d="M 136 388.2 Q 128.4 388.2 122.4 384.5 Q 116.4 380.8 113 373.9 Q 109.6 367.1 109.6 357.6 Q 109.6 348.2 113 341.3 Q 116.4 334.4 122.4 330.7 Q 128.4 327 136 327 Q 143.7 327 149.6 330.7 Q 155.6 334.4 159 341.3 Q 162.4 348.2 162.4 357.6 Q 162.4 367.1 159 373.9 Q 156.3 379.4 152 382.8 L 159.7 393 L 151.8 393 L 146.6 386.1 Q 141.8 388.2 136 388.2 Z M 133.6 368.8 L 141.5 368.8 L 147.7 377 Q 150.6 374.4 152.5 370.5 Q 155 365.2 155 357.6 Q 155 350 152.5 344.7 Q 150 339.4 145.7 336.7 Q 141.4 334 136 334 Q 130.7 334 126.4 336.8 Q 122 339.5 119.5 344.7 Q 117 350 117 357.6 Q 117 365.2 119.5 370.5 Q 122 375.7 126.4 378.4 Q 130.7 381.2 136 381.2 Q 139.3 381.2 142.2 380.1 L 133.6 368.8 Z" fill="none" stroke="#8be9fd" stroke-width="1.8"/>
+  <rect x="134.2" y="386.4" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="128.4" cy="388.2" r="1.6" fill="#6272a4"/>
+  <circle cx="116.4" cy="380.8" r="1.6" fill="#6272a4"/>
+  <circle cx="109.6" cy="367.1" r="1.6" fill="#6272a4"/>
+  <rect x="107.8" y="355.8" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="109.6" cy="348.2" r="1.6" fill="#6272a4"/>
+  <circle cx="116.4" cy="334.4" r="1.6" fill="#6272a4"/>
+  <circle cx="128.4" cy="327" r="1.6" fill="#6272a4"/>
+  <circle cx="143.7" cy="327" r="1.6" fill="#6272a4"/>
+  <circle cx="155.6" cy="334.4" r="1.6" fill="#6272a4"/>
+  <circle cx="162.4" cy="348.2" r="1.6" fill="#6272a4"/>
+  <rect x="160.6" y="355.8" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="162.4" cy="367.1" r="1.6" fill="#6272a4"/>
+  <rect x="157.2" y="372.1" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="156.3" cy="379.4" r="1.6" fill="#6272a4"/>
+  <rect x="150.2" y="381.0" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <rect x="157.9" y="391.2" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <rect x="150.0" y="391.2" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <rect x="144.8" y="384.3" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="141.8" cy="388.2" r="1.6" fill="#6272a4"/>
+  <rect x="131.8" y="367.0" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <rect x="139.7" y="367.0" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <rect x="145.9" y="375.2" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="150.6" cy="374.4" r="1.6" fill="#6272a4"/>
+  <rect x="150.7" y="368.7" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="155" cy="365.2" r="1.6" fill="#6272a4"/>
+  <rect x="153.2" y="355.8" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="155" cy="350" r="1.6" fill="#6272a4"/>
+  <circle cx="150" cy="339.4" r="1.6" fill="#6272a4"/>
+  <circle cx="141.4" cy="334" r="1.6" fill="#6272a4"/>
+  <rect x="134.2" y="332.2" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="130.7" cy="334" r="1.6" fill="#6272a4"/>
+  <circle cx="122" cy="339.5" r="1.6" fill="#6272a4"/>
+  <circle cx="117" cy="350" r="1.6" fill="#6272a4"/>
+  <rect x="115.2" y="355.8" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="117" cy="365.2" r="1.6" fill="#6272a4"/>
+  <circle cx="122" cy="375.7" r="1.6" fill="#6272a4"/>
+  <circle cx="130.7" cy="381.2" r="1.6" fill="#6272a4"/>
+  <rect x="134.2" y="379.4" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <circle cx="139.3" cy="381.2" r="1.6" fill="#6272a4"/>
+  <rect x="140.4" y="378.3" width="3.6" height="3.6" fill="#282a36" stroke="#ffb86c" stroke-width="1"/>
+  <text x="136" y="416" fill="#6272a4" font-size="12" text-anchor="middle">a drawing</text>
+
+  <!-- glyph cell 2: a drawn u -->
+  <rect x="196" y="310" width="104" height="112" rx="4" fill="#282a36" stroke="#6272a4" stroke-width="1"/>
+  <line x1="218" y1="330" x2="218" y2="366" stroke="#6272a4" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="252" y1="392" x2="270" y2="378" stroke="#6272a4" stroke-width="1" stroke-dasharray="3 3"/>
+  <path d="M 218 330 L 218 372 C 218 388 230 396 244 396 C 258 396 270 388 270 372 L 270 330 M 270 372 L 270 396" fill="none" stroke="#8be9fd" stroke-width="2.5"/>
+  <rect x="214" y="326" width="8" height="8" fill="#282a36" stroke="#ffb86c" stroke-width="1.5"/>
+  <rect x="240" y="392" width="8" height="8" fill="#282a36" stroke="#ffb86c" stroke-width="1.5"/>
+  <rect x="266" y="326" width="8" height="8" fill="#282a36" stroke="#ffb86c" stroke-width="1.5"/>
+  <text x="248" y="416" fill="#6272a4" font-size="12" text-anchor="middle">a drawing</text>
+
+  <!-- glyph cell 3: a drawn a -->
+  <rect x="308" y="310" width="104" height="112" rx="4" fill="#282a36" stroke="#6272a4" stroke-width="1"/>
+  <line x1="376" y1="344" x2="352" y2="326" stroke="#6272a4" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="330" y1="386" x2="316" y2="366" stroke="#6272a4" stroke-width="1" stroke-dasharray="3 3"/>
+  <path d="M 376 344 C 368 330 344 326 334 338 C 322 352 322 380 334 390 C 346 400 368 394 376 380 M 376 330 L 376 396" fill="none" stroke="#8be9fd" stroke-width="2.5"/>
+  <rect x="372" y="340" width="8" height="8" fill="#282a36" stroke="#ffb86c" stroke-width="1.5"/>
+  <rect x="330" y="334" width="8" height="8" fill="#282a36" stroke="#ffb86c" stroke-width="1.5"/>
+  <rect x="372" y="392" width="8" height="8" fill="#282a36" stroke="#ffb86c" stroke-width="1.5"/>
+  <text x="360" y="416" fill="#6272a4" font-size="12" text-anchor="middle">a drawing</text>
+
+  <text x="82" y="450" fill="#6272a4" font-size="13">one drawing per glyph used, per font, ×27 fonts</text>
+
+  <text x="64" y="504" fill="#ff5555" font-size="15" font-family="Consolas, Menlo, monospace">/FontFile2  0</text>
+  <text x="432" y="504" fill="#6272a4" font-size="13" text-anchor="end">no font program anywhere</text>
+
+  <!-- ================= RIGHT PANEL: static faces ================= -->
+  <rect x="496" y="36" width="432" height="492" rx="6" fill="#f8f8f2" fill-opacity="0.02" stroke="#44475a" stroke-width="1"/>
+  <text x="520" y="72" fill="#50fa7b" font-size="18" font-weight="600">the same page, static faces</text>
+  <text x="904" y="72" fill="#6272a4" font-size="14" text-anchor="end">125,272 bytes</text>
+
+  <!-- text stream -->
+  <rect x="528" y="96" width="368" height="44" rx="5" fill="#f8f8f2" fill-opacity="0.06" stroke="#f8f8f2" stroke-width="1.5"/>
+  <text x="546" y="124" fill="#f8f8f2" font-size="15" font-family="Consolas, Menlo, monospace">&lt;001200340056&gt; Tj</text>
+  <text x="878" y="124" fill="#6272a4" font-size="13" text-anchor="end">the same text, recoded</text>
+
+  <line x1="712" y1="140" x2="712" y2="166" stroke="#6272a4" stroke-width="1.5"/>
+  <path d="M 712 172 L 706 162 L 718 162 Z" fill="#6272a4"/>
+
+  <!-- Type0 font -->
+  <rect x="528" y="176" width="368" height="58" rx="5" fill="#50fa7b" fill-opacity="0.08" stroke="#50fa7b" stroke-width="1.5"/>
+  <text x="546" y="200" fill="#50fa7b" font-size="15" font-family="Consolas, Menlo, monospace">/Type0  Inter-Regular</text>
+  <text x="546" y="222" fill="#6272a4" font-size="13">a composite font, with /ToUnicode</text>
+
+  <line x1="712" y1="234" x2="712" y2="260" stroke="#6272a4" stroke-width="1.5"/>
+  <path d="M 712 266 L 706 256 L 718 256 Z" fill="#6272a4"/>
+
+  <!-- FontFile2 -->
+  <rect x="528" y="270" width="368" height="196" rx="5" fill="#50fa7b" fill-opacity="0.06" stroke="#50fa7b" stroke-width="1.5"/>
+  <text x="546" y="296" fill="#50fa7b" font-size="15" font-family="Consolas, Menlo, monospace">/FontFile2</text>
+
+  <rect x="548" y="310" width="104" height="112" rx="4" fill="#282a36" stroke="#6272a4" stroke-width="1"/>
+  <!-- the identical Inter Q outline, filled: the glyph as the font program stores it -->
+  <path fill-rule="evenodd" fill="#f8f8f2" d="M 600 388.2 Q 592.4 388.2 586.4 384.5 Q 580.4 380.8 577 373.9 Q 573.6 367.1 573.6 357.6 Q 573.6 348.2 577 341.3 Q 580.4 334.4 586.4 330.7 Q 592.4 327 600 327 Q 607.7 327 613.6 330.7 Q 619.6 334.4 623 341.3 Q 626.4 348.2 626.4 357.6 Q 626.4 367.1 623 373.9 Q 620.3 379.4 616 382.8 L 623.7 393 L 615.8 393 L 610.6 386.1 Q 605.8 388.2 600 388.2 Z M 597.6 368.8 L 605.5 368.8 L 611.7 377 Q 614.6 374.4 616.5 370.5 Q 619 365.2 619 357.6 Q 619 350 616.5 344.7 Q 614 339.4 609.7 336.7 Q 605.4 334 600 334 Q 594.7 334 590.4 336.8 Q 586 339.5 583.5 344.7 Q 581 350 581 357.6 Q 581 365.2 583.5 370.5 Q 586 375.7 590.4 378.4 Q 594.7 381.2 600 381.2 Q 603.3 381.2 606.2 380.1 L 597.6 368.8 Z"/>
+
+  <text x="672" y="342" fill="#f8f8f2" font-size="15">the actual font program,</text>
+  <text x="672" y="364" fill="#f8f8f2" font-size="15">subset to the glyphs used</text>
+  <text x="672" y="394" fill="#6272a4" font-size="13">outlines live here, once,</text>
+  <text x="672" y="412" fill="#6272a4" font-size="13">and the text refers to them</text>
+
+  <text x="546" y="450" fill="#6272a4" font-size="13">eleven subset programs across the five faces</text>
+
+  <text x="528" y="504" fill="#50fa7b" font-size="15" font-family="Consolas, Menlo, monospace">/Type3  0</text>
+  <text x="896" y="504" fill="#6272a4" font-size="13" text-anchor="end">glyphs referenced, never redrawn</text>
+</svg>

@@ -10,7 +10,7 @@ tags:
   - "Kingdom Come: Deliverance II"
   - KCD2
 cover_image: /uploads/images/KCD2.jpg
-description: "Kingdom Come: Deliverance 2's stunning showcase on a forked CryEngine offers a beacon of hope and a fascinating look into engine customization, thanks to licensed source code access."
+description: "Kingdom Come: Deliverance 2 runs on a forked CryEngine, built with licensed source access. A look at what the engine can still do."
 ---
 
 Not too long ago, many of us in the CryEngine community (modders, developers, enthusiasts alike) were looking at news from Crytek: layoffs, *Crysis 4* on hold, and feeling a distinct sense of unease about the engine's trajectory. You can read my previous thoughts <a href="/blog/posts/cryengine-a-cloud-over-crytek" target="_blank" rel="noopener noreferrer">here if you missed it</a>. The question on many minds: what does this mean for the future of this powerhouse engine?

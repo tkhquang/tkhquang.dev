@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" width="760" height="400" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Two top-down panels comparing where the third-person offset is applied relative to the cull planes">
+  <rect width="760" height="400" rx="8" fill="#282a36"/>
+  <line x1="380" y1="20" x2="380" y2="330" stroke="#44475a" stroke-width="1" stroke-dasharray="5 5"/>
+
+  <!-- ================= PANEL A : offset applied AFTER the cull planes ================= -->
+  <text x="190" y="36" fill="#ff5555" font-size="14" font-weight="600" text-anchor="middle">Offset AFTER the cull planes</text>
+  <text x="190" y="54" fill="#6272a4" font-size="12" text-anchor="middle">frustum apex = eye, but we render from the camera</text>
+
+  <!-- what the camera actually renders (dashed, wider) -->
+  <path d="M 190 310 L 22 70" stroke="#6272a4" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+  <path d="M 190 310 L 358 70" stroke="#6272a4" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+
+  <!-- the cull frustum, built at the eye (solid, narrower) -->
+  <path d="M 190 258 L 58 70 L 322 70 Z" fill="#f8f8f2" fill-opacity="0.06" stroke="#f8f8f2" stroke-width="2"/>
+
+  <!-- props: inside the rendered view, outside the cull frustum -->
+  <circle cx="155" cy="232" r="9" fill="#ff5555"/>
+  <circle cx="225" cy="232" r="9" fill="#ff5555"/>
+
+  <!-- player -->
+  <circle cx="190" cy="212" r="7" fill="#f1fa8c"/>
+  <text x="190" y="197" fill="#f1fa8c" font-size="11" text-anchor="middle">player</text>
+
+  <!-- eye -->
+  <circle cx="190" cy="258" r="4.5" fill="#f8f8f2"/>
+  <text x="204" y="262" fill="#f8f8f2" font-size="11">eye (frustum apex)</text>
+
+  <!-- camera -->
+  <rect x="181" y="302" width="18" height="14" rx="3" fill="#8be9fd"/>
+  <text x="190" y="332" fill="#8be9fd" font-size="11" text-anchor="middle">render camera</text>
+
+  <text x="190" y="352" fill="#ff5555" font-size="11.5" text-anchor="middle">on screen, but culled away</text>
+
+  <!-- ================= PANEL B : offset applied BEFORE the cull planes ================= -->
+  <text x="570" y="36" fill="#50fa7b" font-size="14" font-weight="600" text-anchor="middle">Offset BEFORE the cull planes</text>
+  <text x="570" y="54" fill="#6272a4" font-size="12" text-anchor="middle">one apex: the frustum is built from the camera</text>
+
+  <!-- single frustum, apex at the camera -->
+  <path d="M 570 310 L 402 70 L 738 70 Z" fill="#50fa7b" fill-opacity="0.08" stroke="#50fa7b" stroke-width="2"/>
+
+  <!-- props: inside -->
+  <circle cx="535" cy="232" r="9" fill="#50fa7b"/>
+  <circle cx="605" cy="232" r="9" fill="#50fa7b"/>
+
+  <!-- player -->
+  <circle cx="570" cy="212" r="7" fill="#f1fa8c"/>
+  <text x="570" y="197" fill="#f1fa8c" font-size="11" text-anchor="middle">player</text>
+
+  <!-- eye, no longer the apex -->
+  <circle cx="570" cy="258" r="4" fill="#6272a4"/>
+  <text x="583" y="262" fill="#6272a4" font-size="11">eye (not used)</text>
+
+  <!-- camera -->
+  <rect x="561" y="302" width="18" height="14" rx="3" fill="#8be9fd"/>
+  <text x="570" y="332" fill="#8be9fd" font-size="11" text-anchor="middle">render camera = frustum apex</text>
+
+  <text x="570" y="352" fill="#50fa7b" font-size="11.5" text-anchor="middle">on screen and drawn</text>
+
+  <!-- ================= LEGEND ================= -->
+  <line x1="150" y1="378" x2="180" y2="378" stroke="#f8f8f2" stroke-width="2"/>
+  <text x="188" y="382" fill="#f8f8f2" font-size="11">cull frustum</text>
+  <line x1="300" y1="378" x2="330" y2="378" stroke="#6272a4" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="338" y="382" fill="#6272a4" font-size="11">what the camera actually renders</text>
+</svg>

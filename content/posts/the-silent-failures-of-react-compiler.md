@@ -10,7 +10,7 @@ tags:
   - ESLint
   - Web Development
 cover_image: /uploads/images/blog/the-silent-failures-of-react-compiler.jpg
-description: "React Compiler is powerful, but it often fails to optimize silently. A recent team chat sent us down a rabbit hole of discovery, and here's what I found."
+description: "React Compiler is powerful, but it often fails to optimize silently."
 ---
 
 The other day, a simple question popped up in our team chat that spiraled into a much deeper investigation. We've been using [**React Compiler**](https://react.dev/learn/react-compiler) in our project, a tool that promises to handle memoization automatically, freeing us from the manual toil of `useMemo`, `useCallback`, and `React.memo`.

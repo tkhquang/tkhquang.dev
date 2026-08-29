@@ -11,7 +11,7 @@ tags:
   - CSS
   - LQIP
 cover_image: /uploads/images/phoenix_lqip_blur.webp
-description: "A step-by-step guide to implementing Low-Quality Image Placeholders (LQIP) in your Phoenix LiveView application for a better user experience and perceived performance."
+description: "A step-by-step guide to Low-Quality Image Placeholders (LQIP) in Phoenix LiveView: the CSS, the JS Hook, and the template integration."
 ---
 
 We've all experienced it: landing on a webpage and watching as images pop into existence, causing the layout to jump around, or staring at blank spaces while high-resolution images slowly load. It's not the best user experience. One popular technique to combat this and improve perceived performance is using **Low-Quality Image Placeholders (LQIP)**. The idea is simple: show a very small, heavily blurred version of an image instantly, then smoothly transition to the high-quality version once it's loaded.
