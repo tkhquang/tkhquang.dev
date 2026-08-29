@@ -117,6 +117,7 @@ export default function SpotifyNowPlaying({
         <div className="relative size-6 shrink-0 rounded-full">
           <Image
             fill
+            sizes="24px"
             src={data.item?.album.images?.[0]?.url}
             alt={data.item?.album.name || "Now playing"}
             className="animate-spin rounded-full border border-gray-300 [animation-duration:6s] dark:border-gray-700"

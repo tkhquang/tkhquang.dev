@@ -110,7 +110,6 @@ export default function Image(props: ImageProps) {
         alt={alt}
         loading={loading}
         quality={100}
-        sizes="(max-width: 768px) 100vw, 1440px"
         style={{
           backgroundRepeat: "no-repeat",
           objectFit: "cover",
