@@ -72,16 +72,18 @@ export async function createBrowserInstance(): Promise<Browser> {
  * resolver for intercepted requests.
  *
  * @description
- * - Attach this BEFORE any other "request" listener: listeners run in registration
- *   order, so the guard gets to abort before another handler can resolve a request.
+ * - Attach this BEFORE any other "request" listener: with no handler passing a
+ *   priority, Puppeteer resolves an intercepted request the moment any one of them
+ *   acts, and this guard skips anything already handled. Reversing the order
+ *   disarms it with no visible symptom.
  * - Only main-frame navigations are checked, so off-origin subresources and iframes
- *   keep behaving as they do today.
+ *   keep behaving as they do today. Popups are a separate target a page-scoped
+ *   listener cannot see either.
  * - A request URL that cannot be parsed is treated as off-origin.
  * - Interception must be on for the guard to see requests, and an intercepted
  *   request hangs until exactly one handler resolves it. Pass
  *   `passThroughUnhandled: true` when no other handler (e.g.
  *   `attachResourceInterception`) will be attached to the page.
- * - Note that enabling interception disables the browser's HTTP cache.
  *
  * @example
  * await attachNavigationOriginGuard(page, {

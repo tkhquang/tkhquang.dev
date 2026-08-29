@@ -77,7 +77,6 @@ function getProcessor(): Processor {
       targetPath: "./public/uploads/remote",
     })
     .use(rehypeRaw)
-    .use(rehypeStringify)
     .use(rehypeSlug)
     .use(rehypeExtractToc)
     .use(rehypeAutolinkHeadings, {

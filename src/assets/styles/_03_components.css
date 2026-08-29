@@ -209,18 +209,25 @@
     }
 
     a {
-      position: relative;
       font-weight: bold;
       color: var(--primary);
-      position: relative;
+
+      /**
+       * Deliberately NOT position: relative. The padding/margin pair below is
+       * layout-neutral but slides the next character under the anchor's padding
+       * box, and a positioned inline is hit-tested ahead of ordinary inline
+       * content, so the anchor swallowed clicks 1em past its last glyph.
+       * Reproduced in Chrome 142 and Firefox 144.
+       */
       padding-inline-end: 1em;
       margin-inline-end: -1em;
 
       /**
-       * The icon lives in this pseudo-element's end padding, and the content is a
-       * non-breaking space so it cannot be separated from the last word. An
-       * inline-block here would be an atomic inline, which gives the line breaker a
-       * break opportunity in front of it and lets the icon wrap on its own.
+       * The icon lives in this pseudo-element's end padding. Leaving it a
+       * non-atomic inline is what keeps it on the last word's line: an
+       * inline-block would be an atomic inline, which gives the line breaker a
+       * break opportunity in front of it. The nbsp is only a content carrier;
+       * a plain space measured the same.
        */
       &[target="_blank"]::after {
         content: "\00a0";

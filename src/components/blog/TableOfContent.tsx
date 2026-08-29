@@ -2,6 +2,7 @@
 
 import Drawer, { useDrawerContext } from "@/components/common/Drawer";
 import { useThemeValue } from "@/store/theme";
+import { cn } from "@/utils/css";
 import { Portal } from "@ariakit/react";
 import { Toc, TocEntry } from "@stefanprobst/rehype-extract-toc";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -21,6 +22,7 @@ interface TocItemProps {
     e: React.MouseEvent<HTMLAnchorElement>
   ) => void;
   hideDrawer?: boolean;
+  depth?: number;
 }
 
 interface UseActiveAnchorOptions {
@@ -33,6 +35,16 @@ interface UseScrollToHeadingOptions {
   onActiveChange?: (id: string) => void;
 }
 
+/**
+ * `TocEntry.children` nests, so the scroll spy has to walk the tree: iterating
+ * the top level only leaves nested headings permanently un-highlightable.
+ */
+const flattenHeadings = (headings: Toc): TocEntry[] =>
+  headings.flatMap((heading) => [
+    heading,
+    ...(heading.children ? flattenHeadings(heading.children) : []),
+  ]);
+
 // Custom hook for managing active anchor with intersection observer
 const useActiveAnchor = ({
   headings,
@@ -40,6 +52,10 @@ const useActiveAnchor = ({
 }: UseActiveAnchorOptions) => {
   const [activeAnchor, setActiveAnchor] = useState<string>("");
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const flatHeadings = useMemo(
+    () => flattenHeadings(headings ?? []),
+    [headings]
+  );
 
   const handleIntersection = useCallback(
     (entries: IntersectionObserverEntry[]) => {
@@ -66,9 +82,9 @@ const useActiveAnchor = ({
   );
 
   const setInitialActiveAnchor = useCallback(() => {
-    if (!headings?.length) return;
+    if (!flatHeadings.length) return;
 
-    const headingElements = headings
+    const headingElements = flatHeadings
       .map((heading) => document.getElementById(heading.id!))
       .filter(Boolean) as HTMLElement[];
 
@@ -86,10 +102,10 @@ const useActiveAnchor = ({
     } else if (headingElements.length > 0) {
       setActiveAnchor(headingElements[0].id);
     }
-  }, [headings, headerHeight]);
+  }, [flatHeadings, headerHeight]);
 
   useEffect(() => {
-    if (!headings?.length) return;
+    if (!flatHeadings.length) return;
 
     // Cleanup previous observer
     if (observerRef.current) {
@@ -103,7 +119,7 @@ const useActiveAnchor = ({
     });
 
     // Observe all heading elements
-    const headingElements = headings
+    const headingElements = flatHeadings
       .map((heading) => document.getElementById(heading.id!))
       .filter(Boolean) as HTMLElement[];
 
@@ -120,7 +136,7 @@ const useActiveAnchor = ({
         observerRef.current.disconnect();
       }
     };
-  }, [headings, headerHeight, handleIntersection, setInitialActiveAnchor]);
+  }, [flatHeadings, headerHeight, handleIntersection, setInitialActiveAnchor]);
 
   return activeAnchor;
 };
@@ -161,6 +177,7 @@ const TocItem = ({
   activeAnchor,
   onAnchorClick,
   hideDrawer = false,
+  depth = 0,
 }: TocItemProps) => {
   const drawerStore = useDrawerContext();
 
@@ -177,20 +194,37 @@ const TocItem = ({
   const isActive = activeAnchor === heading.id;
 
   return (
-    <li className="my-2 font-semibold">
+    <li
+      className={cn(
+        "my-2 font-semibold",
+        // Smaller and lighter than the top-level entry it sits under.
+        depth > 0 && "my-1 text-sm font-normal"
+      )}
+    >
       <a
         href={`#${heading.id}`}
-        className={`anchor transition-colors duration-200 hover:text-theme-primary ${
+        className={cn(
+          "anchor hover:text-theme-primary transition-colors duration-200",
           isActive
             ? "anchor--is-active text-theme-primary"
             : "text-theme-on-surface"
-        }`}
+        )}
         onClick={handleClick}
         aria-current={isActive ? "location" : undefined}
       >
         <span>#</span>&nbsp;
         <span>{heading.value}</span>
       </a>
+
+      {heading.children?.length ? (
+        <TocList
+          headings={heading.children}
+          activeAnchor={activeAnchor}
+          onAnchorClick={onAnchorClick}
+          hideDrawer={hideDrawer}
+          depth={depth + 1}
+        />
+      ) : null}
     </li>
   );
 };
@@ -201,16 +235,29 @@ const TocList = ({
   activeAnchor,
   onAnchorClick,
   hideDrawer = false,
+  depth = 0,
 }: {
   headings: Toc;
   activeAnchor: string;
   onAnchorClick: TocItemProps["onAnchorClick"];
   hideDrawer?: boolean;
+  depth?: number;
 }) => {
   if (!headings?.length) return null;
 
+  const isRoot = depth === 0;
+
   return (
-    <ul className="mt-5" role="navigation" aria-label="Table of contents">
+    <ul
+      className={cn(
+        "mt-5",
+        !isRoot && "border-theme-on-surface/20 mt-1 ml-2 border-l pl-3"
+      )}
+      // Only the outermost list is the landmark; nesting them would announce
+      // one per level.
+      role={isRoot ? "navigation" : undefined}
+      aria-label={isRoot ? "Table of contents" : undefined}
+    >
       {headings.map((heading) => (
         <TocItem
           key={heading.id}
@@ -218,6 +265,7 @@ const TocList = ({
           activeAnchor={activeAnchor}
           onAnchorClick={onAnchorClick}
           hideDrawer={hideDrawer}
+          depth={depth}
         />
       ))}
     </ul>
@@ -256,8 +304,13 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
       className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100"
       aria-label="Table of contents navigation"
     >
+      {/*
+        Nested headings make this list long enough to outgrow the viewport, and a
+        sticky element taller than the viewport puts its tail permanently out of
+        reach. `lg:` gates on width, so a short laptop window still hits this.
+      */}
       {headings?.length > 0 && (
-        <div className="table-of-content__list sticky top-header-height hidden pt-5 lg:block">
+        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 lg:block">
           <h2 className="heading mt-10 text-2xl">Table of Content</h2>
 
           {/* Mobile Drawer */}
