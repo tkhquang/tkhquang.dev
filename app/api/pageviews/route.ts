@@ -1,3 +1,4 @@
+import { isAllowedPathname } from "@/utils/pageviews";
 import { getIpAddress } from "@/utils/server";
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,6 +17,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
   if (!pathname) {
     return new NextResponse("Pathname not found", { status: 400 });
+  }
+
+  if (!isAllowedPathname(pathname)) {
+    return new NextResponse("Invalid pathname", { status: 400 });
   }
 
   if (process.env.NODE_ENV !== "production") {
@@ -58,7 +63,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 export async function GET(request: NextRequest): Promise<NextResponse> {
   const url = request.nextUrl;
   // Support for multiple pathnames: ?pathname=/a&pathname=/b
-  const pathnames = url.searchParams.getAll("pathname");
+  // Drop unknown pathnames rather than failing the whole batch. This also
+  // bounds the mget below, since the allowlist is finite.
+  const pathnames = url.searchParams
+    .getAll("pathname")
+    .filter(isAllowedPathname);
 
   if (!pathnames.length) {
     return new NextResponse("Pathname not found", { status: 400 });

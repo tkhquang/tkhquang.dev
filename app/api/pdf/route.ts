@@ -1,4 +1,5 @@
 import {
+  attachNavigationOriginGuard,
   attachResourceInterception,
   createBrowserInstance,
 } from "@/utils/browser";
@@ -15,6 +16,12 @@ let browser: Browser | null;
 // Cache configuration
 const CACHE_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
 const CACHE_DIR = path.resolve("/tmp/pdf-cache");
+
+// Only pages on our own origin may be rendered. Next inlines the env var at
+// build time, so this parses once rather than on every request.
+const BASE_ORIGIN = process.env.NEXT_PUBLIC_BASE_URL
+  ? new URL(process.env.NEXT_PUBLIC_BASE_URL).origin
+  : null;
 
 // Launch or reuse the browser instance
 async function getBrowserInstance(): Promise<Browser> {
@@ -193,6 +200,23 @@ async function generatePDF({
         width: 794,
       });
 
+      if (!BASE_ORIGIN) {
+        throw new Error("URL not allowed");
+      }
+
+      // Attached before attachResourceInterception on purpose: "request"
+      // listeners run in registration order and the resource handler resolves
+      // requests synchronously, so the guard has to see them first. It aborts
+      // off-origin main-frame navigations before the request leaves the browser,
+      // which the post-goto check below cannot do.
+      await attachNavigationOriginGuard(page, {
+        allowedOrigin: BASE_ORIGIN,
+        // The guard turns interception on, and an intercepted request hangs
+        // until exactly one handler resolves it. attachResourceInterception is
+        // that resolver when it is attached; otherwise the guard has to be.
+        passThroughUnhandled: intercept !== "true",
+      });
+
       if (intercept === "true") {
         await attachResourceInterception(page);
       }
@@ -201,6 +225,13 @@ async function generatePDF({
         timeout: 10_000,
         waitUntil: "networkidle0",
       });
+
+      // The caller's URL is only the first request: goto follows redirects, and
+      // the page can navigate itself before networkidle0 settles. Re-check where
+      // we actually landed, so nothing off-origin reaches the returned PDF.
+      if (new URL(page.url()).origin !== BASE_ORIGIN) {
+        throw new Error("URL not allowed");
+      }
 
       pdfBuffer = Buffer.from(
         await page.pdf({
@@ -291,7 +322,7 @@ export async function GET(request: NextRequest) {
   console.time(`GET ${params}`);
 
   try {
-    if (!url?.startsWith(process.env.NEXT_PUBLIC_BASE_URL!)) {
+    if (!BASE_ORIGIN || new URL(url).origin !== BASE_ORIGIN) {
       throw new Error("URL not allowed");
     }
 

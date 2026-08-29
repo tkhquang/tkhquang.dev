@@ -62,6 +62,72 @@ export async function createBrowserInstance(): Promise<Browser> {
 }
 
 /**
+ * Aborts main-frame navigations that leave the allowed origin, at the request
+ * layer, so the outbound request is never sent.
+ *
+ * @param {Page} page - The Puppeteer page instance to guard.
+ * @param {Object} options - Guard options.
+ * @param {string} options.allowedOrigin - The only origin the main frame may navigate to.
+ * @param {boolean} options.passThroughUnhandled - Whether this guard is the terminal
+ * resolver for intercepted requests.
+ *
+ * @description
+ * - Attach this BEFORE any other "request" listener: listeners run in registration
+ *   order, so the guard gets to abort before another handler can resolve a request.
+ * - Only main-frame navigations are checked, so off-origin subresources and iframes
+ *   keep behaving as they do today.
+ * - A request URL that cannot be parsed is treated as off-origin.
+ * - Interception must be on for the guard to see requests, and an intercepted
+ *   request hangs until exactly one handler resolves it. Pass
+ *   `passThroughUnhandled: true` when no other handler (e.g.
+ *   `attachResourceInterception`) will be attached to the page.
+ * - Note that enabling interception disables the browser's HTTP cache.
+ *
+ * @example
+ * await attachNavigationOriginGuard(page, {
+ *   allowedOrigin: "https://example.com",
+ *   passThroughUnhandled: true,
+ * });
+ * await page.goto("https://example.com/resume");
+ */
+export const attachNavigationOriginGuard = async (
+  page: Page,
+  {
+    allowedOrigin,
+    passThroughUnhandled,
+  }: { allowedOrigin: string; passThroughUnhandled: boolean }
+) => {
+  await page.setRequestInterception(true);
+  page.on("request", (request) => {
+    if (request.isInterceptResolutionHandled()) {
+      return;
+    }
+
+    const isMainFrameNavigation =
+      request.isNavigationRequest() && request.frame() === page.mainFrame();
+
+    if (isMainFrameNavigation) {
+      const requestOrigin = (() => {
+        try {
+          return new URL(request.url()).origin;
+        } catch {
+          return null;
+        }
+      })();
+
+      if (requestOrigin !== allowedOrigin) {
+        request.abort().catch(() => {});
+        return;
+      }
+    }
+
+    if (passThroughUnhandled) {
+      request.continue().catch(() => {});
+    }
+  });
+};
+
+/**
  * Attaches resource interception to a Puppeteer page instance.
  * This function intercepts requests for specific static resources (e.g., fonts, images, and Next.js static files)
  * and serves them from the local file system or a proxy server.

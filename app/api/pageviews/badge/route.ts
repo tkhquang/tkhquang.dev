@@ -1,8 +1,24 @@
+import { isAllowedPathname } from "@/utils/pageviews";
 import { getIpAddress } from "@/utils/server";
 import { Redis } from "@upstash/redis";
+import { escape } from "es-toolkit";
 import { NextRequest, NextResponse } from "next/server";
 
 const redis = Redis.fromEnv();
+
+/**
+ * The 79.2px plate only fits about 13 characters, so this bounds how far a
+ * long label can spill rather than preventing overflow.
+ */
+const MAX_LABEL_LENGTH = 32;
+
+/**
+ * Codepoints XML 1.0 forbids outright. `escape` only covers `& < > " '`, so
+ * without this a control character in the label reaches the wire and the
+ * browser refuses to parse the response as SVG.
+ */
+const NON_XML_CHARACTERS =
+  /[\u0000-\u0008\u000B\u000C\u000E-\u001F\uFFFE\uFFFF]/g;
 
 // Updated SVG_TEMPLATE to use placeholders for dynamic values
 const SVG_TEMPLATE = `
@@ -25,7 +41,7 @@ const SVG_TEMPLATE = `
         <text x="99" y="15" fill="#010101" fill-opacity=".3">{COUNT}</text>
         <text x="99" y="14">{COUNT}</text>
     </g>
-<script xmlns=""/></svg>
+</svg>
 `;
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
@@ -36,6 +52,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   if (!pathname) {
     return new NextResponse("Pathname not found", { status: 400 });
+  }
+
+  if (!isAllowedPathname(pathname)) {
+    return new NextResponse("Invalid pathname", { status: 400 });
   }
 
   if (type !== "unique" && type !== "total") {
@@ -97,9 +117,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ? new Intl.NumberFormat("en").format(count)
       : count;
 
-  const svg = SVG_TEMPLATE.replace(/{LABEL}/g, label).replace(
-    /{COUNT}/g,
-    formattedCount.toString()
+  // Truncate before escaping so the cut cannot land inside an entity.
+  const escapedLabel = escape(
+    label.replace(NON_XML_CHARACTERS, "").slice(0, MAX_LABEL_LENGTH)
+  );
+  const escapedCount = escape(formattedCount.toString());
+
+  // One pass with a replacer function: chained replaces let a "{COUNT}" label
+  // be substituted again, and a string replacement would interpret $-patterns
+  // a caller can put in the query string.
+  const svg = SVG_TEMPLATE.replace(/{LABEL}|{COUNT}/g, (placeholder) =>
+    placeholder === "{LABEL}" ? escapedLabel : escapedCount
   );
 
   return new NextResponse(svg, {

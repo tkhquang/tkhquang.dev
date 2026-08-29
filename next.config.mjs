@@ -63,6 +63,7 @@ const nextConfig = {
       "./content/**",
       "./src/lib/remark-embed/templates/**",
     ],
+    "/api/pageviews{,/**/*}": ["./content/posts/**"],
     "/api/pdf{,/**/*}": [
       "node_modules/@sparticuz/chromium/**/*",
       "node_modules/puppeteer-core/**/*",

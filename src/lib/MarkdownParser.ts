@@ -9,6 +9,7 @@ import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import { getProcessedImage } from "@/utils/image";
+import { getPostFiles, postsDirectory } from "@/utils/posts";
 import { slugifyTag } from "@/utils/slug";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
@@ -34,14 +35,7 @@ declare global {
   var __MARKDOWN_PARSER_INITIALIZED__: boolean;
 }
 
-const postsDirectory = path.join(process.cwd(), "content", "posts");
 const categoriesDirectory = path.join(process.cwd(), "content", "categories");
-
-function getPostFiles() {
-  return fs
-    .readdirSync(postsDirectory, { encoding: "utf8" })
-    .filter((files) => files.endsWith(".md"));
-}
 
 function getCategoryFiles() {
   return fs
