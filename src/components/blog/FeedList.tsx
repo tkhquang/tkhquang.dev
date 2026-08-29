@@ -36,7 +36,7 @@ const FeedList = <T,>({
         </h1>
       ) : (
         <>
-          <h1 className="mx-auto text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
+          <h1 className="text-theme-primary mx-auto text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
             Latest Posts
           </h1>
           <ul className="news-feed__list flex-center flex-col">

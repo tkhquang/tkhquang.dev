@@ -49,8 +49,8 @@
     background-image: linear-gradient(
       to right,
       transparent 0%,
-      var(--primary) 30%,
-      var(--primary) 70%,
+      var(--hairline) 30%,
+      var(--hairline) 70%,
       transparent 100%
     );
   }
@@ -72,19 +72,19 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: #2e3645;
+      background: hsl(202deg 30% 21%);
     }
 
     &::-webkit-scrollbar-corner {
-      background-color: #2e3645;
+      background-color: hsl(202deg 30% 21%);
     }
 
     /* For Internet Explorer */
     scrollbar-face-color: var(--primary-dark);
-    scrollbar-track-color: #2e3645;
+    scrollbar-track-color: hsl(202deg 30% 21%);
 
     /* For Firefox */
-    scrollbar-color: var(--primary-dark) #2e3645;
+    scrollbar-color: var(--primary-dark) hsl(202deg 30% 21%);
     scrollbar-width: auto;
 
     &[data-theme="light"] {
@@ -103,19 +103,19 @@
       }
 
       &::-webkit-scrollbar-track {
-        background: #2e3645;
+        background: hsl(220deg 30% 88%);
       }
 
       &::-webkit-scrollbar-corner {
-        background-color: #2e3645;
+        background-color: hsl(220deg 30% 88%);
       }
 
       /* For Internet Explorer */
       scrollbar-face-color: var(--primary-light);
-      scrollbar-track-color: #2e3645;
+      scrollbar-track-color: hsl(220deg 30% 88%);
 
       /* For Firefox */
-      scrollbar-color: var(--primary-light) #2e3645;
+      scrollbar-color: var(--primary-light) hsl(220deg 30% 88%);
       scrollbar-width: auto;
     }
   }

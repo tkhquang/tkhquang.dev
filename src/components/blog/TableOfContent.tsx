@@ -183,7 +183,7 @@ const TocItem = ({
         className={`anchor transition-colors duration-200 hover:text-theme-primary ${
           isActive
             ? "anchor--is-active text-theme-primary"
-            : "text-theme-secondary"
+            : "text-theme-on-surface"
         }`}
         onClick={handleClick}
         aria-current={isActive ? "location" : undefined}

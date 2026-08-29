@@ -5,7 +5,9 @@ function NotFoundPage() {
   return (
     <div className="typography container mt-header-height flex flex-1 flex-col">
       <div className="my-4 flex flex-1 flex-col md:my-8">
-        <h1 className="">Oops! We have looked everywhere...</h1>
+        <h1 className="text-theme-primary">
+          Oops! We have looked everywhere...
+        </h1>
         <p className="">
           But we couldn&apos;t find what you are looking for.
           <br />

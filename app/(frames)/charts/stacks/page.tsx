@@ -66,7 +66,8 @@ export default async function StacksPage() {
   );
 
   stats["other"] = {
-    color: "#AAAAAA",
+    // Blue-cast neutral so the catch-all slice sits inside the palette
+    color: "#93A3B3",
     id: "other",
     name: "Other",
     percentage: 100 - totalPercentage,

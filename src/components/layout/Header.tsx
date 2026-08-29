@@ -61,7 +61,7 @@ const Header = ({
     <header
       ref={headerRef}
       className={classNames(
-        "flex-center z-(--z-header) fixed inset-0 m-0 h-header-height w-full flex-wrap p-0 text-gray-200 shadow-lg transition-all duration-500 ease-in-out",
+        "flex-center z-(--z-header) text-theme-on-primary-light fixed inset-0 m-0 h-header-height w-full flex-wrap p-0 shadow-lg transition-all duration-500 ease-in-out",
         className
       )}
       style={
@@ -95,7 +95,7 @@ const Header = ({
               <path d="m784.3 945.1c-3.5 2.2-4.6 3.7-1.5 2 2.2-1.3 5.8-4 5.2-4.1-.3 0-2 1-3.7 2.1zm-6.9 4.5c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-7.6 4c-3.8 2-3.6 2.8.2.9 1.7-.9 3-1.8 3-2 0-.7-.1-.6-3.2 1.1z" />
             </svg>
           </div>
-          <div className="h-4 w-px bg-gray-200"></div>
+          <div className="bg-theme-on-primary-light h-4 w-px"></div>
           <button type="button" className="focus:outline-hidden">
             <a href="/blog" target="_blank" rel="noopener noreferrer">
               <div className="flex-center whitespace-no-wrap no-underine focus:outline-hidden select-none font-extrabold uppercase">
