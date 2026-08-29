@@ -42,8 +42,9 @@ export class ScrollManager {
     this.debounceTime = debounceTime;
     this.handleScroll = debounce(() => {
       const scrollY = window.scrollY || 0;
+      const scrollableHeight = document.body.scrollHeight - window.innerHeight;
       const scrollProgress =
-        scrollY / (document.body.scrollHeight - window.innerHeight);
+        scrollableHeight > 0 ? scrollY / scrollableHeight : 0;
 
       this.listeners.forEach(({ callback }) => {
         callback({ scrollY, scrollProgress });

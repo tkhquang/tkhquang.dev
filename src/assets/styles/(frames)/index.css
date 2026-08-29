@@ -9,11 +9,11 @@
     overflow: hidden !important;
 
     /*
-     * Painted with the theme background instead of transparent: identical
-     * pixels when embedded over a themed section, but a standalone visit
-     * no longer renders light-on-white text in dark mode.
+     * Transparent so the frame does not flash its own color while the host
+     * switches theme. These pages are only ever embedded in an iframe, never
+     * visited standalone, so they need no background of their own.
      */
-    background: var(--background) !important;
+    background: transparent !important;
   }
 }
 

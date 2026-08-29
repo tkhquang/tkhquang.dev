@@ -12,6 +12,11 @@ gsap.registerPlugin(useGSAP);
 
 const radius = 10;
 const circumference = 2 * Math.PI * radius;
+// Gap deliberately longer than the path. Firefox reports stroke-dashoffset in
+// px, which makes GSAP round it to a whole pixel: at 0% it writes 63 against a
+// 62.83 circumference, and an equal-length gap wraps the pattern back onto the
+// path as a sliver that the round linecap renders as a visible dot.
+const dashArray = `${circumference} ${circumference * 2}`;
 
 const ID = "BackButtonIcon";
 
@@ -77,7 +82,7 @@ const BackButtonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
         ref={circleRef}
         style={{
           stroke: "currentColor",
-          strokeDasharray: circumference,
+          strokeDasharray: dashArray,
           strokeDashoffset: circumference,
         }}
       />
