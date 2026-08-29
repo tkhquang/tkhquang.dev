@@ -19,6 +19,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
     containerClassName: "",
     fill: true,
     height: undefined,
+    sizes: "(max-width: 640px) 100vw, 640px",
     style: {
       objectFit: "cover",
       objectPosition: "center",

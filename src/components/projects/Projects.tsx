@@ -165,6 +165,7 @@ const Projects = async () => {
                       <div className="relative aspect-video w-full">
                         <Image
                           fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
                           src={
                             image.source ||
                             "/assets/resources/images/demos/default.svg"

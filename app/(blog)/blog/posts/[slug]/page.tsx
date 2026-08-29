@@ -92,6 +92,7 @@ export default async function Post({
     height: coverHeight ?? 720,
     loading: "eager",
     priority: true,
+    sizes: "(max-width: 768px) 100vw, 1024px",
     width: coverWidth ?? 1280,
     blurDataURL: post.coverData.blurDataURL,
     placeholder: "blur",
