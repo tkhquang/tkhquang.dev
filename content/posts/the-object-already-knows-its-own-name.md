@@ -16,7 +16,7 @@ cover_image: /uploads/images/blog/rtti-self-heal-cover.webp
 description: "A bug report from my modding idol grew into RTTI self-heal: mods that re-find their own offsets."
 ---
 
-My least favourite part of native modding is [the loop](/blog/posts/hot-reload-in-a-live-process-the-two-binary-architecture). My second least favourite part is patch day, because patch day is the loop with the difficulty turned up: the game updates, the compiler reshuffles a struct, every hard-coded offset in the mod now reads garbage, and the first you hear of it is a user report that just says "broken".
+My least favourite part of native modding is <a href="/blog/posts/hot-reload-in-a-live-process-the-two-binary-architecture" target="_blank" rel="noopener noreferrer">the loop</a>. My second least favourite part is patch day, because patch day is the loop with the difficulty turned up: the game updates, the compiler reshuffles a struct, every hard-coded offset in the mod now reads garbage, and the first you hear of it is a user report that just says "broken".
 
 The usual fix is archaeology. Attach a debugger, find where the field went, update a constant, rebuild, ship. Every patch, for every offset, forever.
 
@@ -216,4 +216,4 @@ There's a version of this story where the takeaway is the module: record landmar
 
 But the version I keep thinking about is the other one. A year and a half ago I typed a stranger's handle into a credits file. This spring he walked into my issue tracker with the fix already diffed, stuck around through three patches, and handed me the idea that became my favourite part of my own toolkit. He also wrote that my mods *"do what they have to do without convoluted UIs or other crap"*, which I'm considering having engraved. The offsets will move again. Guaranteed. The difference is that now the mod notices before my users do, and when it can't heal, it says so and points.
 
-The KCD2 devlogs were about [finding the flag](/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag). This one is about the name. Next patch, the mod does the asking.
+The KCD2 devlogs were about <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">finding the flag</a>. This one is about the name. Next patch, the mod does the asking.

@@ -21,8 +21,8 @@ One more trip under the hood of **Kingdom Come: Deliverance II**, and this one c
 
 This one builds on two earlier devlogs:
 
-*   [\[Devlog\] Kingdom Come: Deliverance II - Finding the Third-Person View Toggle Flag](/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag), where I went hunting for the built-in third-person flag, found it in the camera manager, and flipped it.
-*   [\[Devlog\] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood](/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood), where I bolted offsets, sensitivity and pitch limits on top of it, because the community wanted an over-the-shoulder view.
+*   <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Finding the Third-Person View Toggle Flag</a>, where I went hunting for the built-in third-person flag, found it in the camera manager, and flipped it.
+*   <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood</a>, where I bolted offsets, sensitivity and pitch limits on top of it, because the community wanted an over-the-shoulder view.
 
 Both mods run on the same idea: borrow the game's own debug third-person camera, switch it on, and patch around whatever it breaks.
 
