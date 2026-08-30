@@ -40,7 +40,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
         href={`/blog/posts/${post.slug}`}
         className="news-feed__list-item__link inline"
       >
-        <h2 className="news-feed__list-item__title heading mb-4 mt-1 inline text-xl hover:opacity-75 xs:text-2xl sm:text-3xl sm:leading-10">
+        <h2 className="news-feed__list-item__title heading xs:text-2xl mt-1 mb-4 inline-block text-xl hover:opacity-75 sm:text-3xl sm:leading-10">
           {post.title}
         </h2>
       </Link>
@@ -52,7 +52,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
             className="news-feed__list-item__link"
             aria-label={post.title}
           >
-            <div className="relative mb-4 mt-2 aspect-video w-full">
+            <div className="relative mt-2 mb-4 aspect-video w-full">
               <NextImage {...post.coverData} {...coverProps} />
             </div>
           </Link>
@@ -63,7 +63,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
         {post.description}
       </p>
       <TagList className="news-feed__list-item__tags mt-3" post={post} />
-      <hr className="-mb-3 mt-6" />
+      <hr className="mt-6 -mb-3" />
     </li>
   );
 };
