@@ -10,14 +10,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ScrollManager } from "@/utils/dom";
 import classNames from "classnames";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const ID = "Header";
-const SCROLLED_THRESHOLD = 480;
+/*
+ * The header flips from transparent-over-band to blurred as soon as the
+ * hero band can no longer back its text: the header's own height plus the
+ * hero's wave edge, which already paints in the page background color.
+ */
+const HEADER_HEIGHT = 60;
+const HERO_WAVE_HEIGHT = 96;
 
 const NAV_ITEMS = [
   { emoji: "🙋🏻‍♂️", href: "/#about", label: "About" },
@@ -40,17 +44,25 @@ const Header = ({
       return;
     }
 
-    setScrolled(window.scrollY > SCROLLED_THRESHOLD);
-    const scrollManager = new ScrollManager();
-    scrollManager.subscribe({
-      id: ID,
-      callback({ scrollY }) {
-        setScrolled(scrollY > SCROLLED_THRESHOLD);
+    const hero = document.querySelector("[data-hero]");
+    if (!hero) {
+      setScrolled(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setScrolled(!entry.isIntersecting);
       },
-    });
+      {
+        rootMargin: `-${HEADER_HEIGHT + HERO_WAVE_HEIGHT}px 0px 0px 0px`,
+        threshold: 0,
+      }
+    );
+    observer.observe(hero);
 
     return () => {
-      scrollManager.destroy();
+      observer.disconnect();
     };
   }, [useScroll]);
 
