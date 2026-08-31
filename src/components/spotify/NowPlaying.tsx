@@ -20,16 +20,32 @@ import { SiSpotify } from "react-icons/si";
 const Fallback = ({
   className,
   isLoading,
+  songEffect,
 }: {
   className?: string;
   isLoading: boolean;
+  songEffect?: "none" | "underline";
 }) => (
   <div className={clsx(["flex items-center", className])}>
     <SiSpotify className="size-6 shrink-0" />
     <div className="ml-2 inline-flex truncate">
-      <p className="font-medium text-(--song-color)">
-        {isLoading ? "Loading..." : "Not Playing"}
-      </p>
+      {isLoading ? (
+        <p className="font-medium text-(--song-color)">Loading...</p>
+      ) : (
+        // A failed fetch lands here. /music renders without the live
+        // endpoint, so the link stays useful.
+        <Link
+          href="/music"
+          className="font-medium text-(--song-color)"
+          title="What I have been listening to"
+        >
+          {songEffect === "underline" ? (
+            <GrowingUnderline>Not Playing</GrowingUnderline>
+          ) : (
+            "Not Playing"
+          )}
+        </Link>
+      )}
     </div>
   </div>
 );
@@ -45,6 +61,7 @@ export default function SpotifyNowPlaying({
 }) {
   const pathname = usePathname();
   const [data, setData] = useState<CurrentPlayingResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const durationMs = data?.item?.duration_ms || 0;
   const progressMs = data?.progress_ms || 0;
@@ -53,12 +70,14 @@ export default function SpotifyNowPlaying({
 
   // --- Fetch logic with abort signal ---
   const fetchSpotifyData = async (signal?: AbortSignal) => {
+    setIsLoading(true);
     setData(null);
     try {
       const response = await fetch("/api/spotify/current-playing", { signal });
       if (!response.ok) {
-        // throw new Error("Failed to fetch");
-        console.warn("Failed to fetch");
+        console.warn(
+          `/api/spotify/current-playing responded ${response.status}`
+        );
         return;
       }
       const json: CurrentPlayingResponse = await response.json();
@@ -66,6 +85,12 @@ export default function SpotifyNowPlaying({
     } catch (error: any) {
       if (error.name !== "AbortError") {
         console.error("fetchSpotifyData: ", error);
+      }
+    } finally {
+      // An aborted call hands the state to the newer one. Do not end the
+      // loading phase from here.
+      if (!signal?.aborted) {
+        setIsLoading(false);
       }
     }
   };
@@ -94,7 +119,13 @@ export default function SpotifyNowPlaying({
   }, [remainingPlayingTime, pathname]);
 
   if (data === null) {
-    return <Fallback className={className} isLoading={data === null} />;
+    return (
+      <Fallback
+        className={className}
+        isLoading={isLoading}
+        songEffect={songEffect}
+      />
+    );
   }
 
   const trackDuration = intervalToDuration({
@@ -136,21 +167,29 @@ export default function SpotifyNowPlaying({
                 className="max-w-full shrink-0 truncate font-medium text-(--song-color)"
                 title={`${data.item.name} - ${artistName}`}
                 target="_blank"
-                rel="noopener noreferer"
+                rel="noopener noreferrer"
               >
                 {songEffect === "underline" ? (
-                  <GrowingUnderline data-umami-event="spotify-now-playing-view-song max-w-full truncate">
-                    {data.item.name}
-                  </GrowingUnderline>
+                  <GrowingUnderline>{data.item.name}</GrowingUnderline>
                 ) : (
-                  <span data-umami-event="spotify-now-playing-view-song max-w-full truncate">
-                    {data.item.name}
-                  </span>
+                  <span>{data.item.name}</span>
                 )}
               </Link>
             </>
           ) : (
-            <span className="font-medium text-(--song-color)">Not Playing</span>
+            // Nothing else on the site links to /music yet, so the idle state
+            // doubles as the way in.
+            <Link
+              href="/music"
+              className="max-w-full shrink-0 truncate font-medium text-(--song-color)"
+              title="What I have been listening to"
+            >
+              {songEffect === "underline" ? (
+                <GrowingUnderline>Not Playing</GrowingUnderline>
+              ) : (
+                <span>Not Playing</span>
+              )}
+            </Link>
           )}
           <div className="inline-flex">
             <span className="mx-1 text-(--artist-color)">&middot;</span>

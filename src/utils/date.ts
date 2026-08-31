@@ -30,3 +30,21 @@ export function getFormattedDuration({
   });
   return `${format(start, "MM/yyyy")} - ${format(end, "MM/yyyy")} (${durationString})`;
 }
+
+/**
+ * Track lengths as Spotify shows them: "3:42", or "1:02:07" for a long mix.
+ */
+export function formatTrackDuration(milliseconds: number): string {
+  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  const paddedSeconds = String(seconds).padStart(2, "0");
+
+  if (hours > 0) {
+    return `${hours}:${String(minutes).padStart(2, "0")}:${paddedSeconds}`;
+  }
+
+  return `${minutes}:${paddedSeconds}`;
+}
