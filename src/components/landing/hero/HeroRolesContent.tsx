@@ -14,7 +14,11 @@ const ROLES = [
 const ROTATE_INTERVAL_MS = 5000;
 const FADE_OUT_MS = 450;
 
-const HeroRolesContent = () => {
+const HeroRolesContent = ({
+  align = "start",
+}: {
+  align?: "start" | "center";
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const swapTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -49,6 +53,7 @@ const HeroRolesContent = () => {
           <div
             className={classnames(
               "absolute inset-0 flex items-center leading-none transition-all duration-400",
+              align === "center" ? "justify-center" : "justify-start",
               isShown ? "opacity-100" : "translate-y-2 opacity-0"
             )}
             key={index}

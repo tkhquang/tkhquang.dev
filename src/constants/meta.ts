@@ -27,6 +27,9 @@ I enjoy working with teams who care about quality and learning. If you'd like to
     title: "Aleks's Portfolio",
   };
 
+  /** Hero composition: "portrait" shows the photo column, "text" centers the copy */
+  export const HERO_LAYOUT: "portrait" | "text" = "text";
+
   /** Content of the "Right now" plate on the homepage; edit here */
   export const RIGHT_NOW = {
     basedIn: {
