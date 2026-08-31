@@ -92,9 +92,6 @@ const Projects = async () => {
                 >
                   <GrowingUnderline>{project.name}</GrowingUnderline>
                 </a>
-                <span className="border-theme-hairline-soft ml-auto shrink-0 rounded-full border px-2 py-0.5 font-mono text-[0.65rem] opacity-65">
-                  Public
-                </span>
               </div>
               <p className="m-0 flex-1 text-sm leading-relaxed">
                 {project.blurb}
@@ -126,16 +123,19 @@ const Projects = async () => {
                   {live?.forkCount ?? 0}
                 </span>
               </div>
-              {project.devlog && (
-                <Link
-                  href={project.devlog.href}
-                  className="text-theme-primary font-mono text-sm"
-                >
-                  <GrowingUnderline>
-                    {project.devlog.label} <span aria-hidden="true">✍️</span>
-                  </GrowingUnderline>
-                </Link>
-              )}
+              {/* Always reserve this line so meta rows align across cards */}
+              <div className="min-h-6">
+                {project.devlog && (
+                  <Link
+                    href={project.devlog.href}
+                    className="text-theme-primary font-mono text-sm"
+                  >
+                    <GrowingUnderline>
+                      {project.devlog.label} <span aria-hidden="true">✍️</span>
+                    </GrowingUnderline>
+                  </Link>
+                )}
+              </div>
             </article>
           );
         })}
