@@ -50,10 +50,7 @@
     --color-theme-tone-2: var(--tone-2);
     --color-theme-tone-3: var(--tone-3);
 
-    /* Role tokens: elevation, band text, hairline borders */
-    --color-theme-raised: var(--surface-raised);
-    --color-theme-on-band: var(--on-band);
-    --color-theme-on-band-dim: var(--on-band-dim);
+    /* Card and chip borders across the shared shell */
     --color-theme-hairline-soft: var(--hairline-soft);
 
     /* Fluid type scale shared by homepage and blog */

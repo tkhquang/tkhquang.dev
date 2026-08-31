@@ -13,7 +13,11 @@
   }
 
   html {
-    @apply bg-theme-background text-theme-on-background font-sans text-base leading-normal antialiased;
+    @apply bg-theme-background text-theme-on-background font-sans text-sm leading-normal antialiased;
+
+    @media screen and (width >= 640px) {
+      @apply text-base;
+    }
   }
 
   a:not(.button) {

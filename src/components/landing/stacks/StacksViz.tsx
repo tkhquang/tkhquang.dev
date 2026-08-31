@@ -56,12 +56,12 @@ const DEFAULT_PERSONA: PersonaKey = "all";
 
 /**
  * GitHub identity color (matching the repo cards below) through the
- * per-theme legibility tokens in _00_core.css; the catch-all "Other" takes
- * the ramp's neutral stop.
+ * per-theme legibility tokens in (default)/_02_base.css; the catch-all
+ * "Other" takes the neutral stop.
  */
 function chartColor(language: LanguageShare): string {
   if (language.id === "other" || !language.color) {
-    return "var(--chart-6)";
+    return "var(--chart-neutral)";
   }
   return `color-mix(in srgb, ${language.color} var(--lang-color-keep), var(--lang-color-tune))`;
 }

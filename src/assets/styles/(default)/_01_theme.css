@@ -1,5 +1,10 @@
 @layer theme {
   @theme {
+    /* Colors for the landing bands and raised cards */
+    --color-theme-raised: var(--surface-raised);
+    --color-theme-on-band: var(--on-band);
+    --color-theme-on-band-dim: var(--on-band-dim);
+
     /* Animations */
     --animate-fade-in: fade-in 0.3s linear;
     @keyframes fade-in {
