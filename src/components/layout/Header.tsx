@@ -16,12 +16,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 /*
- * The header flips from transparent-over-band to blurred as soon as the
- * hero band can no longer back its text: the header's own height plus the
- * hero's wave edge, which already paints in the page background color.
+ * Transparent only at rest: the hero's top padding guarantees nothing sits
+ * under the header at scroll 0, but any scroll slides hero content (the
+ * portrait, the greeting) beneath it, so the blurred backdrop comes in
+ * immediately.
  */
-const HEADER_HEIGHT = 60;
-const HERO_WAVE_HEIGHT = 96;
+const SCROLLED_AT = 16;
 
 const NAV_ITEMS = [
   { emoji: "🙋🏻‍♂️", href: "/#about", label: "About" },
@@ -44,25 +44,15 @@ const Header = ({
       return;
     }
 
-    const hero = document.querySelector("[data-hero]");
-    if (!hero) {
-      setScrolled(true);
-      return;
-    }
+    const update = () => {
+      setScrolled(window.scrollY > SCROLLED_AT);
+    };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setScrolled(!entry.isIntersecting);
-      },
-      {
-        rootMargin: `-${HEADER_HEIGHT + HERO_WAVE_HEIGHT}px 0px 0px 0px`,
-        threshold: 0,
-      }
-    );
-    observer.observe(hero);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
 
     return () => {
-      observer.disconnect();
+      window.removeEventListener("scroll", update);
     };
   }, [useScroll]);
 
