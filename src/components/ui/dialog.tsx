@@ -6,7 +6,7 @@ import {
   DialogHeading,
   DialogDescription,
   useDialogStore,
-} from "@ariakit/react";
+} from "@ariakit/react/dialog";
 import { X } from "lucide-react";
 import { cn } from "@/utils/css";
 

@@ -11,7 +11,6 @@ import { GrowingUnderline } from "@/components/ui/growing-underline";
 import { MusicWaves } from "@/components/ui/music-waves";
 import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 import { clsx } from "clsx";
-import { intervalToDuration } from "date-fns";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,7 +26,7 @@ const Fallback = ({
   songEffect?: "none" | "underline";
 }) => (
   <div className={clsx(["flex items-center", className])}>
-    <SiSpotify className="size-6 shrink-0" />
+    <SiSpotify className="size-6 shrink-0" aria-hidden="true" />
     <div className="ml-2 inline-flex truncate">
       {isLoading ? (
         <p className="font-medium text-(--song-color)">Loading...</p>
@@ -128,16 +127,6 @@ export default function SpotifyNowPlaying({
     );
   }
 
-  const trackDuration = intervalToDuration({
-    end: data.item?.duration_ms,
-    start: 0,
-  });
-
-  const progressDuration = intervalToDuration({
-    end: data.progress_ms,
-    start: 0,
-  });
-
   const artistName =
     data.item?.album?.artists?.map((artist) => artist.name).join(", ") ??
     "Spotify";
@@ -155,7 +144,7 @@ export default function SpotifyNowPlaying({
           />
         </div>
       ) : (
-        <SiSpotify className="size-6 shrink-0" />
+        <SiSpotify className="size-6 shrink-0" aria-hidden="true" />
       )}
       <div className="ml-2 flex items-center">
         <div className="grid max-w-full grid-cols-[auto_auto_minmax(0,1fr)] items-center truncate">

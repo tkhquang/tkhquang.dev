@@ -150,7 +150,7 @@ export default function NowPlayingHero({
             <div className="bg-theme-background size-full animate-pulse" />
           ) : (
             <div className="flex-center bg-theme-background size-full">
-              <SiSpotify className="size-10 opacity-30" />
+              <SiSpotify className="size-10 opacity-30" aria-hidden="true" />
             </div>
           )
         }
@@ -170,7 +170,7 @@ export default function NowPlayingHero({
           <Label>Paused</Label>
         ) : lastPlayed ? (
           <Label>
-            <SiSpotify className="size-4 text-[#1ED760]" />
+            <SiSpotify className="size-4 text-[#1ED760]" aria-hidden="true" />
             Last played{" "}
             <time dateTime={lastPlayed.played_at}>
               {formatDistanceToNowStrict(new Date(lastPlayed.played_at), {
@@ -180,7 +180,7 @@ export default function NowPlayingHero({
           </Label>
         ) : (
           <Label>
-            <SiSpotify className="size-4 text-[#1ED760]" />
+            <SiSpotify className="size-4 text-[#1ED760]" aria-hidden="true" />
             Not playing
           </Label>
         )}

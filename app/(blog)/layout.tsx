@@ -7,7 +7,7 @@ import BlogFooter from "@/components/layout/BlogFooter";
 import BlogHeader from "@/components/layout/BlogHeader";
 import { Blog } from "@/constants/meta";
 import AppProvider from "@/providers/AppProvider";
-import { Portal } from "@ariakit/react";
+import { Portal } from "@ariakit/react/portal";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
