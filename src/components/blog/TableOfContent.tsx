@@ -196,19 +196,20 @@ const TocItem = ({
   return (
     <li
       className={cn(
-        "my-2 font-semibold",
+        "font-semibold",
         // Smaller and lighter than the top-level entry it sits under.
-        depth > 0 && "my-1 text-sm font-normal"
+        depth > 0 && "text-sm font-normal"
       )}
     >
       <a
         href={`#${heading.id}`}
         className={cn(
-          "anchor hover:text-theme-primary transition-colors duration-200",
+          "anchor -ml-px block border-l-2 py-1 leading-snug transition-colors duration-200",
           isActive
-            ? "anchor--is-active text-theme-primary"
-            : "text-theme-on-surface"
+            ? "anchor--is-active border-theme-primary text-theme-primary"
+            : "text-theme-on-surface hover:text-theme-primary border-transparent opacity-75 hover:opacity-100"
         )}
+        style={{ paddingLeft: `${0.75 + depth * 0.75}rem` }}
         onClick={handleClick}
         aria-current={isActive ? "location" : undefined}
       >
@@ -250,8 +251,8 @@ const TocList = ({
   return (
     <ul
       className={cn(
-        "mt-5",
-        !isRoot && "border-theme-on-surface/20 mt-1 ml-2 border-l pl-3"
+        // One shared hairline rail; nesting indents via the link padding
+        isRoot && "border-theme-hairline-soft mt-4 border-l"
       )}
       // Only the outermost list is the landmark; nesting them would announce
       // one per level.
@@ -311,7 +312,7 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
       */}
       {headings?.length > 0 && (
         <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 xl:block">
-          <h2 className="heading mt-10 text-2xl">Table of Content</h2>
+          <h2 className="kicker mt-10 mb-1 block">On this page</h2>
 
           {/* Mobile Drawer */}
           <Drawer

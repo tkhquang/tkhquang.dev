@@ -1,17 +1,11 @@
 "use client";
 
 import { useMemo, ComponentType } from "react";
-import {
-  ChevronFirstIcon,
-  ChevronLastIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
@@ -60,6 +54,7 @@ type Props = {
   siblingCount?: number;
   getPageUrl?: (page: number) => string;
   LinkComponent?: ComponentType<any>;
+  className?: string;
 };
 
 const DOTS = "...";
@@ -70,6 +65,7 @@ const range = (start: number, end: number) => {
 };
 
 const PaginationWithSelect = ({
+  className,
   currentPage,
   totalPage,
   onPageChange,
@@ -181,47 +177,51 @@ const PaginationWithSelect = ({
   };
 
   return (
-    <Pagination>
+    <Pagination className={className}>
       <PaginationContent>
-        <PaginationItem className="2xs:block hidden">
-          {renderLink(<ChevronFirstIcon className="h-4 w-4" />, 1, {
-            "aria-label": "Go to first page",
-            size: "icon",
-            className: "rounded-full",
-            "aria-disabled": currentPage === 1,
-            tabIndex: currentPage === 1 ? -1 : undefined,
-            style:
-              currentPage === 1
-                ? { pointerEvents: "none", opacity: 0.5 }
-                : undefined,
-          })}
-        </PaginationItem>
+        {/* Colophon status: always visible, anchors the bar to the rail */}
+        <li className="pagination-status kicker mr-auto whitespace-nowrap tabular-nums">
+          Page {currentPage} of {totalPage}
+        </li>
+
         <PaginationItem className="2xs:block hidden">
           {renderLink(
-            <ChevronLeftIcon className="h-4 w-4" />,
+            <>
+              <ChevronLeftIcon className="size-3.5" aria-hidden />
+              <span className="xs:inline hidden">Newer</span>
+            </>,
             Math.max(1, currentPage - 1),
             {
               "aria-label": "Go to previous page",
-              size: "icon",
-              className: "rounded-full",
+              size: "default",
+              className:
+                "pagination-nav" +
+                (currentPage === 1 ? " pagination-nav-disabled" : ""),
               "aria-disabled": currentPage === 1,
               tabIndex: currentPage === 1 ? -1 : undefined,
-              style:
-                currentPage === 1
-                  ? { pointerEvents: "none", opacity: 0.5 }
-                  : undefined,
             }
           )}
         </PaginationItem>
 
         {paginationRange.map((pageNumber, index) => {
           if (pageNumber === DOTS) {
-            return <PaginationEllipsis key={`${pageNumber}-${index}`} />;
+            return (
+              <PaginationItem
+                key={`${pageNumber}-${index}`}
+                className="2xs:block hidden"
+              >
+                <span aria-hidden className="px-1 font-mono text-xs opacity-60">
+                  ...
+                </span>
+                <span className="sr-only">More pages</span>
+              </PaginationItem>
+            );
           }
 
           return (
             <PaginationItem key={pageNumber} className="2xs:block hidden">
               {renderLink(pageNumber, pageNumber as number, {
+                className: "pagination-number",
                 isActive: currentPage === pageNumber,
                 "aria-current": currentPage === pageNumber ? "page" : undefined,
               })}
@@ -231,43 +231,30 @@ const PaginationWithSelect = ({
 
         <PaginationItem className="2xs:block hidden">
           {renderLink(
-            <ChevronRightIcon className="h-4 w-4" />,
+            <>
+              <span className="xs:inline hidden">Older</span>
+              <ChevronRightIcon className="size-3.5" aria-hidden />
+            </>,
             Math.min(totalPage, currentPage + 1),
             {
               "aria-label": "Go to next page",
-              size: "icon",
-              className: "rounded-full",
+              size: "default",
+              className:
+                "pagination-nav" +
+                (currentPage === totalPage ? " pagination-nav-disabled" : ""),
               "aria-disabled": currentPage === totalPage,
               tabIndex: currentPage === totalPage ? -1 : undefined,
-              style:
-                currentPage === totalPage
-                  ? { pointerEvents: "none", opacity: 0.5 }
-                  : undefined,
             }
           )}
         </PaginationItem>
-        <PaginationItem className="2xs:block hidden">
-          {renderLink(<ChevronLastIcon className="h-4 w-4" />, totalPage, {
-            "aria-label": "Go to last page",
-            size: "icon",
-            className: "rounded-full",
-            "aria-disabled": currentPage === totalPage,
-            tabIndex: currentPage === totalPage ? -1 : undefined,
-            style:
-              currentPage === totalPage
-                ? { pointerEvents: "none", opacity: 0.5 }
-                : undefined,
-          })}
-        </PaginationItem>
-        <PaginationItem>
+
+        <PaginationItem className="ml-4">
           <Select
             value={String(currentPage)}
             onValueChange={(value) => handlePageChange(Number(value))}
           >
-            <SelectTrigger className="w-[120px]" size="sm">
-              <SelectValue placeholder="Select page">
-                Page {currentPage}
-              </SelectValue>
+            <SelectTrigger className="w-auto" size="sm" aria-label="Jump to page">
+              <SelectValue placeholder="Jump to">Jump to</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {range(1, totalPage).map((page) => (

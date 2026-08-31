@@ -1,5 +1,5 @@
 import Author from "@/components/blog/Author";
-import CircuitBoard from "@/components/blog/CircuitBoard";
+import ConstellationChart from "@/components/blog/ConstellationChart";
 import Subscribe from "@/components/blog/Subscribe";
 import HorizontalLine from "@/components/common/HorizontalLine";
 import classNames from "classnames";
@@ -17,7 +17,7 @@ const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
         </div>
         <Subscribe />
 
-        <CircuitBoard className="surface absolute inset-0 z-(--z-bg) rounded-sm shadow-md" />
+        <ConstellationChart className="surface absolute inset-0 z-(--z-bg) rounded-sm shadow-md" />
       </div>
     </section>
   );

@@ -13,8 +13,8 @@ const BlogMasthead = ({
   totalPosts,
 }: BlogMastheadProps) => {
   return (
-    /* Pulled under the transparent header so the aurora runs behind it */
-    <section className="band -mt-header-height pt-header-height relative overflow-hidden">
+    /* Pulled under the transparent header so the sky runs behind it */
+    <section className="band band--day -mt-header-height pt-header-height relative overflow-hidden">
       <AuroraCanvas />
       {/* Dissolve into the page background instead of ending on a hard edge */}
       <div
@@ -25,7 +25,7 @@ const BlogMasthead = ({
         <span className="kicker text-theme-on-band mb-2 block opacity-80">
           The blog · by Aleks
         </span>
-        <h1 className="text-theme-on-band text-5xl leading-tight font-extrabold tracking-tight lg:text-6xl">
+        <h1 className="blog-masthead__title text-theme-on-band text-5xl leading-tight font-extrabold tracking-tight lg:text-6xl">
           Ljóss
         </h1>
         <span

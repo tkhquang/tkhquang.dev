@@ -14,6 +14,7 @@ const BlogPagination = ({ totalPages }: { totalPages: number }) => {
 
   return (
     <PaginationWithSelect
+      className="blog-pagination"
       currentPage={curentPage}
       totalPage={totalPages}
       getPageUrl={(page) => `/blog/page/${page}`}

@@ -1,0 +1,194 @@
+/*
+ * Night: a living sky (aurora wash, twinkling stars, shooting stars).
+ * Day: a printed lapis star chart; no wash, no comets, two quiet glints.
+ * All animation is CSS keyframes on opacity/dashoffset: no SVG filters
+ * (feGaussianBlur is what janked Android Firefox), no JS.
+ */
+
+#constellation-chart {
+  --chart-line: color-mix(in srgb, var(--on-surface) 16%, transparent);
+  --chart-star: hsl(199deg 90% 85%);
+  --chart-main-opacity: 0.9;
+  --chart-field-opacity: 0.45;
+  --chart-field-quiet-opacity: 0.28;
+  --chart-wash-opacity: 1;
+
+  /* Comet timing mirrors the old circuit sparks: one pulse per cycle */
+  --comet-cycle: 17s;
+  --comet-span: 760px;
+}
+
+#constellation-chart .chart-figure {
+  stroke: var(--chart-line);
+  stroke-width: 0.75;
+  fill: none;
+}
+
+#constellation-chart .chart-star {
+  fill: var(--chart-star);
+  opacity: var(--chart-main-opacity);
+}
+
+#constellation-chart .chart-star-ring {
+  fill: none;
+  stroke: var(--chart-star);
+  stroke-width: 0.75;
+}
+
+#constellation-chart .chart-star-tick {
+  stroke: var(--chart-star);
+  stroke-width: 0.8;
+}
+
+#constellation-chart .chart-field circle {
+  fill: var(--chart-star);
+  opacity: var(--chart-field-opacity);
+}
+
+#constellation-chart .chart-field--quiet circle {
+  opacity: var(--chart-field-quiet-opacity);
+}
+
+#constellation-chart .chart-wash {
+  opacity: var(--chart-wash-opacity);
+  animation: chart-wash-breathe 18s ease-in-out var(--chart-wash-delay, 0s)
+    infinite alternate;
+}
+
+@keyframes chart-wash-breathe {
+  from {
+    opacity: calc(var(--chart-wash-opacity) * 0.65);
+  }
+
+  to {
+    opacity: var(--chart-wash-opacity);
+  }
+}
+
+/* Stars twinkle by briefly dimming, the inverse of the old LED blink */
+#constellation-chart .chart-twinkle {
+  --tw-hi: var(--chart-field-opacity);
+  animation: chart-twinkle 9s ease-in-out var(--chart-twinkle-delay, 0s)
+    infinite;
+}
+
+#constellation-chart .chart-star.chart-twinkle {
+  --tw-hi: var(--chart-main-opacity);
+}
+
+@keyframes chart-twinkle {
+  0%,
+  82%,
+  100% {
+    opacity: var(--tw-hi);
+  }
+
+  86% {
+    opacity: 0.15;
+  }
+
+  92% {
+    opacity: calc(var(--tw-hi) * 0.6);
+  }
+
+  95% {
+    opacity: 0.15;
+  }
+}
+
+/*
+ * One comet per pulse: halo, trail and head share a leading edge, the same
+ * dash mechanics the circuit sparks used.
+ */
+#constellation-chart .chart-comet {
+  fill: none;
+  stroke: var(--comet-color, var(--aurora-c));
+  stroke-width: var(--comet-w);
+  stroke-opacity: var(--comet-o);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--comet-dash)
+    calc(var(--comet-span) - var(--comet-dash));
+  animation: chart-comet-travel var(--comet-cycle) linear var(--comet-delay, 0s)
+    infinite;
+}
+
+@keyframes chart-comet-travel {
+  from {
+    stroke-dashoffset: calc(var(--comet-span) + var(--comet-lag));
+  }
+
+  to {
+    stroke-dashoffset: var(--comet-lag);
+  }
+}
+
+#constellation-chart .chart-comet--halo {
+  --comet-dash: 72px;
+  --comet-lag: 59px;
+  --comet-w: 5;
+  --comet-o: 0.09;
+}
+
+#constellation-chart .chart-comet--trail {
+  --comet-dash: 34px;
+  --comet-lag: 21px;
+  --comet-w: 2.2;
+  --comet-o: 0.24;
+}
+
+#constellation-chart .chart-comet--head {
+  --comet-dash: 13px;
+  --comet-lag: 0px;
+  --comet-w: 1.15;
+  --comet-o: 0.95;
+}
+
+/* Day: firmer engraved lines, lapis ink, stillness except two glints */
+html[data-theme="light"] #constellation-chart {
+  --chart-line: color-mix(in srgb, var(--primary) 28%, transparent);
+  --chart-star: var(--primary);
+  --chart-main-opacity: 0.55;
+  --chart-field-opacity: 0.3;
+  --chart-field-quiet-opacity: 0.2;
+  --chart-wash-opacity: 0;
+
+  .chart-comet-layer {
+    display: none;
+  }
+
+  .chart-comet,
+  .chart-twinkle,
+  .chart-wash {
+    animation: none;
+  }
+
+  .chart-glint {
+    animation: chart-glint 8s ease-in-out var(--chart-twinkle-delay, 0s)
+      infinite;
+  }
+}
+
+@keyframes chart-glint {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #constellation-chart .chart-comet-layer {
+    display: none;
+  }
+
+  #constellation-chart .chart-comet,
+  #constellation-chart .chart-twinkle,
+  #constellation-chart .chart-glint,
+  #constellation-chart .chart-wash {
+    animation: none;
+  }
+}

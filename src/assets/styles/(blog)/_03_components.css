@@ -126,11 +126,20 @@
     --shelf-gaming: hsl(352deg 62% 73%);
     --shelf-the-inner-crisis: hsl(267deg 56% 75%);
 
+    /* Aurora hues, shared by the masthead shader and the circuit current */
+    --aurora-a: hsl(168deg 70% 62%);
+    --aurora-b: hsl(267deg 60% 76%);
+    --aurora-c: hsl(199deg 90% 66%);
+
     &[data-theme="light"] {
       --shelf-gaming: hsl(351deg 58% 40%);
       --shelf-the-inner-crisis: hsl(266deg 50% 55%);
+      --aurora-a: hsl(168deg 55% 34%);
+      --aurora-b: hsl(266deg 45% 48%);
+      --aurora-c: hsl(210deg 75% 42%);
     }
   }
+
 }
 
 .code-container {

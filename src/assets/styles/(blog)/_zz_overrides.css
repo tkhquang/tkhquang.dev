@@ -1,4 +1,103 @@
 @layer overrides {
+  /*
+   * Dawn Horizon: in light mode the masthead abandons the saturated lapis
+   * flag for a pastel dawn. The CSS carries the sky gradient (zenith lapis
+   * through near-white into a warm cream horizon landing on paper); the
+   * shader composites the stratus decks and sun over it. Ink tokens flip so
+   * every text-theme-on-band element goes dark; dark theme never matches.
+   */
+  html[data-theme="light"] {
+    .band--day {
+      --band-a: hsl(219deg 48% 88%);
+      --band-b: var(--background-light);
+      --on-band: var(--on-background-light);
+      --on-band-dim: hsl(221deg 26% 32%);
+
+      /* The gradient belongs to the band only; the header reuses this
+         class purely for its ink tokens */
+      &.band {
+        background-image: linear-gradient(
+          180deg,
+          hsl(219deg 48% 88%) 0%,
+          hsl(220deg 40% 93%) 55%,
+          hsl(44deg 55% 93%) 78%,
+          var(--background-light) 100%
+        );
+      }
+
+      /* The Tailwind color bridge computes at the root, so re-anchor it
+         here or text-theme-on-band keeps the root's near-white ink */
+      --color-theme-on-band: var(--on-band);
+      --color-theme-on-band-dim: var(--on-band-dim);
+    }
+
+    .band--day .blog-masthead__title {
+      color: var(--primary);
+    }
+  }
+
+  /*
+   * Colophon Bar pagination: the row closes the feed on its left rail as a
+   * hairline-topped stat line with de-boxed mono numbers. Lives in the
+   * overrides layer because the shadcn button variants are utility-layer
+   * classes that would out-cascade a components-layer reskin.
+   */
+  .blog-pagination {
+    ul {
+      @apply border-theme-hairline-soft w-full flex-nowrap items-center gap-1 pt-5 whitespace-nowrap;
+    }
+
+    /* De-box everything; the design is text on the rail, not chips */
+    li > a,
+    li > a > span,
+    [role="combobox"] {
+      @apply h-auto rounded-none border-0 bg-transparent font-mono text-xs font-semibold shadow-none;
+    }
+
+    /* GrowingUnderline mechanics in plain CSS: tint swells, nothing moves.
+       Clipped to the content box or the tint hangs under the padding like
+       a detached swatch. */
+    .pagination-number {
+      padding: 0.5rem 0.375rem;
+      background: linear-gradient(
+          to right,
+          color-mix(in srgb, var(--primary) 30%, transparent),
+          color-mix(in srgb, var(--primary) 18%, transparent)
+        )
+        no-repeat left bottom / 0% 50%;
+      background-origin: content-box;
+      background-clip: content-box;
+      transition:
+        background-size 300ms,
+        color 150ms;
+    }
+
+    .pagination-number:hover,
+    .pagination-number[aria-current="page"] {
+      color: var(--primary);
+      background-size: 100% 50%;
+    }
+
+    .pagination-nav {
+      @apply inline-flex items-center gap-1 px-1 py-2 transition-colors;
+
+      color: color-mix(in srgb, var(--on-background) 75%, transparent);
+    }
+
+    .pagination-nav:hover {
+      color: var(--primary);
+    }
+
+    .pagination-nav-disabled {
+      @apply pointer-events-none opacity-40;
+    }
+
+    /* The select reads as the quiet "Jump to" kicker control */
+    [role="combobox"] {
+      @apply kicker gap-1 px-1 py-2;
+    }
+  }
+
   .mermaid {
     @apply transition-opacity;
 
