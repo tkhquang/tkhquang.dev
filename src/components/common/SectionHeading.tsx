@@ -1,19 +1,24 @@
 import classNames from "classnames";
 
 interface SectionHeadingProps extends React.ComponentProps<"div"> {
-  kicker: string;
   title: string;
+  kicker?: string;
   emoji?: string;
   intro?: string;
   /** "band" renders on-band ink for use inside gradient bands */
   tone?: "default" | "band";
+  /** Heading level; the visual style is carried by `size`, not the tag */
+  as?: "h1" | "h2";
+  size?: "section" | "subsection";
 }
 
 const SectionHeading = ({
+  as: Heading = "h2",
   className,
   emoji,
   intro,
   kicker,
+  size = "section",
   title,
   tone = "default",
   ...props
@@ -22,17 +27,20 @@ const SectionHeading = ({
 
   return (
     <div className={classNames("mb-10", className)} {...props}>
-      <span
+      {kicker && (
+        <span
+          className={classNames(
+            "kicker mb-2 block",
+            onBand ? "text-theme-on-band" : "text-theme-primary"
+          )}
+        >
+          {kicker}
+        </span>
+      )}
+      <Heading
         className={classNames(
-          "kicker mb-2 block",
-          onBand ? "text-theme-on-band" : "text-theme-primary"
-        )}
-      >
-        {kicker}
-      </span>
-      <h2
-        className={classNames(
-          "text-section relative leading-tight font-bold tracking-tight",
+          "relative leading-tight font-bold tracking-tight",
+          size === "section" ? "text-section" : "text-subsection",
           onBand ? "text-theme-on-band" : "text-theme-primary"
         )}
       >
@@ -43,7 +51,7 @@ const SectionHeading = ({
             <span aria-hidden="true">{emoji}</span>
           </>
         )}
-      </h2>
+      </Heading>
       <span
         className={classNames(
           "mt-3 block h-0.5 w-16 rounded",

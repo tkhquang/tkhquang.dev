@@ -39,9 +39,15 @@ const Empty = () => (
 export default function TopItems({ artists, tracks }: TopItemsByRange) {
   return (
     <Tabs defaultValue="short_term">
-      <TabsList className="mb-4">
+      {/* Full width with flex-1 triggers so the three ranges fit a 320px
+          viewport; styled to match the homepage persona filter */}
+      <TabsList className="border-theme-hairline-soft mb-4 h-auto w-full gap-1 rounded-lg border bg-transparent p-1 sm:w-auto">
         {TOP_ITEMS_TIME_RANGES.map(({ label, value }) => (
-          <TabsTrigger key={value} value={value}>
+          <TabsTrigger
+            key={value}
+            value={value}
+            className="data-[state=active]:bg-theme-primary data-[state=active]:text-theme-on-primary flex-1 rounded-md px-2 py-1.5 font-mono text-xs font-semibold sm:flex-initial sm:px-3.5"
+          >
             {label}
           </TabsTrigger>
         ))}
