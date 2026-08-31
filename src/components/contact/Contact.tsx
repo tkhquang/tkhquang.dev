@@ -195,7 +195,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="bg-theme-primary text-theme-on-primary flex-center h-11 w-full cursor-pointer rounded-lg font-semibold shadow-md transition-all duration-200 hover:shadow-lg disabled:pointer-events-none disabled:opacity-60"
+                  className="bg-theme-primary text-theme-on-primary flex-center h-11 w-full cursor-pointer rounded-lg font-semibold shadow-md transition-all duration-200 hover:bg-[color-mix(in_srgb,var(--primary)_82%,var(--on-primary))] hover:shadow-lg disabled:pointer-events-none disabled:opacity-60"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

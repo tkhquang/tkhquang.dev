@@ -21,13 +21,13 @@ const Hero = () => {
             <div className="animate-rise-in mt-8 flex flex-wrap items-center gap-3 [animation-delay:0.5s]">
               <Link
                 href="/blog"
-                className="bg-theme-on-band inline-flex items-center gap-1.5 rounded-lg px-5 py-2.5 font-semibold text-(--band-b) shadow-md transition-all duration-200 hover:shadow-lg"
+                className="bg-theme-on-band inline-flex items-center gap-1.5 rounded-lg px-5 py-2.5 font-semibold text-(--band-b) shadow-md transition-all duration-200 hover:bg-[color-mix(in_srgb,var(--on-band)_82%,var(--band-b))] hover:shadow-lg"
               >
                 Read the blog <span aria-hidden="true">✍️</span>
               </Link>
               <AnchorLink
                 href="/#projects"
-                className="text-theme-on-band inline-flex items-center gap-1.5 rounded-lg border border-[color-mix(in_srgb,var(--on-band)_45%,transparent)] px-5 py-2.5 font-semibold transition-all duration-200 hover:border-(--on-band)"
+                className="text-theme-on-band inline-flex items-center gap-1.5 rounded-lg border border-[color-mix(in_srgb,var(--on-band)_45%,transparent)] px-5 py-2.5 font-semibold transition-all duration-200 hover:border-(--on-band) hover:bg-[color-mix(in_srgb,var(--on-band)_12%,transparent)]"
               >
                 See my work <span aria-hidden="true">💻</span>
               </AnchorLink>
