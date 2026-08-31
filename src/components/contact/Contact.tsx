@@ -111,8 +111,14 @@ const Contact = () => {
             />
           </div>
 
+          {/*
+            noValidate suppresses only the native validation bubble; the
+            required attributes stay for semantics while react-hook-form
+            renders the styled messages.
+          */}
           <form
             className="email-form bg-theme-raised border-theme-hairline-soft text-theme-on-surface rounded-xl border p-6 shadow-md"
+            noValidate
             onSubmit={handleSubmit(onSubmit)}
           >
             {/* Hidden field for bot prevention */}
@@ -136,6 +142,7 @@ const Contact = () => {
                     })}
                     type="text"
                     autoComplete="name"
+                    required
                     aria-invalid={errors.name ? true : undefined}
                     {...register("name", { required: "Full name is required" })}
                   />
@@ -153,6 +160,7 @@ const Contact = () => {
                     })}
                     type="email"
                     autoComplete="email"
+                    required
                     aria-invalid={errors.email ? true : undefined}
                     {...register("email", {
                       pattern: {
@@ -176,6 +184,7 @@ const Contact = () => {
                       "border-theme-error": errors.message,
                     })}
                     rows={5}
+                    required
                     aria-invalid={errors.message ? true : undefined}
                     {...register("message", {
                       required: "Message is required",
