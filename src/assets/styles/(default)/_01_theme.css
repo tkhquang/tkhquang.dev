@@ -16,8 +16,12 @@
 
     --animate-fade-in-forwards: fade-in 1s forwards;
 
-    /* Max-width wipe: never wider than the text, so a caret can sit flush */
-    --animate-typing: typing 0.5s steps(14, end) forwards 1s;
+    /*
+     * Max-width wipe: never wider than the text, so a caret can sit flush.
+     * Fill mode "both" keeps the from state (width 0) applied DURING the
+     * 1s delay; with "forwards" the full text flashes before typing starts.
+     */
+    --animate-typing: typing 0.5s steps(14, end) 1s both;
     @keyframes typing {
       from {
         max-width: 0;
