@@ -17,7 +17,7 @@ const Hero = () => {
   const withPortrait = Portfolio.HERO_LAYOUT === "portrait";
 
   return (
-    <section className="band flex min-h-[78svh] items-center overflow-hidden">
+    <section className="band hero-entrance flex min-h-[78svh] items-center overflow-hidden">
       <div className="pt-header-height relative z-2 container pb-28">
         <div
           className={classNames(

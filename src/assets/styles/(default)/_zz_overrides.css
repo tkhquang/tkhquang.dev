@@ -1,3 +1,10 @@
 @layer overrides {
-  /* Placeholder for overrides */
+  /*
+   * The hero entrance means nothing before its glyphs can render, so it
+   * holds until the fonts settle (or the inline script's 1.5s cap).
+   * html.js comes from the same script, so no-JS visitors never pause.
+   */
+  html.js:not(.fonts-ready) .hero-entrance * {
+    animation-play-state: paused !important;
+  }
 }
