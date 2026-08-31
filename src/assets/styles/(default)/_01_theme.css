@@ -19,11 +19,13 @@
     /*
      * Counter-translate pair: window and text slide by equal opposite
      * amounts, so the glyphs hold still while the clip edge sweeps across.
-     * Transforms only, so the wipe stays on the compositor and keeps
-     * playing while first-load hydration blocks the main thread (a
-     * max-width wipe stalled there). Fill mode "both" hides the text
-     * DURING the delay; the rest of the hero waits for this to finish
-     * (delays in Hero.tsx).
+     * Transforms keep the wipe on the compositor even while first-load
+     * hydration blocks the main thread (a max-width wipe stalled there).
+     * Both halves must stay plain percentages with matching widths (the
+     * caret's footprint is padding inside the text span): Gecko keeps
+     * calc() transforms on the main thread, and one half falling back
+     * de-synced the pair on Firefox Android. Fill mode "both" hides the
+     * text during the delay; the rest of the hero waits (Hero.tsx).
      */
     --animate-typing-window: typing-window 0.5s steps(14, end) 0.6s both;
     @keyframes typing-window {
@@ -39,11 +41,7 @@
     --animate-typing-text: typing-text 0.5s steps(14, end) 0.6s both;
     @keyframes typing-text {
       from {
-        /*
-         * The window also holds the riding caret (ml-1.5 + w-[0.1em] in
-         * HeroLeading): counter-translate its full width, not just 100%.
-         */
-        transform: translateX(calc(100% + 0.375rem + 0.1em));
+        transform: translateX(100%);
       }
 
       to {
