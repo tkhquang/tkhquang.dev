@@ -26,9 +26,16 @@
   --tone-light: hsl(220deg 100% 50%);
   --background-light: hsl(221deg 42% 96%);
   /* Fallback for browsers that don't support color-mix */
-  --darken-light: hsl(221deg 10% 77%);
-  /* Modern browsers will use this color-mix value */
-  --darken-light: color-mix(in srgb, black 20%, hsl(221deg 42% 96%));
+  --darken-light: hsl(220deg 33% 86%);
+  /*
+   * Mix deep lapis rather than black: black crushes the chroma and the
+   * darkened bands (writing, footer) turn off-palette gray.
+   */
+  --darken-light: color-mix(
+    in srgb,
+    hsl(222deg 50% 32%) 16%,
+    hsl(221deg 42% 96%)
+  );
   /* Low saturation so long-form text reads as ink, not blue (~11:1) */
   --on-background-light: hsl(222deg 26% 23%);
   /* High-chroma lapis: the palette's one loud voice (~7:1 on background) */
@@ -74,7 +81,7 @@
   --neutral-dark: hsl(202deg 14% 26%);
 
   /*
-   * Redesign additions — elevation, band, and chart ramp.
+   * Redesign additions: elevation, band, and chart ramp.
    * Elevation is theme-specific by design: near-white panels + shadow carry
    * light mode, raised lightness + hairline borders carry dark (shadows die
    * on dark backgrounds).
