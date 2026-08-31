@@ -5,6 +5,7 @@ import { ScrollManager } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
 import classNames from "classnames";
 import gsap from "gsap";
+import Link from "next/link";
 import { useRef } from "react";
 
 // Register the hook to avoid React version discrepancies
@@ -96,13 +97,12 @@ const Header = ({
             </svg>
           </div>
           <div className="bg-theme-on-primary-light h-4 w-px"></div>
-          <button type="button" className="focus:outline-hidden">
-            <a href="/blog" target="_blank" rel="noopener noreferrer">
-              <div className="flex-center whitespace-no-wrap no-underine focus:outline-hidden select-none font-extrabold uppercase">
-                Blog
-              </div>
-            </a>
-          </button>
+          <Link
+            href="/blog"
+            className="flex-center whitespace-no-wrap focus:outline-hidden font-extrabold uppercase no-underline select-none"
+          >
+            Blog
+          </Link>
         </div>
         <div className="header__right flex h-full items-center space-x-4">
           <div className="flex flex-col">

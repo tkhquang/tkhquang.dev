@@ -86,7 +86,7 @@ const Contact = () => {
                   <input
                     id="name"
                     className={`input h-10 min-w-full px-2 ${
-                      errors.name ? "border-red-500" : ""
+                      errors.name ? "border-theme-error" : ""
                     }`}
                     type="text"
                     placeholder="Full name*"
@@ -94,7 +94,7 @@ const Contact = () => {
                     required
                   />
                   {errors.name && (
-                    <p className="mt-1 text-sm text-red-500">
+                    <p className="mt-1 text-sm text-theme-error">
                       {errors.name.message}
                     </p>
                   )}
@@ -107,7 +107,7 @@ const Contact = () => {
                   <input
                     id="email"
                     className={`input h-10 min-w-full px-2 ${
-                      errors.email ? "border-red-500" : ""
+                      errors.email ? "border-theme-error" : ""
                     }`}
                     type="email"
                     placeholder="Email*"
@@ -122,7 +122,7 @@ const Contact = () => {
                     required
                   />
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-500">
+                    <p className="mt-1 text-sm text-theme-error">
                       {errors.email.message}
                     </p>
                   )}
@@ -135,7 +135,7 @@ const Contact = () => {
                   <textarea
                     id="message"
                     className={`textarea min-w-full p-2 ${
-                      errors.message ? "border-red-500" : ""
+                      errors.message ? "border-theme-error" : ""
                     }`}
                     placeholder="Message*"
                     rows={5}
@@ -145,7 +145,7 @@ const Contact = () => {
                     required
                   />
                   {errors.message && (
-                    <p className="mt-1 text-sm text-red-500">
+                    <p className="mt-1 text-sm text-theme-error">
                       {errors.message.message}
                     </p>
                   )}
