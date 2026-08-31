@@ -15,8 +15,9 @@ const HeroLeading = ({ className, ...props }: React.ComponentProps<"h1">) => {
     >
       Hello
       <span className="relative inline-block align-bottom whitespace-nowrap">
+        {/* left-1.5 mirrors the done caret's ml-1.5 gap after "Hello" */}
         <span
-          className="animate-caret-wait absolute right-full bottom-[0.21em] h-[0.8em] w-[0.1em] rounded-sm bg-current"
+          className="animate-caret-wait absolute bottom-[0.21em] left-1.5 h-[0.8em] w-[0.1em] rounded-sm bg-current"
           aria-hidden="true"
         />
         {/* Split for the per-letter pops; the sr-only copy keeps screen
