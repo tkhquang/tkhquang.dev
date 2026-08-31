@@ -1,5 +1,4 @@
 import NextImage from "@/components/common/NextImage";
-import Reveal from "@/components/common/Reveal";
 import SectionHeading from "@/components/common/SectionHeading";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { format } from "date-fns";
@@ -34,7 +33,7 @@ const Writing = async () => {
           intro="I keep a blog called Ljóss: devlogs, deep dives, and whatever I broke this month."
         />
 
-        <Reveal className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
           {posts.map((post) => (
             <article key={post.slug} className="flex flex-col">
               {post.cover_image && (
@@ -75,13 +74,10 @@ const Writing = async () => {
               </p>
             </article>
           ))}
-        </Reveal>
+        </div>
 
         {morePosts.length > 0 && (
-          <Reveal
-            className="border-theme-hairline-soft mt-10 border-t"
-            delay={60}
-          >
+          <div className="border-theme-hairline-soft mt-10 border-t">
             {morePosts.map((post) => (
               <div
                 key={post.slug}
@@ -103,17 +99,17 @@ const Writing = async () => {
                 </p>
               </div>
             ))}
-          </Reveal>
+          </div>
         )}
 
-        <Reveal className="mt-10" delay={100}>
+        <div className="mt-10">
           <Link
             href="/blog"
             className="border-theme-primary/50 text-theme-primary hover:border-theme-primary hover:bg-theme-primary/10 inline-flex items-center gap-1.5 rounded-lg border px-5 py-2.5 font-semibold transition-all duration-200"
           >
             Visit the blog →
           </Link>
-        </Reveal>
+        </div>
       </div>
     </section>
   );

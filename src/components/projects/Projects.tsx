@@ -1,4 +1,3 @@
-import Reveal from "@/components/common/Reveal";
 import SectionHeading from "@/components/common/SectionHeading";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import { fetchGitHubProjects } from "@/services/github";
@@ -76,7 +75,7 @@ const Projects = async () => {
     >
       <SectionHeading kicker="What I build" title="Projects" emoji="💻" />
 
-      <Reveal className="grid grid-cols-1 gap-5 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
         {FEATURED.map((project) => {
           const live = repoByName.get(project.name);
 
@@ -142,12 +141,9 @@ const Projects = async () => {
             </article>
           );
         })}
-      </Reveal>
+      </div>
 
-      <Reveal
-        className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2"
-        delay={100}
-      >
+      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
         {repositories.map((repo) => (
           <div
             key={repo.id}
@@ -194,9 +190,9 @@ const Projects = async () => {
             </p>
           </div>
         ))}
-      </Reveal>
+      </div>
 
-      <Reveal className="mt-8" delay={150}>
+      <div className="mt-8">
         <a
           href="https://github.com/tkhquang"
           target="_blank"
@@ -207,7 +203,7 @@ const Projects = async () => {
             Everything else lives on GitHub <span aria-hidden="true">🐣</span> →
           </GrowingUnderline>
         </a>
-      </Reveal>
+      </div>
     </section>
   );
 };

@@ -1,5 +1,4 @@
 import Image from "@/components/common/NextImage";
-import Reveal from "@/components/common/Reveal";
 import SectionHeading from "@/components/common/SectionHeading";
 import StacksViz from "@/components/landing/stacks/StacksViz";
 import { fetchGitHubCommitStats } from "@/services/github";
@@ -136,7 +135,7 @@ const Stacks = async () => {
       <div className="container">
         <SectionHeading kicker="What I work with" title="Stacks" emoji="📚" />
 
-        <Reveal>
+        <div>
           <StacksViz
             languages={languages.map(({ color, id, name, percentage }) => ({
               color,
@@ -145,10 +144,10 @@ const Stacks = async () => {
               percentage,
             }))}
           />
-        </Reveal>
+        </div>
       </div>
 
-      <Reveal className="bg-theme-surface border-theme-hairline-soft mt-14 w-full border-y py-8">
+      <div className="bg-theme-surface border-theme-hairline-soft mt-14 w-full border-y py-8">
         <ul className="container grid grid-cols-2 gap-3 sm:grid-cols-3 md:max-w-4xl md:grid-cols-5">
           {TOOLKIT.map((stack) => (
             <li key={stack.title}>
@@ -176,7 +175,7 @@ const Stacks = async () => {
             </li>
           ))}
         </ul>
-      </Reveal>
+      </div>
     </section>
   );
 };
