@@ -18,14 +18,15 @@ interface FooterProps extends React.ComponentProps<"footer"> {
   showSectionNav?: boolean;
 }
 
+const NAV_LINK_CLASS =
+  "hover:text-theme-primary text-xs font-semibold tracking-wider uppercase opacity-75 transition-colors hover:opacity-100";
+
 const Footer = ({
   children,
   className,
   showSectionNav = false,
   ...props
 }: FooterProps) => {
-  const navItems = showSectionNav ? [...SECTION_NAV, BLOG_NAV] : [BLOG_NAV];
-
   return (
     <footer
       {...props}
@@ -39,21 +40,33 @@ const Footer = ({
           © {new Date().getFullYear()} · Built by day, tinkered by night{" "}
           <span aria-hidden="true">☕</span>
         </div>
-        <nav
-          aria-label="Footer"
-          className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
-        >
-          {navItems.map((item) => (
-            <AnchorLink
-              key={item.label}
-              href={item.href}
-              className="hover:text-theme-primary text-xs font-semibold tracking-wider uppercase opacity-75 transition-colors hover:opacity-100"
+        {showSectionNav ? (
+          <>
+            <nav
+              aria-label="Footer"
+              className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
             >
-              {item.label}
+              {[...SECTION_NAV, BLOG_NAV].map((item) => (
+                <AnchorLink
+                  key={item.label}
+                  href={item.href}
+                  className={NAV_LINK_CLASS}
+                >
+                  {item.label}
+                </AnchorLink>
+              ))}
+            </nav>
+            <SocialLinks className="flex-center gap-1 text-2xl" />
+          </>
+        ) : (
+          /* A lone centered link looks stranded; group it with the socials */
+          <div className="flex items-center gap-5">
+            <AnchorLink href={BLOG_NAV.href} className={NAV_LINK_CLASS}>
+              {BLOG_NAV.label}
             </AnchorLink>
-          ))}
-        </nav>
-        <SocialLinks className="flex-center gap-1 text-2xl" />
+            <SocialLinks className="flex-center gap-1 text-2xl" />
+          </div>
+        )}
       </div>
     </footer>
   );
