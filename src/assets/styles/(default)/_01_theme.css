@@ -32,8 +32,8 @@
       }
     }
 
-    /* Blink six times after the type-in finishes, then stay hidden */
-    --animate-caret: caret 1s steps(1, end) 1s 6 both;
+    /* Pulse from the first frame, through the typing, then stay hidden */
+    --animate-caret: caret 1s steps(1, end) 7 both;
     @keyframes caret {
       0% {
         opacity: 1;
