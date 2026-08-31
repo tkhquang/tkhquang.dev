@@ -37,7 +37,13 @@ export default async function MusicPage() {
   return (
     <div className="mt-header-height">
       <div className="container mx-auto max-w-4xl px-4 py-10">
-        <SectionHeading as="h1" title="Music" emoji="🎧" className="mb-0" />
+        <SectionHeading
+          as="h1"
+          rule="full"
+          title="Music"
+          emoji="🎧"
+          className="mb-0"
+        />
         <p className="text-theme-on-surface mt-4 mb-8 opacity-70">
           Whatever is on repeat at the moment, straight from{" "}
           <Link
@@ -56,6 +62,7 @@ export default async function MusicPage() {
 
         <section className="mt-12">
           <SectionHeading
+            rule="full"
             size="subsection"
             title="On heavy rotation"
             className="mb-0"
@@ -72,6 +79,7 @@ export default async function MusicPage() {
 
         <section className="mt-12">
           <SectionHeading
+            rule="full"
             size="subsection"
             title="Recently played"
             className="mb-0"

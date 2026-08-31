@@ -10,6 +10,12 @@ interface SectionHeadingProps extends React.ComponentProps<"div"> {
   /** Heading level; the visual style is carried by `size`, not the tag */
   as?: "h1" | "h2";
   size?: "section" | "subsection";
+  /**
+   * "full" spans the container like the old heading--section hairline; use
+   * it on flat pages where the rule is what separates sections. The
+   * homepage's alternating backgrounds make the short rule enough there.
+   */
+  rule?: "short" | "full";
 }
 
 const SectionHeading = ({
@@ -18,6 +24,7 @@ const SectionHeading = ({
   emoji,
   intro,
   kicker,
+  rule = "short",
   size = "section",
   title,
   tone = "default",
@@ -54,8 +61,15 @@ const SectionHeading = ({
       </Heading>
       <span
         className={classNames(
-          "mt-3 block h-0.5 w-16 rounded",
-          onBand ? "bg-theme-on-band/45" : "bg-theme-primary/45"
+          "mt-3 block rounded",
+          rule === "full" ? "h-px w-full" : "h-0.5 w-16",
+          onBand
+            ? rule === "full"
+              ? "bg-theme-on-band/25"
+              : "bg-theme-on-band/45"
+            : rule === "full"
+              ? "bg-theme-primary/25"
+              : "bg-theme-primary/45"
         )}
         aria-hidden="true"
       />
