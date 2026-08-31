@@ -10,13 +10,15 @@ const HeroLeading = ({ className, ...props }: React.ComponentProps<"h1">) => {
       {...props}
     >
       Hello
-      <span className="animate-typing-window inline-block overflow-hidden align-bottom whitespace-nowrap">
-        <span className="animate-typing-text inline-block">
+      <span className="animate-typing-window relative inline-block overflow-hidden align-bottom whitespace-nowrap">
+        {/* The padding reserves the caret's slot: window and text keep
+            identical widths, which the wipe pair needs to stay in sync */}
+        <span className="animate-typing-text inline-block pr-[calc(0.375rem+0.1em)]">
           , I&apos;m Aleks!
         </span>
-        {/* Inside the window so it rides the sliding edge like a real caret */}
+        {/* Absolute so it adds no width, at the edge so it rides the wipe */}
         <span
-          className="animate-caret ml-1.5 inline-block h-[0.8em] w-[0.1em] rounded-sm bg-current align-baseline"
+          className="animate-caret absolute right-0 bottom-[0.21em] h-[0.8em] w-[0.1em] rounded-sm bg-current"
           aria-hidden="true"
         />
       </span>
