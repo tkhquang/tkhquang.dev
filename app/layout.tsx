@@ -1,5 +1,6 @@
 import StackedLayers from "@/components/layout/StackedLayers";
 import { Portfolio, Site } from "@/constants/meta";
+import { cn } from "@/utils/css";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat, Source_Code_Pro } from "next/font/google";
 
@@ -7,19 +8,23 @@ const montserrat = Montserrat({
   preload: true,
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-montserrat",
 });
 
 const merriweather = Merriweather({
   preload: true,
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
+  variable: "--font-merriweather",
 });
 
 const sourceCodePro = Source_Code_Pro({
   preload: true,
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-source-code-pro",
 });
 
 const SCRIPT_CONTENT = `
@@ -86,7 +91,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn(
+        montserrat.variable,
+        merriweather.variable,
+        sourceCodePro.variable
+      )}
+    >
       <body className="flex min-h-screen flex-col">
         <script
           dangerouslySetInnerHTML={{
@@ -97,15 +110,6 @@ export default async function RootLayout({
           {children}
         </div>
         <StackedLayers />
-        <div
-          id="class-keeper"
-          aria-hidden
-          style={{
-            ...merriweather.style,
-            ...montserrat.style,
-            ...sourceCodePro.style,
-          }}
-        ></div>
       </body>
     </html>
   );

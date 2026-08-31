@@ -244,7 +244,7 @@ export function TrackRow({
           className={titleClassName}
           title={`${track.name} - ${getArtistNames(track)}`}
         >
-          <GrowingUnderline className={underlineClassName}>
+          <GrowingUnderline tone="spotify" className={underlineClassName}>
             {track.name}
           </GrowingUnderline>
         </SpotifyLink>
@@ -294,7 +294,7 @@ export function ArtistRow({
           className={titleClassName}
           title={artist.name}
         >
-          <GrowingUnderline className={underlineClassName}>
+          <GrowingUnderline tone="spotify" className={underlineClassName}>
             {artist.name}
           </GrowingUnderline>
         </SpotifyLink>

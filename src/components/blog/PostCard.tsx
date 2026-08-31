@@ -59,7 +59,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
           <figcaption></figcaption>
         </figure>
       )}
-      <p className="news-feed__list-item__description text-md mt-3 leading-7">
+      <p className="news-feed__list-item__description mt-3 text-base leading-7">
         {post.description}
       </p>
       <TagList className="news-feed__list-item__tags mt-3" post={post} />

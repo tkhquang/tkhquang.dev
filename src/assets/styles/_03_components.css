@@ -1,18 +1,34 @@
+/* The theme script toggles these on <html> at runtime */
+@source inline("transition-colors duration-500");
+
 @layer components {
-  /* Can be updated to use `@source inline();` later */
-  #class-keeper {
-    @apply transition-colors duration-500;
-
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    z-index: -1;
-    pointer-events: none;
-  }
-
   .flex-center {
     @apply flex items-center justify-center;
+  }
+
+  /*
+   * Full-bleed gradient band (hero, contact outro). One recipe per theme via
+   * the --band-a/--band-b role tokens; text uses --on-band. The grain overlay
+   * keeps large gradient fields from banding and adds a handmade touch.
+   */
+  .band {
+    position: relative;
+    background-image: linear-gradient(
+      165deg,
+      var(--band-a) 0%,
+      var(--band-b) 100%
+    );
+    color: var(--on-band);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      opacity: 0.05;
+      mix-blend-mode: overlay;
+    }
   }
 
   .heading--section {
@@ -104,6 +120,9 @@
   }
 
   .typography {
+    /* Long-form reading leading; the page base stays at a neutral 1.5 */
+    line-height: 1.7;
+
     p,
     table {
       margin-top: 1em;
@@ -448,34 +467,6 @@
     );
   }
 
-  .image-container {
-    &.has-frame {
-      &::before {
-        display: block;
-        content: " ";
-        position: absolute;
-        inset: 3px;
-        border-width: 1px;
-
-        /* Try: groove, outset, inset, double, or keep solid */
-        border-style: outset;
-        border-color: var(--surface);
-        background-color: rgb(0 0 0 / 5%);
-        background-color: color-mix(in srgb, black 5%, transparent);
-        border-radius: 4px;
-        box-sizing: border-box;
-        box-shadow:
-          2px 2px 5px rgb(0 0 0 / 20%),
-          inset 1px 1px 3px rgb(0 0 0 / 30%),
-          1px 1px 3px rgb(255 255 255 / 50%);
-        box-shadow:
-          2px 2px 5px color-mix(in srgb, black 20%, transparent),
-          inset 1px 1px 3px color-mix(in srgb, black 30%, transparent),
-          1px 1px 3px color-mix(in srgb, white 50%, transparent);
-      }
-    }
-  }
-
   .link {
     font-weight: bold;
     color: var(--on-surface);
@@ -502,71 +493,6 @@
 
     &:visited {
       filter: brightness(85%);
-    }
-  }
-
-  .fade-enter-active,
-  .fade-leave-active {
-    transition-property: opacity;
-    transition-duration: 0.5s;
-  }
-
-  .fade-enter-active {
-    transition-delay: 0.5s;
-  }
-
-  .fade-enter,
-  .fade-leave-active {
-    opacity: 0;
-  }
-
-  .quick-fade-enter-active,
-  .quick-fade-leave-active {
-    transition-property: opacity;
-    transition-duration: 0.2s;
-  }
-
-  .quick-fade-enter-active {
-    transition-delay: 0.2s;
-  }
-
-  .quick-fade-enter,
-  .quick-fade-leave-active {
-    opacity: 0;
-  }
-
-  .list-border {
-    & > li {
-      padding-bottom: 1px;
-      background:
-        linear-gradient(
-          to right,
-          transparent 0%,
-          var(--hairline) 30%,
-          var(--hairline) 70%,
-          transparent 100%
-        ),
-        linear-gradient(
-          to right,
-          transparent 0%,
-          var(--hairline) 30%,
-          var(--hairline) 70%,
-          transparent 100%
-        );
-      background-size: 100% 1px;
-      background-position:
-        bottom 0 left 0,
-        bottom 1px left 0;
-      background-repeat: no-repeat;
-
-      &:first-of-type {
-        background-size: 100% 2px;
-        background-position:
-          top 0 left 0,
-          bottom 0 left 0;
-        padding-top: 1px;
-        padding-bottom: 1px;
-      }
     }
   }
 }

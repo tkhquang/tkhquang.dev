@@ -1,0 +1,29 @@
+/*
+ * Loaded only by the index page (imported in app/(default)/page.tsx):
+ * tokens for the stacks chart that nothing else uses.
+ */
+@layer base {
+  :root {
+    /* Neutral stop for the chart's catch-all "Other" entry */
+    --chart-neutral-light: hsl(218deg 16% 78%);
+    --chart-neutral-dark: hsl(202deg 14% 34%);
+  }
+
+  html {
+    --chart-neutral: var(--chart-neutral-dark);
+
+    /*
+     * Legibility tuning for GitHub language identity colors in charts:
+     * lighten toward white in dark (navy Lua would vanish), nudge toward
+     * black in light (JS yellow would wash out on cool paper).
+     */
+    --lang-color-keep: 78%;
+    --lang-color-tune: white;
+  }
+
+  html[data-theme="light"] {
+    --chart-neutral: var(--chart-neutral-light);
+    --lang-color-keep: 88%;
+    --lang-color-tune: black;
+  }
+}

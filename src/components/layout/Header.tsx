@@ -1,81 +1,60 @@
 "use client";
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
-import { ScrollManager } from "@/utils/dom";
-import { useGSAP } from "@gsap/react";
+import { GrowingUnderline } from "@/components/ui/growing-underline";
 import classNames from "classnames";
-import gsap from "gsap";
-import { useRef } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-// Register the hook to avoid React version discrepancies
-gsap.registerPlugin(useGSAP);
+/*
+ * Transparent only at rest: the hero's top padding guarantees nothing sits
+ * under the header at scroll 0, but any scroll slides hero content (the
+ * portrait, the greeting) beneath it, so the blurred backdrop comes in
+ * immediately.
+ *
+ * Deliberately no section nav: the landing page is meant to be scrolled
+ * and read in order, not skipped through.
+ */
+const SCROLLED_AT = 16;
 
-const ID = "Header";
+interface HeaderProps extends React.ComponentProps<"header"> {
+  useScroll?: boolean;
+}
 
-const scrolledStyles = {
-  backgroundColor: "var(--theme-landing-background-semi-transparent)",
-  boxShadow:
-    "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
-};
+const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
+  const [scrolled, setScrolled] = useState(!useScroll);
 
-const Header = ({
-  className,
-  useScroll = true,
-  ...props
-}: React.ComponentProps<"header"> & { useScroll?: boolean }) => {
-  const headerRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!useScroll) {
+      setScrolled(true);
+      return;
+    }
 
-  useGSAP(
-    () => {
-      if (!useScroll) return;
+    const update = () => {
+      setScrolled(window.scrollY > SCROLLED_AT);
+    };
 
-      const scrollManager = new ScrollManager();
-      scrollManager.subscribe({
-        id: ID,
-        callback({ scrollY, scrollProgress }) {
-          if (scrollY > 600 - 96) {
-            gsap.set(headerRef.current, {
-              backgroundColor:
-                "var(--theme-landing-background-semi-transparent)",
-              boxShadow:
-                "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
-            });
-          } else {
-            gsap.set(headerRef.current, {
-              backgroundColor: "transparent",
-              boxShadow: "none",
-            });
-          }
-        },
-      });
+    update();
+    window.addEventListener("scroll", update, { passive: true });
 
-      // Cleanup
-      return () => {
-        scrollManager.destroy();
-      };
-    },
-    { scope: headerRef, dependencies: [useScroll] }
-  );
+    return () => {
+      window.removeEventListener("scroll", update);
+    };
+  }, [useScroll]);
 
   return (
     <header
-      ref={headerRef}
       className={classNames(
-        "flex-center z-(--z-header) text-theme-on-primary-light fixed inset-0 m-0 h-header-height w-full flex-wrap p-0 shadow-lg transition-all duration-500 ease-in-out",
+        "h-header-height fixed inset-x-0 top-0 z-(--z-header) m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
+        scrolled
+          ? "text-theme-on-background bg-theme-background/80 shadow-[inset_0_-1px_0_var(--hairline-soft)] backdrop-blur-md"
+          : "text-theme-on-band bg-transparent",
         className
       )}
-      style={
-        useScroll
-          ? {
-              backgroundColor: "transparent",
-              boxShadow: "none",
-            }
-          : scrolledStyles
-      }
       {...props}
     >
       <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="header__left flex h-full items-center space-x-4">
+        <div className="flex h-full items-center space-x-4">
           <div title="Back to Top">
             <svg
               height={24}
@@ -95,19 +74,17 @@ const Header = ({
               <path d="m784.3 945.1c-3.5 2.2-4.6 3.7-1.5 2 2.2-1.3 5.8-4 5.2-4.1-.3 0-2 1-3.7 2.1zm-6.9 4.5c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-7.6 4c-3.8 2-3.6 2.8.2.9 1.7-.9 3-1.8 3-2 0-.7-.1-.6-3.2 1.1z" />
             </svg>
           </div>
-          <div className="bg-theme-on-primary-light h-4 w-px"></div>
-          <button type="button" className="focus:outline-hidden">
-            <a href="/blog" target="_blank" rel="noopener noreferrer">
-              <div className="flex-center whitespace-no-wrap no-underine focus:outline-hidden select-none font-extrabold uppercase">
-                Blog
-              </div>
-            </a>
-          </button>
         </div>
-        <div className="header__right flex h-full items-center space-x-4">
-          <div className="flex flex-col">
-            <ThemeToggle />
-          </div>
+
+        <div className="flex h-full items-center gap-5">
+          <Link
+            href="/blog"
+            className="text-xs font-extrabold tracking-wider uppercase"
+          >
+            <GrowingUnderline>Blog</GrowingUnderline>
+          </Link>
+
+          <ThemeToggle />
         </div>
       </div>
     </header>

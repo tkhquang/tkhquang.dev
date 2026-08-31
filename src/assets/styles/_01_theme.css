@@ -50,19 +50,34 @@
     --color-theme-tone-2: var(--tone-2);
     --color-theme-tone-3: var(--tone-3);
 
-    /* Font Families */
+    /* Shared shell and band roles */
+    --color-theme-hairline-soft: var(--hairline-soft);
+    --color-theme-raised: var(--surface-raised);
+    --color-theme-on-band: var(--on-band);
+    --color-theme-on-band-dim: var(--on-band-dim);
+
+    /* Fluid type scale shared by homepage and blog */
+    /* Floor low enough that the nowrap hero greeting fits a 320px phone */
+    --text-display: clamp(2rem, 8.5vw, 3.75rem);
+    --text-display--line-height: 1.1;
+    --text-section: clamp(1.75rem, 3vw, 2.25rem);
+    --text-section--line-height: 1.2;
+    --text-subsection: clamp(1.25rem, 2vw, 1.5rem);
+    --text-subsection--line-height: 1.3;
+
+    /* Font Families, fed by the next/font variables set on <html> */
     --font-sans:
-      "Montserrat", "Montserrat Fallback", system-ui, -apple-system,
-      blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial,
-      "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      var(--font-montserrat, "Montserrat"), "Montserrat Fallback", system-ui,
+      -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue",
+      arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
       "Segoe UI Symbol";
     --font-serif:
-      "Merriweather", "Merriweather Fallback", georgia, cambria,
-      "Times New Roman", times, serif;
+      var(--font-merriweather, "Merriweather"), "Merriweather Fallback",
+      georgia, cambria, "Times New Roman", times, serif;
     --font-mono:
-      "Source Code Pro", "Source Code Pro Fallback", ui-monospace,
-      sfmono-regular, menlo, monaco, consolas, "Liberation Mono", "Courier New",
-      monospace;
+      var(--font-source-code-pro, "Source Code Pro"),
+      "Source Code Pro Fallback", ui-monospace, sfmono-regular, menlo, monaco,
+      consolas, "Liberation Mono", "Courier New", monospace;
 
     /* Box Shadows */
     --shadow-box: 0 1px 10px 0 rgb(0 0 0 / 20%);

@@ -1,11 +1,13 @@
 import Image from "@/components/common/NextImage";
-import StacksChartFrame from "@/components/landing/stacks/StacksChartFrame";
+import SectionHeading from "@/components/common/SectionHeading";
+import StacksViz from "@/components/landing/stacks/StacksViz";
+import { fetchGitHubCommitStats } from "@/services/github";
 
-const stacks = [
+const TOOLKIT = [
   {
-    icon: "elixir.svg",
-    link: "https://elixir-lang.org/",
-    title: "Elixir",
+    icon: "typescript.svg",
+    link: "https://www.typescriptlang.org/",
+    title: "TypeScript",
   },
   {
     icon: "javascript.svg",
@@ -14,28 +16,8 @@ const stacks = [
   },
   {
     icon: "react.svg",
-    link: "https://reactjs.org/",
+    link: "https://react.dev/",
     title: "React",
-  },
-  {
-    icon: "vue.svg",
-    link: "https://vuejs.org/",
-    title: "Vue",
-  },
-  {
-    icon: "nodejs.svg",
-    link: "https://nodejs.org/en/",
-    title: "Node",
-  },
-  {
-    icon: "sass.svg",
-    link: "https://sass-lang.com/",
-    title: "SASS",
-  },
-  {
-    icon: "tailwindcss.svg",
-    link: "https://tailwindcss.com/",
-    title: "Tailwind",
   },
   {
     icon: "next.svg",
@@ -43,9 +25,29 @@ const stacks = [
     title: "Next.js",
   },
   {
-    icon: "gridsome.svg",
-    link: "https://gridsome.org",
-    title: "Gridsome",
+    icon: "nodejs.svg",
+    link: "https://nodejs.org/en/",
+    title: "Node",
+  },
+  {
+    icon: "tailwindcss.svg",
+    link: "https://tailwindcss.com/",
+    title: "Tailwind",
+  },
+  {
+    icon: "elixir.svg",
+    link: "https://elixir-lang.org/",
+    title: "Elixir",
+  },
+  {
+    icon: "c-plusplus.svg",
+    link: "https://isocpp.org/",
+    title: "C++",
+  },
+  {
+    icon: "lua.svg",
+    link: "https://www.lua.org/",
+    title: "Lua",
   },
   {
     icon: "git.svg",
@@ -54,62 +56,119 @@ const stacks = [
   },
 ];
 
-export interface ChartData {
-  label: string;
-  value: number;
-  color: string;
+interface LanguageStat {
+  id: string;
+  name: string;
+  size: number;
+  percentage: number;
+  color?: string;
 }
 
-export default async function Stacks() {
+/**
+ * Language share of GitHub commits, aggregated across repositories; shares
+ * under 1% roll up into "Other".
+ */
+async function getLanguageStats(): Promise<LanguageStat[]> {
+  const data = await fetchGitHubCommitStats();
+  const repositories = data.viewer.repositories.edges;
+
+  const stats: Record<string, Omit<LanguageStat, "percentage">> = {};
+  let total = 0;
+
+  repositories
+    .filter(({ node: { primaryLanguage } }) => primaryLanguage !== null)
+    .forEach(({ node: { languages } }) => {
+      languages.edges.forEach(({ node, size }) => {
+        total += size;
+
+        if (!stats[node.id]) {
+          stats[node.id] = {
+            color: node.color,
+            id: node.id,
+            name: node.name,
+            size: 0,
+          };
+        }
+
+        stats[node.id].size += size;
+      });
+    });
+
+  if (total === 0) {
+    return [];
+  }
+
+  const significant = Object.values(stats)
+    .map((stat) => ({
+      ...stat,
+      percentage: (stat.size * 100) / total,
+    }))
+    .filter((stat) => stat.percentage >= 1)
+    .sort((a, b) => b.percentage - a.percentage);
+
+  const significantShare = significant.reduce(
+    (acc, { percentage }) => acc + percentage,
+    0
+  );
+
+  const otherShare = Math.max(0, 100 - significantShare);
+  if (otherShare < 0.05) {
+    return significant;
+  }
+
+  return [
+    ...significant,
+    {
+      id: "other",
+      name: "Other",
+      percentage: otherShare,
+      size: 0,
+    },
+  ];
+}
+
+const Stacks = async () => {
+  const languages = await getLanguageStats();
+
   return (
-    <section className="stacks">
+    <section className="stacks scroll-mt-header-height pt-8" id="stacks">
       <div className="container">
-        <h2 className="heading--section my-10 text-4xl">Stacks 📚</h2>
+        <SectionHeading kicker="What I work with" title="Stacks" emoji="📚" />
 
-        <div className="flex flex-col lg:flex-row">
-          <div className="flex-center mx-auto w-full md:w-2/3 lg:w-1/3">
-            <Image
-              src="/assets/resources/svg/Dev.svg"
-              alt="Developer"
-              width={500}
-              height={500}
-              style={{ objectFit: "cover" }}
-              shouldShowBackground={false}
-              unoptimized
-            />
-          </div>
-
-          <div className="chart-container w-full text-center lg:w-2/3">
-            <StacksChartFrame />
-          </div>
+        <div>
+          <StacksViz
+            languages={languages.map(({ color, id, name, percentage }) => ({
+              color,
+              id,
+              name,
+              percentage,
+            }))}
+          />
         </div>
       </div>
 
-      <div
-        className="mt-10 w-full overflow-hidden bg-theme-surface py-24 shadow-lg"
-        style={{ color: "var(--on-primary-light)" }}
-      >
-        <ul className="stacks-list grid grid-cols-2 gap-10 md:grid-cols-3 md:gap-4 lg:grid-cols-5">
-          {stacks.map((stack) => (
-            <li key={stack.title} className="mx-auto">
+      <div className="bg-theme-surface border-theme-hairline-soft mt-14 w-full border-y py-8">
+        <ul className="container grid grid-cols-2 gap-3 sm:grid-cols-3 md:max-w-4xl md:grid-cols-5">
+          {TOOLKIT.map((stack) => (
+            <li key={stack.title}>
               <a
                 href={stack.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-auto inline-block text-center transition-transform duration-300 ease-in-out hover:scale-110"
+                className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex w-full items-center gap-2.5 rounded-lg border px-3 py-2 transition-all duration-200"
               >
-                <div className="flex-center mx-auto size-24">
+                <span className="flex-center size-5 shrink-0">
                   <Image
                     src={`/assets/resources/svg/stacks/${stack.icon}`}
                     alt=""
-                    width={150}
-                    height={150}
+                    width={20}
+                    height={20}
                     style={{ objectFit: "contain" }}
                     shouldShowBackground={false}
                     unoptimized
                   />
-                </div>
-                <span className="text-xl font-bold leading-loose text-theme-on-surface">
+                </span>
+                <span className="text-theme-on-surface font-mono text-xs font-semibold">
                   {stack.title}
                 </span>
               </a>
@@ -119,4 +178,6 @@ export default async function Stacks() {
       </div>
     </section>
   );
-}
+};
+
+export default Stacks;

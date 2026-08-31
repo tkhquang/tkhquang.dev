@@ -11,13 +11,14 @@ const Footer = ({
     <footer
       {...props}
       className={classNames(
-        "footer surface shadow-box mt-auto py-4 text-center",
+        "footer bg-theme-darken border-theme-hairline-soft mt-auto border-t py-6",
         className
       )}
     >
-      <div className="container flex items-center justify-between">
-        <div className="font-semibold">
-          Copyright © {new Date().getFullYear()}
+      <div className="container flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="kicker text-center sm:whitespace-nowrap">
+          © {new Date().getFullYear()} · Built by day, tinkered by night{" "}
+          <span aria-hidden="true">☕</span>
         </div>
         <SocialLinks className="flex-center gap-1 text-2xl" />
       </div>

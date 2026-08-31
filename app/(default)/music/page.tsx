@@ -1,3 +1,4 @@
+import SectionHeading from "@/components/common/SectionHeading";
 import NowPlayingHero from "@/components/spotify/NowPlayingHero";
 import RecentlyPlayed from "@/components/spotify/RecentlyPlayed";
 import TopItems from "@/components/spotify/TopItems";
@@ -36,7 +37,13 @@ export default async function MusicPage() {
   return (
     <div className="mt-header-height">
       <div className="container mx-auto max-w-4xl px-4 py-10">
-        <h1 className="heading--section text-4xl">Music 🎧</h1>
+        <SectionHeading
+          as="h1"
+          rule="full"
+          title="Music"
+          emoji="🎧"
+          className="mb-0"
+        />
         <p className="text-theme-on-surface mt-4 mb-8 opacity-70">
           Whatever is on repeat at the moment, straight from{" "}
           <Link
@@ -54,7 +61,12 @@ export default async function MusicPage() {
         <NowPlayingHero lastPlayed={recentlyPlayed[0] ?? null} />
 
         <section className="mt-12">
-          <h2 className="heading--section text-2xl">On heavy rotation</h2>
+          <SectionHeading
+            rule="full"
+            size="subsection"
+            title="On heavy rotation"
+            className="mb-0"
+          />
           <p className="text-theme-on-surface mt-4 mb-6 text-sm opacity-60">
             Spotify works these out itself, which makes them the only long-range
             history it will hand over.
@@ -66,7 +78,12 @@ export default async function MusicPage() {
         </section>
 
         <section className="mt-12">
-          <h2 className="heading--section text-2xl">Recently played</h2>
+          <SectionHeading
+            rule="full"
+            size="subsection"
+            title="Recently played"
+            className="mb-0"
+          />
           <p className="text-theme-on-surface mt-4 mb-6 text-sm opacity-60">
             The API only exposes the last 50 plays, roughly three hours of
             listening, so this is the whole of it.

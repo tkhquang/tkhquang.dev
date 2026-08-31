@@ -1,7 +1,9 @@
+import "@/assets/styles/(default)/landing.css";
 import ReportView from "@/components/common/ReportView";
 import Contact from "@/components/contact/Contact";
 import Landing from "@/components/landing/Landing";
 import Stacks from "@/components/landing/stacks/Stacks";
+import Writing from "@/components/landing/writing/Writing";
 import Projects from "@/components/projects/Projects";
 import { Footer, Header, Main } from "@/components/layout";
 import { Suspense } from "react";
@@ -20,6 +22,7 @@ export default async function HomePage() {
         <Landing />
         <Stacks />
         <Projects />
+        <Writing />
         <Contact />
       </Main>
       <Footer />

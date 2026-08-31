@@ -132,8 +132,8 @@ export default function NowPlayingHero({
       className={clsx([
         // Same contract as the list rows: the card delegates its clicks, and
         // `group` drives the underline on card hover.
-        "bg-theme-surface shadow-box group flex flex-col items-center gap-5 rounded-lg p-5",
-        "hover:shadow-box-md transition-shadow duration-200",
+        "bg-theme-raised border-theme-hairline-soft group flex flex-col items-center gap-5 rounded-xl border p-5 shadow-sm",
+        "hover:border-theme-primary/40 transition-all duration-200",
         "sm:flex-row sm:items-start",
         track && "cursor-pointer",
       ])}
@@ -156,7 +156,9 @@ export default function NowPlayingHero({
         }
       />
 
-      <div className="min-w-0 flex-1 text-center sm:text-left">
+      {/* w-full constrains the cross axis in the stacked layout; without it
+          a long title widens this block past the viewport */}
+      <div className="w-full min-w-0 flex-1 text-center sm:text-left">
         {isLoading ? (
           <Label>Loading&hellip;</Label>
         ) : isPlaying ? (
@@ -197,7 +199,7 @@ export default function NowPlayingHero({
               className="mt-2 inline-block max-w-full truncate text-2xl font-bold"
               title={`${track.name} - ${getArtistNames(track)}`}
             >
-              <GrowingUnderline className={underlineClassName}>
+              <GrowingUnderline tone="spotify" className={underlineClassName}>
                 {track.name}
               </GrowingUnderline>
             </SpotifyLink>

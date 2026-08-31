@@ -31,6 +31,12 @@ const nextConfig = {
         ],
         source: "/api/pageviews/badge",
       },
+      // Keep the resume out of search results; crawling stays allowed so
+      // Google can see the noindex and drop the already-indexed entry
+      {
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+        source: "/assets/resources/pdf/:path*",
+      },
     ];
   },
   images: {
