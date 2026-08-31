@@ -6,6 +6,31 @@
     @apply flex items-center justify-center;
   }
 
+  /*
+   * Full-bleed gradient band (hero, contact outro). One recipe per theme via
+   * the --band-a/--band-b role tokens; text uses --on-band. The grain overlay
+   * keeps large gradient fields from banding and adds a handmade touch.
+   */
+  .band {
+    position: relative;
+    background-image: linear-gradient(
+      165deg,
+      var(--band-a) 0%,
+      var(--band-b) 100%
+    );
+    color: var(--on-band);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      opacity: 0.05;
+      mix-blend-mode: overlay;
+    }
+  }
+
   .heading--section {
     @apply heading pb-4;
 

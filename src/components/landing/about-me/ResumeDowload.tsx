@@ -21,28 +21,22 @@ const ResumeDownload = () => {
   };
 
   return (
-    <div className="download-container typography flex-center my-2 flex-col">
-      <a
-        className="download__link shadow-md"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="View Resume"
-        href={RESUME.path}
-        onClick={handleResumeDownload}
-      >
+    <a
+      className="download-container bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex items-center gap-4 rounded-xl border p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="View Resume"
+      href={RESUME.path}
+      onClick={handleResumeDownload}
+    >
+      <span className="download__link shrink-0 shadow-md">
         <span>Download</span>
         <span>PDF</span>
-      </a>
-      <a
-        target="_blank"
-        href={RESUME.path}
-        rel="noopener noreferrer"
-        title="View Resume"
-        onClick={handleResumeDownload}
-      >
-        {RESUME.fileName}
-      </a>
-    </div>
+      </span>
+      <span className="font-semibold">
+        View my resume <span aria-hidden="true">📄</span>
+      </span>
+    </a>
   );
 };
 

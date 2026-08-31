@@ -1,0 +1,55 @@
+@keyframes hero-portrait-morph {
+  0% {
+    border-radius: 42% 58% 49% 51% / 48% 64% 36% 52%;
+  }
+
+  100% {
+    border-radius: 50% 50% 55% 45% / 64% 51% 49% 36%;
+  }
+}
+
+@keyframes hero-portrait-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.hero-portrait {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    display: block;
+    inset: -0.5rem;
+    background-image: linear-gradient(
+      to bottom right,
+      var(--surface) 0%,
+      var(--secondary) 100%
+    );
+    border-radius: 42% 58% 49% 51% / 48% 64% 36% 52%;
+    animation:
+      hero-portrait-spin 12s linear infinite reverse,
+      hero-portrait-morph 8s ease-in-out infinite both alternate;
+    animation-play-state: paused;
+  }
+
+  &:hover {
+    &::before {
+      animation-play-state: running;
+    }
+
+    .hero-portrait__image {
+      border-radius: 50%;
+    }
+  }
+
+  .hero-portrait__image {
+    transition: border-radius 0.5s ease-in-out;
+    border-radius: 50% 50% 55% 45% / 64% 51% 49% 36%;
+  }
+}
+
+.hero-portrait__image-frame {
+  border-radius: 35% 63% 59% 41% / 68% 69% 31% 58%;
+}

@@ -48,7 +48,7 @@ const HeroRolesContent = () => {
         return (
           <div
             className={classnames(
-              "absolute inset-0 flex items-center justify-center text-center leading-none transition-all duration-400",
+              "absolute inset-0 flex items-center leading-none transition-all duration-400",
               isShown ? "opacity-100" : "translate-y-2 opacity-0"
             )}
             key={index}

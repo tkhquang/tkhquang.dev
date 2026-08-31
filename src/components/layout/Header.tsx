@@ -1,82 +1,71 @@
 "use client";
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { GrowingUnderline } from "@/components/ui/growing-underline";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { ScrollManager } from "@/utils/dom";
-import { useGSAP } from "@gsap/react";
 import classNames from "classnames";
-import gsap from "gsap";
+import { MenuIcon } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
-
-// Register the hook to avoid React version discrepancies
-gsap.registerPlugin(useGSAP);
+import { useEffect, useState } from "react";
 
 const ID = "Header";
+const SCROLLED_THRESHOLD = 480;
 
-const scrolledStyles = {
-  backgroundColor: "var(--theme-landing-background-semi-transparent)",
-  boxShadow:
-    "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
-};
+const NAV_ITEMS = [
+  { emoji: "🙋🏻‍♂️", href: "/#about", label: "About" },
+  { emoji: "🧰", href: "/#stacks", label: "Stacks" },
+  { emoji: "💻", href: "/#projects", label: "Projects" },
+  { emoji: "✍️", href: "/#writing", label: "Writing" },
+  { emoji: "📨", href: "/#contact", label: "Contact" },
+];
 
 const Header = ({
   className,
   useScroll = true,
   ...props
 }: React.ComponentProps<"header"> & { useScroll?: boolean }) => {
-  const headerRef = useRef<HTMLElement>(null);
+  const [scrolled, setScrolled] = useState(!useScroll);
 
-  useGSAP(
-    () => {
-      if (!useScroll) return;
+  useEffect(() => {
+    if (!useScroll) {
+      setScrolled(true);
+      return;
+    }
 
-      const scrollManager = new ScrollManager();
-      scrollManager.subscribe({
-        id: ID,
-        callback({ scrollY, scrollProgress }) {
-          if (scrollY > 600 - 96) {
-            gsap.set(headerRef.current, {
-              backgroundColor:
-                "var(--theme-landing-background-semi-transparent)",
-              boxShadow:
-                "var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)",
-            });
-          } else {
-            gsap.set(headerRef.current, {
-              backgroundColor: "transparent",
-              boxShadow: "none",
-            });
-          }
-        },
-      });
+    setScrolled(window.scrollY > SCROLLED_THRESHOLD);
+    const scrollManager = new ScrollManager();
+    scrollManager.subscribe({
+      id: ID,
+      callback({ scrollY }) {
+        setScrolled(scrollY > SCROLLED_THRESHOLD);
+      },
+    });
 
-      // Cleanup
-      return () => {
-        scrollManager.destroy();
-      };
-    },
-    { scope: headerRef, dependencies: [useScroll] }
-  );
+    return () => {
+      scrollManager.destroy();
+    };
+  }, [useScroll]);
 
   return (
     <header
-      ref={headerRef}
       className={classNames(
-        "flex-center z-(--z-header) text-theme-on-primary-light fixed inset-0 m-0 h-header-height w-full flex-wrap p-0 shadow-lg transition-all duration-500 ease-in-out",
+        "h-header-height z-(--z-header) fixed inset-x-0 top-0 m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
+        scrolled
+          ? "text-theme-on-background bg-theme-background/80 shadow-[inset_0_-1px_0_var(--hairline-soft)] backdrop-blur-md"
+          : "text-theme-on-band bg-transparent",
         className
       )}
-      style={
-        useScroll
-          ? {
-              backgroundColor: "transparent",
-              boxShadow: "none",
-            }
-          : scrolledStyles
-      }
       {...props}
     >
       <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div className="header__left flex h-full items-center space-x-4">
+        <div className="flex h-full items-center space-x-4">
           <div title="Back to Top">
             <svg
               height={24}
@@ -96,18 +85,69 @@ const Header = ({
               <path d="m784.3 945.1c-3.5 2.2-4.6 3.7-1.5 2 2.2-1.3 5.8-4 5.2-4.1-.3 0-2 1-3.7 2.1zm-6.9 4.5c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-7.6 4c-3.8 2-3.6 2.8.2.9 1.7-.9 3-1.8 3-2 0-.7-.1-.6-3.2 1.1z" />
             </svg>
           </div>
-          <div className="bg-theme-on-primary-light h-4 w-px"></div>
-          <Link
-            href="/blog"
-            className="flex-center whitespace-no-wrap focus:outline-hidden font-extrabold uppercase no-underline select-none"
-          >
-            Blog
-          </Link>
         </div>
-        <div className="header__right flex h-full items-center space-x-4">
-          <div className="flex flex-col">
-            <ThemeToggle />
-          </div>
+
+        <div className="flex h-full items-center gap-5">
+          <nav
+            aria-label="Sections"
+            className="hidden h-full items-center gap-5 md:flex"
+          >
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-xs font-semibold tracking-wider uppercase"
+              >
+                <GrowingUnderline>{item.label}</GrowingUnderline>
+              </Link>
+            ))}
+            <Link
+              href="/blog"
+              className="text-xs font-extrabold tracking-wider uppercase"
+            >
+              <GrowingUnderline>Blog</GrowingUnderline>
+            </Link>
+          </nav>
+
+          <ThemeToggle />
+
+          <Sheet>
+            <SheetTrigger
+              aria-label="Open navigation"
+              className="flex-center md:hidden"
+            >
+              <MenuIcon className="size-6" />
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className="bg-theme-background text-theme-on-background border-theme-hairline-soft"
+            >
+              <SheetTitle className="kicker px-6 pt-8">
+                tkhquang.dev
+              </SheetTitle>
+              <nav aria-label="Sections" className="flex flex-col gap-1 px-6">
+                {NAV_ITEMS.map((item) => (
+                  <SheetClose asChild key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="text-subsection py-2 font-bold"
+                    >
+                      {item.label}{" "}
+                      <span aria-hidden="true">{item.emoji}</span>
+                    </Link>
+                  </SheetClose>
+                ))}
+                <SheetClose asChild>
+                  <Link
+                    href="/blog"
+                    className="text-subsection text-theme-primary py-2 font-bold"
+                  >
+                    Blog <span aria-hidden="true">📓</span>
+                  </Link>
+                </SheetClose>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

@@ -15,26 +15,43 @@
     }
 
     --animate-fade-in-forwards: fade-in 1s forwards;
-    --animate-hero-height: hero-height 1.5s linear;
-    @keyframes hero-height {
-      0%,
-      50% {
-        min-height: calc(100vh + 6rem);
-      }
 
-      100% {
-        min-height: 600px;
-      }
-    }
-
-    --animate-typing: typing 0.5s steps(20, end) forwards 1s;
+    /* Max-width wipe: never wider than the text, so a caret can sit flush */
+    --animate-typing: typing 0.5s steps(14, end) forwards 1s;
     @keyframes typing {
       from {
-        width: 0;
+        max-width: 0;
       }
 
       to {
-        width: 100%;
+        max-width: 8em;
+      }
+    }
+
+    /* Blink six times after the type-in finishes, then stay hidden */
+    --animate-caret: caret 1s steps(1, end) 1s 6 both;
+    @keyframes caret {
+      0% {
+        opacity: 1;
+      }
+
+      50%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Hero entrance: content rises and settles, staggered via delays */
+    --animate-rise-in: rise-in 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    @keyframes rise-in {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   }

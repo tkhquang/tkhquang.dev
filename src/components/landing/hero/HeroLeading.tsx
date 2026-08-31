@@ -4,15 +4,19 @@ const HeroLeading = ({ className, ...props }: React.ComponentProps<"h1">) => {
   return (
     <h1
       className={classNames(
-        "my-0 animate-fade-in-forwards overflow-hidden whitespace-nowrap text-center text-4xl font-bold leading-loose! lg:text-6xl",
+        "animate-rise-in text-display my-0 font-extrabold tracking-tight whitespace-nowrap",
         className
       )}
       {...props}
     >
       Hello
-      <span className="inline-block w-0 animate-typing text-left">
+      <span className="animate-typing inline-block overflow-hidden align-bottom whitespace-nowrap">
         , I&apos;m Aleks!
       </span>
+      <span
+        className="animate-caret ml-1.5 inline-block h-[0.8em] w-[0.1em] rounded-sm bg-current align-baseline"
+        aria-hidden="true"
+      />
     </h1>
   );
 };

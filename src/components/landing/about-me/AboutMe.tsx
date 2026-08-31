@@ -1,47 +1,33 @@
 import "./AboutMe.css";
-import Image from "@/components/common/NextImage";
+import Reveal from "@/components/common/Reveal";
+import SectionHeading from "@/components/common/SectionHeading";
 import ResumeDownload from "@/components/landing/about-me/ResumeDowload";
+import RightNow from "@/components/landing/about-me/RightNow";
 import { Portfolio } from "@/constants/meta";
-import { getProcessedImage } from "@/utils/image";
 
-const ABOUT_ME_IMAGE = "/assets/resources/images/Aleks-2.jpg";
-
-const AboutMe = async () => {
-  const aboutImage = await getProcessedImage({
-    source: ABOUT_ME_IMAGE,
-    shouldStore: false,
-    cache: true,
-  });
-
+const AboutMe = () => {
   return (
-    <section className="about">
-      <div className="container">
-        <h2 className="heading--section my-10 text-4xl">About Me 🙋🏻‍♂️</h2>
-        <div className="flex-center flex-col-reverse gap-2 lg:flex-row">
+    <section
+      className="about scroll-mt-header-height container pt-16 pb-8"
+      id="about"
+    >
+      <SectionHeading kicker="Who I am" title="About Me" emoji="🙋🏻‍♂️" />
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,40rem)_19rem] lg:justify-between">
+        <Reveal>
           <div
-            className="typography w-full lg:w-2/3"
+            className="typography about__prose"
             dangerouslySetInnerHTML={{
               __html: Portfolio.METADATA.about,
             }}
           ></div>
-          <div className="author flex-center xs:w-1/2 mx-6 my-10 w-4/5 p-6 md:w-1/3">
-            <div className="relative w-full pb-[100%]">
-              <Image
-                fill
-                sizes="auto"
-                className="author__image object-cover object-[15%_50%]"
-                src={aboutImage.source}
-                alt="Aleks"
-                placeholder="blur"
-                blurDataURL={aboutImage.placeholder}
-                loading="eager"
-                containerClassName="author__image--border"
-              />
-            </div>
-          </div>
-        </div>
-
-        <ResumeDownload />
+        </Reveal>
+        <Reveal
+          delay={100}
+          className="flex flex-col gap-5 lg:sticky lg:top-[calc(var(--header-height)+2rem)] lg:self-start"
+        >
+          <RightNow />
+          <ResumeDownload />
+        </Reveal>
       </div>
     </section>
   );
