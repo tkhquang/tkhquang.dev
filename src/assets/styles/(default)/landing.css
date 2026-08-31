@@ -1,0 +1,60 @@
+/*
+ * Loaded only by the index page (imported in app/(default)/page.tsx).
+ * Other (default) routes like /music never ship these tokens; the Tailwind
+ * color mappings that reference them live in (default)/_01_theme.css.
+ */
+@layer base {
+  :root {
+    /*
+     * Hero/outro band gradients, one recipe per theme: a confident lapis
+     * day sky in light, a dusk-lakeshore mix in dark. Text on bands uses
+     * --on-band.
+     */
+    --band-a-light: hsl(222deg 68% 40%);
+    --band-b-light: color-mix(
+      in srgb,
+      hsl(222deg 68% 40%) 62%,
+      hsl(222deg 45% 16%)
+    );
+    --on-band-light: hsl(221deg 42% 97%);
+    --on-band-dim-light: hsl(221deg 42% 88%);
+    --band-a-dark: color-mix(
+      in srgb,
+      hsl(200deg 100% 50%) 28%,
+      hsl(202deg 45% 15%)
+    );
+    --band-b-dark: color-mix(in srgb, black 22%, hsl(202deg 45% 13%));
+    --on-band-dark: hsl(199deg 40% 87%);
+    --on-band-dim-dark: hsl(199deg 30% 74%);
+
+    /* Neutral stop for the chart's catch-all "Other" entry */
+    --chart-neutral-light: hsl(218deg 16% 78%);
+    --chart-neutral-dark: hsl(202deg 14% 34%);
+  }
+
+  html {
+    --band-a: var(--band-a-dark);
+    --band-b: var(--band-b-dark);
+    --on-band: var(--on-band-dark);
+    --on-band-dim: var(--on-band-dim-dark);
+    --chart-neutral: var(--chart-neutral-dark);
+
+    /*
+     * Legibility tuning for GitHub language identity colors in charts:
+     * lighten toward white in dark (navy Lua would vanish), nudge toward
+     * black in light (JS yellow would wash out on cool paper).
+     */
+    --lang-color-keep: 78%;
+    --lang-color-tune: white;
+  }
+
+  html[data-theme="light"] {
+    --band-a: var(--band-a-light);
+    --band-b: var(--band-b-light);
+    --on-band: var(--on-band-light);
+    --on-band-dim: var(--on-band-dim-light);
+    --chart-neutral: var(--chart-neutral-light);
+    --lang-color-keep: 88%;
+    --lang-color-tune: black;
+  }
+}

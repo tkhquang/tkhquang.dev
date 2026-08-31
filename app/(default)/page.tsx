@@ -1,3 +1,4 @@
+import "@/assets/styles/(default)/landing.css";
 import ReportView from "@/components/common/ReportView";
 import Contact from "@/components/contact/Contact";
 import Landing from "@/components/landing/Landing";

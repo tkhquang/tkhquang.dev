@@ -1,65 +1,18 @@
 @layer base {
   /*
-   * Tokens only the (default) group consumes: the landing bands and raised
-   * cards, and the music/stacks chart tuning. Site-wide role tokens live in
-   * _00_core.css.
+   * Raised card surface shared by the (default) routes (landing cards, the
+   * music now-playing hero). Index-page-only tokens live in landing.css.
    */
   :root {
     --surface-raised-light: hsl(219deg 45% 97%);
     --surface-raised-dark: hsl(201deg 38% 23%);
-
-    /*
-     * Hero/outro band gradients, one recipe per theme: a confident lapis
-     * day sky in light, a dusk-lakeshore mix in dark. Text on bands uses
-     * --on-band.
-     */
-    --band-a-light: hsl(222deg 68% 40%);
-    --band-b-light: color-mix(
-      in srgb,
-      hsl(222deg 68% 40%) 62%,
-      hsl(222deg 45% 16%)
-    );
-    --on-band-light: hsl(221deg 42% 97%);
-    --on-band-dim-light: hsl(221deg 42% 88%);
-    --band-a-dark: color-mix(
-      in srgb,
-      hsl(200deg 100% 50%) 28%,
-      hsl(202deg 45% 15%)
-    );
-    --band-b-dark: color-mix(in srgb, black 22%, hsl(202deg 45% 13%));
-    --on-band-dark: hsl(199deg 40% 87%);
-    --on-band-dim-dark: hsl(199deg 30% 74%);
-
-    /* Neutral stop for the chart's catch-all "Other" entry */
-    --chart-neutral-light: hsl(218deg 16% 78%);
-    --chart-neutral-dark: hsl(202deg 14% 34%);
   }
 
   html {
     --surface-raised: var(--surface-raised-dark);
-    --band-a: var(--band-a-dark);
-    --band-b: var(--band-b-dark);
-    --on-band: var(--on-band-dark);
-    --on-band-dim: var(--on-band-dim-dark);
-    --chart-neutral: var(--chart-neutral-dark);
-
-    /*
-     * Legibility tuning for GitHub language identity colors in charts:
-     * lighten toward white in dark (navy Lua would vanish), nudge toward
-     * black in light (JS yellow would wash out on cool paper).
-     */
-    --lang-color-keep: 78%;
-    --lang-color-tune: white;
   }
 
   html[data-theme="light"] {
     --surface-raised: var(--surface-raised-light);
-    --band-a: var(--band-a-light);
-    --band-b: var(--band-b-light);
-    --on-band: var(--on-band-light);
-    --on-band-dim: var(--on-band-dim-light);
-    --chart-neutral: var(--chart-neutral-light);
-    --lang-color-keep: 88%;
-    --lang-color-tune: black;
   }
 }
