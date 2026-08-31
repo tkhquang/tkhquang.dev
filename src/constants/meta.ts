@@ -12,6 +12,10 @@ export namespace Portfolio {
 <p>Hi, I'm Quang Trinh Khac (or just Aleks). I'm an engineer with a genuine curiosity for technology, open source, and the little things that make software work. By day, I build user interfaces with React and modern web tools. By night, I explore how things work under the hood: modding games, reverse engineering, and sharing what I learn along the way.</p>
 
 <p>
+I studied in the Advanced Education Program (AEP) in Information Systems at Ho Chi Minh City University of Information Technology (UIT), where I found a real passion for learning, both inside and outside the classroom. While my path hasn't been the most traditional, hands-on experience and continuous improvement have shaped my journey.
+</p>
+
+<p>
 I'm grateful for the open source community, where I've learned a lot and enjoy giving back when I can. I share modding tools for games, contribute to public projects, and experiment with both web and systems-level code. If you appreciate reliable engineering and a bit of creative problem-solving, I'd be happy to connect.
 </p>
 
