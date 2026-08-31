@@ -1,18 +1,3 @@
 @layer base {
-  /*
-   * Raised card surface shared by the (default) routes (landing cards, the
-   * music now-playing hero). Index-page-only tokens live in landing.css.
-   */
-  :root {
-    --surface-raised-light: hsl(219deg 45% 97%);
-    --surface-raised-dark: hsl(201deg 38% 23%);
-  }
-
-  html {
-    --surface-raised: var(--surface-raised-dark);
-  }
-
-  html[data-theme="light"] {
-    --surface-raised: var(--surface-raised-light);
-  }
+  /* Placeholder for base */
 }

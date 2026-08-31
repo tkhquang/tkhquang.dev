@@ -50,8 +50,11 @@
     --color-theme-tone-2: var(--tone-2);
     --color-theme-tone-3: var(--tone-3);
 
-    /* Card and chip borders across the shared shell */
+    /* Shared shell and band roles */
     --color-theme-hairline-soft: var(--hairline-soft);
+    --color-theme-raised: var(--surface-raised);
+    --color-theme-on-band: var(--on-band);
+    --color-theme-on-band-dim: var(--on-band-dim);
 
     /* Fluid type scale shared by homepage and blog */
     /* Floor low enough that the nowrap hero greeting fits a 320px phone */

@@ -79,6 +79,36 @@
   --accent-dark: hsl(267deg 56% 75%);
   --on-accent-dark: hsl(267deg 58% 12%);
   --neutral-dark: hsl(202deg 14% 26%);
+
+  /*
+   * Elevation is theme-specific by design: near-white panels + shadow carry
+   * light mode, raised lightness + hairline borders carry dark (shadows die
+   * on dark backgrounds).
+   */
+  --surface-raised-light: hsl(219deg 45% 97%);
+  --surface-raised-dark: hsl(201deg 38% 23%);
+
+  /*
+   * Full-bleed gradient band recipes, one per theme: a confident lapis day
+   * sky in light, a dusk-lakeshore mix in dark. Text on bands uses
+   * --on-band.
+   */
+  --band-a-light: hsl(222deg 68% 40%);
+  --band-b-light: color-mix(
+    in srgb,
+    hsl(222deg 68% 40%) 62%,
+    hsl(222deg 45% 16%)
+  );
+  --on-band-light: hsl(221deg 42% 97%);
+  --on-band-dim-light: hsl(221deg 42% 88%);
+  --band-a-dark: color-mix(
+    in srgb,
+    hsl(200deg 100% 50%) 28%,
+    hsl(202deg 45% 15%)
+  );
+  --band-b-dark: color-mix(in srgb, black 22%, hsl(202deg 45% 13%));
+  --on-band-dark: hsl(199deg 40% 87%);
+  --on-band-dim-dark: hsl(199deg 30% 74%);
 }
 
 html {
@@ -105,6 +135,11 @@ html {
 
   /* Card/chip borders: elevation carrier in dark, quiet outline in light */
   --hairline-soft: color-mix(in srgb, var(--on-surface) 14%, transparent);
+  --surface-raised: var(--surface-raised-dark);
+  --band-a: var(--band-a-dark);
+  --band-b: var(--band-b-dark);
+  --on-band: var(--on-band-dark);
+  --on-band-dim: var(--on-band-dim-dark);
 }
 
 html[data-theme="light"] {
@@ -128,4 +163,9 @@ html[data-theme="light"] {
   --hairline: var(--primary);
   /* Softened: full-strength lapis hairlines are too heavy on light paper */
   --hairline: color-mix(in srgb, var(--primary) 55%, transparent);
+  --surface-raised: var(--surface-raised-light);
+  --band-a: var(--band-a-light);
+  --band-b: var(--band-b-light);
+  --on-band: var(--on-band-light);
+  --on-band-dim: var(--on-band-dim-light);
 }
