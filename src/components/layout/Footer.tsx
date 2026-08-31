@@ -3,20 +3,29 @@ import SocialLinks from "@/components/common/SocialLinks";
 import classNames from "classnames";
 import React from "react";
 
-const FOOTER_NAV = [
+const SECTION_NAV = [
   { href: "/#about", label: "About" },
   { href: "/#stacks", label: "Stacks" },
   { href: "/#projects", label: "Projects" },
   { href: "/#writing", label: "Writing" },
   { href: "/#contact", label: "Contact" },
-  { href: "/blog", label: "Blog" },
 ];
+
+const BLOG_NAV = { href: "/blog", label: "Blog" };
+
+interface FooterProps extends React.ComponentProps<"footer"> {
+  /** Section anchors only make sense where the sections exist (homepage) */
+  showSectionNav?: boolean;
+}
 
 const Footer = ({
   children,
   className,
+  showSectionNav = false,
   ...props
-}: React.ComponentProps<"footer">) => {
+}: FooterProps) => {
+  const navItems = showSectionNav ? [...SECTION_NAV, BLOG_NAV] : [BLOG_NAV];
+
   return (
     <footer
       {...props}
@@ -34,7 +43,7 @@ const Footer = ({
           aria-label="Footer"
           className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
         >
-          {FOOTER_NAV.map((item) => (
+          {navItems.map((item) => (
             <AnchorLink
               key={item.label}
               href={item.href}

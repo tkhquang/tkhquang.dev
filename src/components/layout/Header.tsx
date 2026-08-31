@@ -54,9 +54,16 @@ const MobileNavLinks = () => {
 
 interface HeaderProps extends React.ComponentProps<"header"> {
   useScroll?: boolean;
+  /** Section anchors only make sense where the sections exist (homepage) */
+  showSectionNav?: boolean;
 }
 
-const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
+const Header = ({
+  className,
+  showSectionNav = false,
+  useScroll = true,
+  ...props
+}: HeaderProps) => {
   const [scrolled, setScrolled] = useState(!useScroll);
 
   useEffect(() => {
@@ -112,44 +119,53 @@ const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
         </div>
 
         <div className="flex h-full items-center gap-5">
-          <nav
-            aria-label="Sections"
-            className="hidden h-full items-center gap-5 md:flex"
-          >
-            {NAV_ITEMS.map((item) => (
-              <AnchorLink
-                key={item.label}
-                href={item.href}
-                className="text-xs font-semibold tracking-wider uppercase"
-              >
-                <GrowingUnderline>{item.label}</GrowingUnderline>
-              </AnchorLink>
-            ))}
-            <Link
-              href="/blog"
-              className="text-xs font-extrabold tracking-wider uppercase"
+          {showSectionNav && (
+            <nav
+              aria-label="Sections"
+              className="hidden h-full items-center gap-5 md:flex"
             >
-              <GrowingUnderline>Blog</GrowingUnderline>
-            </Link>
-          </nav>
+              {NAV_ITEMS.map((item) => (
+                <AnchorLink
+                  key={item.label}
+                  href={item.href}
+                  className="text-xs font-semibold tracking-wider uppercase"
+                >
+                  <GrowingUnderline>{item.label}</GrowingUnderline>
+                </AnchorLink>
+              ))}
+            </nav>
+          )}
+
+          <Link
+            href="/blog"
+            className={classNames(
+              "text-xs font-extrabold tracking-wider uppercase",
+              /* With the drawer carrying nav on mobile, avoid doubling up */
+              showSectionNav && "hidden md:block"
+            )}
+          >
+            <GrowingUnderline>Blog</GrowingUnderline>
+          </Link>
 
           <ThemeToggle />
 
-          <div className="flex-center md:hidden">
-            <Drawer
-              position="right"
-              size={300}
-              title="tkhquang.dev"
-              trigger={
-                <>
-                  <MenuIcon className="size-6" />
-                  <span className="sr-only">Open navigation</span>
-                </>
-              }
-            >
-              <MobileNavLinks />
-            </Drawer>
-          </div>
+          {showSectionNav && (
+            <div className="flex-center md:hidden">
+              <Drawer
+                position="right"
+                size={300}
+                title="tkhquang.dev"
+                trigger={
+                  <>
+                    <MenuIcon className="size-6" />
+                    <span className="sr-only">Open navigation</span>
+                  </>
+                }
+              >
+                <MobileNavLinks />
+              </Drawer>
+            </div>
+          )}
         </div>
       </div>
     </header>

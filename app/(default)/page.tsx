@@ -13,7 +13,7 @@ export const revalidate = 86400;
 export default async function HomePage() {
   return (
     <>
-      <Header />
+      <Header showSectionNav />
       <Main className="flex-1">
         <Suspense>
           <ReportView />
@@ -24,7 +24,7 @@ export default async function HomePage() {
         <Writing />
         <Contact />
       </Main>
-      <Footer />
+      <Footer showSectionNav />
     </>
   );
 }
