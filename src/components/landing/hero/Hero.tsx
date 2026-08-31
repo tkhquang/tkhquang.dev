@@ -29,11 +29,11 @@ const Hero = () => {
             <HeroLeading />
             <HeroRoles
               align={withPortrait ? "start" : "center"}
-              className="text-theme-on-band-dim animate-rise-in mt-3 [animation-delay:0.2s]"
+              className="text-theme-on-band-dim animate-rise-in mt-3 [animation-delay:1.2s]"
             />
             <p
               className={classNames(
-                "animate-rise-in text-theme-on-band-dim mt-6 max-w-xl font-serif text-lg italic [animation-delay:0.35s]",
+                "animate-rise-in text-theme-on-band-dim mt-6 max-w-xl font-serif text-lg italic [animation-delay:1.35s]",
                 !withPortrait && "mx-auto"
               )}
             >
@@ -42,7 +42,7 @@ const Hero = () => {
             </p>
             <div
               className={classNames(
-                "animate-rise-in mt-8 flex flex-wrap items-center gap-3 [animation-delay:0.5s]",
+                "animate-rise-in mt-8 flex flex-wrap items-center gap-3 [animation-delay:1.5s]",
                 !withPortrait && "justify-center"
               )}
             >
@@ -61,13 +61,13 @@ const Hero = () => {
             </div>
             <SocialLinks
               className={classNames(
-                "animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:0.65s]",
+                "animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:1.65s]",
                 !withPortrait && "justify-center"
               )}
             />
           </div>
           {withPortrait && (
-            <HeroPortrait className="animate-rise-in hidden w-72 [animation-delay:0.3s] lg:block xl:w-80" />
+            <HeroPortrait className="animate-rise-in hidden w-72 [animation-delay:1.2s] lg:block xl:w-80" />
           )}
         </div>
       </div>

@@ -19,9 +19,10 @@
     /*
      * Max-width wipe: never wider than the text, so a caret can sit flush.
      * Fill mode "both" keeps the from state (width 0) applied DURING the
-     * 1s delay; with "forwards" the full text flashes before typing starts.
+     * delay; with "forwards" the full text flashes before typing starts.
+     * The rest of the hero waits for this to finish (delays in Hero.tsx).
      */
-    --animate-typing: typing 0.5s steps(14, end) 1s both;
+    --animate-typing: typing 0.5s steps(14, end) 0.6s both;
     @keyframes typing {
       from {
         max-width: 0;
