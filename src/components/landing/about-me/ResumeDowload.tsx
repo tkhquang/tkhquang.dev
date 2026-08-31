@@ -22,7 +22,7 @@ const ResumeDownload = () => {
 
   return (
     <a
-      className="download-container bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex items-center gap-4 rounded-xl border p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5"
+      className="download-container bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex items-center gap-4 rounded-xl border p-4 shadow-sm transition-all duration-200"
       target="_blank"
       rel="noopener noreferrer"
       title="View Resume"

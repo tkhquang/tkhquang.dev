@@ -80,7 +80,7 @@ const Projects = async () => {
           return (
             <article
               key={project.name}
-              className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex flex-col gap-3 rounded-xl border p-5 shadow-sm transition-all duration-200 hover:-translate-y-1"
+              className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex flex-col gap-3 rounded-xl border p-5 shadow-sm transition-all duration-200"
             >
               <div className="flex min-w-0 items-center gap-2">
                 <GoRepo className="size-4 shrink-0 opacity-65" />

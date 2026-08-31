@@ -112,7 +112,7 @@ const Writing = async () => {
         <Reveal className="mt-10" delay={100}>
           <Link
             href="/blog"
-            className="border-theme-primary/50 text-theme-primary hover:border-theme-primary inline-flex items-center gap-1.5 rounded-lg border px-5 py-2.5 font-semibold transition-all duration-200 hover:-translate-y-0.5"
+            className="border-theme-primary/50 text-theme-primary hover:border-theme-primary inline-flex items-center gap-1.5 rounded-lg border px-5 py-2.5 font-semibold transition-all duration-200"
           >
             Visit the blog →
           </Link>
