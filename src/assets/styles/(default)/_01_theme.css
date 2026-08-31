@@ -24,9 +24,13 @@
      * pair de-synced into a bare "Hello" with the caret parked at the
      * line end). Opacity is the one channel that provably kept animating
      * on the stalled device, and per-letter pops cannot de-sync. Letters
-     * start at 0.001, not 0, for the LCP reason on rise-in below.
+     * start at 0.001, not 0, for the LCP reason on rise-in below. The
+     * 42ms duration (one cadence step) matters too: near-zero composited
+     * animations can fall between compositor frames and never apply
+     * their end state (Chrome under hydration jank left the last letters
+     * stuck invisible); a linear 42ms fade still reads as an instant pop.
      */
-    --animate-letter-pop: letter-pop 1ms steps(1, end) both;
+    --animate-letter-pop: letter-pop 42ms linear both;
     @keyframes letter-pop {
       from {
         opacity: 0.001;

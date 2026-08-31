@@ -31,7 +31,7 @@ const HeroLeading = ({ className, ...props }: React.ComponentProps<"h1">) => {
               style={{
                 animationDelay: `${(
                   TYPE_START_S +
-                  ((index + 1) * TYPE_TOTAL_S) / TYPED.length
+                  (index * TYPE_TOTAL_S) / TYPED.length
                 ).toFixed(3)}s`,
               }}
             >
