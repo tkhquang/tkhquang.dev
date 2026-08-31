@@ -30,15 +30,23 @@ const FE_SPECIFIC = [
   "Elixir",
 ];
 
-const PERSONAS: Record<PersonaKey, { label: string; exclude?: string[] }> = {
+const PERSONAS: Record<
+  PersonaKey,
+  { label: string; caption: string; exclude?: string[] }
+> = {
   all: {
+    caption:
+      "Based on GitHub commits, share of everything I push. That C++ share is the game modding habit",
     label: "Everything",
   },
   fe: {
+    caption: "Based on GitHub commits, share within my front-end work.",
     exclude: RE_SPECIFIC,
     label: "Front-end",
   },
   re: {
+    caption:
+      "Based on GitHub commits, share within the reverse engineering side. Mostly the game modding habit",
     exclude: FE_SPECIFIC,
     label: "Reverse engineering",
   },
@@ -60,25 +68,45 @@ function chartColor(language: LanguageShare): string {
 }
 
 /**
- * Language share of GitHub commits, filterable by persona. Percentages stay
- * relative to ALL commits (the honest number); the composition bar shows the
- * mix within the active view.
+ * Language share of GitHub commits, filterable by persona. Percentages are
+ * renormalized within the active view so the rows always agree with the
+ * composition bar and sum to 100. Hovering or tapping a bar segment
+ * highlights its language row, and the other way around.
  */
 const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
   const [persona, setPersona] = useState<PersonaKey>(DEFAULT_PERSONA);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
 
   const excluded = PERSONAS[persona].exclude;
-  const active = excluded
+  const filtered = excluded
     ? languages.filter((language) => !excluded.includes(language.name))
     : languages;
-  const personaTotal = active.reduce(
+  const personaTotal = filtered.reduce(
     (acc, language) => acc + language.percentage,
     0
   );
+  const active = filtered.map((language) => ({
+    ...language,
+    viewPercentage:
+      personaTotal > 0 ? (language.percentage / personaTotal) * 100 : 0,
+  }));
   const maxPercentage = Math.max(
-    ...active.map((language) => language.percentage),
+    ...active.map((language) => language.viewPercentage),
     0.1
   );
+
+  const isDimmed = (id: string) => focusedId !== null && focusedId !== id;
+  const focusHandlers = (id: string) => ({
+    onClick: () => {
+      setFocusedId((current) => (current === id ? null : id));
+    },
+    onMouseEnter: () => {
+      setFocusedId(id);
+    },
+    onMouseLeave: () => {
+      setFocusedId(null);
+    },
+  });
 
   return (
     <div>
@@ -100,6 +128,7 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
             )}
             onClick={() => {
               setPersona(key);
+              setFocusedId(null);
             }}
           >
             {PERSONAS[key].label}
@@ -116,24 +145,34 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
         {active.map((language, index) => (
           <span
             key={language.id}
-            className="animate-grow-bar block h-full"
+            className={classNames(
+              "animate-grow-bar block h-full cursor-pointer transition-opacity duration-200",
+              isDimmed(language.id) && "opacity-30"
+            )}
+            title={`${language.name} ${language.viewPercentage.toFixed(1)}%`}
             style={{
               animationDelay: `${index * 60}ms`,
               backgroundColor: chartColor(language),
-              width: `${(language.percentage / personaTotal) * 100}%`,
+              width: `${language.viewPercentage}%`,
             }}
+            {...focusHandlers(language.id)}
           />
         ))}
       </div>
 
       <div
         key={`rows-${persona}`}
-        className="mt-6 grid gap-x-10 gap-y-2.5 md:grid-cols-2"
+        className="mt-6 grid gap-x-6 gap-y-1 md:grid-cols-2"
       >
         {active.map((language, index) => (
           <div
             key={language.id}
-            className="grid grid-cols-[6.5rem_minmax(0,1fr)_3.5rem] items-center gap-3"
+            className={classNames(
+              "grid cursor-default grid-cols-[6.5rem_minmax(0,1fr)_3.5rem] items-center gap-3 rounded-md px-2 py-1 transition-[background-color,opacity] duration-200",
+              isDimmed(language.id) && "opacity-40",
+              focusedId === language.id && "bg-theme-on-surface/8"
+            )}
+            {...focusHandlers(language.id)}
           >
             <span className="truncate font-mono text-sm opacity-85">
               {language.name}
@@ -144,20 +183,25 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
                 style={{
                   animationDelay: `${100 + index * 60}ms`,
                   backgroundColor: chartColor(language),
-                  width: `${(language.percentage / maxPercentage) * 100}%`,
+                  width: `${(language.viewPercentage / maxPercentage) * 100}%`,
                 }}
               />
             </span>
             <span className="text-right font-mono text-xs tabular-nums opacity-65">
-              {language.percentage.toFixed(1)}%
+              {language.viewPercentage.toFixed(1)}%
             </span>
           </div>
         ))}
       </div>
 
       <p className="kicker mt-6 normal-case">
-        Based on GitHub commits, share of everything I push. That C++ share is
-        the game modding habit <span aria-hidden="true">🎮</span>
+        {PERSONAS[persona].caption}
+        {persona !== "fe" && (
+          <>
+            {" "}
+            <span aria-hidden="true">🎮</span>
+          </>
+        )}
       </p>
     </div>
   );

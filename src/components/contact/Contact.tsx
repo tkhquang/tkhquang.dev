@@ -21,9 +21,13 @@ const INPUT_CLASS =
 const LABEL_CLASS =
   "mb-1.5 block text-xs font-semibold tracking-wider uppercase opacity-75";
 
-/* Always rendered so validation appearing or clearing never shifts layout */
+/*
+ * Always rendered at a constant height so validation appearing or clearing
+ * never shifts layout; the bottom padding keeps a visible gap between an
+ * error message and the next label.
+ */
 const ERROR_SLOT_CLASS =
-  "text-theme-error m-0 min-h-6 pt-1 text-sm leading-5";
+  "text-theme-error m-0 min-h-9 pt-1.5 pb-2.5 text-sm leading-5";
 
 const Contact = () => {
   const {
@@ -182,7 +186,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="bg-theme-primary text-theme-on-primary w-full cursor-pointer rounded-lg py-2.5 font-semibold shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg disabled:pointer-events-none disabled:opacity-60"
+                  className="bg-theme-primary text-theme-on-primary flex-center h-11 w-full cursor-pointer rounded-lg font-semibold shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg disabled:pointer-events-none disabled:opacity-60"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
