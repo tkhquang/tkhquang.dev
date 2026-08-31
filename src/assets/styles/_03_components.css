@@ -1,16 +1,7 @@
+/* The theme script toggles these on <html> at runtime */
+@source inline("transition-colors duration-500");
+
 @layer components {
-  /* Can be updated to use `@source inline();` later */
-  #class-keeper {
-    @apply transition-colors duration-500;
-
-    position: absolute;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-    z-index: -1;
-    pointer-events: none;
-  }
-
   .flex-center {
     @apply flex items-center justify-center;
   }
@@ -104,6 +95,9 @@
   }
 
   .typography {
+    /* Long-form reading leading; the page base stays at a neutral 1.5 */
+    line-height: 1.7;
+
     p,
     table {
       margin-top: 1em;

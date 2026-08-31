@@ -29,6 +29,11 @@
   @apply text-theme-primary relative leading-tight font-bold tracking-tight;
 }
 
+/* Editorial eyebrow/meta device, exported from the blog's PostMeta styling */
+@utility kicker {
+  @apply font-mono text-xs font-semibold tracking-wider uppercase opacity-75;
+}
+
 @utility primary {
   @apply bg-theme-primary text-theme-on-primary;
 }

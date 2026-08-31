@@ -197,7 +197,7 @@ export default function NowPlayingHero({
               className="mt-2 inline-block max-w-full truncate text-2xl font-bold"
               title={`${track.name} - ${getArtistNames(track)}`}
             >
-              <GrowingUnderline className={underlineClassName}>
+              <GrowingUnderline tone="spotify" className={underlineClassName}>
                 {track.name}
               </GrowingUnderline>
             </SpotifyLink>

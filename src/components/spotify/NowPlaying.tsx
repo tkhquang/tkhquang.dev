@@ -40,7 +40,7 @@ const Fallback = ({
           title="What I have been listening to"
         >
           {songEffect === "underline" ? (
-            <GrowingUnderline>Not Playing</GrowingUnderline>
+            <GrowingUnderline tone="spotify">Not Playing</GrowingUnderline>
           ) : (
             "Not Playing"
           )}
@@ -170,7 +170,7 @@ export default function SpotifyNowPlaying({
                 rel="noopener noreferrer"
               >
                 {songEffect === "underline" ? (
-                  <GrowingUnderline>{data.item.name}</GrowingUnderline>
+                  <GrowingUnderline tone="spotify">{data.item.name}</GrowingUnderline>
                 ) : (
                   <span>{data.item.name}</span>
                 )}
@@ -185,7 +185,7 @@ export default function SpotifyNowPlaying({
               title="What I have been listening to"
             >
               {songEffect === "underline" ? (
-                <GrowingUnderline>Not Playing</GrowingUnderline>
+                <GrowingUnderline tone="spotify">Not Playing</GrowingUnderline>
               ) : (
                 <span>Not Playing</span>
               )}

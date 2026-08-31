@@ -72,6 +72,63 @@
   --accent-dark: hsl(267deg 56% 75%);
   --on-accent-dark: hsl(267deg 58% 12%);
   --neutral-dark: hsl(202deg 14% 26%);
+
+  /*
+   * Redesign additions — elevation, band, and chart ramp.
+   * Elevation is theme-specific by design: near-white panels + shadow carry
+   * light mode, raised lightness + hairline borders carry dark (shadows die
+   * on dark backgrounds).
+   */
+  --surface-raised-light: hsl(219deg 45% 97%);
+  --surface-raised-dark: hsl(201deg 38% 23%);
+
+  /*
+   * Hero/outro band gradients, one recipe per theme: a confident lapis day
+   * sky in light, a dusk-lakeshore mix in dark. Text on bands uses --on-band
+   * so theme-invariance is a decision, not a leftover -light suffix.
+   */
+  --band-a-light: hsl(222deg 68% 40%);
+  --band-b-light: color-mix(
+    in srgb,
+    hsl(222deg 68% 40%) 62%,
+    hsl(222deg 45% 16%)
+  );
+  --on-band-light: hsl(221deg 42% 97%);
+  --on-band-dim-light: hsl(221deg 42% 88%);
+  --band-a-dark: color-mix(
+    in srgb,
+    hsl(200deg 100% 50%) 28%,
+    hsl(202deg 45% 15%)
+  );
+  --band-b-dark: color-mix(in srgb, black 22%, hsl(202deg 45% 13%));
+  --on-band-dark: hsl(199deg 40% 87%);
+  --on-band-dim-dark: hsl(199deg 30% 74%);
+
+  /*
+   * Categorical ramp for data visuals, minted from the palette per theme and
+   * ordered so neighbors differ in lightness. Semantic tokens (--error) stay
+   * out of the ramp on purpose.
+   */
+  --chart-1-light: hsl(222deg 68% 40%);
+  --chart-2-light: hsl(266deg 50% 55%);
+  --chart-3-light: hsl(160deg 52% 34%);
+  --chart-4-light: hsl(218deg 36% 62%);
+  --chart-5-light: color-mix(
+    in srgb,
+    hsl(222deg 68% 40%) 45%,
+    hsl(218deg 16% 86%)
+  );
+  --chart-6-light: hsl(218deg 16% 78%);
+  --chart-1-dark: hsl(198deg 58% 71%);
+  --chart-2-dark: hsl(267deg 56% 75%);
+  --chart-3-dark: hsl(158deg 42% 58%);
+  --chart-4-dark: hsl(203deg 45% 42%);
+  --chart-5-dark: color-mix(
+    in srgb,
+    hsl(198deg 58% 71%) 45%,
+    hsl(202deg 14% 30%)
+  );
+  --chart-6-dark: hsl(202deg 14% 34%);
 }
 
 html {
@@ -95,6 +152,21 @@ html {
   /* Decorative hairlines (hr, list separators) draw from primary */
   --hairline: var(--primary);
   --header-height: 60px;
+
+  /* Redesign role tokens */
+  --surface-raised: var(--surface-raised-dark);
+  --band-a: var(--band-a-dark);
+  --band-b: var(--band-b-dark);
+  --on-band: var(--on-band-dark);
+  --on-band-dim: var(--on-band-dim-dark);
+  /* Card/chip borders: elevation carrier in dark, quiet outline in light */
+  --hairline-soft: color-mix(in srgb, var(--on-surface) 14%, transparent);
+  --chart-1: var(--chart-1-dark);
+  --chart-2: var(--chart-2-dark);
+  --chart-3: var(--chart-3-dark);
+  --chart-4: var(--chart-4-dark);
+  --chart-5: var(--chart-5-dark);
+  --chart-6: var(--chart-6-dark);
 }
 
 html[data-theme="light"] {
@@ -118,4 +190,17 @@ html[data-theme="light"] {
   --hairline: var(--primary);
   /* Softened: full-strength lapis hairlines are too heavy on light paper */
   --hairline: color-mix(in srgb, var(--primary) 55%, transparent);
+
+  /* Redesign role tokens */
+  --surface-raised: var(--surface-raised-light);
+  --band-a: var(--band-a-light);
+  --band-b: var(--band-b-light);
+  --on-band: var(--on-band-light);
+  --on-band-dim: var(--on-band-dim-light);
+  --chart-1: var(--chart-1-light);
+  --chart-2: var(--chart-2-light);
+  --chart-3: var(--chart-3-light);
+  --chart-4: var(--chart-4-light);
+  --chart-5: var(--chart-5-light);
+  --chart-6: var(--chart-6-light);
 }
