@@ -1,6 +1,8 @@
 "use client";
 
-import { PortalContext } from "@ariakit/react";
+// Subpath, not the barrel: the barrel drags the whole widget library
+// into every route that renders this provider.
+import { PortalContext } from "@ariakit/react/portal";
 import React, { useEffect, useState } from "react";
 
 interface StackedLayerProviderProps {

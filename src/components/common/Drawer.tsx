@@ -6,11 +6,11 @@ import {
   DialogDisclosure,
   DialogDescription,
   useDialogStore,
-  useStoreState,
   DialogHeading,
   DialogDismiss,
   useDialogContext,
-} from "@ariakit/react";
+} from "@ariakit/react/dialog";
+import { useStoreState } from "@ariakit/react/store";
 import { useDrag } from "@use-gesture/react";
 import clsx from "clsx";
 import { gsap } from "gsap";

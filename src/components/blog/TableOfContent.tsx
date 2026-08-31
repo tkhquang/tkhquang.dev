@@ -3,7 +3,7 @@
 import Drawer, { useDrawerContext } from "@/components/common/Drawer";
 import { useThemeValue } from "@/store/theme";
 import { cn } from "@/utils/css";
-import { Portal } from "@ariakit/react";
+import { Portal } from "@ariakit/react/portal";
 import { Toc, TocEntry } from "@stefanprobst/rehype-extract-toc";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
