@@ -8,14 +8,14 @@ import Link from "next/link";
 const Hero = () => {
   return (
     <section className="band flex min-h-[78svh] items-center overflow-hidden">
-      <div className="container pt-header-height relative z-[2] pb-28">
+      <div className="pt-header-height relative z-[2] container pb-28">
         <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_auto]">
           <div>
             <HeroLeading />
             <HeroRoles className="text-theme-on-band-dim animate-rise-in mt-3 [animation-delay:0.2s]" />
             <p className="animate-rise-in text-theme-on-band-dim mt-6 max-w-xl font-serif text-lg italic [animation-delay:0.35s]">
-              Front-end engineer by day, open source and game modding
-              enthusiast by night.
+              Front-end engineer by day, open source and game modding enthusiast
+              by night.
             </p>
             <div className="animate-rise-in mt-8 flex flex-wrap items-center gap-3 [animation-delay:0.5s]">
               <Link
@@ -33,7 +33,7 @@ const Hero = () => {
             </div>
             <SocialLinks className="animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:0.65s]" />
           </div>
-          <HeroPortrait className="animate-rise-in hidden w-72 lg:block xl:w-80 [animation-delay:0.3s]" />
+          <HeroPortrait className="animate-rise-in hidden w-72 [animation-delay:0.3s] lg:block xl:w-80" />
         </div>
       </div>
 

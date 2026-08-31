@@ -28,13 +28,13 @@ const PostList = <
   return (
     <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
-        <HorizontalLine className="mb-3 h-2px" />
+        <HorizontalLine className="h-2px mb-3" />
 
-        <h1 className="text-center text-2xl font-bold leading-7 sm:text-3xl sm:leading-9">
+        <h1 className="text-center text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
           {title} ({list.length})
         </h1>
 
-        <HorizontalLine className="mt-3 h-2px" />
+        <HorizontalLine className="h-2px mt-3" />
 
         <Accordion type="multiple" className="my-8">
           {list.map((item) => {
@@ -48,7 +48,7 @@ const PostList = <
                     {groupedPostsBySlug[fieldSlug].map((post) => {
                       return (
                         <li
-                          className="post__item mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500 hover:bg-theme-secondary hover:text-theme-on-secondary"
+                          className="post__item hover:bg-theme-secondary hover:text-theme-on-secondary mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500"
                           key={post.slug}
                         >
                           <Link

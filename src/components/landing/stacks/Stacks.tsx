@@ -164,10 +164,7 @@ export default async function Stacks() {
                   key={language.id}
                   className="block h-full"
                   style={{
-                    backgroundColor: chartColor(
-                      index,
-                      language.id === "other"
-                    ),
+                    backgroundColor: chartColor(index, language.id === "other"),
                     width: `${language.percentage}%`,
                   }}
                 />
@@ -203,8 +200,8 @@ export default async function Stacks() {
             </div>
 
             <p className="kicker mt-6 normal-case">
-              Based on GitHub commits. That C++ share is the game modding
-              habit <span aria-hidden="true">🎮</span>
+              Based on GitHub commits. That C++ share is the game modding habit{" "}
+              <span aria-hidden="true">🎮</span>
             </p>
           </Reveal>
         </div>

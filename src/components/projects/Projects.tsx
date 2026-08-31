@@ -169,8 +169,7 @@ const Projects = async () => {
           className="text-theme-primary font-mono text-sm"
         >
           <GrowingUnderline>
-            Everything else lives on GitHub <span aria-hidden="true">🐣</span>{" "}
-            →
+            Everything else lives on GitHub <span aria-hidden="true">🐣</span> →
           </GrowingUnderline>
         </a>
       </Reveal>

@@ -56,7 +56,7 @@ const Header = ({
   return (
     <header
       className={classNames(
-        "h-header-height z-(--z-header) fixed inset-x-0 top-0 m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
+        "h-header-height fixed inset-x-0 top-0 z-(--z-header) m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
         scrolled
           ? "text-theme-on-background bg-theme-background/80 shadow-[inset_0_-1px_0_var(--hairline-soft)] backdrop-blur-md"
           : "text-theme-on-band bg-transparent",
@@ -122,9 +122,7 @@ const Header = ({
               side="right"
               className="bg-theme-background text-theme-on-background border-theme-hairline-soft"
             >
-              <SheetTitle className="kicker px-6 pt-8">
-                tkhquang.dev
-              </SheetTitle>
+              <SheetTitle className="kicker px-6 pt-8">tkhquang.dev</SheetTitle>
               <nav aria-label="Sections" className="flex flex-col gap-1 px-6">
                 {NAV_ITEMS.map((item) => (
                   <SheetClose asChild key={item.label}>
@@ -132,8 +130,7 @@ const Header = ({
                       href={item.href}
                       className="text-subsection py-2 font-bold"
                     >
-                      {item.label}{" "}
-                      <span aria-hidden="true">{item.emoji}</span>
+                      {item.label} <span aria-hidden="true">{item.emoji}</span>
                     </Link>
                   </SheetClose>
                 ))}

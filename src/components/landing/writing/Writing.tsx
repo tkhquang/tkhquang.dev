@@ -7,6 +7,9 @@ import Link from "next/link";
 
 const POST_COUNT = 3;
 
+/* Only technical writing on the front door; personal posts stay on the blog */
+const FEATURED_CATEGORY = "technical";
+
 /**
  * Latest from Ljóss: the blog finally visible from the front door, reusing
  * the blog's card grammar on a darken band.
@@ -14,7 +17,9 @@ const POST_COUNT = 3;
 const Writing = async () => {
   const markdownParser = await getMarkdownParser();
   const allPosts = await markdownParser.getAllPosts();
-  const posts = allPosts.slice(0, POST_COUNT);
+  const posts = allPosts
+    .filter((post) => post.category_slug === FEATURED_CATEGORY)
+    .slice(0, POST_COUNT);
 
   return (
     <section

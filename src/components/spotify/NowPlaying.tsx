@@ -170,7 +170,9 @@ export default function SpotifyNowPlaying({
                 rel="noopener noreferrer"
               >
                 {songEffect === "underline" ? (
-                  <GrowingUnderline tone="spotify">{data.item.name}</GrowingUnderline>
+                  <GrowingUnderline tone="spotify">
+                    {data.item.name}
+                  </GrowingUnderline>
                 ) : (
                   <span>{data.item.name}</span>
                 )}
