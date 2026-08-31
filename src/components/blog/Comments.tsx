@@ -101,11 +101,13 @@ export default function Comments({ className, configs }: CommentsProps) {
 
                       iframeRef.current = iframe;
 
-                      if (iframe.contentDocument?.readyState === "complete") {
-                        // Already loaded (possibly from cache)
+                      // Not `contentDocument.readyState`: a fresh iframe still
+                      // holds the same-origin about:blank document, so it reads
+                      // "complete" long before giscus navigates. Giscus itself
+                      // drops the `loading` class on its iframe's load event.
+                      if (!iframe.classList.contains("loading")) {
                         setIsIframeLoaded(true);
                       } else {
-                        // Listen for load if not already loaded
                         iframe.addEventListener("load", hasLoaded);
                       }
                       break;
