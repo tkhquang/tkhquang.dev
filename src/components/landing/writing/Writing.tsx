@@ -37,7 +37,7 @@ const Writing = async () => {
           intro="I keep a blog called Ljóss: devlogs, deep dives, and whatever I broke this month."
         />
 
-        <Reveal className="grid gap-8 md:grid-cols-3 md:gap-6">
+        <Reveal className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
           {posts.map((post) => (
             <article key={post.slug} className="flex flex-col">
               {post.cover_image && (

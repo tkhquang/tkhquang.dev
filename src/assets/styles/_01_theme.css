@@ -57,7 +57,8 @@
     --color-theme-hairline-soft: var(--hairline-soft);
 
     /* Fluid type scale shared by homepage and blog */
-    --text-display: clamp(2.5rem, 5vw, 3.75rem);
+    /* Floor low enough that the nowrap hero greeting fits a 320px phone */
+    --text-display: clamp(2rem, 8.5vw, 3.75rem);
     --text-display--line-height: 1.1;
     --text-section: clamp(1.75rem, 3vw, 2.25rem);
     --text-section--line-height: 1.2;

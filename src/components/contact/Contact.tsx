@@ -92,7 +92,7 @@ const Contact = () => {
         className="absolute inset-x-0 top-0 z-1 h-20"
       />
       <div className="relative z-2 container">
-        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-2 lg:gap-16">
           <div>
             <SectionHeading
               tone="band"

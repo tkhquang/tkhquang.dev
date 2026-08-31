@@ -73,7 +73,7 @@ const Projects = async () => {
     >
       <SectionHeading kicker="What I build" title="Projects" emoji="💻" />
 
-      <Reveal className="grid gap-5 md:grid-cols-3">
+      <Reveal className="grid grid-cols-1 gap-5 md:grid-cols-3">
         {FEATURED.map((project) => {
           const live = repoByName.get(project.name);
 
@@ -141,7 +141,10 @@ const Projects = async () => {
         })}
       </Reveal>
 
-      <Reveal className="mt-6 grid gap-4 md:grid-cols-2" delay={100}>
+      <Reveal
+        className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2"
+        delay={100}
+      >
         {repositories.map((repo) => (
           <div
             key={repo.id}

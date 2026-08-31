@@ -1,15 +1,9 @@
 "use client";
 
 import AnchorLink from "@/components/common/AnchorLink";
+import Drawer, { useDrawerContext } from "@/components/common/Drawer";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import classNames from "classnames";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
@@ -30,6 +24,33 @@ const NAV_ITEMS = [
   { emoji: "✍️", href: "/#writing", label: "Writing" },
   { emoji: "📨", href: "/#contact", label: "Contact" },
 ];
+
+/** Drawer nav items; tapping one closes the drawer before scrolling */
+const MobileNavLinks = () => {
+  const dialog = useDrawerContext();
+
+  return (
+    <nav aria-label="Sections" className="flex flex-col gap-1 pt-2">
+      {NAV_ITEMS.map((item) => (
+        <AnchorLink
+          key={item.label}
+          href={item.href}
+          className="text-subsection py-2 font-bold"
+          onClick={() => dialog?.hide()}
+        >
+          {item.label} <span aria-hidden="true">{item.emoji}</span>
+        </AnchorLink>
+      ))}
+      <Link
+        href="/blog"
+        className="text-subsection text-theme-primary py-2 font-bold"
+        onClick={() => dialog?.hide()}
+      >
+        Blog <span aria-hidden="true">📓</span>
+      </Link>
+    </nav>
+  );
+};
 
 const Header = ({
   className,
@@ -114,40 +135,21 @@ const Header = ({
 
           <ThemeToggle />
 
-          <Sheet>
-            <SheetTrigger
-              aria-label="Open navigation"
-              className="flex-center md:hidden"
+          <div className="flex-center md:hidden">
+            <Drawer
+              position="right"
+              size={300}
+              title="tkhquang.dev"
+              trigger={
+                <>
+                  <MenuIcon className="size-6" />
+                  <span className="sr-only">Open navigation</span>
+                </>
+              }
             >
-              <MenuIcon className="size-6" />
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="bg-theme-background text-theme-on-background border-theme-hairline-soft"
-            >
-              <SheetTitle className="kicker px-6 pt-8">tkhquang.dev</SheetTitle>
-              <nav aria-label="Sections" className="flex flex-col gap-1 px-6">
-                {NAV_ITEMS.map((item) => (
-                  <SheetClose asChild key={item.label}>
-                    <AnchorLink
-                      href={item.href}
-                      className="text-subsection py-2 font-bold"
-                    >
-                      {item.label} <span aria-hidden="true">{item.emoji}</span>
-                    </AnchorLink>
-                  </SheetClose>
-                ))}
-                <SheetClose asChild>
-                  <Link
-                    href="/blog"
-                    className="text-subsection text-theme-primary py-2 font-bold"
-                  >
-                    Blog <span aria-hidden="true">📓</span>
-                  </Link>
-                </SheetClose>
-              </nav>
-            </SheetContent>
-          </Sheet>
+              <MobileNavLinks />
+            </Drawer>
+          </div>
         </div>
       </div>
     </header>

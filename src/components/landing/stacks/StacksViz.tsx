@@ -162,7 +162,7 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
 
       <div
         key={`rows-${persona}`}
-        className="mt-6 grid gap-x-6 gap-y-1 md:grid-cols-2"
+        className="mt-6 grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2"
       >
         {active.map((language, index) => (
           <div

@@ -12,10 +12,10 @@ const AboutMe = () => {
       id="about"
     >
       <SectionHeading kicker="Who I am" title="About Me" emoji="🙋🏻‍♂️" />
-      <div className="grid gap-12 lg:grid-cols-[minmax(0,40rem)_20rem] lg:justify-between">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1fr)_18rem] md:gap-8 lg:grid-cols-[minmax(0,40rem)_20rem] lg:justify-between lg:gap-12">
         <Reveal>
           <div
-            className="typography about__prose"
+            className="typography about__prose max-w-2xl"
             dangerouslySetInnerHTML={{
               __html: Portfolio.METADATA.about,
             }}
@@ -23,7 +23,7 @@ const AboutMe = () => {
         </Reveal>
         <Reveal
           delay={100}
-          className="flex flex-col gap-5 lg:sticky lg:top-[calc(var(--header-height)+2rem)] lg:self-start"
+          className="grid grid-cols-1 content-start gap-5 sm:grid-cols-2 md:sticky md:top-[calc(var(--header-height)+2rem)] md:grid-cols-1 md:self-start"
         >
           <RightNow />
           <ResumeDownload />

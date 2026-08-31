@@ -144,14 +144,14 @@ export default async function Stacks() {
       </div>
 
       <Reveal className="bg-theme-surface border-theme-hairline-soft mt-14 w-full border-y py-8">
-        <ul className="container flex flex-wrap items-center justify-center gap-3">
+        <ul className="container grid grid-cols-2 gap-3 sm:grid-cols-3 md:max-w-4xl md:grid-cols-5">
           {toolkit.map((stack) => (
             <li key={stack.title}>
               <a
                 href={stack.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex items-center gap-2.5 rounded-lg border px-3 py-2 transition-all duration-200 hover:-translate-y-0.5"
+                className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex w-full items-center gap-2.5 rounded-lg border px-3 py-2 transition-all duration-200 hover:-translate-y-0.5"
               >
                 <span className="flex-center size-5 shrink-0">
                   <Image

@@ -26,7 +26,7 @@ const Footer = ({
       )}
     >
       <div className="container flex flex-col items-center justify-between gap-4 sm:flex-row">
-        <div className="kicker whitespace-nowrap">
+        <div className="kicker text-center sm:whitespace-nowrap">
           © {new Date().getFullYear()} · Built by day, tinkered by night{" "}
           <span aria-hidden="true">☕</span>
         </div>

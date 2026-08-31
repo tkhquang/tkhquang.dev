@@ -10,7 +10,7 @@ const Hero = () => {
   return (
     <section className="band flex min-h-[78svh] items-center overflow-hidden">
       <div className="pt-header-height relative z-[2] container pb-28">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_auto]">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_auto]">
           <div>
             <HeroLeading />
             <HeroRoles className="text-theme-on-band-dim animate-rise-in mt-3 [animation-delay:0.2s]" />
