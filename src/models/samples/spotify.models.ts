@@ -115,3 +115,67 @@ const CURRENT_PLAYING_SAMPLE_RESPONSE = {
 };
 
 export type CurrentPlayingResponse = typeof CURRENT_PLAYING_SAMPLE_RESPONSE;
+
+/**
+ * `recently-played` and `me/top/tracks` return the same full track object as
+ * `currently-playing`, so the shape sampled above is reused rather than
+ * duplicated.
+ */
+export type SpotifyTrack = CurrentPlayingResponse["item"];
+
+const ARTIST_SAMPLE_RESPONSE = {
+  external_urls: {
+    spotify: "string",
+  },
+  followers: {
+    href: null as string | null,
+    total: 0,
+  },
+  genres: ["string"],
+  href: "string",
+  id: "string",
+  images: [
+    {
+      height: 640,
+      url: "https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228",
+      width: 640,
+    },
+  ],
+  name: "string",
+  popularity: 0,
+  type: "artist",
+  uri: "string",
+};
+
+export type SpotifyArtist = typeof ARTIST_SAMPLE_RESPONSE;
+
+export interface PlayHistoryItem {
+  context: CurrentPlayingResponse["context"] | null;
+  played_at: string;
+  track: SpotifyTrack;
+}
+
+export interface RecentlyPlayedResponse {
+  cursors: { after: string; before: string };
+  href: string;
+  items: PlayHistoryItem[];
+  limit: number;
+  next: string | null;
+  total: number;
+}
+
+export interface TopItemsResponse<T> {
+  href: string;
+  items: T[];
+  limit: number;
+  next: string | null;
+  offset: number;
+  previous: string | null;
+  total: number;
+}
+
+/**
+ * Spotify's own wording: ~4 weeks, ~6 months, and ~1 year of listening.
+ * These three windows are the only aggregate history the Web API exposes.
+ */
+export type TopItemsTimeRange = "short_term" | "medium_term" | "long_term";

@@ -10,20 +10,27 @@ Complete documentation for the real-time chat feature with Supabase:
 - **[Quick Reference](./chat/QUICK_REFERENCE.md)** - Cheat sheet for common operations and commands
 - **[Form Validation](./chat/FORM_VALIDATION.md)** - react-hook-form and zod validation guide
 
+## Spotify Integration
+
+- **[Spotify README](./spotify/README.md)** - What the Web API exposes, the 50-play history cap, and how to mint a refresh token with the scopes `/music` needs
+
 ## Quick Links
 
 ### Getting Started
+
 1. Read the [Chat README](./chat/README.md#quick-start)
 2. Follow the Supabase setup steps
 3. Run the SQL schema
 4. Start chatting!
 
 ### For Developers
+
 - **Architecture**: See [Architecture Overview](./chat/README.md#architecture-overview)
 - **Components**: Check [Key Components](./chat/README.md#key-components)
 - **Common Tasks**: Use [Quick Reference](./chat/QUICK_REFERENCE.md)
 
 ### Troubleshooting
+
 - [RLS Policy Errors](./chat/README.md#error-new-row-violates-row-level-security-policy)
 - [Profiles Table Issues](./chat/README.md#error-publicprofiles-does-not-exist)
 - [Realtime Not Working](./chat/README.md#realtime-not-working)
