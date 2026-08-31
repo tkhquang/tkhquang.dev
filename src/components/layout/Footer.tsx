@@ -1,6 +1,6 @@
+import AnchorLink from "@/components/common/AnchorLink";
 import SocialLinks from "@/components/common/SocialLinks";
 import classNames from "classnames";
-import Link from "next/link";
 import React from "react";
 
 const FOOTER_NAV = [
@@ -35,13 +35,13 @@ const Footer = ({
           className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1"
         >
           {FOOTER_NAV.map((item) => (
-            <Link
+            <AnchorLink
               key={item.label}
               href={item.href}
               className="hover:text-theme-primary text-xs font-semibold tracking-wider uppercase opacity-75 transition-colors hover:opacity-100"
             >
               {item.label}
-            </Link>
+            </AnchorLink>
           ))}
         </nav>
         <SocialLinks className="flex-center gap-1 text-2xl" />

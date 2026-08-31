@@ -1,5 +1,6 @@
 "use client";
 
+import AnchorLink from "@/components/common/AnchorLink";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import {
@@ -93,13 +94,13 @@ const Header = ({
             className="hidden h-full items-center gap-5 md:flex"
           >
             {NAV_ITEMS.map((item) => (
-              <Link
+              <AnchorLink
                 key={item.label}
                 href={item.href}
                 className="text-xs font-semibold tracking-wider uppercase"
               >
                 <GrowingUnderline>{item.label}</GrowingUnderline>
-              </Link>
+              </AnchorLink>
             ))}
             <Link
               href="/blog"
@@ -126,12 +127,12 @@ const Header = ({
               <nav aria-label="Sections" className="flex flex-col gap-1 px-6">
                 {NAV_ITEMS.map((item) => (
                   <SheetClose asChild key={item.label}>
-                    <Link
+                    <AnchorLink
                       href={item.href}
                       className="text-subsection py-2 font-bold"
                     >
                       {item.label} <span aria-hidden="true">{item.emoji}</span>
-                    </Link>
+                    </AnchorLink>
                   </SheetClose>
                 ))}
                 <SheetClose asChild>

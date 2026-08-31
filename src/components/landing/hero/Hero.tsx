@@ -1,3 +1,4 @@
+import AnchorLink from "@/components/common/AnchorLink";
 import SocialLinks from "@/components/common/SocialLinks";
 import HeroLeading from "@/components/landing/hero/HeroLeading";
 import HeroPortrait from "@/components/landing/hero/HeroPortrait";
@@ -24,12 +25,12 @@ const Hero = () => {
               >
                 Read the blog <span aria-hidden="true">✍️</span>
               </Link>
-              <Link
+              <AnchorLink
                 href="/#projects"
                 className="text-theme-on-band inline-flex items-center gap-1.5 rounded-lg border border-[color-mix(in_srgb,var(--on-band)_45%,transparent)] px-5 py-2.5 font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:border-(--on-band)"
               >
                 See my work <span aria-hidden="true">💻</span>
-              </Link>
+              </AnchorLink>
             </div>
             <SocialLinks className="animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:0.65s]" />
           </div>
