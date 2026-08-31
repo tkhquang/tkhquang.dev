@@ -1,5 +1,6 @@
 import StackedLayers from "@/components/layout/StackedLayers";
 import { Portfolio, Site } from "@/constants/meta";
+import { cn } from "@/utils/css";
 import type { Metadata } from "next";
 import { Merriweather, Montserrat, Source_Code_Pro } from "next/font/google";
 
@@ -93,7 +94,11 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${montserrat.variable} ${merriweather.variable} ${sourceCodePro.variable}`}
+      className={cn(
+        montserrat.variable,
+        merriweather.variable,
+        sourceCodePro.variable
+      )}
     >
       <body className="flex min-h-screen flex-col">
         <script
