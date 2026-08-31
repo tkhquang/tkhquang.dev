@@ -20,7 +20,7 @@
   --tone-3: hsl(360deg 100% 50%);
 
   /*
-   * Light Theme — "cool paper": quiet blue-cast neutrals with one confident
+   * Light Theme: "cool paper": quiet blue-cast neutrals with one confident
    * lapis primary. Subtle hue drift (218-222deg) between layers adds depth.
    */
   --tone-light: hsl(220deg 100% 50%);
@@ -55,7 +55,7 @@
   --neutral-light: hsl(218deg 16% 86%);
 
   /*
-   * Dark Theme — "dusk lakeshore": the same deep teal identity, gently
+   * Dark Theme: "dusk lakeshore": the same deep teal identity, gently
    * desaturated text for long reads, matching 198-203deg hue drift.
    */
   --tone-dark: hsl(200deg 100% 50%);
@@ -81,7 +81,6 @@
   --neutral-dark: hsl(202deg 14% 26%);
 
   /*
-   * Redesign additions: elevation, band, and chart ramp.
    * Elevation is theme-specific by design: near-white panels + shadow carry
    * light mode, raised lightness + hairline borders carry dark (shadows die
    * on dark backgrounds).
@@ -91,8 +90,7 @@
 
   /*
    * Hero/outro band gradients, one recipe per theme: a confident lapis day
-   * sky in light, a dusk-lakeshore mix in dark. Text on bands uses --on-band
-   * so theme-invariance is a decision, not a leftover -light suffix.
+   * sky in light, a dusk-lakeshore mix in dark. Text on bands uses --on-band.
    */
   --band-a-light: hsl(222deg 68% 40%);
   --band-b-light: color-mix(
@@ -160,7 +158,7 @@ html {
   --hairline: var(--primary);
   --header-height: 60px;
 
-  /* Redesign role tokens */
+  /* Role tokens */
   --surface-raised: var(--surface-raised-dark);
   --band-a: var(--band-a-dark);
   --band-b: var(--band-b-dark);
@@ -206,7 +204,7 @@ html[data-theme="light"] {
   /* Softened: full-strength lapis hairlines are too heavy on light paper */
   --hairline: color-mix(in srgb, var(--primary) 55%, transparent);
 
-  /* Redesign role tokens */
+  /* Role tokens */
   --lang-color-keep: 88%;
   --lang-color-tune: black;
   --surface-raised: var(--surface-raised-light);

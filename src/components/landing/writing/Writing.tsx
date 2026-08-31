@@ -11,10 +11,7 @@ const MORE_COUNT = 3;
 /* Only technical writing on the front door; personal posts stay on the blog */
 const FEATURED_CATEGORY = "technical";
 
-/**
- * Latest from Ljóss: the blog finally visible from the front door, reusing
- * the blog's card grammar on a darken band.
- */
+/** Blog teaser: the latest technical posts in the blog's card grammar */
 const Writing = async () => {
   const markdownParser = await getMarkdownParser();
   const allPosts = await markdownParser.getAllPosts();

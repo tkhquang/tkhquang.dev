@@ -14,7 +14,7 @@ const Hero = () => {
 
   return (
     <section className="band flex min-h-[78svh] items-center overflow-hidden">
-      <div className="pt-header-height relative z-[2] container pb-28">
+      <div className="pt-header-height relative z-2 container pb-28">
         <div
           className={classNames(
             "grid grid-cols-1 items-center gap-12",
@@ -22,7 +22,9 @@ const Hero = () => {
           )}
         >
           <div
-            className={classNames(!withPortrait && "mx-auto max-w-2xl text-center")}
+            className={classNames(
+              !withPortrait && "mx-auto max-w-2xl text-center"
+            )}
           >
             <HeroLeading />
             <HeroRoles

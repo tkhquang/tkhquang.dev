@@ -1,7 +1,7 @@
 import "./AboutMe.css";
 import Reveal from "@/components/common/Reveal";
 import SectionHeading from "@/components/common/SectionHeading";
-import ResumeDownload from "@/components/landing/about-me/ResumeDowload";
+import ResumeDownload from "@/components/landing/about-me/ResumeDownload";
 import RightNow from "@/components/landing/about-me/RightNow";
 import { Portfolio } from "@/constants/meta";
 

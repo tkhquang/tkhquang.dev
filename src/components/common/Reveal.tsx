@@ -41,7 +41,8 @@ const Reveal = ({ children, className, delay = 0, ...props }: RevealProps) => {
           observer.disconnect();
         }
       },
-      { rootMargin: "0px 0px -30px 0px", threshold: 0.08 }
+      /* Threshold 0: a ratio can never be met by very tall elements */
+      { rootMargin: "0px 0px -30px 0px", threshold: 0 }
     );
     observer.observe(element);
 

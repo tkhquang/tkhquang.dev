@@ -4,7 +4,7 @@ This directory serves as a **boilerplate/preset template** for newly added segme
 
 ## Purpose
 
-When creating a new route segment in Next.js (e.g., `(blog)`, `(default)`, `(frames)`), you can copy this `(00)` directory as a starting point for route-specific styles.
+When creating a new route segment in Next.js (e.g., `(blog)`, `(default)`), you can copy this `(00)` directory as a starting point for route-specific styles.
 
 ## Structure
 

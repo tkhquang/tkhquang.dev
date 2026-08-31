@@ -5,7 +5,10 @@ import classNames from "classnames";
 
 const PORTRAIT_IMAGE = "/assets/resources/images/Aleks-2.jpg";
 
-const HeroPortrait = async ({ className }: { className?: string }) => {
+const HeroPortrait = async ({
+  className,
+  ...props
+}: React.ComponentProps<"div">) => {
   const portraitImage = await getProcessedImage({
     source: PORTRAIT_IMAGE,
     shouldStore: false,
@@ -13,7 +16,7 @@ const HeroPortrait = async ({ className }: { className?: string }) => {
   });
 
   return (
-    <div className={classNames("hero-portrait", className)}>
+    <div className={classNames("hero-portrait", className)} {...props}>
       <div className="relative w-full pb-[100%]">
         <Image
           fill

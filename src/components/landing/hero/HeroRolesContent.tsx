@@ -1,6 +1,6 @@
 "use client";
 
-import classnames from "classnames";
+import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 
 const ROLES = [
@@ -51,7 +51,7 @@ const HeroRolesContent = ({
 
         return (
           <div
-            className={classnames(
+            className={classNames(
               "absolute inset-0 flex items-center leading-none transition-all duration-400",
               align === "center" ? "justify-center" : "justify-start",
               isShown ? "opacity-100" : "translate-y-2 opacity-0"

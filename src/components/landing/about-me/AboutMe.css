@@ -5,12 +5,6 @@
   line-height: 1.85;
 }
 
-.download-container {
-  a[target="_blank"]::after {
-    display: none;
-  }
-}
-
 .download__link {
   /* Paper look drawn from the theme: near-white in light, dimmed in dark */
   --paper: #ffffff;

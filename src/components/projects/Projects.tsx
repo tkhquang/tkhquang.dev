@@ -50,14 +50,17 @@ const Projects = async () => {
   const data = await fetchGitHubProjects();
 
   const publicRepos = data.viewer.repositories.edges
-    .filter(({ node }) => !node.isPrivate && node.primaryLanguage !== null)
+    .filter(({ node }) => !node.isPrivate)
     .map(({ node }) => node);
 
+  /* Featured lookup tolerates repos without a detected language yet */
   const repoByName = new Map(publicRepos.map((repo) => [repo.name, repo]));
   const featuredNames = new Set(FEATURED.map((project) => project.name));
 
   const repositories = publicRepos
-    .filter((repo) => !featuredNames.has(repo.name))
+    .filter(
+      (repo) => repo.primaryLanguage !== null && !featuredNames.has(repo.name)
+    )
     .sort((a, b) => {
       if (a.stargazers.totalCount > 0 || b.stargazers.totalCount > 0) {
         return b.stargazers.totalCount - a.stargazers.totalCount;

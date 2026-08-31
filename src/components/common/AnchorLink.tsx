@@ -21,6 +21,16 @@ const AnchorLink = ({
         if (event.defaultPrevented) {
           return;
         }
+        /* Modified clicks keep their native open-in-new-tab behavior */
+        if (
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
+        }
 
         const hashIndex = String(href).indexOf("#");
         if (hashIndex === -1) {

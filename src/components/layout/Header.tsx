@@ -52,11 +52,11 @@ const MobileNavLinks = () => {
   );
 };
 
-const Header = ({
-  className,
-  useScroll = true,
-  ...props
-}: React.ComponentProps<"header"> & { useScroll?: boolean }) => {
+interface HeaderProps extends React.ComponentProps<"header"> {
+  useScroll?: boolean;
+}
+
+const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(!useScroll);
 
   useEffect(() => {

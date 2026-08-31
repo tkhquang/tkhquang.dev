@@ -8,11 +8,14 @@ interface LocalTimeProps {
   timeZone: string;
 }
 
-/** Offset of a time zone relative to the viewer, in hours */
+/**
+ * Offset of a time zone relative to the viewer, in hours. Quarter-hour
+ * rounding covers every real zone, including the 45-minute ones.
+ */
 function offsetFromViewer(timeZone: string, now: Date): number {
   const here = new Date(now.toLocaleString("en-US"));
   const there = new Date(now.toLocaleString("en-US", { timeZone }));
-  return Math.round(((there.getTime() - here.getTime()) / 3_600_000) * 2) / 2;
+  return Math.round(((there.getTime() - here.getTime()) / 3_600_000) * 4) / 4;
 }
 
 /**

@@ -4,7 +4,7 @@ import SectionHeading from "@/components/common/SectionHeading";
 import StacksViz from "@/components/landing/stacks/StacksViz";
 import { fetchGitHubCommitStats } from "@/services/github";
 
-const toolkit = [
+const TOOLKIT = [
   {
     icon: "typescript.svg",
     link: "https://www.typescriptlang.org/",
@@ -66,8 +66,8 @@ interface LanguageStat {
 }
 
 /**
- * Language share of GitHub commits, aggregated across repositories. Colors
- * come from the palette's categorical ramp, never from raw GitHub colors.
+ * Language share of GitHub commits, aggregated across repositories; shares
+ * under 1% roll up into "Other".
  */
 async function getLanguageStats(): Promise<LanguageStat[]> {
   const data = await fetchGitHubCommitStats();
@@ -112,18 +112,23 @@ async function getLanguageStats(): Promise<LanguageStat[]> {
     0
   );
 
+  const otherShare = Math.max(0, 100 - significantShare);
+  if (otherShare < 0.05) {
+    return significant;
+  }
+
   return [
     ...significant,
     {
       id: "other",
       name: "Other",
-      percentage: 100 - significantShare,
+      percentage: otherShare,
       size: 0,
     },
   ];
 }
 
-export default async function Stacks() {
+const Stacks = async () => {
   const languages = await getLanguageStats();
 
   return (
@@ -145,7 +150,7 @@ export default async function Stacks() {
 
       <Reveal className="bg-theme-surface border-theme-hairline-soft mt-14 w-full border-y py-8">
         <ul className="container grid grid-cols-2 gap-3 sm:grid-cols-3 md:max-w-4xl md:grid-cols-5">
-          {toolkit.map((stack) => (
+          {TOOLKIT.map((stack) => (
             <li key={stack.title}>
               <a
                 href={stack.link}
@@ -174,4 +179,6 @@ export default async function Stacks() {
       </Reveal>
     </section>
   );
-}
+};
+
+export default Stacks;

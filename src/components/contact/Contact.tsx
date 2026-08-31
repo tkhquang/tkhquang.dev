@@ -11,6 +11,7 @@ interface FormValues {
   name: string;
   email: string;
   message: string;
+  botcheck?: boolean;
 }
 
 const FORM_API_ENDPOINT = "https://api.web3forms.com/submit";
@@ -62,7 +63,7 @@ const Contact = () => {
         setStatus("success");
         reset();
       } else {
-        Promise.reject();
+        throw new Error(responseData.message || "Submission failed");
       }
     } catch (error: any) {
       console.error("Error submitting form:", error);
@@ -121,12 +122,9 @@ const Contact = () => {
             noValidate
             onSubmit={handleSubmit(onSubmit)}
           >
-            {/* Hidden field for bot prevention */}
+            {/* web3forms discards submissions where botcheck is truthy */}
             <div hidden aria-hidden="true">
-              <label>
-                {`Don't fill this out if you're human:`}
-                <input name="bot-field" />
-              </label>
+              <input type="checkbox" tabIndex={-1} {...register("botcheck")} />
             </div>
 
             {(!status || status === "fetching") && (

@@ -9,11 +9,6 @@ interface SectionHeadingProps extends React.ComponentProps<"div"> {
   tone?: "default" | "band";
 }
 
-/**
- * Shared section header: kicker eyebrow, primary-colored heading with the
- * site's trailing-emoji voice, and a short rule instead of the old
- * full-container hairline.
- */
 const SectionHeading = ({
   className,
   emoji,

@@ -40,7 +40,7 @@ const PERSONAS: Record<
     label: "Everything",
   },
   fe: {
-    caption: "Based on GitHub commits, share within my front-end work.",
+    caption: "Based on GitHub commits, share within my front-end work",
     exclude: RE_SPECIFIC,
     label: "Front-end",
   },
@@ -55,10 +55,9 @@ const PERSONAS: Record<
 const DEFAULT_PERSONA: PersonaKey = "all";
 
 /**
- * Each language keeps its GitHub identity color everywhere (matching the
- * repo cards below), run through a per-theme legibility mix so dark navies
- * survive the dark theme and light yellows survive cool paper. The
- * catch-all "Other" takes the ramp's neutral stop.
+ * GitHub identity color (matching the repo cards below) through the
+ * per-theme legibility tokens in _00_core.css; the catch-all "Other" takes
+ * the ramp's neutral stop.
  */
 function chartColor(language: LanguageShare): string {
   if (language.id === "other" || !language.color) {
@@ -70,8 +69,7 @@ function chartColor(language: LanguageShare): string {
 /**
  * Language share of GitHub commits, filterable by persona. Percentages are
  * renormalized within the active view so the rows always agree with the
- * composition bar and sum to 100. Hovering or tapping a bar segment
- * highlights its language row, and the other way around.
+ * composition bar and sum to 100.
  */
 const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
   const [persona, setPersona] = useState<PersonaKey>(DEFAULT_PERSONA);
@@ -96,30 +94,42 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
   );
 
   const isDimmed = (id: string) => focusedId !== null && focusedId !== id;
+  /*
+   * Mouse pointers highlight on hover; touch toggles on tap. Touch also
+   * synthesizes mouseenter before click, which would set and immediately
+   * clear the focus, so each path only reacts to its own pointer type.
+   */
   const focusHandlers = (id: string) => ({
-    onClick: () => {
-      setFocusedId((current) => (current === id ? null : id));
+    onPointerEnter: (event: React.PointerEvent) => {
+      if (event.pointerType !== "touch") {
+        setFocusedId(id);
+      }
     },
-    onMouseEnter: () => {
-      setFocusedId(id);
+    onPointerLeave: (event: React.PointerEvent) => {
+      if (event.pointerType !== "touch") {
+        setFocusedId(null);
+      }
     },
-    onMouseLeave: () => {
-      setFocusedId(null);
+    onPointerUp: (event: React.PointerEvent) => {
+      if (event.pointerType === "touch") {
+        setFocusedId((current) => (current === id ? null : id));
+      }
     },
   });
 
   return (
     <div>
+      {/* Filters, not tabs: no tabpanel or arrow-key contract to honor */}
       <div
-        role="tablist"
+        role="group"
         aria-label="Filter the stacks by persona"
         className="border-theme-hairline-soft mb-6 inline-flex flex-wrap gap-1 rounded-lg border p-1"
       >
         {(Object.keys(PERSONAS) as PersonaKey[]).map((key) => (
           <button
             key={key}
-            role="tab"
-            aria-selected={persona === key}
+            type="button"
+            aria-pressed={persona === key}
             className={classNames(
               "cursor-pointer rounded-md px-3.5 py-1.5 font-mono text-xs font-semibold transition-colors duration-200",
               persona === key

@@ -14,10 +14,10 @@ const ROW_LABEL_CLASS =
 const ROW_VALUE_CLASS = "m-0 min-w-0 leading-6";
 
 /**
- * The "Right now" status plate: the page's alive detail. The listening row is
- * live Spotify data; the rest is configured in Portfolio.RIGHT_NOW.
+ * "Right now" status plate. The listening row is live Spotify data; the
+ * rest comes from Portfolio.RIGHT_NOW.
  */
-const RightNow = ({ className }: { className?: string }) => {
+const RightNow = ({ className, ...props }: React.ComponentProps<"div">) => {
   const { basedIn, modding } = Portfolio.RIGHT_NOW;
 
   return (
@@ -26,6 +26,7 @@ const RightNow = ({ className }: { className?: string }) => {
         "bg-theme-raised border-theme-hairline-soft rounded-xl border p-5 shadow-sm",
         className
       )}
+      {...props}
     >
       <span className="kicker text-theme-primary block">
         Right now <span aria-hidden="true">⚡</span>
