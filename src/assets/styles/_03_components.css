@@ -13,27 +13,22 @@
    */
   .band {
     position: relative;
-    background-image: linear-gradient(
-      165deg,
-      var(--band-a) 0%,
-      var(--band-b) 100%
-    );
-    color: var(--on-band);
 
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      /*
-       * 100px tile: Chrome scores a repeated background by tile area as
-       * an LCP candidate, and at 140px this noise outscored every text
-       * block on the page. Same noise field, smaller repeat.
-       */
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
-      opacity: 0.05;
-      mix-blend-mode: overlay;
-    }
+    /*
+     * The grain rides in the background stack via background-blend-mode,
+     * not on a ::before with mix-blend-mode: a cross-element blend group
+     * must rasterize as one unit, and on a stalled Gecko main thread it
+     * held the whole band black while composited text played over it.
+     * The rect's 0.0275 alpha bakes in the old 0.55 SVG times 0.05
+     * element opacity. Tile stays 100px: Chrome scores repeated
+     * backgrounds by tile area for LCP, and at 140px the noise outscored
+     * every text block on the page.
+     */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.0275'/%3E%3C/svg%3E"),
+      linear-gradient(165deg, var(--band-a) 0%, var(--band-b) 100%);
+    background-blend-mode: overlay, normal;
+    color: var(--on-band);
   }
 
   .heading--section {

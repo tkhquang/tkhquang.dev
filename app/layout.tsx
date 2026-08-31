@@ -29,6 +29,9 @@ const sourceCodePro = Source_Code_Pro({
 
 const SCRIPT_CONTENT = `
 (function() {
+  // Marks that scripting runs, so CSS can gate on it without breaking no-JS
+  document.documentElement.classList.add("js");
+
   window.__onThemeChange = function() {};
   function setTheme(newTheme) {
     window.__theme = newTheme;
@@ -62,6 +65,20 @@ const SCRIPT_CONTENT = `
   });
 
   setTheme(preferredTheme || (darkQuery.matches ? "dark" : "light"));
+
+  // The hero entrance holds until glyphs can actually render (fonts
+  // settled), capped so a hung font fetch cannot hold it forever
+  var fontsReady = function() {
+    document.documentElement.classList.add("fonts-ready");
+  };
+  if (document.fonts && document.fonts.ready) {
+    Promise.race([
+      document.fonts.ready,
+      new Promise(function(resolve) { setTimeout(resolve, 1500); })
+    ]).then(fontsReady, fontsReady);
+  } else {
+    fontsReady();
+  }
 })();
 `;
 
