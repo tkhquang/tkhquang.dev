@@ -21,6 +21,10 @@ const INPUT_CLASS =
 const LABEL_CLASS =
   "mb-1.5 block text-xs font-semibold tracking-wider uppercase opacity-75";
 
+/* Always rendered so validation appearing or clearing never shifts layout */
+const ERROR_SLOT_CLASS =
+  "text-theme-error m-0 min-h-6 pt-1 text-sm leading-5";
+
 const Contact = () => {
   const {
     formState: { errors, isSubmitting },
@@ -117,7 +121,7 @@ const Contact = () => {
 
             {(!status || status === "fetching") && (
               <>
-                <div className="mb-4">
+                <div>
                   <label htmlFor="name" className={LABEL_CLASS}>
                     Full name
                   </label>
@@ -128,17 +132,13 @@ const Contact = () => {
                     })}
                     type="text"
                     autoComplete="name"
+                    aria-invalid={errors.name ? true : undefined}
                     {...register("name", { required: "Full name is required" })}
-                    required
                   />
-                  {errors.name && (
-                    <p className="text-theme-error mt-1 text-sm">
-                      {errors.name.message}
-                    </p>
-                  )}
+                  <p className={ERROR_SLOT_CLASS}>{errors.name?.message}</p>
                 </div>
 
-                <div className="mb-4">
+                <div>
                   <label htmlFor="email" className={LABEL_CLASS}>
                     Email
                   </label>
@@ -149,6 +149,7 @@ const Contact = () => {
                     })}
                     type="email"
                     autoComplete="email"
+                    aria-invalid={errors.email ? true : undefined}
                     {...register("email", {
                       pattern: {
                         message: "Invalid email address",
@@ -157,16 +158,11 @@ const Contact = () => {
                       },
                       required: "Email is required",
                     })}
-                    required
                   />
-                  {errors.email && (
-                    <p className="text-theme-error mt-1 text-sm">
-                      {errors.email.message}
-                    </p>
-                  )}
+                  <p className={ERROR_SLOT_CLASS}>{errors.email?.message}</p>
                 </div>
 
-                <div className="mb-5">
+                <div>
                   <label htmlFor="message" className={LABEL_CLASS}>
                     Message
                   </label>
@@ -176,16 +172,12 @@ const Contact = () => {
                       "border-theme-error": errors.message,
                     })}
                     rows={5}
+                    aria-invalid={errors.message ? true : undefined}
                     {...register("message", {
                       required: "Message is required",
                     })}
-                    required
                   />
-                  {errors.message && (
-                    <p className="text-theme-error mt-1 text-sm">
-                      {errors.message.message}
-                    </p>
-                  )}
+                  <p className={ERROR_SLOT_CLASS}>{errors.message?.message}</p>
                 </div>
 
                 <button
