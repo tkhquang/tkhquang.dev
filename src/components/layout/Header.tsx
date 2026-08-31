@@ -20,7 +20,7 @@ const SCROLLED_THRESHOLD = 480;
 
 const NAV_ITEMS = [
   { emoji: "🙋🏻‍♂️", href: "/#about", label: "About" },
-  { emoji: "🧰", href: "/#stacks", label: "Stacks" },
+  { emoji: "📚", href: "/#stacks", label: "Stacks" },
   { emoji: "💻", href: "/#projects", label: "Projects" },
   { emoji: "✍️", href: "/#writing", label: "Writing" },
   { emoji: "📨", href: "/#contact", label: "Contact" },
