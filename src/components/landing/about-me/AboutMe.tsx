@@ -23,7 +23,7 @@ const AboutMe = () => {
         </Reveal>
         <Reveal
           delay={100}
-          className="grid grid-cols-1 content-start gap-5 sm:grid-cols-2 md:sticky md:top-[calc(var(--header-height)+2rem)] md:grid-cols-1 md:self-start"
+          className="grid w-full max-w-md grid-cols-1 content-start gap-5 md:sticky md:top-[calc(var(--header-height)+2rem)] md:max-w-none md:self-start"
         >
           <RightNow />
           <ResumeDownload />
