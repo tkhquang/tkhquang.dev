@@ -72,7 +72,7 @@ const Contact = () => {
 
   return (
     <section
-      className="contact scroll-mt-header-height band relative mt-16 overflow-hidden pt-32 pb-16"
+      className="contact scroll-mt-header-height band relative overflow-hidden pt-32 pb-16"
       id="contact"
     >
       <HeroWaves
