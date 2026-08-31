@@ -5,6 +5,8 @@ interface SectionHeadingProps extends React.ComponentProps<"div"> {
   title: string;
   emoji?: string;
   intro?: string;
+  /** "band" renders on-band ink for use inside gradient bands */
+  tone?: "default" | "band";
 }
 
 /**
@@ -18,12 +20,27 @@ const SectionHeading = ({
   intro,
   kicker,
   title,
+  tone = "default",
   ...props
 }: SectionHeadingProps) => {
+  const onBand = tone === "band";
+
   return (
     <div className={classNames("mb-10", className)} {...props}>
-      <span className="kicker text-theme-primary mb-2 block">{kicker}</span>
-      <h2 className="heading text-section">
+      <span
+        className={classNames(
+          "kicker mb-2 block",
+          onBand ? "text-theme-on-band" : "text-theme-primary"
+        )}
+      >
+        {kicker}
+      </span>
+      <h2
+        className={classNames(
+          "text-section relative leading-tight font-bold tracking-tight",
+          onBand ? "text-theme-on-band" : "text-theme-primary"
+        )}
+      >
         {title}
         {emoji && (
           <>
@@ -33,7 +50,10 @@ const SectionHeading = ({
         )}
       </h2>
       <span
-        className="bg-theme-primary/45 mt-3 block h-0.5 w-16 rounded"
+        className={classNames(
+          "mt-3 block h-0.5 w-16 rounded",
+          onBand ? "bg-theme-on-band/45" : "bg-theme-primary/45"
+        )}
         aria-hidden="true"
       />
       {intro && (

@@ -1,5 +1,9 @@
 "use client";
 
+import SectionHeading from "@/components/common/SectionHeading";
+import SocialLinks from "@/components/common/SocialLinks";
+import HeroWaves from "@/components/landing/hero/HeroWaves";
+import classNames from "classnames";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -10,6 +14,12 @@ interface FormValues {
 }
 
 const FORM_API_ENDPOINT = "https://api.web3forms.com/submit";
+
+const INPUT_CLASS =
+  "border-theme-hairline-soft bg-theme-background text-theme-on-background focus:border-theme-primary focus:outline-theme-primary/50 w-full rounded-lg border px-3 py-2.5 shadow-inner transition-colors duration-200 focus:outline-2";
+
+const LABEL_CLASS =
+  "mb-1.5 block text-xs font-semibold tracking-wider uppercase opacity-75";
 
 const Contact = () => {
   const {
@@ -61,12 +71,37 @@ const Contact = () => {
   };
 
   return (
-    <section className="contact mt-10 py-10">
-      <div className="container">
-        <h2 className="heading--section mb-10 text-4xl">Contact 📨</h2>
-        <div className="mx-auto w-full md:w-2/3">
+    <section
+      className="contact scroll-mt-header-height band relative mt-16 overflow-hidden pt-32 pb-16"
+      id="contact"
+    >
+      <HeroWaves
+        flip={false}
+        fromColor="var(--darken)"
+        toColor="var(--darken)"
+        gradientId="contact-waves-gradient"
+        duration="20s"
+        className="absolute inset-x-0 top-0 z-1 h-20"
+      />
+      <div className="relative z-2 container">
+        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
+            <SectionHeading
+              tone="band"
+              kicker="Say hi"
+              title="Contact"
+              emoji="📨"
+              className="mb-6"
+            />
+            <p className="text-theme-on-band-dim m-0 max-w-md font-serif text-lg italic">
+              If you&apos;d like to collaborate or just talk shop, feel free to
+              reach out!
+            </p>
+            <SocialLinks className="mt-8 flex items-center gap-4 text-3xl" />
+          </div>
+
           <form
-            className="email-form flex-center relative flex w-full flex-wrap overflow-hidden pt-5 text-center"
+            className="email-form bg-theme-raised border-theme-hairline-soft text-theme-on-surface rounded-xl border p-6 shadow-md"
             onSubmit={handleSubmit(onSubmit)}
           >
             {/* Hidden field for bot prevention */}
@@ -79,38 +114,38 @@ const Contact = () => {
 
             {(!status || status === "fetching") && (
               <>
-                <div className="mb-5 w-full">
-                  <label htmlFor="name" className="sr-only">
+                <div className="mb-4">
+                  <label htmlFor="name" className={LABEL_CLASS}>
                     Full name
                   </label>
                   <input
                     id="name"
-                    className={`input h-10 min-w-full px-2 ${
-                      errors.name ? "border-theme-error" : ""
-                    }`}
+                    className={classNames(INPUT_CLASS, {
+                      "border-theme-error": errors.name,
+                    })}
                     type="text"
-                    placeholder="Full name*"
+                    autoComplete="name"
                     {...register("name", { required: "Full name is required" })}
                     required
                   />
                   {errors.name && (
-                    <p className="mt-1 text-sm text-theme-error">
+                    <p className="text-theme-error mt-1 text-sm">
                       {errors.name.message}
                     </p>
                   )}
                 </div>
 
-                <div className="mb-5 w-full">
-                  <label htmlFor="email" className="sr-only">
+                <div className="mb-4">
+                  <label htmlFor="email" className={LABEL_CLASS}>
                     Email
                   </label>
                   <input
                     id="email"
-                    className={`input h-10 min-w-full px-2 ${
-                      errors.email ? "border-theme-error" : ""
-                    }`}
+                    className={classNames(INPUT_CLASS, {
+                      "border-theme-error": errors.email,
+                    })}
                     type="email"
-                    placeholder="Email*"
+                    autoComplete="email"
                     {...register("email", {
                       pattern: {
                         message: "Invalid email address",
@@ -122,22 +157,21 @@ const Contact = () => {
                     required
                   />
                   {errors.email && (
-                    <p className="mt-1 text-sm text-theme-error">
+                    <p className="text-theme-error mt-1 text-sm">
                       {errors.email.message}
                     </p>
                   )}
                 </div>
 
-                <div className="mb-5 w-full">
-                  <label htmlFor="message" className="sr-only">
+                <div className="mb-5">
+                  <label htmlFor="message" className={LABEL_CLASS}>
                     Message
                   </label>
                   <textarea
                     id="message"
-                    className={`textarea min-w-full p-2 ${
-                      errors.message ? "border-theme-error" : ""
-                    }`}
-                    placeholder="Message*"
+                    className={classNames(INPUT_CLASS, "resize-y", {
+                      "border-theme-error": errors.message,
+                    })}
                     rows={5}
                     {...register("message", {
                       required: "Message is required",
@@ -145,7 +179,7 @@ const Contact = () => {
                     required
                   />
                   {errors.message && (
-                    <p className="mt-1 text-sm text-theme-error">
+                    <p className="text-theme-error mt-1 text-sm">
                       {errors.message.message}
                     </p>
                   )}
@@ -153,13 +187,13 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="button w-32"
+                  className="bg-theme-primary text-theme-on-primary w-full cursor-pointer rounded-lg py-2.5 font-semibold shadow-md transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg disabled:pointer-events-none disabled:opacity-60"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <span className="flex-center">
                       <svg
-                        className="spinner size-4 animate-spin"
+                        className="spinner size-5 animate-spin"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -180,14 +214,16 @@ const Contact = () => {
                       </svg>
                     </span>
                   ) : (
-                    "Submit"
+                    <>
+                      Send it <span aria-hidden="true">📨</span>
+                    </>
                   )}
                 </button>
               </>
             )}
 
             {status === "success" && (
-              <div className="space-y-4 text-theme-success">
+              <div className="text-theme-success space-y-4 text-center">
                 <p className="space-x-2">
                   <svg
                     className="inline-block size-4"
@@ -204,16 +240,16 @@ const Contact = () => {
                 </p>
                 <button
                   type="button"
-                  className="button mx-auto"
+                  className="text-theme-primary mx-auto cursor-pointer font-semibold"
                   onClick={retryHandler}
                 >
-                  Retry
+                  Send another
                 </button>
               </div>
             )}
 
             {status === "error" && (
-              <div className="text-theme-error">
+              <div className="text-theme-error text-center">
                 <p className="space-x-2">
                   <svg
                     className="inline-block size-4"
@@ -228,7 +264,7 @@ const Contact = () => {
                 <p className="my-2">{errorMessage}</p>
                 <button
                   type="button"
-                  className="button mx-auto"
+                  className="text-theme-primary mx-auto cursor-pointer font-semibold"
                   onClick={retryHandler}
                 >
                   Retry
