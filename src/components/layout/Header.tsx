@@ -1,11 +1,8 @@
 "use client";
 
-import AnchorLink from "@/components/common/AnchorLink";
-import Drawer, { useDrawerContext } from "@/components/common/Drawer";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import classNames from "classnames";
-import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -14,56 +11,17 @@ import { useEffect, useState } from "react";
  * under the header at scroll 0, but any scroll slides hero content (the
  * portrait, the greeting) beneath it, so the blurred backdrop comes in
  * immediately.
+ *
+ * Deliberately no section nav: the landing page is meant to be scrolled
+ * and read in order, not skipped through.
  */
 const SCROLLED_AT = 16;
 
-const NAV_ITEMS = [
-  { emoji: "🙋🏻‍♂️", href: "/#about", label: "About" },
-  { emoji: "📚", href: "/#stacks", label: "Stacks" },
-  { emoji: "💻", href: "/#projects", label: "Projects" },
-  { emoji: "✍️", href: "/#writing", label: "Writing" },
-  { emoji: "📨", href: "/#contact", label: "Contact" },
-];
-
-/** Drawer nav items; tapping one closes the drawer before scrolling */
-const MobileNavLinks = () => {
-  const dialog = useDrawerContext();
-
-  return (
-    <nav aria-label="Sections" className="flex flex-col gap-1 pt-2">
-      {NAV_ITEMS.map((item) => (
-        <AnchorLink
-          key={item.label}
-          href={item.href}
-          className="text-subsection py-2 font-bold"
-          onClick={() => dialog?.hide()}
-        >
-          {item.label} <span aria-hidden="true">{item.emoji}</span>
-        </AnchorLink>
-      ))}
-      <Link
-        href="/blog"
-        className="text-subsection text-theme-primary py-2 font-bold"
-        onClick={() => dialog?.hide()}
-      >
-        Blog <span aria-hidden="true">📓</span>
-      </Link>
-    </nav>
-  );
-};
-
 interface HeaderProps extends React.ComponentProps<"header"> {
   useScroll?: boolean;
-  /** Section anchors only make sense where the sections exist (homepage) */
-  showSectionNav?: boolean;
 }
 
-const Header = ({
-  className,
-  showSectionNav = false,
-  useScroll = true,
-  ...props
-}: HeaderProps) => {
+const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(!useScroll);
 
   useEffect(() => {
@@ -119,53 +77,14 @@ const Header = ({
         </div>
 
         <div className="flex h-full items-center gap-5">
-          {showSectionNav && (
-            <nav
-              aria-label="Sections"
-              className="hidden h-full items-center gap-5 md:flex"
-            >
-              {NAV_ITEMS.map((item) => (
-                <AnchorLink
-                  key={item.label}
-                  href={item.href}
-                  className="text-xs font-semibold tracking-wider uppercase"
-                >
-                  <GrowingUnderline>{item.label}</GrowingUnderline>
-                </AnchorLink>
-              ))}
-            </nav>
-          )}
-
           <Link
             href="/blog"
-            className={classNames(
-              "text-xs font-extrabold tracking-wider uppercase",
-              /* With the drawer carrying nav on mobile, avoid doubling up */
-              showSectionNav && "hidden md:block"
-            )}
+            className="text-xs font-extrabold tracking-wider uppercase"
           >
             <GrowingUnderline>Blog</GrowingUnderline>
           </Link>
 
           <ThemeToggle />
-
-          {showSectionNav && (
-            <div className="flex-center md:hidden">
-              <Drawer
-                position="right"
-                size={300}
-                title="tkhquang.dev"
-                trigger={
-                  <>
-                    <MenuIcon className="size-6" />
-                    <span className="sr-only">Open navigation</span>
-                  </>
-                }
-              >
-                <MobileNavLinks />
-              </Drawer>
-            </div>
-          )}
         </div>
       </div>
     </header>

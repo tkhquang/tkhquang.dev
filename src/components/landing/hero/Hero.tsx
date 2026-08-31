@@ -6,8 +6,12 @@ import HeroRoles from "@/components/landing/hero/HeroRoles";
 import HeroWaves from "@/components/landing/hero/HeroWaves";
 import { Portfolio } from "@/constants/meta";
 import classNames from "classnames";
-import Link from "next/link";
 
+/*
+ * Deliberately no CTAs: the page is a narrative meant to be scrolled and
+ * read in order, so nothing invites skipping ahead or leaving early. The
+ * drifting chevron is the only "there is more below" nudge.
+ */
 const Hero = () => {
   /* Toggle in src/constants/meta.ts: "portrait" | "text" */
   const withPortrait = Portfolio.HERO_LAYOUT === "portrait";
@@ -40,28 +44,9 @@ const Hero = () => {
               Front-end engineer by day, open source and game modding enthusiast
               by night.
             </p>
-            <div
-              className={classNames(
-                "animate-rise-in mt-8 flex flex-wrap items-center gap-3 [animation-delay:1.5s]",
-                !withPortrait && "justify-center"
-              )}
-            >
-              <Link
-                href="/blog"
-                className="bg-theme-on-band inline-flex items-center gap-1.5 rounded-lg px-5 py-2.5 font-semibold text-(--band-b) shadow-md transition-all duration-200 hover:bg-[color-mix(in_srgb,var(--on-band)_82%,var(--band-b))] hover:shadow-lg"
-              >
-                Read the blog <span aria-hidden="true">✍️</span>
-              </Link>
-              <AnchorLink
-                href="/#projects"
-                className="text-theme-on-band inline-flex items-center gap-1.5 rounded-lg border border-[color-mix(in_srgb,var(--on-band)_45%,transparent)] px-5 py-2.5 font-semibold transition-all duration-200 hover:border-(--on-band) hover:bg-[color-mix(in_srgb,var(--on-band)_12%,transparent)]"
-              >
-                See my work <span aria-hidden="true">💻</span>
-              </AnchorLink>
-            </div>
             <SocialLinks
               className={classNames(
-                "animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:1.65s]",
+                "animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:1.5s]",
                 !withPortrait && "justify-center"
               )}
             />
@@ -71,6 +56,28 @@ const Hero = () => {
           )}
         </div>
       </div>
+
+      <AnchorLink
+        href="/#about"
+        aria-label="Continue to the content"
+        className="animate-rise-in absolute bottom-28 left-1/2 z-2 -translate-x-1/2 [animation-delay:1.8s]"
+      >
+        <span className="animate-scroll-cue text-theme-on-band-dim block">
+          <svg
+            width="26"
+            height="26"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </span>
+      </AnchorLink>
 
       <HeroWaves className="hero__waves absolute inset-x-0 bottom-0 z-1 h-24" />
     </section>
