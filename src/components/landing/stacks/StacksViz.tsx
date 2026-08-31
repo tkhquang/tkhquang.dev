@@ -7,6 +7,8 @@ export interface LanguageShare {
   id: string;
   name: string;
   percentage: number;
+  /** GitHub language identity color */
+  color?: string;
 }
 
 type PersonaKey = "all" | "fe" | "re";
@@ -44,12 +46,17 @@ const PERSONAS: Record<PersonaKey, { label: string; exclude?: string[] }> = {
 
 const DEFAULT_PERSONA: PersonaKey = "all";
 
-/** Ramp position for a row; the catch-all "Other" takes the neutral stop */
-function chartColor(index: number, isOther: boolean): string {
-  if (isOther) {
+/**
+ * Each language keeps its GitHub identity color everywhere (matching the
+ * repo cards below), run through a per-theme legibility mix so dark navies
+ * survive the dark theme and light yellows survive cool paper. The
+ * catch-all "Other" takes the ramp's neutral stop.
+ */
+function chartColor(language: LanguageShare): string {
+  if (language.id === "other" || !language.color) {
     return "var(--chart-6)";
   }
-  return `var(--chart-${Math.min(index + 1, 6)})`;
+  return `color-mix(in srgb, ${language.color} var(--lang-color-keep), var(--lang-color-tune))`;
 }
 
 /**
@@ -112,7 +119,7 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
             className="animate-grow-bar block h-full"
             style={{
               animationDelay: `${index * 60}ms`,
-              backgroundColor: chartColor(index, language.id === "other"),
+              backgroundColor: chartColor(language),
               width: `${(language.percentage / personaTotal) * 100}%`,
             }}
           />
@@ -136,7 +143,7 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
                 className="animate-grow-bar block h-full rounded-full"
                 style={{
                   animationDelay: `${100 + index * 60}ms`,
-                  backgroundColor: chartColor(index, language.id === "other"),
+                  backgroundColor: chartColor(language),
                   width: `${(language.percentage / maxPercentage) * 100}%`,
                 }}
               />

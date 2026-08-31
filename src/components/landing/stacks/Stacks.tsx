@@ -62,6 +62,7 @@ interface LanguageStat {
   name: string;
   size: number;
   percentage: number;
+  color?: string;
 }
 
 /**
@@ -83,6 +84,7 @@ async function getLanguageStats(): Promise<LanguageStat[]> {
 
         if (!stats[node.id]) {
           stats[node.id] = {
+            color: node.color,
             id: node.id,
             name: node.name,
             size: 0,
@@ -131,7 +133,8 @@ export default async function Stacks() {
 
         <Reveal>
           <StacksViz
-            languages={languages.map(({ id, name, percentage }) => ({
+            languages={languages.map(({ color, id, name, percentage }) => ({
+              color,
               id,
               name,
               percentage,
