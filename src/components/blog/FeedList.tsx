@@ -5,6 +5,7 @@ import BlogPagination from "@/components/blog/BlogPagination";
 import { ClientOnly } from "@/components/ui/client-only";
 
 const FeedList = <T,>({
+  hideTitle,
   item,
   pathInfoType,
   pathSlug,
@@ -18,8 +19,9 @@ const FeedList = <T,>({
   item?: T;
   totalPages?: number;
   currentPage?: number;
+  /* The list page headlines itself with the masthead instead */
+  hideTitle?: boolean;
 }) => {
-  const shouldShowEndOfResults = !currentPage || totalPages === currentPage;
   return (
     <section className="news-feed w-full max-w-(--breakpoint-sm) flex-1">
       {pathInfoType && item && (
@@ -36,18 +38,18 @@ const FeedList = <T,>({
         </h1>
       ) : (
         <>
-          <h1 className="text-theme-primary mx-auto text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-            Latest Posts
-          </h1>
+          {!hideTitle && (
+            <h1 className="text-theme-primary mx-auto text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
+              Latest Posts
+            </h1>
+          )}
           <ul className="news-feed__list flex-center flex-col">
             {posts.map((post, index) => (
               <PostCard key={post.slug} post={post} index={index} />
             ))}
           </ul>
 
-          <h1 className="flex-center mx-auto my-6 w-full text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-            {shouldShowEndOfResults ? "End of Results" : ""}
-          </h1>
+          <div className="my-6" />
 
           {totalPages && totalPages > 1 && (
             <ClientOnly>

@@ -23,25 +23,30 @@
     display: none;
   }
 
+  /*
+   * Same 45s wander as the old background-position version, moved onto a
+   * transform so the blurred layer stays composited instead of repainting.
+   * The oversized inset keeps the edges covered at every stop.
+   */
   @keyframes waves {
     0% {
-      background-position: top left;
+      transform: translate3d(-18px, -8px, 0);
     }
 
     25% {
-      background-position: bottom right;
+      transform: translate3d(18px, 8px, 0);
     }
 
     50% {
-      background-position: center;
+      transform: translate3d(0, 0, 0);
     }
 
     75% {
-      background-position: top right;
+      transform: translate3d(18px, -8px, 0);
     }
 
     100% {
-      background-position: bottom left;
+      transform: translate3d(-18px, 8px, 0);
     }
   }
 
@@ -50,14 +55,28 @@
       position: absolute;
       display: block;
       content: "";
-      inset: -16px -40px;
+      inset: -28px -60px;
       background-image: var(--background-url);
-      background-size: 105% auto;
+      /* cover, not 105% auto: with a fixed position the flanks must always
+         be filled or the grit loading layer shows through as speckles */
+      background-size: cover;
       background-position: center;
       animation: waves 45s linear infinite alternate both;
       filter: blur(20px) brightness(75%);
       background-repeat: no-repeat;
       z-index: -1;
+    }
+
+    /* Dissolve into the page instead of slamming against light paper */
+    &::after {
+      position: absolute;
+      display: block;
+      content: "";
+      inset: auto 0 0;
+      height: 40%;
+      background-image: linear-gradient(to bottom, transparent, var(--background));
+      z-index: -1;
+      pointer-events: none;
     }
 
     @apply shadow-2xl;
@@ -94,6 +113,22 @@
     p {
       display: inline;
       background-color: var(--surface);
+    }
+  }
+
+  /*
+   * Shelf accents: one identity hue per category, tuned per theme the same
+   * way the landing tunes GitHub language colors. Named by category slug so
+   * components can resolve var(--shelf-<slug>).
+   */
+  html {
+    --shelf-technical: var(--primary);
+    --shelf-gaming: hsl(352deg 62% 73%);
+    --shelf-the-inner-crisis: hsl(267deg 56% 75%);
+
+    &[data-theme="light"] {
+      --shelf-gaming: hsl(351deg 58% 40%);
+      --shelf-the-inner-crisis: hsl(266deg 50% 55%);
     }
   }
 }

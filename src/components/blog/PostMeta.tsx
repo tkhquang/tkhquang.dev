@@ -2,6 +2,7 @@ import ViewCount from "@/components/common/ViewCount";
 import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
 import { format, isValid } from "date-fns";
+import Link from "next/link";
 import React from "react";
 import {
   // FaCalendarAlt,
@@ -11,6 +12,13 @@ import {
 interface PostDatesProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;
 }
+
+/* Posts only store the slug; the display name is its title-cased form */
+const categoryTitleFromSlug = (slug: string) =>
+  slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
 const PostMeta = ({ className, post }: PostDatesProps) => {
   const formatDate = (date: Date): string | null => {
@@ -26,27 +34,35 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
   return (
     <div
       className={classNames(
-        "grid grid-cols-[1fr_auto] items-end gap-2 text-xs font-semibold tracking-wider uppercase opacity-75 md:text-sm",
+        "grid grid-cols-[1fr_auto] items-end gap-2",
         className
       )}
     >
-      <div className="text-theme-error flex flex-wrap items-center gap-x-1.5 gap-y-1">
-        {/* <FaCalendarAlt className="size-3 shrink-0 md:size-4" /> */}
+      <div className="kicker flex flex-wrap items-center gap-x-1.5 gap-y-1">
         <time className="align-middle" dateTime={post.created_at.toISOString()}>
           {created_at}
         </time>
         {updated_at && (
           <span className="align-middle">
-            (Updated:{" "}
+            · Updated:{" "}
             <time dateTime={post.updated_at?.toISOString?.()}>
               {updated_at}
             </time>
-            )
           </span>
         )}
+        <span aria-hidden>·</span>
+        <Link
+          href={`/blog/categories/${post.category_slug}`}
+          className="font-bold transition-opacity hover:opacity-75"
+          style={{
+            color: `var(--shelf-${post.category_slug}, var(--primary))`,
+          }}
+        >
+          # {categoryTitleFromSlug(post.category_slug)}
+        </Link>
       </div>
 
-      <div className="text-theme-on-surface flex items-center space-x-2">
+      <div className="text-theme-on-surface flex items-center space-x-2 font-mono text-xs opacity-75 md:text-sm">
         <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>

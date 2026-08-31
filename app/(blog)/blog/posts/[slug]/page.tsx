@@ -1,6 +1,7 @@
 import BlogInfo from "@/components/blog/BlogInfo";
 import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
+import PostAside from "@/components/blog/PostAside";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import TableOfContent from "@/components/blog/TableOfContent";
@@ -78,6 +79,13 @@ export default async function Post({
 
   const category = await markdownParser.getCategoryBySlug(post.category_slug);
 
+  const relatedPosts = (await markdownParser.getAllPosts())
+    .filter(
+      (other) =>
+        other.category_slug === post.category_slug && other.slug !== post.slug
+    )
+    .slice(0, 3);
+
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;
 
@@ -126,24 +134,29 @@ export default async function Post({
         {post.cover_image && <NextImage {...post.coverData} {...coverProps} />}
       </header>
 
-      <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
+      <h1 className="heading mx-auto mt-4 mb-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
         {post.title}
       </h1>
 
       <div className="flex">
         <TableOfContent headings={headings} />
 
-        <section className="container max-w-(--breakpoint-md)!">
+        <section className="container mx-auto max-w-(--breakpoint-md)!">
           <article className="article">
-            <div className="article__meta my-3">
-              <PostMeta post={post} />
-            </div>
             <div className="article__path-info">
               <PathInfo<MarkdownCategory, "slug">
                 item={category}
                 pathInfoType="category"
                 pathSlug="categories"
               />
+            </div>
+            {post.description && (
+              <p className="article__lede my-4 font-serif text-lg italic opacity-85">
+                {post.description}
+              </p>
+            )}
+            <div className="article__meta border-theme-hairline-soft mt-3 mb-6 border-b pb-4">
+              <PostMeta post={post} />
             </div>
 
             <div
@@ -173,9 +186,11 @@ export default async function Post({
           </article>
         </section>
 
-        <section className="underconstruction hidden flex-auto flex-col lg:flex">
-          <p>&nbsp;</p>
-        </section>
+        <PostAside
+          categoryTitle={category.title}
+          categorySlug={category.slug}
+          posts={relatedPosts}
+        />
       </div>
     </div>
   );

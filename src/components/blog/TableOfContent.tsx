@@ -276,7 +276,7 @@ const TocList = ({
 const MobileTocTrigger = () => (
   <Portal>
     <BsFillMenuButtonWideFill
-      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-hidden lg:hidden"
+      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-hidden xl:hidden"
       aria-label="Open table of contents"
     />
   </Portal>
@@ -301,16 +301,16 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
 
   return (
     <section
-      className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100"
+      className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 xl:relative xl:opacity-50 xl:hover:opacity-100"
       aria-label="Table of contents navigation"
     >
       {/*
         Nested headings make this list long enough to outgrow the viewport, and a
         sticky element taller than the viewport puts its tail permanently out of
-        reach. `lg:` gates on width, so a short laptop window still hits this.
+        reach. `xl:` gates on width, so a short laptop window still hits this.
       */}
       {headings?.length > 0 && (
-        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 lg:block">
+        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 xl:block">
           <h2 className="heading mt-10 text-2xl">Table of Content</h2>
 
           {/* Mobile Drawer */}

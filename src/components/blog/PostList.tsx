@@ -42,7 +42,14 @@ const PostList = <
 
             return (
               <AccordionItem value={fieldSlug} key={fieldSlug}>
-                <AccordionTrigger>{item.title}</AccordionTrigger>
+                <AccordionTrigger>
+                  <span className="flex flex-1 items-baseline justify-between gap-4">
+                    <span>{item.title}</span>
+                    <span className="kicker tabular-nums">
+                      {groupedPostsBySlug[fieldSlug]?.length ?? 0} posts
+                    </span>
+                  </span>
+                </AccordionTrigger>
                 <AccordionContent>
                   <ul className="post__list">
                     {groupedPostsBySlug[fieldSlug].map((post) => {

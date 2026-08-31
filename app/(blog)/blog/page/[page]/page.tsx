@@ -2,6 +2,7 @@ import ClientSideGetPageViews from "@/components/container/ClientSideGetPageView
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { Suspense } from "react";
 
+import BlogMasthead from "@/components/blog/BlogMasthead";
 import NewsFeed from "@/components/blog/NewsFeed";
 import { chunk } from "es-toolkit";
 import { Blog } from "@/constants/meta";
@@ -30,14 +31,27 @@ export default async function BlogPage({ params }: any) {
   const totalPages = postChunks.length;
   const currentPage = page;
 
+  const shelfCount = new Set(allPosts.map((post) => post.category_slug)).size;
+
+  const sinceYear = allPosts.reduce(
+    (year, post) => Math.min(year, post.created_at.getFullYear()),
+    new Date().getFullYear()
+  );
+
   return (
     <>
+      <BlogMasthead
+        totalPosts={allPosts.length}
+        sinceYear={sinceYear}
+        shelfCount={shelfCount}
+      />
       <NewsFeed
         posts={posts}
         pathSlug="categories"
         pathInfoType="category"
         totalPages={totalPages}
         currentPage={currentPage}
+        hideTitle
       />
       <Suspense>
         <ClientSideGetPageViews
