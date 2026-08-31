@@ -12,7 +12,7 @@ const AboutMe = () => {
       id="about"
     >
       <SectionHeading kicker="Who I am" title="About Me" emoji="🙋🏻‍♂️" />
-      <div className="grid gap-12 lg:grid-cols-[minmax(0,40rem)_19rem] lg:justify-between">
+      <div className="grid gap-12 lg:grid-cols-[minmax(0,40rem)_20rem] lg:justify-between">
         <Reveal>
           <div
             className="typography about__prose"

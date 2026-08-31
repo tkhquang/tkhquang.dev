@@ -26,6 +26,16 @@ I enjoy working with teams who care about quality and learning. If you'd like to
     description: `Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience: front-end by day, open source and modding enthusiast by night.`,
     title: "Aleks's Portfolio",
   };
+
+  /** Content of the "Right now" plate on the homepage; edit here */
+  export const RIGHT_NOW = {
+    basedIn: {
+      city: "Ho Chi Minh City",
+      gmtLabel: "GMT+7",
+      timeZone: "Asia/Ho_Chi_Minh",
+    },
+    modding: "Crimson Desert",
+  };
 }
 
 export namespace Blog {

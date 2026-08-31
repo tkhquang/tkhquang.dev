@@ -3,14 +3,10 @@ import SectionHeading from "@/components/common/SectionHeading";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import { fetchGitHubProjects } from "@/services/github";
 import Link from "next/link";
-
-/* Raw GitHub language colors survive only as these small identity dots */
-const CPP_COLOR = "#f34b7d";
+import { GoRepo, GoRepoForked, GoStar } from "react-icons/go";
 
 interface FeaturedProject {
   name: string;
-  meta: string;
-  metaColor: string;
   blurb: string;
   source: string;
   devlog?: { href: string; label: string };
@@ -24,8 +20,6 @@ const FEATURED: FeaturedProject[] = [
       href: "/blog/posts/hot-reload-in-a-live-process-the-two-binary-architecture",
       label: "Read the devlog",
     },
-    meta: "C++23 · Library",
-    metaColor: CPP_COLOR,
     name: "DetourModKit",
     source: "https://github.com/tkhquang/DetourModKit",
   },
@@ -36,16 +30,12 @@ const FEATURED: FeaturedProject[] = [
       href: "/blog/posts/devlog-kingdom-come-deliverance-ii-building-a-proper-third-person-camera",
       label: "Read the devlog",
     },
-    meta: "C++ · Game modding",
-    metaColor: CPP_COLOR,
     name: "KCD2Tools",
     source: "https://github.com/tkhquang/KCD2Tools",
   },
   {
     blurb:
       "A collection of mods for Crimson Desert that enhance gameplay and add new features to the game.",
-    meta: "C++ · Game modding",
-    metaColor: CPP_COLOR,
     name: "CrimsonDesertTools",
     source: "https://github.com/tkhquang/CrimsonDesertTools",
   },
@@ -53,18 +43,21 @@ const FEATURED: FeaturedProject[] = [
 
 const LIST_SIZE = 6;
 
+const REPO_META_CLASS =
+  "flex shrink-0 items-center gap-1 font-mono text-xs opacity-65";
+
 const Projects = async () => {
   const data = await fetchGitHubProjects();
 
+  const publicRepos = data.viewer.repositories.edges
+    .filter(({ node }) => !node.isPrivate && node.primaryLanguage !== null)
+    .map(({ node }) => node);
+
+  const repoByName = new Map(publicRepos.map((repo) => [repo.name, repo]));
   const featuredNames = new Set(FEATURED.map((project) => project.name));
-  const repositories = data.viewer.repositories.edges
-    .filter(
-      ({ node }) =>
-        !node.isPrivate &&
-        node.primaryLanguage !== null &&
-        !featuredNames.has(node.name)
-    )
-    .map(({ node }) => node)
+
+  const repositories = publicRepos
+    .filter((repo) => !featuredNames.has(repo.name))
     .sort((a, b) => {
       if (a.stargazers.totalCount > 0 || b.stargazers.totalCount > 0) {
         return b.stargazers.totalCount - a.stargazers.totalCount;
@@ -81,50 +74,71 @@ const Projects = async () => {
       <SectionHeading kicker="What I build" title="Projects" emoji="💻" />
 
       <Reveal className="grid gap-5 md:grid-cols-3">
-        {FEATURED.map((project) => (
-          <article
-            key={project.name}
-            className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex flex-col gap-3 rounded-xl border p-5 shadow-sm transition-all duration-200 hover:-translate-y-1"
-          >
-            <div className="flex items-center gap-2 font-mono text-xs opacity-70">
-              <span
-                className="size-2.5 shrink-0 rounded-full"
-                style={{ backgroundColor: project.metaColor }}
-              />
-              {project.meta}
-            </div>
-            <h3 className="m-0 font-mono text-lg font-semibold">
-              <a
-                className="text-theme-primary"
-                href={project.source}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <GrowingUnderline>{project.name}</GrowingUnderline>
-              </a>
-            </h3>
-            <p className="m-0 flex-1 text-sm leading-relaxed">
-              {project.blurb}
-            </p>
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-1 font-mono text-sm">
-              <a
-                href={project.source}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-theme-primary"
-              >
-                <GrowingUnderline>Source →</GrowingUnderline>
-              </a>
+        {FEATURED.map((project) => {
+          const live = repoByName.get(project.name);
+
+          return (
+            <article
+              key={project.name}
+              className="bg-theme-raised border-theme-hairline-soft hover:border-theme-primary/40 flex flex-col gap-3 rounded-xl border p-5 shadow-sm transition-all duration-200 hover:-translate-y-1"
+            >
+              <div className="flex min-w-0 items-center gap-2">
+                <GoRepo className="size-4 shrink-0 opacity-65" />
+                <a
+                  className="text-theme-primary min-w-0 truncate font-mono text-base font-semibold"
+                  href={live?.url ?? project.source}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GrowingUnderline>{project.name}</GrowingUnderline>
+                </a>
+                <span className="border-theme-hairline-soft ml-auto shrink-0 rounded-full border px-2 py-0.5 font-mono text-[0.65rem] opacity-65">
+                  Public
+                </span>
+              </div>
+              <p className="m-0 flex-1 text-sm leading-relaxed">
+                {project.blurb}
+              </p>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                {live?.primaryLanguage && (
+                  <span className={REPO_META_CLASS}>
+                    <span
+                      className="size-2.5 rounded-full"
+                      style={{
+                        backgroundColor: live.primaryLanguage.color,
+                      }}
+                    />
+                    {live.primaryLanguage.name}
+                  </span>
+                )}
+                <span
+                  className={REPO_META_CLASS}
+                  aria-label={`${live?.stargazers.totalCount ?? 0} stars`}
+                >
+                  <GoStar className="size-3.5" />
+                  {live?.stargazers.totalCount ?? 0}
+                </span>
+                <span
+                  className={REPO_META_CLASS}
+                  aria-label={`${live?.forkCount ?? 0} forks`}
+                >
+                  <GoRepoForked className="size-3.5" />
+                  {live?.forkCount ?? 0}
+                </span>
+              </div>
               {project.devlog && (
-                <Link href={project.devlog.href} className="text-theme-primary">
+                <Link
+                  href={project.devlog.href}
+                  className="text-theme-primary font-mono text-sm"
+                >
                   <GrowingUnderline>
                     {project.devlog.label} <span aria-hidden="true">✍️</span>
                   </GrowingUnderline>
                 </Link>
               )}
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </Reveal>
 
       <Reveal className="mt-6 grid gap-4 md:grid-cols-2" delay={100}>
@@ -133,24 +147,39 @@ const Projects = async () => {
             key={repo.id}
             className="border-theme-hairline-soft hover:border-theme-primary/40 rounded-lg border p-4 transition-colors duration-200"
           >
-            <div className="flex items-baseline justify-between gap-3">
-              <a
-                className="text-theme-primary min-w-0 truncate font-mono text-sm font-semibold"
-                href={repo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <GrowingUnderline>{repo.name}</GrowingUnderline>
-              </a>
-              <span className="flex shrink-0 items-center gap-1.5 font-mono text-xs opacity-65">
+            <div className="flex items-center justify-between gap-3">
+              <span className="flex min-w-0 items-center gap-2">
+                <GoRepo className="size-3.5 shrink-0 opacity-65" />
+                <a
+                  className="text-theme-primary min-w-0 truncate font-mono text-sm font-semibold"
+                  href={repo.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GrowingUnderline>{repo.name}</GrowingUnderline>
+                </a>
+              </span>
+              <span className="flex shrink-0 items-center gap-3">
+                <span className={REPO_META_CLASS}>
+                  <span
+                    className="size-2 rounded-full"
+                    style={{ backgroundColor: repo.primaryLanguage.color }}
+                  />
+                  {repo.primaryLanguage.name}
+                </span>
                 <span
-                  className="size-2 rounded-full"
-                  style={{ backgroundColor: repo.primaryLanguage.color }}
-                />
-                {repo.primaryLanguage.name}
-                <span aria-hidden="true">·</span>
-                <span aria-label={`${repo.stargazers.totalCount} stars`}>
-                  ★ {repo.stargazers.totalCount}
+                  className={REPO_META_CLASS}
+                  aria-label={`${repo.stargazers.totalCount} stars`}
+                >
+                  <GoStar className="size-3.5" />
+                  {repo.stargazers.totalCount}
+                </span>
+                <span
+                  className={REPO_META_CLASS}
+                  aria-label={`${repo.forkCount} forks`}
+                >
+                  <GoRepoForked className="size-3.5" />
+                  {repo.forkCount}
                 </span>
               </span>
             </div>
@@ -163,7 +192,7 @@ const Projects = async () => {
 
       <Reveal className="mt-8" delay={150}>
         <a
-          href="https://github.com/tkhquang?tab=repositories"
+          href="https://github.com/tkhquang"
           target="_blank"
           rel="noopener noreferrer"
           className="text-theme-primary font-mono text-sm"

@@ -97,7 +97,10 @@ const Contact = () => {
               If you&apos;d like to collaborate or just talk shop, feel free to
               reach out!
             </p>
-            <SocialLinks className="mt-8 flex items-center gap-4 text-3xl" />
+            <SocialLinks
+              className="mt-8 flex items-center gap-4 text-3xl"
+              entities={["Github", "LinkedIn"]}
+            />
           </div>
 
           <form

@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 
 const POST_COUNT = 3;
+const MORE_COUNT = 3;
 
 /* Only technical writing on the front door; personal posts stay on the blog */
 const FEATURED_CATEGORY = "technical";
@@ -17,9 +18,11 @@ const FEATURED_CATEGORY = "technical";
 const Writing = async () => {
   const markdownParser = await getMarkdownParser();
   const allPosts = await markdownParser.getAllPosts();
-  const posts = allPosts
-    .filter((post) => post.category_slug === FEATURED_CATEGORY)
-    .slice(0, POST_COUNT);
+  const technicalPosts = allPosts.filter(
+    (post) => post.category_slug === FEATURED_CATEGORY
+  );
+  const posts = technicalPosts.slice(0, POST_COUNT);
+  const morePosts = technicalPosts.slice(POST_COUNT, POST_COUNT + MORE_COUNT);
 
   return (
     <section
@@ -76,6 +79,35 @@ const Writing = async () => {
             </article>
           ))}
         </Reveal>
+
+        {morePosts.length > 0 && (
+          <Reveal
+            className="border-theme-hairline-soft mt-10 border-t"
+            delay={60}
+          >
+            {morePosts.map((post) => (
+              <div
+                key={post.slug}
+                className="border-theme-hairline-soft border-b py-4"
+              >
+                <span className="kicker block">
+                  {format(post.created_at, "MMM dd, yyyy")}
+                </span>
+                <h3 className="m-0 mt-0.5 text-base leading-snug font-bold">
+                  <Link
+                    href={`/blog/posts/${post.slug}`}
+                    className="text-theme-primary transition-opacity hover:opacity-75"
+                  >
+                    {post.title}
+                  </Link>
+                </h3>
+                <p className="mt-1 mb-0 line-clamp-1 text-sm opacity-75">
+                  {post.description}
+                </p>
+              </div>
+            ))}
+          </Reveal>
+        )}
 
         <Reveal className="mt-10" delay={100}>
           <Link

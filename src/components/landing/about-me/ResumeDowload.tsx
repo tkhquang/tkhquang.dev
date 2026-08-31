@@ -33,8 +33,13 @@ const ResumeDownload = () => {
         <span>Download</span>
         <span>PDF</span>
       </span>
-      <span className="font-semibold">
-        View my resume <span aria-hidden="true">📄</span>
+      <span className="min-w-0">
+        <span className="block font-semibold">
+          View my resume <span aria-hidden="true">📄</span>
+        </span>
+        <span className="mt-1 block truncate font-mono text-xs opacity-65">
+          {RESUME.fileName}
+        </span>
       </span>
     </a>
   );

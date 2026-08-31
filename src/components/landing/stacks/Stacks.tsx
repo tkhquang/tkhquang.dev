@@ -1,6 +1,7 @@
 import Image from "@/components/common/NextImage";
 import Reveal from "@/components/common/Reveal";
 import SectionHeading from "@/components/common/SectionHeading";
+import StacksViz from "@/components/landing/stacks/StacksViz";
 import { fetchGitHubCommitStats } from "@/services/github";
 
 const toolkit = [
@@ -120,91 +121,23 @@ async function getLanguageStats(): Promise<LanguageStat[]> {
   ];
 }
 
-/** Ramp position for a row: "Other" always takes the neutral last stop */
-function chartColor(index: number, isOther: boolean): string {
-  if (isOther) {
-    return "var(--chart-6)";
-  }
-  return `var(--chart-${Math.min(index + 1, 6)})`;
-}
-
 export default async function Stacks() {
   const languages = await getLanguageStats();
-  const maxPercentage = Math.max(
-    ...languages.map((language) => language.percentage),
-    1
-  );
 
   return (
     <section className="stacks scroll-mt-header-height pt-8" id="stacks">
       <div className="container">
         <SectionHeading kicker="What I work with" title="Stacks" emoji="🧰" />
 
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.9fr)]">
-          <div className="flex-center mx-auto hidden w-full max-w-xs lg:flex">
-            <Image
-              src="/assets/resources/svg/Dev.svg"
-              alt=""
-              width={500}
-              height={500}
-              style={{ objectFit: "cover" }}
-              shouldShowBackground={false}
-              unoptimized
-            />
-          </div>
-
-          <Reveal>
-            <div
-              className="flex h-3.5 overflow-hidden rounded-full"
-              role="img"
-              aria-label="Language share of GitHub commits"
-            >
-              {languages.map((language, index) => (
-                <span
-                  key={language.id}
-                  className="block h-full"
-                  style={{
-                    backgroundColor: chartColor(index, language.id === "other"),
-                    width: `${language.percentage}%`,
-                  }}
-                />
-              ))}
-            </div>
-
-            <div className="mt-6 space-y-2.5">
-              {languages.map((language, index) => (
-                <div
-                  key={language.id}
-                  className="grid grid-cols-[7.5rem_minmax(0,1fr)_3.5rem] items-center gap-3"
-                >
-                  <span className="truncate font-mono text-sm opacity-85">
-                    {language.name}
-                  </span>
-                  <span className="bg-theme-on-surface/8 h-2 overflow-hidden rounded-full">
-                    <span
-                      className="block h-full rounded-full"
-                      style={{
-                        backgroundColor: chartColor(
-                          index,
-                          language.id === "other"
-                        ),
-                        width: `${(language.percentage / maxPercentage) * 100}%`,
-                      }}
-                    />
-                  </span>
-                  <span className="text-right font-mono text-xs tabular-nums opacity-65">
-                    {language.percentage.toFixed(1)}%
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <p className="kicker mt-6 normal-case">
-              Based on GitHub commits. That C++ share is the game modding habit{" "}
-              <span aria-hidden="true">🎮</span>
-            </p>
-          </Reveal>
-        </div>
+        <Reveal>
+          <StacksViz
+            languages={languages.map(({ id, name, percentage }) => ({
+              id,
+              name,
+              percentage,
+            }))}
+          />
+        </Reveal>
       </div>
 
       <Reveal className="bg-theme-surface border-theme-hairline-soft mt-14 w-full border-y py-8">
