@@ -2,6 +2,7 @@
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
+import { ScrollManager } from "@/utils/dom";
 import classNames from "classnames";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -30,15 +31,17 @@ const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
       return;
     }
 
-    const update = () => {
-      setScrolled(window.scrollY > SCROLLED_AT);
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    /* The house scroll pub/sub, same as BlogHeader and BackToTop */
+    const scrollManager = new ScrollManager();
+    scrollManager.subscribe({
+      id: "landing-header",
+      callback: ({ scrollY }) => {
+        setScrolled(scrollY > SCROLLED_AT);
+      },
+    });
 
     return () => {
-      window.removeEventListener("scroll", update);
+      scrollManager.destroy();
     };
   }, [useScroll]);
 
