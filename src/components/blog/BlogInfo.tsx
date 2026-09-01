@@ -5,14 +5,26 @@ import HorizontalLine from "@/components/common/HorizontalLine";
 import classNames from "classnames";
 import React from "react";
 
-const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
+interface BlogInfoProps extends React.ComponentProps<"section"> {
+  /* rail: the 240px sidebar card, plate chart at lg and up; wide: the
+     horizontal card (post page), always the outline-less sky. A container
+     query would be the natural switch, but inline-size containment zeroes
+     the card's intrinsic width and collapses the shrink-to-fit feed rows,
+     so the variant is declared per callsite instead. */
+  variant?: "rail" | "wide";
+}
+
+const BlogInfo = ({ className, variant = "rail" }: BlogInfoProps) => {
   return (
     <section className={classNames("blog-info relative text-sm", className)}>
-      {/* The @container lets the chart pick its sky by card width: the
-          same instance is a 240px rail on the desktop feed but a wide
-          card on the post page and the narrow feed (inline-size
-          containment leaves the sticky behavior alone) */}
-      <div className="blog-info__content @container/blog-info text-theme-on-surface sticky rounded-sm px-4 py-8 shadow-md">
+      <div
+        className={classNames(
+          "blog-info__content text-theme-on-surface sticky rounded-sm px-4 py-8 shadow-md",
+          variant === "rail"
+            ? "blog-info__content--rail"
+            : "blog-info__content--wide"
+        )}
+      >
         <div className="[&_.author\_\_image--container]:mb-4">
           <Author />
           <div className="my-5">

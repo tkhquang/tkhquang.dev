@@ -23,7 +23,7 @@ const FeedList = <T,>({
   hideTitle?: boolean;
 }) => {
   return (
-    <section className="news-feed w-full max-w-(--breakpoint-md) flex-1">
+    <section className="news-feed w-full max-w-(--breakpoint-sm) flex-1">
       {pathInfoType && item && (
         <PathInfo<any, "slug">
           item={item}

@@ -27,21 +27,23 @@
 }
 
 /*
- * Two skies, one card. The wide slice is the default so browsers
- * without container queries never see the plate; the plate takes over
- * when BlogInfo's content div (the @container/blog-info) runs
- * rail-narrow, where the meet fit shows the whole framed plate.
+ * Two skies, one card. The wide slice is the default; the framed plate
+ * takes over on rail-variant cards at lg and up, where the sidebar is
+ * its 240px column and the meet fit shows the whole plate. The switch
+ * is a callsite variant plus a media query, not a container query,
+ * because inline-size containment zeroes the card's intrinsic width
+ * and collapses the shrink-to-fit feed rows around it.
  */
 .constellation-chart.chart--plate {
   display: none;
 }
 
-@container blog-info (max-width: 20rem) {
-  .constellation-chart.chart--wide {
+@media (min-width: 64rem) {
+  .blog-info__content--rail .constellation-chart.chart--wide {
     display: none;
   }
 
-  .constellation-chart.chart--plate {
+  .blog-info__content--rail .constellation-chart.chart--plate {
     display: block;
   }
 }
