@@ -1,7 +1,10 @@
-/* The first paragraph reads as a Merriweather lede; the rest stays sans */
+/* The first paragraph reads as a Merriweather lede; the rest stays sans.
+   The x-height leveling matches the .font-serif rule in _02_base.css,
+   needed here too because the family is set raw rather than by class */
 .about__prose > p:first-child {
   font-family: var(--font-serif);
   font-size: 1.0625rem;
+  font-size-adjust: 0.525;
   line-height: 1.85;
 }
 

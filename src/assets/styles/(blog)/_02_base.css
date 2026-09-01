@@ -10,17 +10,6 @@
     color: var(--on-background);
   }
 
-  /*
-   * Measured on the loaded fonts: Merriweather's x-height is 0.556em to
-   * Montserrat's 0.525, so serif accents read six percent oversized at
-   * the same font-size. Pinning the used size to the sans x-height ratio
-   * makes the two faces sit level; pre-Baseline browsers simply keep
-   * today's rendering.
-   */
-  .font-serif {
-    font-size-adjust: 0.525;
-  }
-
   html[data-theme="light"] ::selection {
     background-color: color-mix(in srgb, var(--aurora-c) 22%, transparent);
     color: var(--on-background);

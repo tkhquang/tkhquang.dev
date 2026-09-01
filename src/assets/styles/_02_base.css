@@ -12,6 +12,18 @@
     @apply m-0 p-0;
   }
 
+  /*
+   * Measured on the loaded fonts: Merriweather's x-height is 0.556em to
+   * Montserrat's 0.525, so serif accents read six percent oversized at
+   * the same font-size. Pinning the used size to the sans x-height ratio
+   * makes the two faces sit level everywhere the pairing appears; the
+   * About lede sets font-family raw, so it carries its own copy of this
+   * line. Pre-Baseline browsers simply keep the old rendering.
+   */
+  .font-serif {
+    font-size-adjust: 0.525;
+  }
+
   html {
     @apply bg-theme-background text-theme-on-background font-sans text-sm leading-normal antialiased;
 
