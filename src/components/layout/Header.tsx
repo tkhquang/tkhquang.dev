@@ -23,11 +23,16 @@ interface HeaderProps extends React.ComponentProps<"header"> {
 }
 
 const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
-  const [scrolled, setScrolled] = useState(!useScroll);
+  const [scrolledPastTop, setScrolledPastTop] = useState(false);
+
+  /*
+   * Without scroll tracking the header is solid from the very first paint,
+   * so the flag is derived here rather than stored: no effect has to flip it.
+   */
+  const scrolled = !useScroll || scrolledPastTop;
 
   useEffect(() => {
     if (!useScroll) {
-      setScrolled(true);
       return;
     }
 
@@ -36,7 +41,7 @@ const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
     scrollManager.subscribe({
       id: "landing-header",
       callback: ({ scrollY }) => {
-        setScrolled(scrollY > SCROLLED_AT);
+        setScrolledPastTop(scrollY > SCROLLED_AT);
       },
     });
 

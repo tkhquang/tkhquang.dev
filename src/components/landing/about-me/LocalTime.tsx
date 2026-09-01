@@ -1,11 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 interface LocalTimeProps {
   city: string;
   gmtLabel: string;
   timeZone: string;
+}
+
+const TICK_MS = 30_000;
+
+function subscribeToTick(onTick: () => void) {
+  const interval = setInterval(onTick, TICK_MS);
+
+  return () => {
+    clearInterval(interval);
+  };
+}
+
+/**
+ * Floored to the tick so repeated reads return an identical value, which
+ * useSyncExternalStore requires; a raw Date.now() would re-render forever.
+ * Flooring to 30s never crosses a minute boundary, so the displayed time is
+ * the same one a fresh Date would show.
+ */
+function getTick(): number {
+  return Math.floor(Date.now() / TICK_MS) * TICK_MS;
+}
+
+/**
+ * No clock on the server, which keeps the static fallback in the server markup
+ * and in the hydrating render.
+ */
+function getServerTick(): null {
+  return null;
 }
 
 /**
@@ -24,18 +52,8 @@ function offsetFromViewer(timeZone: string, now: Date): number {
  * mounted so server and client markup agree.
  */
 const LocalTime = ({ city, gmtLabel, timeZone }: LocalTimeProps) => {
-  const [now, setNow] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setNow(new Date());
-    const interval = setInterval(() => {
-      setNow(new Date());
-    }, 30_000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  const tick = useSyncExternalStore(subscribeToTick, getTick, getServerTick);
+  const now = tick === null ? null : new Date(tick);
 
   if (now === null) {
     return (

@@ -108,7 +108,7 @@ function SelectTrigger({
 
   // Extract SelectValue component from children to render it inside the button
   let selectValue: React.ReactNode = null;
-  let otherChildren: React.ReactNode[] = [];
+  const otherChildren: React.ReactNode[] = [];
 
   React.Children.forEach(children, (child) => {
     if (React.isValidElement(child) && child.type === SelectValue) {
