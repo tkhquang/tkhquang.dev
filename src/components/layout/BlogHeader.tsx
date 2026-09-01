@@ -124,12 +124,14 @@ const BlogHeader = ({
                 </span>
               </div>
             </button>
+            {/* A step smaller and dimmer than the nav so it reads as the
+                wordmark's suffix, not another destination */}
             <Link
               href="/"
-              className="inline-flex items-center gap-0.5 font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
+              className="inline-flex items-center gap-1 font-mono text-[0.65rem] font-semibold tracking-[0.2em] uppercase opacity-60 transition-opacity hover:opacity-100"
             >
               · By Aleks
-              <FiArrowUpRight aria-hidden className="size-3.5" />
+              <FiArrowUpRight aria-hidden className="size-3" />
             </Link>
           </div>
           <div className="header__right flex h-full items-center">

@@ -7,6 +7,21 @@
     transition: transform 0.3s;
     transform-origin: 50% 0;
     transform-style: preserve-3d;
+
+    /* The flip's two faces differ in width (Home runs wider than Ljóss),
+       so a hidden zero-height copy of the hover text sizes the box to
+       the widest face: both faces center in one stable box and the
+       byline beside it never shifts between states */
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo__text::after {
+    content: attr(data-hover);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .logo__text::before {
@@ -131,8 +146,7 @@
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
 
-    /* The wordmark face; Fraunces ships subset to the Ljóss and Home
-       glyphs, so any other character must fall through to the serifs */
+    /* The wordmark face, loaded by the blog layout only */
     --font-display:
       var(--font-fraunces, "Fraunces"), georgia, cambria, serif;
 
