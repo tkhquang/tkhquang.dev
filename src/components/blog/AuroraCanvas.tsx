@@ -163,26 +163,25 @@ void main(){
   col+=vec3(.9,.95,1.)*step(.992,s)*exp(-r*r*45.)*(.18+.85*mag)*tw*(.35+.65*uv.y);}
  col*=u_intensity*u_breath;
  /* Shooting star: slot-hashed so one falls every 20 to 40 seconds and
-    the block is skipped outside its 0.9s life. A hot core over a soft
-    halo along a trail that thins toward its end; about one in four
-    burns brighter with the halo pulled toward u_c3 so it rhymes with
-    the aurora. Distances are aspect-corrected so the streak stays
-    round on wide bands. */
+    the block is skipped outside its 0.7s life. A hot blooming head
+    draws a thin trail whose luminance dies exponentially behind it, so
+    the streak dissolves into the sky instead of ending on an edge.
+    Distances are aspect-corrected so it stays true on wide bands. */
  float slot=floor(u_time/30.);
  float e=u_time-(slot+.35+hash(vec2(slot,7.))/3.)*30.;
- if(e>0.&&e<.9){
-  float en=e/.9;
-  float ang=-.464+.42*(hash(vec2(slot,5.))-.5);
+ if(e>0.&&e<.7){
+  float en=e/.7;
+  float ang=-.50+.4*(hash(vec2(slot,5.))-.5);
   vec2 dir=vec2(cos(ang),sin(ang));
-  vec2 head=vec2((.1+.6*hash(vec2(slot,3.)))*asp.x,.78+.14*hash(vec2(slot,9.)))+dir*en*(.62-.12*en);
+  vec2 head=vec2((.15+.55*hash(vec2(slot,3.)))*asp.x,.82+.12*hash(vec2(slot,9.)))+dir*en*.85;
   vec2 rel=uv*asp-head;
   float lp=dot(rel,-dir);
-  float pd=length(rel+dir*lp)*mix(1.,2.8,clamp(lp/.16,0.,1.));
-  float ax=max(-lp,0.)+max(lp-.16,0.);
-  float d2=pd*pd+ax*ax;
-  float env=pow(sin(3.14159*en),.75);
-  float big=step(.75,hash(vec2(slot,11.)));
-  col+=(vec3(.95,.97,1.)*exp(-d2*22000.)+mix(vec3(.85,.92,1.),u_c3,.25*big)*exp(-d2*2600.)*.35)*env*(1.+.5*big);}
+  float pd=length(rel+dir*lp);
+  float trail=exp(-max(lp,0.)*8.)*step(-.002,lp);
+  float core=exp(-pd*pd*36000.)*trail;
+  float bloom=exp(-dot(rel,rel)*2600.);
+  float env=pow(sin(3.14159*en),.6);
+  col+=(vec3(.97,.99,1.)*core+vec3(.75,.88,1.)*bloom*.45)*env;}
  col+=vec3((ign(gl_FragCoord.xy)-.5)/255.);
  float alpha=clamp(max(col.r,max(col.g,col.b)),0.,1.);
  gl_FragColor=vec4(clamp(col,0.,1.),alpha);}
@@ -408,7 +407,7 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
     if (reducedMotion) {
       /* One still composition. 174250ms puts both breathing sines at
          their crest (174.25s is 10.25 * 17 and 4.25 * 41) and lands 24s
-         into a 30s meteor slot, past every possible 0.9s streak window,
+         into a 30s meteor slot, past every possible 0.7s streak window,
          so the frame never freezes a meteor mid-fall. Pinning
          lastPointerMove to the same instant keeps idle at zero, so the
          still keeps its full-strength flare at the resting pointer. */

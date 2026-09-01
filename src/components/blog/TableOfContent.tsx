@@ -313,9 +313,11 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
         overflow, so pl-3 keeps the progress star and its glow (which hang
         left of the rail hairline) inside the clip; items-end on the section
         pins the right edge, so the padding grows leftward and nothing moves.
+        pb-2 gives the glow's 7px bottom overhang room when the star reaches
+        the rail foot, or the container grows a scrollbar at full scroll.
       */}
       {headings?.length > 0 && (
-        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 pl-3 xl:block">
+        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 pb-2 pl-3 xl:block">
           {/*
             The idle dim sits on the header and list wrappers instead of the
             section so the progress star stays legible on the dimmed rail;

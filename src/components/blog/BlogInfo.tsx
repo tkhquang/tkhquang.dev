@@ -8,7 +8,11 @@ import React from "react";
 const BlogInfo = ({ className }: React.ComponentProps<"section">) => {
   return (
     <section className={classNames("blog-info relative text-sm", className)}>
-      <div className="blog-info__content text-theme-on-surface sticky rounded-sm px-4 py-8 shadow-md">
+      {/* The @container lets the chart pick its sky by card width: the
+          same instance is a 240px rail on the desktop feed but a wide
+          card on the post page and the narrow feed (inline-size
+          containment leaves the sticky behavior alone) */}
+      <div className="blog-info__content @container/blog-info text-theme-on-surface sticky rounded-sm px-4 py-8 shadow-md">
         <div className="[&_.author\_\_image--container]:mb-4">
           <Author />
           <div className="my-5">

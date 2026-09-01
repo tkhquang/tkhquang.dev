@@ -236,6 +236,26 @@
     }
   }
 
+  /* Language badge: the kicker recipe pinned to the frame's top corner.
+     The copy-button plugin hoists data-language onto the figure, skipping
+     titled figures so the badge never doubles a title bar */
+  figure[data-rehype-pretty-code-figure][data-language]::before {
+    @apply kicker;
+    content: attr(data-language);
+    position: absolute;
+    top: 0.75rem;
+    right: 0.875rem;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  /* The copy button borrows the corner while it is visible */
+  figure[data-rehype-pretty-code-figure]:hover::before,
+  figure[data-rehype-pretty-code-figure]:focus-within::before {
+    opacity: 0;
+  }
+
   /* Copy button: only the ink is ours, placement and behavior stay with the
      plugin's injected styles */
   button[data-rehype-pretty-copy-button] {

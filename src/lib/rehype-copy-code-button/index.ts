@@ -90,9 +90,28 @@ export default function rehypeCopyCodeButton(
       };
       preNode.tagName = "rehype-pretty-copy-button-pre";
 
+      /* Hoist the language onto the figure so CSS can badge the frame.
+         "plaintext" is the defaultLang filler, not worth a badge, and a
+         titled figure already names itself, so the badge stays off there */
+      const hasTitle = element.children.some((childNode) => {
+        const child = childNode as Element;
+
+        return (
+          child.type === "element" &&
+          (child.properties?.hasOwnProperty("dataRehypePrettyCodeTitle") ||
+            child.properties?.hasOwnProperty("data-rehype-pretty-code-title"))
+        );
+      });
+
+      const language =
+        preNode.properties["data-language"] ?? preNode.properties.dataLanguage;
+
       element.properties = {
         ...element.properties,
         "data-visibility": `${visibility}`,
+        ...(language && language !== "plaintext" && !hasTitle
+          ? { "data-language": `${language}` }
+          : {}),
       };
     });
 

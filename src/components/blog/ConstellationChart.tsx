@@ -1,4 +1,5 @@
 import "./ConstellationChart.css";
+import classNames from "classnames";
 import React from "react";
 
 /*
@@ -8,10 +9,12 @@ import React from "react";
  * via, the one quiet bridge back to the circuit board this replaces.
  * By night it lives (aurora wash, twinkle, shooting stars); by day it is
  * a printed lapis chart. The bio text rectangle stays free of figures.
- * The only cartography is crop-safe linework painted under the stars:
- * dotted graticule arcs and a gilt ecliptic. Bounded furniture (frame,
- * ticks, labels, legend) died in owner review: the slice crop cuts any
- * plate border into a broken outline at real card aspects.
+ * Two skies share the card: the wide slice keeps only crop-safe linework
+ * (dotted graticule arcs, a gilt ecliptic), because a plate border cut
+ * by the slice crop died in owner review. The rail-narrow card instead
+ * meet-fits the full Harmonia plate (frame, ticks, boundary meanders,
+ * Old Norse labels, magnitude legend), whole outline always visible;
+ * the container query in the CSS picks which sky renders.
  */
 
 interface ChartStar {
@@ -25,6 +28,14 @@ interface ChartStar {
 interface ChartFigure {
   stars: ChartStar[];
   links: [number, number][];
+}
+
+interface ChartLabel {
+  ink?: boolean;
+  rotate?: boolean;
+  text: string;
+  x: number;
+  y: number;
 }
 
 const FIGURES: ChartFigure[] = [
@@ -250,6 +261,9 @@ const COMETS = [
 
 const COMET_LAYERS = ["halo", "trail", "head"];
 
+/* Inside-edge rail ticks every 40px, both rails of the plate frame */
+const TICK_YS = Array.from({ length: 15 }, (_, index) => 49 + index * 40);
+
 /* Graticule: 3 right-ascension and 2 declination arcs, gently swept */
 const GRATICULE = [
   "M 84 12 A 900 900 0 0 1 70 630",
@@ -267,8 +281,47 @@ const ECLIPTIC = [
   { d: "M 258 434 C 274 482 292 520 310 556" },
 ];
 
+/* Boundary meanders around the two showpiece figures only */
+const BOUNDARIES = [
+  "M 40 48 L 62 46 L 64 28 L 120 26 L 122 42 L 158 44 L 160 76 L 168 78 L 166 130 L 146 132 L 144 158 L 100 160 L 56 158 L 54 118 L 42 116 Z",
+  "M 196 30 L 240 28 L 242 16 L 286 14 L 288 30 L 306 32 L 304 88 L 296 90 L 298 128 L 250 130 L 248 138 L 210 136 L 208 96 L 198 94 Z",
+];
+
+/* Old Norse figure names; only the showpiece label slowly inks up */
+const LABELS: ChartLabel[] = [
+  { ink: true, text: "LJÓSKER", x: 48, y: 168 },
+  { text: "ÁR", x: 216, y: 150 },
+  { rotate: true, text: "SVEIGR", x: 22, y: 316 },
+  { rotate: true, text: "SEF", x: 304, y: 186 },
+  { text: "ARINN", x: 44, y: 486 },
+  { text: "GANGLERI", x: 172, y: 494 },
+];
+
 const CORE_RADIUS = { 1: 2.2, 2: 1.6, 3: 1.2 } as const;
 const RING_RADIUS = { 1: 4.5, 2: 3.2 } as const;
+
+/* Atlas convention on the plate: figure lines stop short of the glyphs
+   they join. The wide slice keeps full-length lines instead; trimmed
+   ends there read as stray floating dashes at the crop. */
+const LINK_CLEARANCE = 2;
+
+const glyphRadius = (star: ChartStar) =>
+  (star.mag < 3 ? RING_RADIUS[star.mag as 1 | 2] : CORE_RADIUS[3]) +
+  LINK_CLEARANCE;
+
+const trimLink = (a: ChartStar, b: ChartStar) => {
+  const length = Math.hypot(b.x - a.x, b.y - a.y);
+  const ux = (b.x - a.x) / length;
+  const uy = (b.y - a.y) / length;
+  const round = (value: number) => Math.round(value * 100) / 100;
+
+  return {
+    x1: round(a.x + ux * glyphRadius(a)),
+    y1: round(a.y + uy * glyphRadius(a)),
+    x2: round(b.x - ux * glyphRadius(b)),
+    y2: round(b.y - uy * glyphRadius(b)),
+  };
+};
 
 const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
   <g
@@ -308,28 +361,24 @@ const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
   </g>
 );
 
-const ConstellationChart = (props: React.ComponentProps<"svg">) => {
+/* The sky itself, painted into either svg. The plate variant adds the
+   Harmonia furniture and its own wash gradient ids, since both skies
+   are in the DOM at once and url(#...) must stay unambiguous. */
+const ChartSky = ({ plate }: { plate?: boolean }) => {
+  const wash = plate ? "chart-plate-wash" : "chart-wash";
+
   return (
-    <svg
-      id="constellation-chart"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 320 640"
-      preserveAspectRatio="xMidYMin slice"
-      width="100%"
-      height="100%"
-      aria-hidden
-      {...props}
-    >
+    <>
       <defs>
-        <radialGradient id="chart-wash-a">
+        <radialGradient id={`${wash}-a`}>
           <stop offset="0%" stopColor="var(--aurora-a)" stopOpacity="0.14" />
           <stop offset="100%" stopColor="var(--aurora-a)" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="chart-wash-b">
+        <radialGradient id={`${wash}-b`}>
           <stop offset="0%" stopColor="var(--aurora-b)" stopOpacity="0.11" />
           <stop offset="100%" stopColor="var(--aurora-b)" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="chart-wash-c">
+        <radialGradient id={`${wash}-c`}>
           <stop offset="0%" stopColor="var(--aurora-c)" stopOpacity="0.09" />
           <stop offset="100%" stopColor="var(--aurora-c)" stopOpacity="0" />
         </radialGradient>
@@ -341,7 +390,7 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
         cy="110"
         rx="150"
         ry="100"
-        fill="url(#chart-wash-a)"
+        fill={`url(#${wash}-a)`}
       />
       <ellipse
         className="chart-wash"
@@ -349,7 +398,7 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
         cy="70"
         rx="130"
         ry="90"
-        fill="url(#chart-wash-b)"
+        fill={`url(#${wash}-b)`}
         style={{ "--chart-wash-delay": "6s" } as React.CSSProperties}
       />
       <ellipse
@@ -358,10 +407,34 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
         cy="540"
         rx="140"
         ry="100"
-        fill="url(#chart-wash-c)"
+        fill={`url(#${wash}-c)`}
         style={{ "--chart-wash-delay": "12s" } as React.CSSProperties}
       />
 
+      {plate && (
+        <>
+          <rect
+            className="chart-frame"
+            x="9"
+            y="9"
+            width="302"
+            height="622"
+            rx="1"
+          />
+          {TICK_YS.map((y) => (
+            <React.Fragment key={y}>
+              <line className="chart-frame-tick" x1="9" y1={y} x2="12" y2={y} />
+              <line
+                className="chart-frame-tick"
+                x1="311"
+                y1={y}
+                x2="308"
+                y2={y}
+              />
+            </React.Fragment>
+          ))}
+        </>
+      )}
       {GRATICULE.map((d) => (
         <path key={d} className="chart-graticule" d={d} />
       ))}
@@ -376,16 +449,66 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
           d={segment.d}
         />
       ))}
+      {plate && (
+        <>
+          {BOUNDARIES.map((d) => (
+            <path key={d} className="chart-boundary" d={d} />
+          ))}
+          {LABELS.map((label) => (
+            <text
+              key={label.text}
+              x={label.x}
+              y={label.y}
+              transform={
+                label.rotate ? `rotate(90 ${label.x} ${label.y})` : undefined
+              }
+              className={
+                label.ink ? "chart-label chart-label--ink" : "chart-label"
+              }
+            >
+              {label.text}
+            </text>
+          ))}
+          <g className="chart-legend">
+            <g transform="translate(24 612)">
+              <circle r={CORE_RADIUS[1]} className="chart-legend-core" />
+              <circle r={RING_RADIUS[1]} className="chart-legend-ring" />
+              <line x1="5.2" y1="0" x2="8" y2="0" />
+              <line x1="-5.2" y1="0" x2="-8" y2="0" />
+              <line x1="0" y1="5.2" x2="0" y2="8" />
+              <line x1="0" y1="-5.2" x2="0" y2="-8" />
+            </g>
+            <g transform="translate(48 612)">
+              <circle r={CORE_RADIUS[2]} className="chart-legend-core" />
+              <circle r={RING_RADIUS[2]} className="chart-legend-ring" />
+            </g>
+            <circle
+              cx="64"
+              cy="612"
+              r={CORE_RADIUS[3]}
+              className="chart-legend-core"
+            />
+            <text x="76" y="614.5" className="chart-legend-text">
+              MAG · I II III
+            </text>
+          </g>
+        </>
+      )}
+
       {FIGURES.map((figure, figureIndex) => (
         <g key={figureIndex}>
           {figure.links.map(([from, to], linkIndex) => (
             <line
               key={linkIndex}
               className="chart-figure"
-              x1={figure.stars[from].x}
-              y1={figure.stars[from].y}
-              x2={figure.stars[to].x}
-              y2={figure.stars[to].y}
+              {...(plate
+                ? trimLink(figure.stars[from], figure.stars[to])
+                : {
+                    x1: figure.stars[from].x,
+                    y1: figure.stars[from].y,
+                    x2: figure.stars[to].x,
+                    y2: figure.stars[to].y,
+                  })}
             />
           ))}
           {figure.stars.map((star, starIndex) => (
@@ -450,7 +573,47 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
           ))}
         </g>
       ))}
-    </svg>
+    </>
+  );
+};
+
+/*
+ * Two explicit svgs, one visible at a time (see the container query in
+ * the CSS). The wide slice is the default so browsers without container
+ * queries never see the plate; the plate meet-fits so its outline is
+ * always whole, letterboxed on the svg's own surface background.
+ */
+const ConstellationChart = ({
+  className,
+  ...props
+}: React.ComponentProps<"svg">) => {
+  return (
+    <>
+      <svg
+        className={classNames("constellation-chart chart--wide", className)}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 320 640"
+        preserveAspectRatio="xMidYMin slice"
+        width="100%"
+        height="100%"
+        aria-hidden
+        {...props}
+      >
+        <ChartSky />
+      </svg>
+      <svg
+        className={classNames("constellation-chart chart--plate", className)}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 320 640"
+        preserveAspectRatio="xMidYMid meet"
+        width="100%"
+        height="100%"
+        aria-hidden
+        {...props}
+      >
+        <ChartSky plate />
+      </svg>
+    </>
   );
 };
 
