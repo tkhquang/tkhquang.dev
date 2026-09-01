@@ -51,17 +51,10 @@ export default function rehypeCustomNextImage(
             shouldStore: true,
           });
 
-          const isProcessedImage = output.includes(
-            targetPath.replace(/^\.\/public/, "")
-          );
-
-          const normalizedOutput = output.startsWith("/")
-            ? output
-            : `/${output}`;
-
-          const src = isProcessedImage
-            ? `${process.env.NEXT_PUBLIC_BASE_URL}${normalizedOutput}`
-            : normalizedOutput;
+          // Keep the src relative: an absolute URL makes next/image treat it
+          // as an upstream fetch, which Next 16 blocks in dev because
+          // localhost resolves to a private IP
+          const src = output.startsWith("/") ? output : `/${output}`;
 
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
