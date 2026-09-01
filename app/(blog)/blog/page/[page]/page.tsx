@@ -1,5 +1,6 @@
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { Metadata } from "next/types";
 import { Suspense } from "react";
 
 import BlogMasthead from "@/components/blog/BlogMasthead";
@@ -20,6 +21,14 @@ export async function generateStaticParams() {
 export const dynamic = "force-static";
 export const revalidate = false;
 export const dynamicParams = false;
+
+export async function generateMetadata({ params }: any): Promise<Metadata> {
+  const page = +(await params).page;
+
+  return {
+    title: `Page ${page}`,
+  };
+}
 
 export default async function BlogPage({ params }: any) {
   const page = +(await params).page;

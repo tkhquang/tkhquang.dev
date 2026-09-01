@@ -8,6 +8,9 @@ import React from "react";
  * via, the one quiet bridge back to the circuit board this replaces.
  * By night it lives (aurora wash, twinkle, shooting stars); by day it is
  * a printed lapis chart. The bio text rectangle stays free of figures.
+ * The plate furniture (frame, graticule, gilt ecliptic, boundary
+ * meanders, Old Norse labels, magnitude legend) is static and painted
+ * under the star layers, Harmonia Macrocosmica style.
  */
 
 interface ChartStar {
@@ -21,6 +24,14 @@ interface ChartStar {
 interface ChartFigure {
   stars: ChartStar[];
   links: [number, number][];
+}
+
+interface ChartLabel {
+  ink?: number;
+  rotate?: boolean;
+  text: string;
+  x: number;
+  y: number;
 }
 
 const FIGURES: ChartFigure[] = [
@@ -205,6 +216,38 @@ const FIELD_STARS_QUIET = [
   { r: 1.1, x: 278.1, y: 417.7 },
 ];
 
+/* Depth tail: near-subpixel stars, seeded like the arrays above */
+const TAIL_STARS = [
+  { r: 0.6, x: 22, y: 36 },
+  { r: 0.5, x: 74, y: 24 },
+  { r: 0.65, x: 118, y: 44 },
+  { r: 0.45, x: 156, y: 30 },
+  { r: 0.55, x: 196, y: 58 },
+  { r: 0.6, x: 228, y: 22 },
+  { r: 0.5, x: 262, y: 90 },
+  { r: 0.65, x: 300, y: 50 },
+  { r: 0.5, x: 36, y: 84 },
+  { r: 0.6, x: 132, y: 86 },
+  { r: 0.45, x: 208, y: 120 },
+  { r: 0.55, x: 288, y: 132 },
+  { r: 0.6, x: 18, y: 140 },
+  { r: 0.5, x: 96, y: 152 },
+  { r: 0.65, x: 246, y: 160 },
+  { quiet: true, r: 0.5, x: 58, y: 196 },
+  { quiet: true, r: 0.6, x: 150, y: 206 },
+  { quiet: true, r: 0.45, x: 262, y: 222 },
+  { quiet: true, r: 0.55, x: 96, y: 262 },
+  { quiet: true, r: 0.5, x: 204, y: 300 },
+  { quiet: true, r: 0.6, x: 42, y: 332 },
+  { quiet: true, r: 0.45, x: 168, y: 352 },
+  { quiet: true, r: 0.55, x: 232, y: 424 },
+  { r: 0.6, x: 30, y: 470 },
+  { r: 0.5, x: 142, y: 462 },
+  { r: 0.65, x: 254, y: 470 },
+  { r: 0.55, x: 70, y: 606 },
+  { r: 0.6, x: 186, y: 610 },
+];
+
 /* Shooting stars, routed through the figure-free corridors */
 const COMETS = [
   { delay: 0, hue: "var(--aurora-a)", points: "336,-16 40,200" },
@@ -214,8 +257,66 @@ const COMETS = [
 
 const COMET_LAYERS = ["halo", "trail", "head"];
 
+/* Inside-edge rail ticks every 40px, both rails of the plate frame */
+const TICK_YS = Array.from({ length: 15 }, (_, index) => 49 + index * 40);
+
+/* Graticule: 3 right-ascension and 2 declination arcs, gently swept */
+const GRATICULE = [
+  "M 84 12 A 900 900 0 0 1 70 630",
+  "M 162 11 A 1200 1200 0 0 1 152 630",
+  "M 238 12 A 900 900 0 0 0 252 630",
+  "M 11 150 A 800 800 0 0 0 309 142",
+  "M 11 460 A 800 800 0 0 1 309 452",
+];
+
+/* One gilt ecliptic sweep; the middle segment skirts the bio text
+   rectangle at reduced ink so the quiet zone stays quiet */
+const ECLIPTIC = [
+  { d: "M 12 118 C 60 140 90 152 118 168" },
+  { d: "M 118 168 C 180 202 226 330 258 434", quiet: true },
+  { d: "M 258 434 C 274 482 292 520 310 556" },
+];
+
+/* Boundary meanders around the two showpiece figures only */
+const BOUNDARIES = [
+  "M 40 48 L 62 46 L 64 28 L 120 26 L 122 42 L 158 44 L 160 76 L 168 78 L 166 130 L 146 132 L 144 158 L 100 160 L 56 158 L 54 118 L 42 116 Z",
+  "M 196 30 L 240 28 L 242 16 L 286 14 L 288 30 L 306 32 L 304 88 L 296 90 L 298 128 L 250 130 L 248 138 L 210 136 L 208 96 L 198 94 Z",
+];
+
+/* Old Norse figure names; the top-third pair survives the wide-card
+   crop. One label per third of the chart inks up (ink is the delay). */
+const LABELS: ChartLabel[] = [
+  { ink: 0, text: "LJÓSKER", x: 48, y: 168 },
+  { text: "ÁR", x: 216, y: 150 },
+  { ink: 8, rotate: true, text: "SVEIGR", x: 22, y: 316 },
+  { rotate: true, text: "SEF", x: 304, y: 186 },
+  { text: "ARINN", x: 44, y: 486 },
+  { ink: 16, text: "GANGLERI", x: 172, y: 494 },
+];
+
 const CORE_RADIUS = { 1: 2.2, 2: 1.6, 3: 1.2 } as const;
 const RING_RADIUS = { 1: 4.5, 2: 3.2 } as const;
+
+/* Atlas convention: figure lines stop short of the glyphs they join */
+const LINK_CLEARANCE = 2;
+
+const glyphRadius = (star: ChartStar) =>
+  (star.mag < 3 ? RING_RADIUS[star.mag as 1 | 2] : CORE_RADIUS[3]) +
+  LINK_CLEARANCE;
+
+const trimLink = (a: ChartStar, b: ChartStar) => {
+  const length = Math.hypot(b.x - a.x, b.y - a.y);
+  const ux = (b.x - a.x) / length;
+  const uy = (b.y - a.y) / length;
+  const round = (value: number) => Math.round(value * 100) / 100;
+
+  return {
+    x1: round(a.x + ux * glyphRadius(a)),
+    y1: round(a.y + uy * glyphRadius(a)),
+    x2: round(b.x - ux * glyphRadius(b)),
+    y2: round(b.y - uy * glyphRadius(b)),
+  };
+};
 
 const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
   <g
@@ -237,7 +338,11 @@ const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
     {star.mag < 3 && (
       <circle
         r={RING_RADIUS[star.mag as 1 | 2]}
-        className="chart-star-ring"
+        className={
+          star.mag === 1
+            ? "chart-star-ring chart-star-ring--mag1"
+            : "chart-star-ring"
+        }
       />
     )}
     {star.mag === 1 && (
@@ -265,15 +370,15 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
     >
       <defs>
         <radialGradient id="chart-wash-a">
-          <stop offset="0%" stopColor="var(--aurora-a)" stopOpacity="0.1" />
+          <stop offset="0%" stopColor="var(--aurora-a)" stopOpacity="0.14" />
           <stop offset="100%" stopColor="var(--aurora-a)" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="chart-wash-b">
-          <stop offset="0%" stopColor="var(--aurora-b)" stopOpacity="0.08" />
+          <stop offset="0%" stopColor="var(--aurora-b)" stopOpacity="0.11" />
           <stop offset="100%" stopColor="var(--aurora-b)" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="chart-wash-c">
-          <stop offset="0%" stopColor="var(--aurora-c)" stopOpacity="0.06" />
+          <stop offset="0%" stopColor="var(--aurora-c)" stopOpacity="0.09" />
           <stop offset="100%" stopColor="var(--aurora-c)" stopOpacity="0" />
         </radialGradient>
       </defs>
@@ -305,16 +410,92 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
         style={{ "--chart-wash-delay": "12s" } as React.CSSProperties}
       />
 
+      <rect
+        className="chart-frame"
+        x="9"
+        y="9"
+        width="302"
+        height="622"
+        rx="1"
+      />
+      {TICK_YS.map((y) => (
+        <React.Fragment key={y}>
+          <line className="chart-frame-tick" x1="9" y1={y} x2="12" y2={y} />
+          <line className="chart-frame-tick" x1="311" y1={y} x2="308" y2={y} />
+        </React.Fragment>
+      ))}
+      {GRATICULE.map((d) => (
+        <path key={d} className="chart-graticule" d={d} />
+      ))}
+      {ECLIPTIC.map((segment) => (
+        <path
+          key={segment.d}
+          className={
+            segment.quiet
+              ? "chart-ecliptic chart-ecliptic--quiet"
+              : "chart-ecliptic"
+          }
+          d={segment.d}
+        />
+      ))}
+      {BOUNDARIES.map((d) => (
+        <path key={d} className="chart-boundary" d={d} />
+      ))}
+      {LABELS.map((label) => (
+        <text
+          key={label.text}
+          x={label.x}
+          y={label.y}
+          transform={
+            label.rotate ? `rotate(90 ${label.x} ${label.y})` : undefined
+          }
+          className={
+            label.ink === undefined
+              ? "chart-label"
+              : "chart-label chart-label--ink"
+          }
+          style={
+            label.ink === undefined
+              ? undefined
+              : ({
+                  "--chart-ink-delay": `${label.ink}s`,
+                } as React.CSSProperties)
+          }
+        >
+          {label.text}
+        </text>
+      ))}
+      <g className="chart-legend">
+        <g transform="translate(24 612)">
+          <circle r={CORE_RADIUS[1]} className="chart-legend-core" />
+          <circle r={RING_RADIUS[1]} className="chart-legend-ring" />
+          <line x1="5.2" y1="0" x2="8" y2="0" />
+          <line x1="-5.2" y1="0" x2="-8" y2="0" />
+          <line x1="0" y1="5.2" x2="0" y2="8" />
+          <line x1="0" y1="-5.2" x2="0" y2="-8" />
+        </g>
+        <g transform="translate(48 612)">
+          <circle r={CORE_RADIUS[2]} className="chart-legend-core" />
+          <circle r={RING_RADIUS[2]} className="chart-legend-ring" />
+        </g>
+        <circle
+          cx="64"
+          cy="612"
+          r={CORE_RADIUS[3]}
+          className="chart-legend-core"
+        />
+        <text x="76" y="614.5" className="chart-legend-text">
+          MAG · I II III
+        </text>
+      </g>
+
       {FIGURES.map((figure, figureIndex) => (
         <g key={figureIndex}>
           {figure.links.map(([from, to], linkIndex) => (
             <line
               key={linkIndex}
               className="chart-figure"
-              x1={figure.stars[from].x}
-              y1={figure.stars[from].y}
-              x2={figure.stars[to].x}
-              y2={figure.stars[to].y}
+              {...trimLink(figure.stars[from], figure.stars[to])}
             />
           ))}
           {figure.stars.map((star, starIndex) => (
@@ -348,6 +529,17 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
       <g className="chart-field chart-field--quiet">
         {FIELD_STARS_QUIET.map((star, index) => (
           <circle key={index} cx={star.x} cy={star.y} r={star.r} />
+        ))}
+      </g>
+      <g className="chart-tail">
+        {TAIL_STARS.map((star, index) => (
+          <circle
+            key={index}
+            cx={star.x}
+            cy={star.y}
+            r={star.r}
+            className={star.quiet ? "chart-tail--quiet" : undefined}
+          />
         ))}
       </g>
 

@@ -14,5 +14,13 @@
     html {
       scroll-behavior: auto !important;
     }
+
+    /* The wildcard above never matches view transition pseudo-elements, so
+       kill those separately: navigation becomes an instant cut */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation-duration: 0.01ms !important;
+    }
   }
 }

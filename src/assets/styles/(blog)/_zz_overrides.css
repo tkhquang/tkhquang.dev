@@ -98,6 +98,21 @@
     }
   }
 
+  /*
+   * Lantern Handoff: the card cover and title morph into the post hero on
+   * navigation. Groups glide on a long-tail ease; old and new page paints
+   * crossfade briefly underneath so neither theme ever hard-flashes.
+   */
+  ::view-transition-group(*) {
+    animation-duration: 350ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 200ms;
+  }
+
   .mermaid {
     @apply transition-opacity;
 

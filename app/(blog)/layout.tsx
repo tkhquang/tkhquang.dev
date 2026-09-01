@@ -12,6 +12,11 @@ import { Metadata } from "next/types";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
+  alternates: {
+    types: {
+      "application/atom+xml": "/blog/feed.xml",
+    },
+  },
   description: Blog.METADATA.description,
   title: Blog.METADATA.title,
 };

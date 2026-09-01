@@ -1,3 +1,80 @@
 @layer base {
-  /* Placeholder for base */
+  /*
+   * Typesetter's pass: the craft felt while actually reading. Selection
+   * carries the aurora by night and a lapis wash by day; the --aurora-*
+   * tokens live on html in (blog)/_03_components.css, so they resolve
+   * anywhere in the blog scope.
+   */
+  ::selection {
+    background-color: color-mix(in srgb, var(--aurora-a) 30%, transparent);
+    color: var(--on-background);
+  }
+
+  html[data-theme="light"] ::selection {
+    background-color: color-mix(in srgb, var(--aurora-c) 22%, transparent);
+    color: var(--on-background);
+  }
+
+  /*
+   * Balanced display lines, orphan-free running text. The post h1 is the
+   * only direct h1 child of the post page wrapper; article-body headings
+   * sit deeper. Browsers without balance/pretty wrap normally.
+   */
+  .blog-masthead__title,
+  /* stylelint-disable-next-line selector-class-pattern -- pre-existing markup class */
+  .news-feed__list-item__title,
+  .code-container > h1 {
+    text-wrap: balance;
+  }
+
+  .article__lede,
+  /* stylelint-disable-next-line selector-class-pattern -- pre-existing markup class */
+  .news-feed__list-item__description {
+    text-wrap: pretty;
+  }
+
+  /* Safari only: the lede's opening punctuation hangs into the margin */
+  .article__lede {
+    hanging-punctuation: first allow-end;
+  }
+
+  /*
+   * Reading progress: a 2px aurora hairline pinned to the top of the
+   * viewport, filled by the root scroll with zero JS. .code-container
+   * exists only on post pages. Unsupported browsers and reduced motion
+   * get no bar at all, never a stuck one.
+   */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .code-container::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          var(--aurora-a),
+          var(--aurora-b),
+          var(--aurora-c)
+        );
+        transform: scaleX(0);
+        transform-origin: left;
+        animation: reading-progress linear both;
+        animation-timeline: scroll(root);
+        pointer-events: none;
+
+        /* Over the sticky header's backdrop; modal layers live in portals
+           painted later and never meet a 2px strip at the top edge */
+        z-index: calc(var(--z-header) + 1);
+      }
+    }
+  }
+
+  @keyframes reading-progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
 }

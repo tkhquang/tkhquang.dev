@@ -14,7 +14,7 @@ import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import clsx from "clsx";
 import { Metadata } from "next/types";
-import { Suspense } from "react";
+import { Suspense, ViewTransition } from "react";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();
@@ -79,6 +79,12 @@ export default async function Post({
 
   const category = await markdownParser.getCategoryBySlug(post.category_slug);
 
+  /* Posts embed diagrams as raw <pre class="mermaid"> blocks (fenced form
+     kept for safety); skip the CDN module entirely when neither appears */
+  const hasMermaidDiagram =
+    post.content.includes('class="mermaid') ||
+    post.content.includes("```mermaid");
+
   const relatedPosts = (await markdownParser.getAllPosts())
     .filter(
       (other) =>
@@ -131,12 +137,18 @@ export default async function Post({
           }) as React.CSSProperties),
         }}
       >
-        {post.cover_image && <NextImage {...post.coverData} {...coverProps} />}
+        {post.cover_image && (
+          <ViewTransition name={`post-cover-${slug}`}>
+            <NextImage {...post.coverData} {...coverProps} />
+          </ViewTransition>
+        )}
       </header>
 
-      <h1 className="heading mx-auto mt-4 mb-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
-        {post.title}
-      </h1>
+      <ViewTransition name={`post-title-${slug}`}>
+        <h1 className="heading mx-auto mt-4 mb-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
+          {post.title}
+        </h1>
+      </ViewTransition>
 
       <div className="flex">
         <TableOfContent headings={headings} />
@@ -167,7 +179,9 @@ export default async function Post({
             >
               {html}
             </div>
-            <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
+            {hasMermaidDiagram && (
+              <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
+            )}
 
             <div className="article__footer my-6 flex">
               <TagList post={post} />

@@ -1,6 +1,7 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { Metadata } from "next/types";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {
@@ -10,6 +11,21 @@ export async function generateStaticParams() {
   return categories.map((category) => ({
     slug: category.slug,
   }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const slug = decodeURIComponent((await params).slug);
+
+  const markdownParser = await getMarkdownParser();
+  const category = await markdownParser.getCategoryBySlug(slug);
+
+  return {
+    title: category.title,
+  };
 }
 
 export const dynamic = "force-static";

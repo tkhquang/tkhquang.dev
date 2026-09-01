@@ -6,6 +6,7 @@ const __dirname = path.resolve();
 const nextConfig = {
   reactCompiler: true,
   experimental: {
+    viewTransition: true,
     swcPlugins: [
       // ["@swc-jotai/debug-label", {}],
       // ["@swc-jotai/react-refresh", {}],

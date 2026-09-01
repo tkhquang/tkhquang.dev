@@ -4,9 +4,14 @@ import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
 import Link from "next/link";
+import { Metadata } from "next/types";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
+
+export const metadata: Metadata = {
+  title: "Tags",
+};
 
 export default async function TagsPage() {
   const markdownParser = await getMarkdownParser();

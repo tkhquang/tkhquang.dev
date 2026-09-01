@@ -235,4 +235,98 @@
       overflow-x: auto;
     }
   }
+
+  /* Language badge: the kicker recipe pinned to the frame's top corner.
+     The copy-button plugin hoists data-language onto the figure. */
+  figure[data-rehype-pretty-code-figure][data-language]::before {
+    @apply kicker;
+    content: attr(data-language);
+    position: absolute;
+    top: 0.75rem;
+    right: 0.875rem;
+    z-index: 1;
+    pointer-events: none;
+    transition: opacity 300ms ease-in-out;
+  }
+
+  /* The copy button borrows the corner while it is visible */
+  figure[data-rehype-pretty-code-figure]:hover::before,
+  figure[data-rehype-pretty-code-figure]:focus-within::before {
+    opacity: 0;
+  }
+
+  /* Copy button: pinned to the figure so wide code scrolls under it.
+     Feedback is tint and opacity only, nothing moves. */
+  button[data-rehype-pretty-copy-button] {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.25rem;
+    color: var(--on-surface);
+    transition:
+      opacity 300ms ease-in-out,
+      background-color 200ms ease-in-out,
+      color 200ms ease-in-out;
+
+    &:hover {
+      background-color: var(--code);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    &.rehype-pretty-copied {
+      color: var(--success);
+    }
+  }
+
+  figure[data-rehype-pretty-code-figure][data-visibility="hover"]
+    button[data-rehype-pretty-copy-button]:not(:focus-visible) {
+    opacity: 0;
+  }
+
+  figure[data-rehype-pretty-code-figure][data-visibility="hover"]:hover
+    button[data-rehype-pretty-copy-button] {
+    opacity: 1;
+  }
+
+  /* Icons drawn as mask shapes so they inherit the button's currentColor */
+  .rehype-pretty-copy-button-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    background-color: currentColor;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M16.187 9.5H12.25a1.75 1.75 0 0 0-1.75 1.75v28.5c0 .967.784 1.75 1.75 1.75h23.5a1.75 1.75 0 0 0 1.75-1.75v-28.5a1.75 1.75 0 0 0-1.75-1.75h-3.937a4.25 4.25 0 0 1-4.063 3h-7.5a4.25 4.25 0 0 1-4.063-3M31.813 7h3.937A4.25 4.25 0 0 1 40 11.25v28.5A4.25 4.25 0 0 1 35.75 44h-23.5A4.25 4.25 0 0 1 8 39.75v-28.5A4.25 4.25 0 0 1 12.25 7h3.937a4.25 4.25 0 0 1 4.063-3h7.5a4.25 4.25 0 0 1 4.063 3M18.5 8.25c0 .966.784 1.75 1.75 1.75h7.5a1.75 1.75 0 1 0 0-3.5h-7.5a1.75 1.75 0 0 0-1.75 1.75'/%3E%3C/svg%3E");
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  button[data-rehype-pretty-copy-button].rehype-pretty-copied
+    .rehype-pretty-copy-button-icon {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L5.53 12.7a.996.996 0 1 0-1.41 1.41l4.18 4.18c.39.39 1.02.39 1.41 0L20.29 7.71a.996.996 0 1 0-1.41-1.41z'/%3E%3C/svg%3E");
+  }
+
+  /* Copied confirmation: a stationary kicker fading in beside the button */
+  .rehype-pretty-copy-feedback {
+    @apply kicker;
+    position: absolute;
+    top: 0.875rem;
+    right: 2.75rem;
+    z-index: 2;
+    color: var(--success);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms ease-in-out;
+
+    &[data-visible="true"] {
+      opacity: 0.75;
+    }
+  }
 }

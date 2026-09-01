@@ -3,37 +3,6 @@ import { toString as hastToString } from "hast-util-to-string";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 
-const DEFAULT_STYLES = /* css */ `
-    [data-rehype-pretty-code-figure] pre {
-      position: relative;
-    }
-
-    [data-rehype-pretty-code-figure][data-visibility="hover"] button[data-rehype-pretty-copy-button] {
-      transition: opacity 300ms ease-in-out;
-      opacity: 0;
-    }
-
-    [data-rehype-pretty-code-figure][data-visibility="hover"]:hover button[data-rehype-pretty-copy-button] {
-      opacity: 1;
-    }
-
-    button[data-rehype-pretty-copy-button] {
-      position: absolute;
-      top: 0.5em;
-      right: 0.5em;
-      width: 24px;
-      height: 24px;
-    }
-
-    .rehype-pretty-copy-button-icon {
-      width: 24px;
-      height: 24px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
-`;
-
 interface Options {
   feedbackDuration?: number;
   visibility?: "hover" | "always";
@@ -58,6 +27,8 @@ export default function rehypeCopyCodeButton(
       passDataCode = false,
     } = options || {};
 
+    let matchedFigure = false;
+
     visit(tree, "element", (node, _index, _parent) => {
       const element = node as Element;
 
@@ -72,7 +43,11 @@ export default function rehypeCopyCodeButton(
         (childNode) => (childNode as Element).tagName === "pre"
       );
 
+      if (preNodeIndex === -1) return;
+
       const preNode = element.children[preNodeIndex] as Element;
+
+      matchedFigure = true;
 
       preNode.properties = {
         ...preNode.properties,
@@ -86,25 +61,36 @@ export default function rehypeCopyCodeButton(
       };
       preNode.tagName = "rehype-pretty-copy-button-pre";
 
+      // Hoist the language onto the figure so CSS can badge the frame.
+      // "plaintext" is the defaultLang filler, not worth a badge.
+      const language =
+        preNode.properties["data-language"] ?? preNode.properties.dataLanguage;
+
       element.properties = {
         ...element.properties,
         "data-visibility": `${visibility}`,
+        ...(language && language !== "plaintext"
+          ? { "data-language": `${language}` }
+          : {}),
       };
-
-      if (injectStyles !== false) {
-        tree.children.push({
-          children: [
-            {
-              type: "text",
-              value: trimWhitespace(injectStyles || DEFAULT_STYLES),
-            },
-          ],
-          properties: {},
-          tagName: "style",
-          type: "element",
-        });
-      }
     });
+
+    // One shared style element per tree, never one per figure. The site
+    // itself passes no injectStyles and owns the CSS in its stylesheets.
+    if (matchedFigure && injectStyles) {
+      tree.children.push({
+        children: [
+          {
+            type: "text",
+            value: trimWhitespace(injectStyles),
+          },
+        ],
+        properties: {},
+        tagName: "style",
+        type: "element",
+      });
+    }
+
     return tree;
   };
 }

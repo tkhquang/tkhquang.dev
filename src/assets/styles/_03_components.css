@@ -129,6 +129,11 @@
       margin-bottom: 1em;
     }
 
+    p {
+      /* Orphan control; browsers without pretty wrap normally */
+      text-wrap: pretty;
+    }
+
     table {
       display: block;
       width: max-content;
@@ -232,6 +237,25 @@
       color: var(--primary);
 
       /**
+       * Always-on underline at low alpha so links scan in long-form text,
+       * going full primary on hover. It never reaches the icon: underlines
+       * skip inline padding (the 1em hit-area below and the icon pseudo's
+       * padding), and the pseudo's mask clips its own nbsp's share of the
+       * decoration, so the line stops at the last glyph. Verified with a
+       * headless Chromium pixel test; no inline-block needed, which would
+       * have handed the line breaker a break opportunity before the icon.
+       */
+      text-decoration-line: underline;
+      text-decoration-color: color-mix(
+        in srgb,
+        var(--primary) 35%,
+        transparent
+      );
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 150ms;
+
+      /**
        * Deliberately NOT position: relative. The padding/margin pair below is
        * layout-neutral but slides the next character under the anchor's padding
        * box, and a positioned inline is hit-tested ahead of ordinary inline
@@ -265,13 +289,9 @@
       }
 
       &:hover,
-      &:active {
-        text-decoration: underline;
-        filter: brightness(85%);
-      }
-
-      &:visited {
-        filter: brightness(85%);
+      &:active,
+      &:visited:hover {
+        text-decoration-color: var(--primary);
       }
     }
 
@@ -372,6 +392,9 @@
       padding: 1em 0.5em;
       quotes: "\201c" "\201d";
 
+      /* Safari only: the opening quote hangs into the margin */
+      hanging-punctuation: first allow-end;
+
       & > p:first-of-type {
         display: inline;
         font-style: italic;
@@ -446,14 +469,9 @@
       }
     }
 
-    /* Workaround for fixed header anchor click */
+    /* Anchored jumps land clear of the fixed header */
     :target {
-      &::before {
-        content: "";
-        display: block;
-        height: var(--header-height);
-        margin-top: calc(var(--header-height) * -1);
-      }
+      scroll-margin-top: calc(var(--header-height) + 1rem);
     }
   }
 

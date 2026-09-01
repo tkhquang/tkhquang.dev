@@ -1,9 +1,14 @@
 import PostList from "@/components/blog/PostList";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
+import { Metadata } from "next/types";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
+
+export const metadata: Metadata = {
+  title: "Categories",
+};
 
 export default async function CategoriesPage() {
   const markdownParser = await getMarkdownParser();
