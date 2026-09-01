@@ -4,6 +4,7 @@ import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
+import { ScrollManager } from "@/utils/dom";
 import classNames from "classnames";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -40,15 +41,17 @@ const BlogHeader = ({
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const update = () => {
-      setScrolled(window.scrollY > SCROLLED_AT);
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    /* The house scroll pub/sub, same as BackToTop and BackButtonIcon */
+    const scrollManager = new ScrollManager();
+    scrollManager.subscribe({
+      id: "blog-header",
+      callback: ({ scrollY }) => {
+        setScrolled(scrollY > SCROLLED_AT);
+      },
+    });
 
     return () => {
-      window.removeEventListener("scroll", update);
+      scrollManager.destroy();
     };
   }, []);
 
@@ -95,7 +98,16 @@ const BlogHeader = ({
     >
       <div className="flex-center size-full flex-wrap">
         <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="header__left flex h-full items-center">
+          {/* Over the masthead the big Ljóss already stands right below,
+              so the wordmark and byline hold back until the sky scrolls
+              away; inert keeps the invisible pair out of the tab order */}
+          <div
+            className={classNames(
+              "header__left flex h-full items-center gap-2 transition-opacity duration-300",
+              transparent ? "pointer-events-none opacity-0" : "opacity-100"
+            )}
+            inert={transparent || undefined}
+          >
             <button
               type="button"
               className="cursor-pointer focus:outline-hidden"
@@ -111,6 +123,12 @@ const BlogHeader = ({
                 </span>
               </div>
             </button>
+            <Link
+              href="/"
+              className="font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
+            >
+              {"· By Aleks ->"}
+            </Link>
           </div>
           <div className="header__right flex h-full items-center">
             <nav
