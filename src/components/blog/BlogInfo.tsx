@@ -7,10 +7,11 @@ import React from "react";
 
 interface BlogInfoProps extends React.ComponentProps<"section"> {
   /* rail: the 240px sidebar card, plate chart at lg and up; wide: the
-     horizontal card (post page), always the outline-less sky. A container
-     query would be the natural switch, but inline-size containment zeroes
-     the card's intrinsic width and collapses the shrink-to-fit feed rows,
-     so the variant is declared per callsite instead. */
+     horizontal card (post page), portrait slice on phones and the
+     landscape land sky at md and up. A container query would be the
+     natural switch, but inline-size containment zeroes the card's
+     intrinsic width and collapses the shrink-to-fit feed rows, so the
+     variant is declared per callsite instead. */
   variant?: "rail" | "wide";
 }
 

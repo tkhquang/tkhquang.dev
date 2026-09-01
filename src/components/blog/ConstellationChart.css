@@ -4,10 +4,11 @@
  * All animation is CSS keyframes on opacity/dashoffset: no SVG filters
  * (feGaussianBlur is what janked Android Firefox), no JS.
  *
- * The component renders two svgs and this file picks one: the wide
- * slice for horizontal cards, the meet-fit Harmonia plate when the
- * card runs rail-narrow. The hook is a class because both svgs are in
- * the DOM at once and an id could not be.
+ * The component renders three svgs and this file picks one: the
+ * portrait wide slice for phone-narrow cards, the landscape land sky
+ * for horizontal cards at md and up, the meet-fit Harmonia plate when
+ * the card runs rail-narrow at lg and up. The hook is a class because
+ * all svgs are in the DOM at once and an id could not be.
  */
 
 .constellation-chart {
@@ -27,19 +28,33 @@
 }
 
 /*
- * Two skies, one card. The wide slice is the default; the framed plate
- * takes over on rail-variant cards at lg and up, where the sidebar is
- * its 240px column and the meet fit shows the whole plate. The switch
- * is a callsite variant plus a media query, not a container query,
- * because inline-size containment zeroes the card's intrinsic width
- * and collapses the shrink-to-fit feed rows around it.
+ * Three skies, one card. The wide slice is the default; at md and up
+ * every bio card runs horizontal (the article's closing card, the
+ * full-width feed cards), so the land sky, authored at that aspect,
+ * takes over and the slice zoom returns to 1x. On rail-variant cards
+ * the framed plate takes over at lg and up, where the sidebar is its
+ * 240px column and the meet fit shows the whole plate. The switches
+ * are media queries, not container queries, because inline-size
+ * containment zeroes the card's intrinsic width and collapses the
+ * shrink-to-fit feed rows around it.
  */
+.constellation-chart.chart--land,
 .constellation-chart.chart--plate {
   display: none;
 }
 
+@media (min-width: 48rem) {
+  .constellation-chart.chart--wide {
+    display: none;
+  }
+
+  .constellation-chart.chart--land {
+    display: block;
+  }
+}
+
 @media (min-width: 64rem) {
-  .blog-info__content--rail .constellation-chart.chart--wide {
+  .blog-info__content--rail .constellation-chart.chart--land {
     display: none;
   }
 
@@ -289,18 +304,19 @@
 }
 
 /*
- * The article's wide closing card crops the chart to its showpiece third
- * and every visible pixel sits behind text there, so that placement drops
- * the whole sky to quiet-zone ink.
+ * Below md the article's closing card still crops the portrait sky to
+ * its showpiece third and every visible pixel sits behind text, so that
+ * slice drops to quiet-zone ink. The land sky above md keeps its
+ * figures clear of the text and runs at full night ink like the rail.
  */
-.article .constellation-chart {
+.article .constellation-chart.chart--wide {
   --chart-main-opacity: 0.5;
   --chart-field-opacity: 0.3;
   --chart-field-quiet-opacity: 0.2;
   --chart-line: color-mix(in srgb, var(--on-surface) 10%, transparent);
 }
 
-html[data-theme="light"] .article .constellation-chart {
+html[data-theme="light"] .article .constellation-chart.chart--wide {
   --chart-main-opacity: 0.4;
   --chart-line: color-mix(in srgb, var(--primary) 18%, transparent);
 }

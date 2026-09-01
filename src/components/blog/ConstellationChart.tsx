@@ -9,12 +9,17 @@ import React from "react";
  * via, the one quiet bridge back to the circuit board this replaces.
  * By night it lives (aurora wash, twinkle, shooting stars); by day it is
  * a printed lapis chart. The bio text rectangle stays free of figures.
- * Two skies share the card: the wide slice keeps only crop-safe linework
- * (dotted graticule arcs, a gilt ecliptic), because a plate border cut
- * by the slice crop died in owner review. The rail-narrow card instead
- * meet-fits the full Harmonia plate (frame, ticks, boundary meanders,
- * Old Norse labels, magnitude legend), whole outline always visible;
- * the container query in the CSS picks which sky renders.
+ * Three skies share the card. The portrait wide slice keeps only
+ * crop-safe linework (dotted graticule arcs, a gilt ecliptic), because
+ * a plate border cut by the slice crop died in owner review; it serves
+ * the phone-narrow cards, where its zoom stays near 1x. Horizontal
+ * cards at md and up get the land sky, the same figures re-laid on a
+ * 720x240 canvas at the card's own aspect, because slicing the portrait
+ * canvas into a 3:1 card magnified every glyph and comet 2x and up.
+ * The rail-narrow card at lg and up meet-fits the full Harmonia plate
+ * (frame, ticks, boundary meanders, Old Norse labels, magnitude
+ * legend), whole outline always visible; the media queries in the CSS
+ * pick which sky renders.
  */
 
 interface ChartStar {
@@ -578,10 +583,363 @@ const ChartSky = ({ plate }: { plate?: boolean }) => {
 };
 
 /*
- * Two explicit svgs, one visible at a time (see the container query in
- * the CSS). The wide slice is the default so browsers without container
- * queries never see the plate; the plate meet-fits so its outline is
- * always whole, letterboxed on the svg's own surface background.
+ * The land sky: the horizontal cards' own composition on a 720x240
+ * canvas, near 1:1 units-to-pixels at the article card's md width.
+ * The quiet rectangles it works around are the bio text row (roughly
+ * x 96-664, y 30-118) and the subscribe button (x 276-444, y 142-212).
+ * Five figures fit the band, showpieces outermost, one pair flanking
+ * the button; Gangleri, the walker, sits this plate out. Same topology
+ * and magnitudes as the portrait figures, hand-relaid.
+ */
+const FIGURES_LAND: ChartFigure[] = [
+  /* The Lantern (bottom left showpiece) */
+  {
+    links: [
+      [0, 1],
+      [1, 2],
+      [1, 3],
+      [3, 4],
+      [3, 5],
+      [2, 6],
+    ],
+    stars: [
+      { mag: 2, twinkle: true, x: 58, y: 127 },
+      { glint: true, mag: 1, x: 92, y: 149 },
+      { mag: 3, x: 126, y: 135 },
+      { mag: 2, x: 104, y: 187 },
+      { mag: 3, x: 70, y: 213 },
+      { mag: 3, twinkle: true, x: 132, y: 223 },
+      { mag: 3, x: 150, y: 171 },
+    ],
+  },
+  /* The Oar (bottom right showpiece) */
+  {
+    links: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [1, 5],
+    ],
+    stars: [
+      { mag: 3, x: 596, y: 148 },
+      { mag: 2, x: 622, y: 170 },
+      { glint: true, mag: 1, x: 652, y: 164 },
+      { mag: 2, x: 678, y: 190 },
+      { mag: 3, twinkle: true, x: 666, y: 230 },
+      { mag: 3, x: 634, y: 210 },
+    ],
+  },
+  /* The Crown (top left corner, the one closed cycle) */
+  {
+    links: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 0],
+    ],
+    stars: [
+      { mag: 3, x: 20, y: 12 },
+      { mag: 2, twinkle: true, x: 40, y: 28 },
+      { mag: 3, x: 36, y: 62 },
+      { mag: 3, x: 16, y: 70 },
+      { mag: 3, x: 10, y: 38 },
+    ],
+  },
+  /* The Reed (right edge chain) */
+  {
+    links: [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 4],
+    ],
+    stars: [
+      { mag: 3, x: 704, y: 20 },
+      { mag: 2, x: 694, y: 40 },
+      { mag: 3, twinkle: true, x: 706, y: 61 },
+      { mag: 3, x: 696, y: 84 },
+      { mag: 3, x: 708, y: 106 },
+    ],
+  },
+  /* The Hearth (left of the subscribe button) */
+  {
+    links: [
+      [0, 1],
+      [1, 2],
+      [1, 3],
+      [3, 4],
+      [3, 5],
+    ],
+    stars: [
+      { mag: 2, x: 180, y: 130 },
+      { mag: 3, x: 212, y: 145 },
+      { mag: 2, twinkle: true, x: 246, y: 135 },
+      { mag: 3, x: 224, y: 176 },
+      { mag: 3, twinkle: true, x: 192, y: 203 },
+      { mag: 3, x: 256, y: 193 },
+    ],
+  },
+];
+
+/* Seeded-jitter output, hardcoded like the portrait fields */
+const FIELD_STARS_LAND = [
+  { r: 1.2, x: 30.3, y: 36.9 },
+  { r: 1.1, x: 90.5, y: 20.3 },
+  { r: 1.2, x: 176.8, y: 10.1 },
+  { r: 1, twinkle: true, x: 240.3, y: 10.2 },
+  { r: 1.2, x: 481.7, y: 28.3 },
+  { r: 0.9, x: 555, y: 23.6 },
+  { r: 1.2, x: 622.6, y: 14.8 },
+  { r: 0.8, x: 686.5, y: 11.4 },
+  { r: 1, x: 20.7, y: 83 },
+  { r: 1.1, twinkle: true, x: 686.1, y: 63.4 },
+  { r: 1.3, x: 28.4, y: 131.2 },
+  { r: 0.9, x: 111.7, y: 121.6 },
+  { r: 0.9, x: 195.8, y: 129.1 },
+  { r: 1.2, x: 244.8, y: 122.2 },
+  { r: 0.9, x: 323, y: 133.5 },
+  { r: 0.9, twinkle: true, x: 484.9, y: 123.5 },
+  { r: 0.9, x: 543.1, y: 133.8 },
+  { r: 1.3, x: 609.8, y: 120.2 },
+  { r: 1.2, x: 700.6, y: 117.6 },
+  { r: 1.1, x: 26.2, y: 174 },
+  { r: 1.3, x: 97.4, y: 167.8 },
+  { r: 1.2, twinkle: true, x: 173.1, y: 163.1 },
+  { r: 1.3, x: 244.8, y: 168.3 },
+  { r: 0.9, x: 477.2, y: 180.4 },
+  { r: 0.9, x: 547.3, y: 156 },
+  { r: 0.9, x: 610.1, y: 163.9 },
+  { r: 1.3, x: 685.5, y: 181.7 },
+  { r: 0.9, twinkle: true, x: 36.5, y: 210 },
+  { r: 1.2, x: 117.6, y: 217.2 },
+  { r: 0.9, x: 198.4, y: 203.7 },
+  { r: 1.1, x: 252.2, y: 209.2 },
+  { r: 1.4, x: 304.6, y: 225.6 },
+  { r: 0.9, x: 395.5, y: 215.2 },
+  { r: 1, twinkle: true, x: 462.4, y: 221 },
+  { r: 0.9, x: 558.2, y: 213.1 },
+  { r: 0.8, x: 602.9, y: 214.6 },
+  { r: 1.3, x: 703.9, y: 212 },
+];
+
+/* Inside the text and button rectangles: field stars only, extra quiet */
+const FIELD_STARS_LAND_QUIET = [
+  { r: 1, x: 329.7, y: 33.3 },
+  { r: 1.1, x: 403.6, y: 33.8 },
+  { r: 1.1, x: 100.3, y: 79.8 },
+  { r: 1.1, x: 184.6, y: 76.9 },
+  { r: 1.3, x: 263.3, y: 65.8 },
+  { r: 1, x: 342.8, y: 74.6 },
+  { r: 0.9, x: 376.1, y: 71.7 },
+  { r: 1.2, x: 460.1, y: 69.1 },
+  { r: 0.9, x: 545.1, y: 83.5 },
+  { r: 1.1, x: 623.7, y: 84.3 },
+  { r: 1, x: 392.6, y: 116.8 },
+  { r: 0.9, x: 334.6, y: 159.6 },
+  { r: 1, x: 389.4, y: 167.7 },
+];
+
+/* Depth tail for the land sky, seeded like the arrays above */
+const TAIL_STARS_LAND = [
+  { r: 0.6, x: 41, y: 47 },
+  { quiet: true, r: 0.5, x: 158, y: 49 },
+  { quiet: true, r: 0.6, x: 245, y: 37 },
+  { quiet: true, r: 0.7, x: 302, y: 55 },
+  { quiet: true, r: 0.5, x: 382, y: 57 },
+  { quiet: true, r: 0.6, x: 500, y: 57 },
+  { quiet: true, r: 0.7, x: 604, y: 39 },
+  { r: 0.6, x: 696, y: 18 },
+  { r: 0.7, x: 58, y: 122 },
+  { quiet: true, r: 0.5, x: 129, y: 99 },
+  { quiet: true, r: 0.6, x: 235, y: 100 },
+  { r: 0.5, x: 300, y: 123 },
+  { r: 0.5, x: 424, y: 139 },
+  { quiet: true, r: 0.6, x: 512, y: 113 },
+  { r: 0.7, x: 586, y: 128 },
+  { r: 0.5, x: 681, y: 132 },
+  { r: 0.5, x: 39, y: 198 },
+  { r: 0.5, x: 125, y: 182 },
+  { r: 0.5, x: 216, y: 195 },
+  { quiet: true, r: 0.6, x: 297, y: 205 },
+  { quiet: true, r: 0.6, x: 382, y: 202 },
+  { r: 0.5, x: 506, y: 203 },
+  { r: 0.6, x: 563, y: 220 },
+  { r: 0.6, x: 665, y: 194 },
+];
+
+/* Shooting stars at meteor angles, routed through the land sky's own
+   figure-free corridors: the sliver above the text, the Crown-Lantern
+   gap down the left edge, the button-to-Oar gap out the bottom */
+const COMETS_LAND = [
+  { delay: 0, hue: "var(--aurora-a)", points: "744,2 344,36" },
+  { delay: 5.7, hue: "var(--aurora-b)", points: "84,-16 8,230" },
+  { delay: 11.3, hue: "var(--aurora-c)", points: "438,128 590,250" },
+];
+
+/* Land cartography: three right-ascension arcs, two declination arcs,
+   gently swept for the wide canvas */
+const GRATICULE_LAND = [
+  "M 168 10 A 900 900 0 0 1 158 232",
+  "M 372 8 A 1300 1300 0 0 0 380 232",
+  "M 566 10 A 900 900 0 0 1 574 230",
+  "M 14 54 A 1600 1600 0 0 1 706 46",
+  "M 14 186 A 1600 1600 0 0 0 706 194",
+];
+
+/* One gilt ecliptic sweep, lower left to upper right; the middle
+   segment crosses under the bio text at reduced ink */
+const ECLIPTIC_LAND = [
+  { d: "M 12 196 C 84 184 136 170 194 150" },
+  { d: "M 194 150 C 336 102 436 88 564 74", quiet: true },
+  { d: "M 564 74 C 622 66 670 56 710 46" },
+];
+
+/* The horizontal cards' sky. Untrimmed figure lines like the wide
+   slice; no plate furniture, the card edge is the frame. */
+const LandSky = () => (
+  <>
+    <defs>
+      <radialGradient id="chart-land-wash-a">
+        <stop offset="0%" stopColor="var(--aurora-a)" stopOpacity="0.14" />
+        <stop offset="100%" stopColor="var(--aurora-a)" stopOpacity="0" />
+      </radialGradient>
+      <radialGradient id="chart-land-wash-b">
+        <stop offset="0%" stopColor="var(--aurora-b)" stopOpacity="0.11" />
+        <stop offset="100%" stopColor="var(--aurora-b)" stopOpacity="0" />
+      </radialGradient>
+      <radialGradient id="chart-land-wash-c">
+        <stop offset="0%" stopColor="var(--aurora-c)" stopOpacity="0.09" />
+        <stop offset="100%" stopColor="var(--aurora-c)" stopOpacity="0" />
+      </radialGradient>
+    </defs>
+
+    <ellipse
+      className="chart-wash"
+      cx="120"
+      cy="195"
+      rx="150"
+      ry="85"
+      fill="url(#chart-land-wash-a)"
+    />
+    <ellipse
+      className="chart-wash"
+      cx="620"
+      cy="55"
+      rx="150"
+      ry="75"
+      fill="url(#chart-land-wash-b)"
+      style={{ "--chart-wash-delay": "6s" } as React.CSSProperties}
+    />
+    <ellipse
+      className="chart-wash"
+      cx="610"
+      cy="205"
+      rx="150"
+      ry="80"
+      fill="url(#chart-land-wash-c)"
+      style={{ "--chart-wash-delay": "12s" } as React.CSSProperties}
+    />
+
+    {GRATICULE_LAND.map((d) => (
+      <path key={d} className="chart-graticule" d={d} />
+    ))}
+    {ECLIPTIC_LAND.map((segment) => (
+      <path
+        key={segment.d}
+        className={
+          segment.quiet
+            ? "chart-ecliptic chart-ecliptic--quiet"
+            : "chart-ecliptic"
+        }
+        d={segment.d}
+      />
+    ))}
+
+    {FIGURES_LAND.map((figure, figureIndex) => (
+      <g key={figureIndex}>
+        {figure.links.map(([from, to], linkIndex) => (
+          <line
+            key={linkIndex}
+            className="chart-figure"
+            x1={figure.stars[from].x}
+            y1={figure.stars[from].y}
+            x2={figure.stars[to].x}
+            y2={figure.stars[to].y}
+          />
+        ))}
+        {figure.stars.map((star, starIndex) => (
+          <StarGlyph
+            key={starIndex}
+            star={star}
+            index={figureIndex * 3 + starIndex}
+          />
+        ))}
+      </g>
+    ))}
+
+    <g className="chart-field">
+      {FIELD_STARS_LAND.map((star, index) => (
+        <circle
+          key={index}
+          cx={star.x}
+          cy={star.y}
+          r={star.r}
+          className={star.twinkle ? "chart-twinkle" : undefined}
+          style={
+            star.twinkle
+              ? ({
+                  "--chart-twinkle-delay": `${(index * 2.3) % 9}s`,
+                } as React.CSSProperties)
+              : undefined
+          }
+        />
+      ))}
+    </g>
+    <g className="chart-field chart-field--quiet">
+      {FIELD_STARS_LAND_QUIET.map((star, index) => (
+        <circle key={index} cx={star.x} cy={star.y} r={star.r} />
+      ))}
+    </g>
+    <g className="chart-tail">
+      {TAIL_STARS_LAND.map((star, index) => (
+        <circle
+          key={index}
+          cx={star.x}
+          cy={star.y}
+          r={star.r}
+          className={star.quiet ? "chart-tail--quiet" : undefined}
+        />
+      ))}
+    </g>
+
+    {COMET_LAYERS.map((layer) => (
+      <g key={layer} className={`chart-comet-layer chart-comet--${layer}`}>
+        {COMETS_LAND.map((comet, index) => (
+          <polyline
+            key={index}
+            className="chart-comet"
+            points={comet.points}
+            style={
+              {
+                "--comet-color": comet.hue,
+                "--comet-delay": `${comet.delay}s`,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+      </g>
+    ))}
+  </>
+);
+
+/*
+ * Three explicit svgs, one visible at a time (see the media queries in
+ * the CSS). The wide slice is the default; the land sky slices at the
+ * horizontal cards' own aspect so nothing magnifies; the plate
+ * meet-fits so its outline is always whole, letterboxed on the svg's
+ * own surface background.
  */
 const ConstellationChart = ({
   className,
@@ -600,6 +958,18 @@ const ConstellationChart = ({
         {...props}
       >
         <ChartSky />
+      </svg>
+      <svg
+        className={classNames("constellation-chart chart--land", className)}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 720 240"
+        preserveAspectRatio="xMidYMid slice"
+        width="100%"
+        height="100%"
+        aria-hidden
+        {...props}
+      >
+        <LandSky />
       </svg>
       <svg
         className={classNames("constellation-chart chart--plate", className)}
