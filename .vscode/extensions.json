@@ -1,0 +1,5 @@
+{
+  // Highlights and validates the GLSL ES 100,
+  // keyed off the /* glsl */ tag before each template literal
+  "recommendations": ["raczzalan.webgl-glsl-editor"]
+}

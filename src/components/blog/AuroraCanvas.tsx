@@ -1,192 +1,11 @@
 "use client";
 
+import {
+  FRAGMENT_SHADER,
+  VERTEX_SHADER,
+} from "@/components/blog/AuroraCanvas.glsl";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
-
-const VERTEX_SHADER =
-  "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
-
-/*
- * Two skies for one band. Night: three noise-driven aurora curtains with a
- * sharp lower edge fading upward, vertical ray structure, and a macro
- * envelope so bands come and go along the horizon. Day (u_day): Dawn
- * Horizon: warped-fbm pastel stratus decks with gilded under-edges, a
- * warm horizon haze, and a veiled low sun, alpha-composited over the
- * CSS dawn gradient.
- *
- * Both skies carry the Spirit Light idle program: when the pointer rests
- * for a few seconds the flare hands off to a slow two-sine wanderer and
- * dims to a wisp (u_flare), brightness breathes on 17s and 41s periods
- * (u_breath), the night sky drops a shooting star every 20 to 40 seconds,
- * and a slow veil pulse dims and re-reveals the day sun. IGN dither in
- * both branches keeps the exponential falloffs from banding.
- */
-const FRAGMENT_SHADER = `
-precision highp float;
-uniform vec2 u_res;uniform float u_time;uniform vec2 u_mouse;
-uniform vec3 u_c1;uniform vec3 u_c2;uniform vec3 u_c3;
-uniform float u_intensity;uniform float u_stars;uniform float u_day;
-uniform float u_flare;uniform float u_breath;uniform float u_dpr;
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-float noise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);f=f*f*(3.-2.*f);
- return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
-float fbm(vec2 p){float v=0.;float a=.5;
- v+=a*noise(p);p*=2.03;a*=.5;
- v+=a*noise(p);p*=2.01;a*=.5;
- v+=a*noise(p);return v;}
-float hashB(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
-float vnoise(vec2 p){vec2 i=floor(p);vec2 f=fract(p);vec2 u=f*f*(3.-2.*f);
- float a=hashB(i);float b=hashB(i+vec2(1.,0.));float c=hashB(i+vec2(0.,1.));float d=hashB(i+vec2(1.,1.));
- return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-float fbm5(vec2 p){float v=0.;float amp=.5;mat2 r=mat2(.8,-.6,.6,.8);
- for(int i=0;i<5;i++){v+=amp*vnoise(p);p=r*p*2.03;amp*=.55;}
- return v;}
-float bandsN(vec2 q,float seed,float spd){
- vec2 p=vec2(q.x+u_time*spd+seed*17.,q.y+seed*7.);
- float w=fbm5(p*vec2(.9,1.4)+vec2(0.,seed));
- return fbm5(p+vec2(0.,(w-.5)*1.4));}
-vec4 over(vec4 dst,vec3 src,float a){
- a=clamp(a,0.,1.);
- float na=a+dst.a*(1.-a);
- vec3 nc=(src*a+dst.rgb*dst.a*(1.-a))/max(na,1e-4);
- return vec4(nc,na);}
-vec3 curtain(vec2 uv,float t,float fi,vec3 tint){
- float x=uv.x*(1.1+fi*.25)+fi*2.7;
- float center=.58-fi*.14+.3*(fbm(vec2(x*.7+t*(.5+fi*.2),fi*3.7))-.5);
- float d=uv.y-center;
- float fall=d>0.?exp(-d*4.):exp(d*22.);
- float mac=smoothstep(.28,.78,fbm(vec2(x*.5-t*.3,fi*9.3)));
- float rays=.45+.55*noise(vec2(x*26.,uv.y*2.+t*.6));
- float shimmer=.5+.5*fbm(vec2(x*3.-t*1.1,uv.y*2.));
- return tint*fall*mac*rays*shimmer;}
-/* Jimenez interleaved gradient noise: a one-line dither for the falloffs */
-float ign(vec2 p){return fract(52.9829189*fract(dot(p,vec2(0.06711056,0.00583715))));}
-void main(){
- vec2 uv=gl_FragCoord.xy/u_res;
- float t=u_time*.05;
- vec2 asp=vec2(u_res.x/u_res.y,1.);
- float md=distance(uv*asp,u_mouse*asp);
- if(u_day>.5){
-  float x=uv.x;
-  float y=1.-uv.y;
-  float asp=u_res.x/u_res.y;
-  vec3 GOLD=vec3(.99,.84,.57);
-  vec3 BLUSH=vec3(.96,.67,.7);
-  vec3 LAV=vec3(.77,.7,.93);
-  vec3 SUN=vec3(1.,.96,.86);
-  /* Slow occlusion envelope: a cloud drifts across the sun and it
-     re-emerges; the gilded rim below flares on each return via sunw */
-  float vp=.55+.45*smoothstep(.4,.6,noise(vec2(u_time*.02,5.)));
-  vec4 acc=vec4(0.);
-  {
-   vec2 q=vec2(x*asp*.85,y*10.);
-   float n=bandsN(q,3.7,.03);
-   float m=smoothstep(.5,.575,n)*(1.-smoothstep(.575,.72,n));
-   float env=smoothstep(.02,.1,y)*(1.-smoothstep(.38,.55,y));
-   acc=over(acc,mix(LAV,BLUSH,.25),m*env*.62);
-  }
-  float sunw;
-  {
-   vec2 q=vec2(x*asp*.62,y*6.);
-   float n=bandsN(q,1.3,.018);
-   float m=smoothstep(.455,.525,n);
-   float core=smoothstep(.545,.76,n);
-   float env=smoothstep(.16,.34,y)*(1.-smoothstep(.66,.8,y));
-   vec3 c=mix(LAV,BLUSH,smoothstep(.18,.45,y));
-   c=mix(c,GOLD,smoothstep(.45,.68,y));
-   sunw=exp(-pow(length(vec2((x-.72)*asp,y-.74)),2.)*2.5)*vp;
-   c=mix(c,GOLD,sunw*.45);
-   acc=over(acc,c,(m*.68+core*.32)*env);
-   float n2=bandsN(vec2(q.x,q.y+.24),1.3,.018);
-   float m2=smoothstep(.455,.525,n2);
-   float rim=clamp(m-m2,0.,1.);
-   acc=over(acc,mix(GOLD,SUN,.6),rim*env*(.35+.65*sunw));
-  }
-  {
-   vec2 q=vec2(x*asp*.75,y*7.5);
-   float n=bandsN(q,8.9,-.012);
-   float m=smoothstep(.485,.555,n);
-   float env=smoothstep(.3,.48,y)*(1.-smoothstep(.7,.84,y));
-   vec3 c=mix(BLUSH,GOLD,smoothstep(.4,.68,y));
-   acc=over(acc,c,m*env*.58);
-  }
-  {
-   float hz=exp(-pow((y-.72)*5.5,2.));
-   float hx=.55+.45*exp(-pow((x-.72)*asp*.45,2.));
-   acc=over(acc,mix(GOLD,SUN,.35),hz*hx*.4);
-  }
-  {
-   vec2 d=vec2((x-.72)*asp,(y-.74)*1.2);
-   float ds=dot(d,d);
-   float veil=.75+.5*fbm5(vec2(x*asp*1.6+u_time*.014,y*4.5));
-   float glow=exp(-ds*3.)*vp;
-   float score=exp(-ds*12.)*veil*vp;
-   float hot=exp(-ds*38.)*veil*vp;
-   acc=over(acc,mix(GOLD,SUN,.5),glow*.5);
-   acc=over(acc,mix(GOLD,SUN,.8),score*.6);
-   acc=over(acc,vec3(1.,.98,.92),hot*.7);
-  }
-  /*
-   * The day sky answers the pointer like the night one: clouds thin where
-   * you point and a patch of warm sunlight follows, a beam breaking
-   * through. u_mouse is bottom-origin, y here is top-origin. When idle,
-   * JS hands the target to a wanderer biased toward the sun quadrant and
-   * u_flare (normalized against its pointer strength) dims the beam.
-   */
-  {
-   float k=u_flare/.35;
-   float mdd=distance(vec2(x*asp,y),vec2(u_mouse.x*asp,1.-u_mouse.y));
-   float beam=exp(-mdd*mdd*7.);
-   acc.a*=1.-.3*k*beam;
-   acc=over(acc,mix(GOLD,SUN,.7),beam*.24*k);
-  }
-  float yieldX=mix(.4,1.,smoothstep(.06,.56,x));
-  float fadeB=1.-smoothstep(.76,.985,y);
-  float aOut=acc.a*yieldX*fadeB*u_breath;
-  acc.rgb+=(ign(gl_FragCoord.xy)-.5)/255.;
-  /* Premultiplied output: the site canvas keeps default alpha behavior */
-  gl_FragColor=vec4(acc.rgb*aOut,aOut);
-  return;
- }
- vec3 col=curtain(uv,t,0.,u_c1)+curtain(uv,t,1.,u_c2)+curtain(uv,t,2.,u_c3);
- col*=1.+u_flare*exp(-md*3.5);
- if(u_stars>.5){
-  /* Stars hash a CSS-pixel grid (u_dpr) so density survives DPR and
-     resize; pow(hash,3.) keeps most as steady dust so only the bright
-     few twinkle, and per-cell jitter breaks the grid alignment */
-  vec2 sp=gl_FragCoord.xy/(u_dpr*3.);
-  vec2 cell=floor(sp);
-  float s=hash(cell);
-  vec2 jit=.3+.4*vec2(hash(cell+.31),hash(cell+.57));
-  float r=length(fract(sp)-jit);
-  float mag=pow(hash(cell+.73),3.);
-  float tw=mag>.3? .55+.45*sin(u_time*(1.+fract(s*13.)*2.)+s*40.):1.;
-  col+=vec3(.9,.95,1.)*step(.992,s)*exp(-r*r*45.)*(.18+.85*mag)*tw*(.35+.65*uv.y);}
- col*=u_intensity*u_breath;
- /* Shooting star: slot-hashed so one falls every 20 to 40 seconds and
-    the block is skipped outside its 0.7s life. A hot blooming head
-    draws a thin trail whose luminance dies exponentially behind it, so
-    the streak dissolves into the sky instead of ending on an edge.
-    Distances are aspect-corrected so it stays true on wide bands. */
- float slot=floor(u_time/30.);
- float e=u_time-(slot+.35+hash(vec2(slot,7.))/3.)*30.;
- if(e>0.&&e<.7){
-  float en=e/.7;
-  float ang=-.50+.4*(hash(vec2(slot,5.))-.5);
-  vec2 dir=vec2(cos(ang),sin(ang));
-  vec2 head=vec2((.15+.55*hash(vec2(slot,3.)))*asp.x,.82+.12*hash(vec2(slot,9.)))+dir*en*.85;
-  vec2 rel=uv*asp-head;
-  float lp=dot(rel,-dir);
-  float pd=length(rel+dir*lp);
-  float trail=exp(-max(lp,0.)*8.)*step(-.002,lp);
-  float core=exp(-pd*pd*36000.)*trail;
-  float bloom=exp(-dot(rel,rel)*2600.);
-  float env=pow(sin(3.14159*en),.6);
-  col+=(vec3(.97,.99,1.)*core+vec3(.75,.88,1.)*bloom*.45)*env;}
- col+=vec3((ign(gl_FragCoord.xy)-.5)/255.);
- float alpha=clamp(max(col.r,max(col.g,col.b)),0.,1.);
- gl_FragColor=vec4(clamp(col,0.,1.),alpha);}
-`;
 
 /* Northern lights over the dusk lakeshore; sunlight over the lapis day sky */
 const PALETTES = {
@@ -477,8 +296,14 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
         dispose();
       }
       /* Client-side revisits would otherwise stack live contexts until
-         the browser starts evicting the oldest */
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+         the browser starts evicting the oldest. Only release it once the
+         canvas has really left the document: React re-runs this effect on
+         the same node under Strict Mode and Fast Refresh, and getContext()
+         then hands back the SAME lost context, which nothing can revive.
+         The sky would sit at full opacity over a dead canvas. */
+      if (!canvas.isConnected) {
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+      }
     };
   }, []);
 
