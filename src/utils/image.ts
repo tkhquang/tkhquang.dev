@@ -38,6 +38,18 @@ export function getFileBuffer(
   return isRemote ? getFileBufferRemote(src, options) : getFileBufferLocal(src);
 }
 
+function getImageExtension(buffer: Buffer, url: string): string {
+  try {
+    const { type } = imageSize(buffer);
+    if (type) {
+      return type;
+    }
+  } catch {
+    // Not a format image-size recognizes; fall back to the url's extension
+  }
+  return path.extname(new URL(url).pathname).slice(1) || "bin";
+}
+
 interface GetRemoteImageOptionsBase {
   cache?: boolean;
 }
@@ -74,16 +86,26 @@ export async function getRemoteImage(
   }
 ): Promise<string | ArrayBuffer> {
   try {
-    let filePath: string | undefined;
+    let hash: string | undefined;
 
-    // If storing, resolve the target file path and check cache
+    // If storing, hash the url and check the cache. Cached files carry a
+    // real image extension (Vercel serves extension-less files as
+    // application/octet-stream, which its optimizer rejects with
+    // INVALID_IMAGE_OPTIMIZE_REQUEST), so match on the hash prefix
     if (options.shouldStore) {
-      const hash = crypto.createHash("md5").update(url).digest("hex");
-      filePath = path.resolve(options.targetPath, sanitize(hash));
+      hash = sanitize(crypto.createHash("md5").update(url).digest("hex"));
 
-      if (options.cache && fs.existsSync(filePath)) {
-        console.info("Remote image (cached) found at: ", filePath);
-        return filePath;
+      if (options.cache) {
+        const dir = path.resolve(options.targetPath);
+        const cached = fs.existsSync(dir)
+          ? fs.readdirSync(dir).find((file) => file.startsWith(`${hash}.`))
+          : undefined;
+
+        if (cached) {
+          const filePath = path.join(dir, cached);
+          console.info("Remote image (cached) found at: ", filePath);
+          return filePath;
+        }
       }
     }
 
@@ -108,8 +130,12 @@ export async function getRemoteImage(
     const arrayBuffer = await response.arrayBuffer();
 
     // If storing, write file and return path
-    if (options.shouldStore && filePath) {
+    if (options.shouldStore && hash) {
       const body = Buffer.from(arrayBuffer);
+      const filePath = path.resolve(
+        options.targetPath,
+        `${hash}.${getImageExtension(body, url)}`
+      );
       const dir = path.dirname(filePath);
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
