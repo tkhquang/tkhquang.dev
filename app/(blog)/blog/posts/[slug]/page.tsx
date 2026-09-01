@@ -4,6 +4,7 @@ import { PathInfo } from "@/components/blog/PathInfo";
 import PostAside from "@/components/blog/PostAside";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
+import RailSky from "@/components/blog/RailSky";
 import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
@@ -14,7 +15,7 @@ import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import clsx from "clsx";
 import { Metadata } from "next/types";
-import { Suspense, ViewTransition } from "react";
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();
@@ -137,23 +138,19 @@ export default async function Post({
           }) as React.CSSProperties),
         }}
       >
-        {post.cover_image && (
-          <ViewTransition name={`post-cover-${slug}`}>
-            <NextImage {...post.coverData} {...coverProps} />
-          </ViewTransition>
-        )}
+        {post.cover_image && <NextImage {...post.coverData} {...coverProps} />}
       </header>
 
-      <ViewTransition name={`post-title-${slug}`}>
-        <h1 className="heading mx-auto mt-4 mb-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
-          {post.title}
-        </h1>
-      </ViewTransition>
+      <h1 className="heading mx-auto mt-4 mb-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
+        {post.title}
+      </h1>
 
-      <div className="flex">
+      {/* The row hosts the article's view timeline (see RailSky.css): the
+          section owns it, and both flanking rails consume it */}
+      <div className="post-row flex">
         <TableOfContent headings={headings} />
 
-        <section className="container mx-auto max-w-(--breakpoint-md)!">
+        <section className="post-row__article container mx-auto max-w-(--breakpoint-md)!">
           <article className="article">
             <div className="article__path-info">
               <PathInfo<MarkdownCategory, "slug">
@@ -200,11 +197,17 @@ export default async function Post({
           </article>
         </section>
 
-        <PostAside
-          categoryTitle={category.title}
-          categorySlug={category.slug}
-          posts={relatedPosts}
-        />
+        {/* The wrapper takes over the flank's flex-item role so the aside
+            keeps its stretch-and-stick behavior while the constellation
+            fills the runway below its rail */}
+        <div className="relative hidden min-w-0 flex-1 xl:flex">
+          <PostAside
+            categoryTitle={category.title}
+            categorySlug={category.slug}
+            posts={relatedPosts}
+          />
+          <RailSky />
+        </div>
       </div>
     </div>
   );

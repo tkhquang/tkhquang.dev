@@ -37,6 +37,73 @@
   }
 
   /*
+   * The Sky Sets: scrolling off the feed masthead sinks the text block
+   * toward the horizon while the aurora drifts up at a slower rate and a
+   * taller veil thickens the dissolve. Scrubbed against scroll(root), so
+   * scrolling back replays it in reverse; without scroll timelines or
+   * with reduced motion nothing below applies and the masthead behaves
+   * exactly as shipped.
+   */
+  .masthead-veil {
+    height: 65%;
+    background: linear-gradient(to bottom, transparent, var(--background) 82%);
+    opacity: 0;
+  }
+
+  /* The day band's lowest stripe is cream, not raw background, so the
+     light veil lands on the same warm horizon mix */
+  html[data-theme="light"] .masthead-veil {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, hsl(44deg 55% 93%) 55%, var(--background)) 82%
+    );
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /* The animation shorthand resets animation-timeline, so the
+         shorthand always comes first */
+      .masthead-set {
+        animation: masthead-sky-set linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 420px;
+      }
+
+      .masthead-sky {
+        animation: masthead-sky-drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 420px;
+      }
+
+      .masthead-veil {
+        animation: masthead-veil-rise linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0px 420px;
+      }
+
+      @keyframes masthead-sky-set {
+        to {
+          transform: translateY(56px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes masthead-sky-drift {
+        to {
+          transform: translateY(-15%);
+        }
+      }
+
+      @keyframes masthead-veil-rise {
+        to {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  /*
    * Colophon Bar pagination: the row closes the feed on its left rail as a
    * hairline-topped stat line with de-boxed mono numbers. Lives in the
    * overrides layer because the shadcn button variants are utility-layer
@@ -96,21 +163,6 @@
     [role="combobox"] {
       @apply kicker gap-1 px-1 py-2;
     }
-  }
-
-  /*
-   * Lantern Handoff: the card cover and title morph into the post hero on
-   * navigation. Groups glide on a long-tail ease; old and new page paints
-   * crossfade briefly underneath so neither theme ever hard-flashes.
-   */
-  ::view-transition-group(*) {
-    animation-duration: 350ms;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 200ms;
   }
 
   .mermaid {

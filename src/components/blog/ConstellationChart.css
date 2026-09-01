@@ -23,7 +23,7 @@
 
 #constellation-chart .chart-figure {
   stroke: var(--chart-line);
-  stroke-width: 0.9;
+  stroke-width: 0.8;
   stroke-linecap: round;
   fill: none;
 }
@@ -59,14 +59,6 @@
 
 #constellation-chart .chart-ecliptic--quiet {
   stroke-opacity: 0.08;
-}
-
-#constellation-chart .chart-boundary {
-  fill: none;
-  stroke: var(--aurora-b);
-  stroke-opacity: 0.16;
-  stroke-width: 0.6;
-  stroke-dasharray: 2 5;
 }
 
 #constellation-chart .chart-label {
@@ -251,7 +243,7 @@
 
 /* Day: firmer engraved lines, lapis ink, stillness except two glints */
 html[data-theme="light"] #constellation-chart {
-  --chart-line: color-mix(in srgb, var(--primary) 40%, transparent);
+  --chart-line: color-mix(in srgb, var(--primary) 28%, transparent);
   --chart-star: var(--primary);
   --chart-gilt: hsl(40deg 60% 42%);
   --chart-main-opacity: 0.55;
@@ -273,7 +265,7 @@ html[data-theme="light"] #constellation-chart {
 
   /* Printed plate: firmer furniture ink, gilt ecliptic and mag-1 rings */
   .chart-frame {
-    stroke: color-mix(in srgb, var(--primary) 30%, transparent);
+    stroke: color-mix(in srgb, var(--primary) 22%, transparent);
   }
 
   .chart-frame-tick {
@@ -282,7 +274,7 @@ html[data-theme="light"] #constellation-chart {
 
   .chart-graticule {
     stroke: var(--primary);
-    stroke-opacity: 0.15;
+    stroke-opacity: 0.1;
   }
 
   .chart-ecliptic {
@@ -291,10 +283,6 @@ html[data-theme="light"] #constellation-chart {
 
   .chart-ecliptic--quiet {
     stroke-opacity: 0.14;
-  }
-
-  .chart-boundary {
-    stroke-opacity: 0.2;
   }
 
   .chart-label {

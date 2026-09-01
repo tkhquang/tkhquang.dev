@@ -302,17 +302,28 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
 
   return (
     <section
-      className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 xl:relative xl:opacity-50 xl:hover:opacity-100"
+      className="table-of-content group fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold xl:relative"
       aria-label="Table of contents navigation"
     >
       {/*
         Nested headings make this list long enough to outgrow the viewport, and a
         sticky element taller than the viewport puts its tail permanently out of
         reach. `xl:` gates on width, so a short laptop window still hits this.
+        overflow-y-auto also makes this a scroll container that clips left
+        overflow, so pl-3 keeps the progress star and its glow (which hang
+        left of the rail hairline) inside the clip; items-end on the section
+        pins the right edge, so the padding grows leftward and nothing moves.
       */}
       {headings?.length > 0 && (
-        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 xl:block">
-          <h2 className="kicker mt-10 mb-1 block">On this page</h2>
+        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 pl-3 xl:block">
+          {/*
+            The idle dim sits on the header and list wrappers instead of the
+            section so the progress star stays legible on the dimmed rail;
+            hovering anywhere in the section still restores full ink.
+          */}
+          <h2 className="kicker mt-10 mb-1 block transition-opacity duration-500 xl:opacity-50 xl:group-hover:opacity-100">
+            On this page
+          </h2>
 
           {/* Mobile Drawer */}
           <Drawer
@@ -330,12 +341,18 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
             />
           </Drawer>
 
-          {/* Desktop TOC List */}
-          <TocList
-            headings={headings}
-            activeAnchor={activeAnchor}
-            onAnchorClick={scrollToHeading}
-          />
+          {/* Desktop TOC List, with the scroll-driven progress star riding
+              the rail hairline (styles and gating in RailSky.css) */}
+          <div className="relative">
+            <span className="toc-progress-star" aria-hidden />
+            <div className="transition-opacity duration-500 xl:opacity-50 xl:group-hover:opacity-100">
+              <TocList
+                headings={headings}
+                activeAnchor={activeAnchor}
+                onAnchorClick={scrollToHeading}
+              />
+            </div>
+          </div>
         </div>
       )}
     </section>

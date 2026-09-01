@@ -3,7 +3,7 @@ import TagList from "@/components/blog/PostTag";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import { MarkdownPost } from "@/models/markdown.types";
 import Link from "next/link";
-import React, { ViewTransition } from "react";
+import React from "react";
 
 interface PostCardProps {
   post: MarkdownPost;
@@ -40,11 +40,9 @@ const PostCard = ({ index, post }: PostCardProps) => {
         href={`/blog/posts/${post.slug}`}
         className="news-feed__list-item__link inline"
       >
-        <ViewTransition name={`post-title-${post.slug}`}>
-          <h2 className="news-feed__list-item__title heading xs:text-2xl mt-1 mb-2 inline-block text-xl hover:opacity-75 sm:text-3xl sm:leading-10">
-            {post.title}
-          </h2>
-        </ViewTransition>
+        <h2 className="news-feed__list-item__title heading xs:text-2xl mt-1 mb-2 inline-block text-xl hover:opacity-75 sm:text-3xl sm:leading-10">
+          {post.title}
+        </h2>
       </Link>
 
       {coverImage && (
@@ -54,11 +52,9 @@ const PostCard = ({ index, post }: PostCardProps) => {
             className="news-feed__list-item__link"
             aria-label={post.title}
           >
-            <ViewTransition name={`post-cover-${post.slug}`}>
-              <div className="border-theme-hairline-soft relative mb-4 aspect-video w-full overflow-hidden rounded-lg border">
-                <NextImage {...post.coverData} {...coverProps} />
-              </div>
-            </ViewTransition>
+            <div className="border-theme-hairline-soft relative mb-4 aspect-video w-full overflow-hidden rounded-lg border">
+              <NextImage {...post.coverData} {...coverProps} />
+            </div>
           </Link>
           <figcaption></figcaption>
         </figure>

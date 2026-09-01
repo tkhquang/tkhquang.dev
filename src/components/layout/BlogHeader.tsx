@@ -85,8 +85,6 @@ const BlogHeader = ({
   return (
     <header
       {...props}
-      /* Freeze the sticky chrome so page view transitions never crossfade it */
-      style={{ viewTransitionName: "site-header" }}
       className={classNames(
         "band--day h-header-height sticky inset-0 z-(--z-header) m-0 w-full flex-wrap p-0 transition-[background-color,color,box-shadow] duration-300",
         transparent

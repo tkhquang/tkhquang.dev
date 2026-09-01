@@ -8,9 +8,9 @@ import React from "react";
  * via, the one quiet bridge back to the circuit board this replaces.
  * By night it lives (aurora wash, twinkle, shooting stars); by day it is
  * a printed lapis chart. The bio text rectangle stays free of figures.
- * The plate furniture (frame, graticule, gilt ecliptic, boundary
- * meanders, Old Norse labels, magnitude legend) is static and painted
- * under the star layers, Harmonia Macrocosmica style.
+ * The plate furniture (frame, graticule, gilt ecliptic, Old Norse
+ * labels, magnitude legend) is static and painted under the star
+ * layers, Harmonia Macrocosmica style.
  */
 
 interface ChartStar {
@@ -277,12 +277,6 @@ const ECLIPTIC = [
   { d: "M 258 434 C 274 482 292 520 310 556" },
 ];
 
-/* Boundary meanders around the two showpiece figures only */
-const BOUNDARIES = [
-  "M 40 48 L 62 46 L 64 28 L 120 26 L 122 42 L 158 44 L 160 76 L 168 78 L 166 130 L 146 132 L 144 158 L 100 160 L 56 158 L 54 118 L 42 116 Z",
-  "M 196 30 L 240 28 L 242 16 L 286 14 L 288 30 L 306 32 L 304 88 L 296 90 L 298 128 L 250 130 L 248 138 L 210 136 L 208 96 L 198 94 Z",
-];
-
 /* Old Norse figure names; the top-third pair survives the wide-card
    crop. One label per third of the chart inks up (ink is the delay). */
 const LABELS: ChartLabel[] = [
@@ -437,9 +431,6 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
           }
           d={segment.d}
         />
-      ))}
-      {BOUNDARIES.map((d) => (
-        <path key={d} className="chart-boundary" d={d} />
       ))}
       {LABELS.map((label) => (
         <text

@@ -3,6 +3,37 @@ import { toString as hastToString } from "hast-util-to-string";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 
+const DEFAULT_STYLES = /* css */ `
+    [data-rehype-pretty-code-figure] pre {
+      position: relative;
+    }
+
+    [data-rehype-pretty-code-figure][data-visibility="hover"] button[data-rehype-pretty-copy-button] {
+      transition: opacity 300ms ease-in-out;
+      opacity: 0;
+    }
+
+    [data-rehype-pretty-code-figure][data-visibility="hover"]:hover button[data-rehype-pretty-copy-button] {
+      opacity: 1;
+    }
+
+    button[data-rehype-pretty-copy-button] {
+      position: absolute;
+      top: 0.5em;
+      right: 0.5em;
+      width: 24px;
+      height: 24px;
+    }
+
+    .rehype-pretty-copy-button-icon {
+      width: 24px;
+      height: 24px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+`;
+
 interface Options {
   feedbackDuration?: number;
   visibility?: "hover" | "always";
@@ -43,8 +74,6 @@ export default function rehypeCopyCodeButton(
         (childNode) => (childNode as Element).tagName === "pre"
       );
 
-      if (preNodeIndex === -1) return;
-
       const preNode = element.children[preNodeIndex] as Element;
 
       matchedFigure = true;
@@ -61,28 +90,19 @@ export default function rehypeCopyCodeButton(
       };
       preNode.tagName = "rehype-pretty-copy-button-pre";
 
-      // Hoist the language onto the figure so CSS can badge the frame.
-      // "plaintext" is the defaultLang filler, not worth a badge.
-      const language =
-        preNode.properties["data-language"] ?? preNode.properties.dataLanguage;
-
       element.properties = {
         ...element.properties,
         "data-visibility": `${visibility}`,
-        ...(language && language !== "plaintext"
-          ? { "data-language": `${language}` }
-          : {}),
       };
     });
 
-    // One shared style element per tree, never one per figure. The site
-    // itself passes no injectStyles and owns the CSS in its stylesheets.
-    if (matchedFigure && injectStyles) {
+    /* One shared style element per tree, never one per visited figure */
+    if (matchedFigure && injectStyles !== false) {
       tree.children.push({
         children: [
           {
             type: "text",
-            value: trimWhitespace(injectStyles),
+            value: trimWhitespace(injectStyles || DEFAULT_STYLES),
           },
         ],
         properties: {},
