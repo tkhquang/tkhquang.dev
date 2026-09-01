@@ -37,7 +37,7 @@ const ResumeDownload = () => {
         <span className="block font-semibold">
           View my resume <span aria-hidden="true">📄</span>
         </span>
-        <span className="mt-1 block truncate font-mono text-xs opacity-65">
+        <span className="mt-1 block truncate font-mono text-xs opacity-75">
           {RESUME.fileName}
         </span>
       </span>

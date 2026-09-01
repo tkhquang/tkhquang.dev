@@ -3,7 +3,8 @@
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
 
-const VERTEX_SHADER = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+const VERTEX_SHADER =
+  "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
 
 /*
  * Two skies for one band. Night: three noise-driven aurora curtains with a
@@ -240,9 +241,8 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
       }
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
-      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        return null;
-      }
+      /* No COMPILE_STATUS query here: it blocks until the compile ends.
+         A broken shader surfaces as LINK_STATUS false in start() below */
       return shader;
     };
 
@@ -258,172 +258,208 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      return;
-    }
-    gl.useProgram(program);
 
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([-1, -1, 3, -1, -1, 3]),
-      gl.STATIC_DRAW
-    );
-    const position = gl.getAttribLocation(program, "p");
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+    /*
+     * Everything past the link waits in start() so the main thread never
+     * blocks on shader compilation: the synchronous status query below
+     * stalls until the compile finishes, and in Lighthouse traces that
+     * stall was the feed page's one long task (2.4s of its TBT). With
+     * KHR_parallel_shader_compile the driver compiles in the background
+     * and a rAF poll fires start() once it is done; without the
+     * extension start() runs at once, exactly the old path.
+     */
+    let rafId = 0;
+    const disposers: Array<() => void> = [];
 
-    const uniform = (name: string) => gl.getUniformLocation(program, name);
-    const uRes = uniform("u_res");
-    const uTime = uniform("u_time");
-    const uMouse = uniform("u_mouse");
-    const uC1 = uniform("u_c1");
-    const uC2 = uniform("u_c2");
-    const uC3 = uniform("u_c3");
-    const uIntensity = uniform("u_intensity");
-    const uStars = uniform("u_stars");
-    const uDay = uniform("u_day");
-    const uFlare = uniform("u_flare");
-    const uBreath = uniform("u_breath");
-    const uDpr = uniform("u_dpr");
-
-    let isDay = false;
-    const setPalette = () => {
-      const theme =
-        document.documentElement.getAttribute("data-theme") === "light"
-          ? "light"
-          : "dark";
-      const palette = PALETTES[theme];
-      isDay = palette.day === 1;
-      gl.uniform3fv(uC1, palette.c1);
-      gl.uniform3fv(uC2, palette.c2);
-      gl.uniform3fv(uC3, palette.c3);
-      gl.uniform1f(uIntensity, palette.intensity);
-      gl.uniform1f(uStars, palette.stars);
-      gl.uniform1f(uDay, palette.day);
-    };
-
-    /* 1.5x is plenty for a blurred field; full DPR just burns fill rate */
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    gl.uniform1f(uDpr, dpr);
-    const resize = () => {
-      const { clientHeight, clientWidth } = canvas;
-      if (!clientWidth || !clientHeight) {
+    const start = () => {
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
         return;
       }
-      canvas.width = Math.round(clientWidth * dpr);
-      canvas.height = Math.round(clientHeight * dpr);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-    };
+      gl.useProgram(program);
 
-    const host = canvas.parentElement ?? canvas;
-    let mouseX = 0.5;
-    let mouseY = 0.62;
-    let targetX = mouseX;
-    let targetY = mouseY;
-    let lastPointerMove = performance.now();
-    const onPointerMove = (event: PointerEvent) => {
-      const rect = host.getBoundingClientRect();
-      targetX = (event.clientX - rect.left) / rect.width;
-      targetY = 1 - (event.clientY - rect.top) / rect.height;
-      lastPointerMove = performance.now();
-    };
-    host.addEventListener("pointermove", onPointerMove);
-
-    let visible = true;
-    const observer = new IntersectionObserver((entries) => {
-      visible = entries[0]?.isIntersecting ?? true;
-    });
-    observer.observe(host);
-
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    const drawFrame = (now: number) => {
-      const t = now / 1000;
-      /* Spirit Light idle scalar: 3s of grace, then a 4s smoothstep
-         ramp. Any pointer move zeroes it within a frame. */
-      const idleRaw = Math.min(
-        Math.max((now - lastPointerMove - 3000) / 4000, 0),
-        1
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([-1, -1, 3, -1, -1, 3]),
+        gl.STATIC_DRAW
       );
-      const idle = idleRaw * idleRaw * (3 - 2 * idleRaw);
-      /* Two incommensurate sines never visibly loop; the day sky biases
-         the patrol toward the sun quadrant, (0.72, 0.26) bottom-origin */
-      let wanderX =
-        0.5 + 0.3 * Math.sin(t * 0.11) + 0.12 * Math.sin(t * 0.043 + 2.1);
-      let wanderY = 0.55 + 0.18 * Math.sin(t * 0.07 + 1.2);
-      if (isDay) {
-        wanderX += (0.72 - wanderX) * 0.55;
-        wanderY += (0.26 - wanderY) * 0.55;
-      }
-      const flareX = targetX + (wanderX - targetX) * idle;
-      const flareY = targetY + (wanderY - targetY) * idle;
-      if (idle === 0) {
-        /* The pointer is live again: snap back, no drift across the sky */
-        mouseX = flareX;
-        mouseY = flareY;
+      const position = gl.getAttribLocation(program, "p");
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+      const uniform = (name: string) => gl.getUniformLocation(program, name);
+      const uRes = uniform("u_res");
+      const uTime = uniform("u_time");
+      const uMouse = uniform("u_mouse");
+      const uC1 = uniform("u_c1");
+      const uC2 = uniform("u_c2");
+      const uC3 = uniform("u_c3");
+      const uIntensity = uniform("u_intensity");
+      const uStars = uniform("u_stars");
+      const uDay = uniform("u_day");
+      const uFlare = uniform("u_flare");
+      const uBreath = uniform("u_breath");
+      const uDpr = uniform("u_dpr");
+
+      let isDay = false;
+      const setPalette = () => {
+        const theme =
+          document.documentElement.getAttribute("data-theme") === "light"
+            ? "light"
+            : "dark";
+        const palette = PALETTES[theme];
+        isDay = palette.day === 1;
+        gl.uniform3fv(uC1, palette.c1);
+        gl.uniform3fv(uC2, palette.c2);
+        gl.uniform3fv(uC3, palette.c3);
+        gl.uniform1f(uIntensity, palette.intensity);
+        gl.uniform1f(uStars, palette.stars);
+        gl.uniform1f(uDay, palette.day);
+      };
+
+      /* 1.5x is plenty for a blurred field; full DPR just burns fill rate */
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      gl.uniform1f(uDpr, dpr);
+      const resize = () => {
+        const { clientHeight, clientWidth } = canvas;
+        if (!clientWidth || !clientHeight) {
+          return;
+        }
+        canvas.width = Math.round(clientWidth * dpr);
+        canvas.height = Math.round(clientHeight * dpr);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.uniform2f(uRes, canvas.width, canvas.height);
+      };
+
+      const host = canvas.parentElement ?? canvas;
+      let mouseX = 0.5;
+      let mouseY = 0.62;
+      let targetX = mouseX;
+      let targetY = mouseY;
+      let lastPointerMove = performance.now();
+      const onPointerMove = (event: PointerEvent) => {
+        const rect = host.getBoundingClientRect();
+        targetX = (event.clientX - rect.left) / rect.width;
+        targetY = 1 - (event.clientY - rect.top) / rect.height;
+        lastPointerMove = performance.now();
+      };
+      host.addEventListener("pointermove", onPointerMove);
+
+      let visible = true;
+      const observer = new IntersectionObserver((entries) => {
+        visible = entries[0]?.isIntersecting ?? true;
+      });
+      observer.observe(host);
+
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      const drawFrame = (now: number) => {
+        const t = now / 1000;
+        /* Spirit Light idle scalar: 3s of grace, then a 4s smoothstep
+           ramp. Any pointer move zeroes it within a frame. */
+        const idleRaw = Math.min(
+          Math.max((now - lastPointerMove - 3000) / 4000, 0),
+          1
+        );
+        const idle = idleRaw * idleRaw * (3 - 2 * idleRaw);
+        /* Two incommensurate sines never visibly loop; the day sky biases
+           the patrol toward the sun quadrant, (0.72, 0.26) bottom-origin */
+        let wanderX =
+          0.5 + 0.3 * Math.sin(t * 0.11) + 0.12 * Math.sin(t * 0.043 + 2.1);
+        let wanderY = 0.55 + 0.18 * Math.sin(t * 0.07 + 1.2);
+        if (isDay) {
+          wanderX += (0.72 - wanderX) * 0.55;
+          wanderY += (0.26 - wanderY) * 0.55;
+        }
+        const flareX = targetX + (wanderX - targetX) * idle;
+        const flareY = targetY + (wanderY - targetY) * idle;
+        if (idle === 0) {
+          /* The pointer is live again: snap back, no drift across the sky */
+          mouseX = flareX;
+          mouseY = flareY;
+        } else {
+          mouseX += (flareX - mouseX) * 0.04;
+          mouseY += (flareY - mouseY) * 0.04;
+        }
+        /* The flare dims from pointer strength to wisp strength as it
+           detaches; breathing rides its own uniform because the day branch
+           returns before the night intensity multiply */
+        gl.uniform1f(uFlare, 0.35 + (0.18 - 0.35) * idle);
+        gl.uniform1f(
+          uBreath,
+          0.88 +
+            0.12 *
+              (0.5 * Math.sin((t * 2 * Math.PI) / 17) +
+                0.5 * Math.sin((t * 2 * Math.PI) / 41))
+        );
+        gl.uniform1f(uTime, t);
+        gl.uniform2f(uMouse, mouseX, mouseY);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      };
+
+      const loop = (now: number) => {
+        if (visible && !document.hidden) {
+          drawFrame(now);
+        }
+        rafId = requestAnimationFrame(loop);
+      };
+
+      resize();
+      setPalette();
+      const resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(canvas);
+      const themeObserver = new MutationObserver(setPalette);
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+
+      if (reducedMotion) {
+        /* One still composition. 174250ms puts both breathing sines at
+           their crest (174.25s is 10.25 * 17 and 4.25 * 41) and lands 24s
+           into a 30s meteor slot, past every possible 0.7s streak window,
+           so the frame never freezes a meteor mid-fall. Pinning
+           lastPointerMove to the same instant keeps idle at zero, so the
+           still keeps its full-strength flare at the resting pointer. */
+        lastPointerMove = 174250;
+        drawFrame(174250);
       } else {
-        mouseX += (flareX - mouseX) * 0.04;
-        mouseY += (flareY - mouseY) * 0.04;
+        rafId = requestAnimationFrame(loop);
       }
-      /* The flare dims from pointer strength to wisp strength as it
-         detaches; breathing rides its own uniform because the day branch
-         returns before the night intensity multiply */
-      gl.uniform1f(uFlare, 0.35 + (0.18 - 0.35) * idle);
-      gl.uniform1f(
-        uBreath,
-        0.88 +
-          0.12 *
-            (0.5 * Math.sin((t * 2 * Math.PI) / 17) +
-              0.5 * Math.sin((t * 2 * Math.PI) / 41))
-      );
-      gl.uniform1f(uTime, t);
-      gl.uniform2f(uMouse, mouseX, mouseY);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      setReady(true);
+
+      disposers.push(() => {
+        host.removeEventListener("pointermove", onPointerMove);
+        observer.disconnect();
+        resizeObserver.disconnect();
+        themeObserver.disconnect();
+      });
     };
 
-    let rafId = 0;
-    const loop = (now: number) => {
-      if (visible && !document.hidden) {
-        drawFrame(now);
-      }
-      rafId = requestAnimationFrame(loop);
-    };
-
-    resize();
-    setPalette();
-    const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(canvas);
-    const themeObserver = new MutationObserver(setPalette);
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-    });
-
-    if (reducedMotion) {
-      /* One still composition. 174250ms puts both breathing sines at
-         their crest (174.25s is 10.25 * 17 and 4.25 * 41) and lands 24s
-         into a 30s meteor slot, past every possible 0.7s streak window,
-         so the frame never freezes a meteor mid-fall. Pinning
-         lastPointerMove to the same instant keeps idle at zero, so the
-         still keeps its full-strength flare at the resting pointer. */
-      lastPointerMove = 174250;
-      drawFrame(174250);
+    const parallelCompile = gl.getExtension("KHR_parallel_shader_compile");
+    if (parallelCompile) {
+      const poll = () => {
+        if (
+          gl.getProgramParameter(program, parallelCompile.COMPLETION_STATUS_KHR)
+        ) {
+          start();
+        } else {
+          rafId = requestAnimationFrame(poll);
+        }
+      };
+      rafId = requestAnimationFrame(poll);
     } else {
-      rafId = requestAnimationFrame(loop);
+      start();
     }
-    setReady(true);
 
     return () => {
       cancelAnimationFrame(rafId);
-      host.removeEventListener("pointermove", onPointerMove);
-      observer.disconnect();
-      resizeObserver.disconnect();
-      themeObserver.disconnect();
+      for (const dispose of disposers) {
+        dispose();
+      }
     };
   }, []);
 

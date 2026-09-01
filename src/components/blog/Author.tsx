@@ -21,6 +21,10 @@ const Author = async () => {
           className="author__image size-[100px] rounded-full shadow-lg md:size-[80px]"
           width={150}
           height={150}
+          /* The avatar is the LCP on the archive and tag index pages;
+             lazy-loading it there fails lcp-lazy-loaded, and it is one
+             small cached file on every blog page anyway */
+          loading="eager"
           placeholder="blur"
           blurDataURL={placeholder}
           containerClassName="rounded-full"

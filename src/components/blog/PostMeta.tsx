@@ -51,9 +51,12 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
           </span>
         )}
         <span aria-hidden>·</span>
+        {/* The layout-neutral padding/margin pair grows the tap target to
+            the 24px floor (target-size); biased upward into the card's
+            empty top padding so the extra area never overlaps the title */}
         <Link
           href={`/blog/categories/${post.category_slug}`}
-          className="font-bold transition-opacity hover:opacity-75"
+          className="-mt-2 -mb-1 pt-2 pb-1 font-bold transition-opacity hover:opacity-75"
           style={{
             color: `var(--shelf-${post.category_slug}, var(--primary))`,
           }}

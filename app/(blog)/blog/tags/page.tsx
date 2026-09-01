@@ -63,7 +63,9 @@ export default async function TagsPage() {
               )}
             >
               # {tag.title}{" "}
-              <span className="text-theme-on-surface opacity-60">
+              {/* 70 percent, not 60: at 60 the dark theme measures 3.98
+                  to 1 on the raised chip, under the 4.5 contrast floor */}
+              <span className="text-theme-on-surface opacity-70">
                 · {tag.count}
               </span>
             </Link>

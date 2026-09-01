@@ -61,7 +61,7 @@ const LocalTime = ({ city, gmtLabel, timeZone }: LocalTimeProps) => {
   return (
     <span>
       {city} · {time} {gmtLabel}
-      <span className="block font-mono text-[0.7rem] leading-5 opacity-65">
+      <span className="block font-mono text-[0.7rem] leading-5 opacity-75">
         {diffText}
       </span>
     </span>

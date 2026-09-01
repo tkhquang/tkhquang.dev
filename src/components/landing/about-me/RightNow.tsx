@@ -8,8 +8,10 @@ import classNames from "classnames";
  * 24px tall), so labels and values sit on the same line regardless of the
  * row's content.
  */
+/* 75 percent, not 65: dark-theme text at 65 measures 4.0 to 1 on the
+   raised plate, under the 4.5 contrast floor */
 const ROW_LABEL_CLASS =
-  "font-mono text-[0.7rem] leading-6 font-semibold tracking-wide uppercase opacity-65";
+  "font-mono text-[0.7rem] leading-6 font-semibold tracking-wide uppercase opacity-75";
 
 const ROW_VALUE_CLASS = "m-0 min-w-0 leading-6";
 

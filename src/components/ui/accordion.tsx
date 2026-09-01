@@ -21,18 +21,22 @@ const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
 >(({ children, className, ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
-        className
-      )}
-      {...props}
-    >
-      {children}
-      <ChevronDown className="size-4 shrink-0 transition-transform duration-200" />
-    </AccordionPrimitive.Trigger>
+  /* h2, not Radix's default h3: every callsite mounts straight under
+     the page h1, so h3 breaks heading order */
+  <AccordionPrimitive.Header asChild>
+    <h2 className="flex">
+      <AccordionPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        <ChevronDown className="size-4 shrink-0 transition-transform duration-200" />
+      </AccordionPrimitive.Trigger>
+    </h2>
   </AccordionPrimitive.Header>
 ));
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;

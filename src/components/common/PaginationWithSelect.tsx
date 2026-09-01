@@ -157,10 +157,14 @@ const PaginationWithSelect = ({
     };
 
     /* An anchor without an href is uncrawlable and fails Lighthouse; the
-       disabled edge renders as a same-styled span instead */
+       disabled edge renders as a same-styled span instead. aria-label is
+       prohibited on a plain span (aria-prohibited-attr), and the visible
+       text already names the edge, so the label stays off here */
     if (isDisabled) {
+      const { "aria-label": _ariaLabel, ...spanProps } = props;
+
       return (
-        <PaginationLink as="span" {...props}>
+        <PaginationLink as="span" {...spanProps}>
           {content}
         </PaginationLink>
       );
@@ -263,7 +267,11 @@ const PaginationWithSelect = ({
             value={String(currentPage)}
             onValueChange={(value) => handlePageChange(Number(value))}
           >
-            <SelectTrigger className="w-auto" size="sm" aria-label="Jump to page">
+            <SelectTrigger
+              className="w-auto"
+              size="sm"
+              aria-label="Jump to page"
+            >
               <SelectValue placeholder="Jump to">Jump to</SelectValue>
             </SelectTrigger>
             <SelectContent>
