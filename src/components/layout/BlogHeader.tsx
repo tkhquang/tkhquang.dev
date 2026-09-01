@@ -2,6 +2,7 @@
 
 import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { FiArrowUpRight } from "react-icons/fi";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
 import { ScrollManager } from "@/utils/dom";
@@ -125,9 +126,10 @@ const BlogHeader = ({
             </button>
             <Link
               href="/"
-              className="font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
+              className="inline-flex items-center gap-0.5 font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
             >
-              {"· By Aleks ->"}
+              · By Aleks
+              <FiArrowUpRight aria-hidden className="size-3.5" />
             </Link>
           </div>
           <div className="header__right flex h-full items-center">
