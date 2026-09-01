@@ -114,7 +114,7 @@ const BlogHeader = ({
               className="cursor-pointer focus:outline-hidden"
               onClick={handleLogoClick}
             >
-              <div className="logo flip-animate flex-center whitespace-no-wrap no-underine gap-2 font-extrabold select-none focus:outline-hidden">
+              <div className="logo flip-animate flex-center whitespace-no-wrap no-underine gap-2 select-none focus:outline-hidden">
                 {!isHomeBlog && <BackButtonIcon className="size-8" />}
                 <span
                   className="logo__text relative inline-flex"

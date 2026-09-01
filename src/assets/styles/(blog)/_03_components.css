@@ -131,6 +131,11 @@
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
 
+    /* The wordmark face; Fraunces ships subset to the Ljóss and Home
+       glyphs, so any other character must fall through to the serifs */
+    --font-display:
+      var(--font-fraunces, "Fraunces"), georgia, cambria, serif;
+
     &[data-theme="light"] {
       --shelf-gaming: hsl(351deg 58% 40%);
       --shelf-the-inner-crisis: hsl(266deg 50% 55%);
@@ -140,6 +145,23 @@
     }
   }
 
+}
+
+/* The name speaks Fraunces; weights and tracking tuned in the wordmark
+   study (620 at masthead size, 650 at logo size). The markup carries no
+   weight or tracking utilities here so these components-layer rules own
+   the letterforms. */
+.blog-masthead__title {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 650;
 }
 
 .code-container {

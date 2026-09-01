@@ -49,7 +49,7 @@ const BlogMasthead = ({
         <span className="kicker text-theme-on-band mb-2 block opacity-80">
           The blog · by Aleks
         </span>
-        <h1 className="blog-masthead__title text-theme-on-band text-5xl leading-tight font-extrabold tracking-tight lg:text-6xl">
+        <h1 className="blog-masthead__title text-theme-on-band text-5xl leading-tight lg:text-6xl">
           Ljóss
         </h1>
         <span
