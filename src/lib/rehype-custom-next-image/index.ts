@@ -41,6 +41,7 @@ export default function rehypeCustomNextImage(
 
         try {
           const {
+            placeholder,
             output,
             width = FALLBACK_DIMENSITION.WIDTH,
             height = FALLBACK_DIMENSITION.HEIGHT,
@@ -60,9 +61,11 @@ export default function rehypeCustomNextImage(
           node.tagName = "next-image";
           node.properties = {
             alt: originalAlt as string,
-            height,
             // No placeholder="blur": next/image wraps it in an SVG feGaussianBlur
-            // filter, which tanks rendering perf on some browsers (Android Firefox)
+            // filter, which tanks rendering perf on some browsers (Android
+            // Firefox). NextImage paints blurDataURL as a CSS background instead
+            blurDataURL: placeholder,
+            height,
             sizes: "(max-width: 768px) 100vw, 768px",
             src,
             width,

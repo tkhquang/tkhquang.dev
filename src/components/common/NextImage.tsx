@@ -30,6 +30,12 @@ export default function Image(props: ImageProps) {
   const imgElementRef = useRef<HTMLImageElement | null>(null);
   const containerElementRef = useRef<HTMLDivElement | null>(null);
 
+  // Custom LQIP: paint the placeholder as a plain CSS background instead of
+  // next/image's placeholder="blur", whose SVG feGaussianBlur filter tanks
+  // rendering perf on some browsers (Android Firefox). The blur-xl class
+  // below smooths the tiny placeholder until the real image decodes
+  const hasCustomPlaceholder = Boolean(blurDataURL && placeholder !== "blur");
+
   const handleLoad: React.ReactEventHandler<HTMLImageElement> = (event) => {
     const imgElement = event.currentTarget;
 
@@ -104,6 +110,9 @@ export default function Image(props: ImageProps) {
         className={clsx(
           "size-full max-h-full object-center",
           "blur-xl [transition:filter_500ms_cubic-bezier(.4,0,.2,1)] data-[fetched='true']:blur-[0]",
+          // Drop the placeholder once the real image is in, so transparent
+          // images don't show it through (important beats the inline style)
+          hasCustomPlaceholder && "data-[fetched='true']:bg-none!",
           className
         )}
         src={src}
@@ -113,6 +122,11 @@ export default function Image(props: ImageProps) {
         style={{
           backgroundRepeat: "no-repeat",
           objectFit: "cover",
+          ...(hasCustomPlaceholder && {
+            backgroundImage: `url(${blurDataURL})`,
+            backgroundPosition: "50% 50%",
+            backgroundSize: "cover",
+          }),
           ...style,
         }}
         {...rest}

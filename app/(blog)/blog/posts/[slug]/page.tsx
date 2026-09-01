@@ -111,7 +111,6 @@ export default async function Post({
     sizes: "(max-width: 768px) 100vw, 1024px",
     width: coverWidth ?? 1280,
     blurDataURL: post.coverData.blurDataURL,
-    placeholder: "blur",
     backgroundClassName: "dark:invert-0 invert",
     ...(coverWidth && coverHeight
       ? {

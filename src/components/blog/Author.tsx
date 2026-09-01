@@ -25,7 +25,6 @@ const Author = async () => {
              lazy-loading it there fails lcp-lazy-loaded, and it is one
              small cached file on every blog page anyway */
           loading="eager"
-          placeholder="blur"
           blurDataURL={placeholder}
           containerClassName="rounded-full"
         />
