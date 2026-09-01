@@ -92,7 +92,8 @@ export default function rehypeCopyCodeButton(
 
       /* Hoist the language onto the figure so CSS can badge the frame.
          "plaintext" is the defaultLang filler, not worth a badge, and a
-         titled figure already names itself, so the badge stays off there */
+         titled figure badges through its title bar instead (the
+         figcaption keeps its own data-language), so no hoist there */
       const hasTitle = element.children.some((childNode) => {
         const child = childNode as Element;
 

@@ -261,30 +261,60 @@
     }
   }
 
-  /* Language badge: the kicker recipe pinned to the frame's top corner.
-     The copy-button plugin hoists data-language onto the figure, skipping
-     titled figures so the badge never doubles a title bar */
+  /* Untitled figures grow the same header bar the titled ones have,
+     holding just the language at the right, where the titled bar rides
+     its badge. The bar is the figure's ::before, so no markup changes:
+     the copy-button plugin still hoists data-language onto untitled
+     figures only, and the language can never touch the code below.
+     0.875rem padding lands the same bar height as the 1rem-type
+     figcaption despite the kicker's smaller line box, and matches the
+     titled badge's right inset. */
   figure[data-rehype-pretty-code-figure][data-language]::before {
-    @apply kicker;
+    @apply kicker shadow-md;
     content: attr(data-language);
-    position: absolute;
-    top: 0.75rem;
-    right: 0.875rem;
-    z-index: 1;
-    pointer-events: none;
-    transition: opacity 300ms ease-in-out;
+    display: block;
+    padding: 0.875rem;
+    text-align: right;
+    background: linear-gradient(
+        90deg,
+        var(--background) 0%,
+        var(--surface) 20%,
+        var(--surface) 50%,
+        var(--surface) 80%,
+        var(--background) 100%
+      )
+      var(--surface);
   }
 
-  /* The copy button borrows the corner while it is visible */
-  figure[data-rehype-pretty-code-figure]:hover::before,
-  figure[data-rehype-pretty-code-figure]:focus-within::before {
-    opacity: 0;
+  /* Titled figures ride the badge on the title bar instead: the
+     figcaption already carries data-language from rehype-pretty-code, so
+     no hoist is needed. Symmetric inline padding keeps the centered
+     title clear of the badge without pushing it off center, and this
+     badge needs no hover fade because the copy button anchors to the
+     pre, a corner the title bar never shares. */
+  figure[data-rehype-pretty-code-figure]
+    > [data-rehype-pretty-code-title]:not([data-language="plaintext"]) {
+    position: relative;
+    padding-inline: 4.5rem;
+
+    &::after {
+      @apply kicker;
+      content: attr(data-language);
+      position: absolute;
+      top: 50%;
+      right: 0.875rem;
+      transform: translateY(-50%);
+      font-style: normal;
+      pointer-events: none;
+    }
   }
 
-  /* Copy button: only the ink is ours, placement and behavior stay with the
-     plugin's injected styles */
+  /* Copy button: only the ink and cursor are ours, placement and behavior
+     stay with the plugin's injected styles (which set neither, and the
+     preflight leaves buttons on the default arrow) */
   button[data-rehype-pretty-copy-button] {
     color: var(--on-surface);
+    cursor: pointer;
 
     &.rehype-pretty-copied {
       color: var(--success);

@@ -207,7 +207,9 @@ const TocItem = ({
           "anchor -ml-px block border-l-2 py-1 leading-snug transition-colors duration-200",
           isActive
             ? "anchor--is-active border-theme-primary text-theme-primary"
-            : "text-theme-on-surface hover:text-theme-primary border-transparent opacity-75 hover:opacity-100"
+            : /* 85, not 75: under the rail's idle 75 percent dim the product
+                 of the two opacities has to stay past the 4.5 contrast floor */
+              "text-theme-on-surface hover:text-theme-primary border-transparent opacity-85 hover:opacity-100"
         )}
         style={{ paddingLeft: `${0.75 + depth * 0.75}rem` }}
         onClick={handleClick}
@@ -322,8 +324,12 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
             The idle dim sits on the header and list wrappers instead of the
             section so the progress star stays legible on the dimmed rail;
             hovering anywhere in the section still restores full ink.
+            75 percent is the dim floor: the inactive links underneath carry
+            their own 75 percent ink, and 0.75 x 0.75 is the last step that
+            keeps them past the 4.5 contrast ratio the audit requires in the
+            dark theme (50 measured 2.78 to 3.56). PostAside mirrors this.
           */}
-          <h2 className="kicker mt-10 mb-1 block transition-opacity duration-500 xl:opacity-50 xl:group-hover:opacity-100">
+          <h2 className="kicker mt-10 mb-1 block transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
             On this page
           </h2>
 
@@ -347,7 +353,7 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
               the rail hairline (styles and gating in RailSky.css) */}
           <div className="relative">
             <span className="toc-progress-star" aria-hidden />
-            <div className="transition-opacity duration-500 xl:opacity-50 xl:group-hover:opacity-100">
+            <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
               <TocList
                 headings={headings}
                 activeAnchor={activeAnchor}
