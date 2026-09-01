@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "fix:style": "npx stylelint src/**/*.css --fix",
     "codegen": "graphql-codegen -r dotenv/config --config codegen.yml",
     "codegen:yml": "tsc --outDir dist scripts/generateTypes.ts && node dist/generateTypes.js",
@@ -141,6 +141,9 @@
       "unist-util-remove",
       "unist-util-visit",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "baseline-browser-mapping": "^2.11.20"
+    }
   }
 }

@@ -7,3 +7,6 @@ out/*
 .next/*
 
 **/generated/*
+
+# Local scratch space, gitignored
+00_idea/
