@@ -72,6 +72,7 @@ export const PreWithCopy = ({
       <button
         data-rehype-pretty-copy-button
         type="button"
+        aria-label={copied ? "Copied" : "Copy code"}
         onClick={handleClick}
       >
         {copied ? renderIcon(successIcon) : renderIcon(copyIcon)}

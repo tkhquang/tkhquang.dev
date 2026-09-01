@@ -128,7 +128,7 @@ const BlogHeader = ({
                 wordmark's suffix, not another destination */}
             <Link
               href="/"
-              className="inline-flex items-center gap-1 font-mono text-[0.65rem] font-semibold tracking-[0.2em] uppercase opacity-60 transition-opacity hover:opacity-100"
+              className="inline-flex items-center gap-1 font-mono text-[0.65rem] font-semibold tracking-[0.2em] uppercase opacity-80 transition-opacity hover:opacity-100"
             >
               · By Aleks
               <FiArrowUpRight aria-hidden className="size-3" />

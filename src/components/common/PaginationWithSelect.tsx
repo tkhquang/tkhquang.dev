@@ -156,6 +156,16 @@ const PaginationWithSelect = ({
         handleLinkClick(e, page, isDisabled),
     };
 
+    /* An anchor without an href is uncrawlable and fails Lighthouse; the
+       disabled edge renders as a same-styled span instead */
+    if (isDisabled) {
+      return (
+        <PaginationLink as="span" {...props}>
+          {content}
+        </PaginationLink>
+      );
+    }
+
     if (LinkComponent && getPageUrl && !isDisabled) {
       return (
         <LinkComponent href={createPageLink(page)}>
