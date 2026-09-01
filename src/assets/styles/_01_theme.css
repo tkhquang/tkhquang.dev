@@ -79,6 +79,9 @@
       "Source Code Pro Fallback", ui-monospace, sfmono-regular, menlo, monaco,
       consolas, "Liberation Mono", "Courier New", monospace;
 
+    /* The wordmark face */
+    --font-display: var(--font-fraunces, "Fraunces"), georgia, cambria, serif;
+
     /* Box Shadows */
     --shadow-box: 0 1px 10px 0 rgb(0 0 0 / 20%);
     --shadow-box-md: 0 1px 10px 2px rgb(0 0 0 / 30%);

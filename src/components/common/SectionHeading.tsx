@@ -1,7 +1,8 @@
 import classNames from "classnames";
 
-interface SectionHeadingProps extends React.ComponentProps<"div"> {
-  title: string;
+interface SectionHeadingProps
+  extends Omit<React.ComponentProps<"div">, "title"> {
+  title: React.ReactNode;
   kicker?: string;
   emoji?: string;
   intro?: string;

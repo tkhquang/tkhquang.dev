@@ -3,11 +3,6 @@ import React from "react";
 const Subscribe = ({ className }: React.ComponentProps<"div">) => {
   return (
     <div className={className}>
-      <p className="mx-auto text-center">
-        <strong>Get rekt!</strong>
-        &nbsp;
-        {`I'll send new posts to your inbox.`}
-      </p>
       {/* <form
         id="SubscriptionForm"
         className="email-form flex-center relative flex w-full flex-wrap pt-5 text-center"
@@ -64,7 +59,7 @@ const Subscribe = ({ className }: React.ComponentProps<"div">) => {
           Subscribe
         </button>
       </form> */}
-      <div className="email-form flex-center relative flex w-full flex-wrap pt-5 text-center">
+      <div className="email-form flex-center relative flex w-full flex-wrap text-center">
         <a
           className="subscribe__button"
           href="https://buttondown.com/ljoss"

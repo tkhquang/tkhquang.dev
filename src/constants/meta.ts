@@ -45,7 +45,7 @@ export namespace Blog {
   export const METADATA = {
     author: "Aleks",
     description:
-      "Hi, I'm Aleks, a Software Engineer with a passion for open-source projects and micro startups. This blog is my little corner of the internet where I share thoughts on topics I love, interesting stories, and the occasional deep dive into technical challenges.",
+      "Hi, I'm Aleks, a software engineer into open source and micro startups. This blog is where I write up the things I take apart: game engines, the web platform, and the ideas that survived contact with production.",
     title: {
       default: "Ljóss - The Portal To A Nobody's Inner World",
       template: "%s | Ljóss - The Portal To A Nobody's Inner World",

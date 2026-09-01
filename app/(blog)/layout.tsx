@@ -8,20 +8,8 @@ import BlogHeader from "@/components/layout/BlogHeader";
 import { Blog } from "@/constants/meta";
 import AppProvider from "@/providers/AppProvider";
 import { Portal } from "@ariakit/react/portal";
-import { Fraunces } from "next/font/google";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
-
-/* The wordmark face, declared here so it ships on blog routes only; the
-   landing never pays for it. Next 16 dropped text subsetting, so the
-   latin variable font loads whole, once, and caches. */
-const fraunces = Fraunces({
-  preload: true,
-  subsets: ["latin"],
-  axes: ["opsz"],
-  display: "swap",
-  variable: "--font-fraunces",
-});
 
 export const metadata: Metadata = {
   alternates: {
@@ -40,14 +28,10 @@ export default async function BlogLayout({
 }) {
   return (
     <>
-      {/* display: contents keeps the body's flex column intact while the
-          wrapper hands --font-fraunces down to the wordmark */}
       <AppProvider>
-        <div className={`${fraunces.variable} contents`}>
-          <BlogHeader />
-          <Main className="flex-1">{children}</Main>
-          <BlogFooter />
-        </div>
+        <BlogHeader />
+        <Main className="flex-1">{children}</Main>
+        <BlogFooter />
 
         <Suspense>
           <Portal>

@@ -2,16 +2,15 @@ import AuroraCanvas from "@/components/blog/AuroraCanvas";
 
 interface BlogMastheadProps {
   totalPosts: number;
-  sinceYear: number;
   shelfCount: number;
+  /* Print-masthead years: volume increments on each founding anniversary */
+  volume: number;
 }
 
+const ROMAN = "I II III IV V VI VII VIII IX X XI XII XIII XIV XV".split(" ");
+
 /* Ljóss is Old Norse for light: the masthead sky carries a live aurora */
-const BlogMasthead = ({
-  shelfCount,
-  sinceYear,
-  totalPosts,
-}: BlogMastheadProps) => {
+const BlogMasthead = ({ shelfCount, totalPosts, volume }: BlogMastheadProps) => {
   return (
     /* Pulled under the transparent header so the sky runs behind it */
     <section className="band band--day -mt-header-height pt-header-height relative overflow-hidden">
@@ -66,8 +65,8 @@ const BlogMasthead = ({
           <span className="kicker text-theme-on-band tabular-nums">
             {shelfCount} shelves
           </span>
-          <span className="kicker text-theme-on-band tabular-nums">
-            writing since {sinceYear}
+          <span className="kicker text-theme-on-band">
+            Vol. {ROMAN[volume - 1] ?? volume}
           </span>
         </div>
       </div>

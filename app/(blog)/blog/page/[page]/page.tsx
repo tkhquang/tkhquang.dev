@@ -42,17 +42,20 @@ export default async function BlogPage({ params }: any) {
 
   const shelfCount = new Set(allPosts.map((post) => post.category_slug)).size;
 
+  /* Volume counts founding anniversaries, newspaper style: first post
+     year is Vol. I. Frozen at build time, which every deploy refreshes */
   const sinceYear = allPosts.reduce(
     (year, post) => Math.min(year, post.created_at.getFullYear()),
     new Date().getFullYear()
   );
+  const volume = new Date().getFullYear() - sinceYear + 1;
 
   return (
     <>
       <BlogMasthead
         totalPosts={allPosts.length}
-        sinceYear={sinceYear}
         shelfCount={shelfCount}
+        volume={volume}
       />
       <NewsFeed
         posts={posts}

@@ -28,7 +28,11 @@ const Writing = async () => {
       <div className="container">
         <SectionHeading
           kicker="From the blog"
-          title="Latest from Ljóss"
+          title={
+            <span>
+              Latest from <span className="writing__blog-title">Ljóss</span>
+            </span>
+          }
           emoji="✍️"
           intro="I keep a blog called Ljóss: devlogs, deep dives, and whatever I broke this month."
         />

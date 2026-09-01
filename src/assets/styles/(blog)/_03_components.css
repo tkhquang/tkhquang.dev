@@ -39,17 +39,19 @@
   }
 
   /*
-   * Same 45s wander as the old background-position version, moved onto a
-   * transform so the blurred layer stays composited instead of repainting.
-   * The oversized inset keeps the edges covered at every stop.
+   * The 45s wander, on a transform so the blurred layer stays composited
+   * instead of repainting. Percentages are of the oversized layer itself;
+   * the throw is tuned by pixel-delta measurement to match the original
+   * background-position sweep (mean quarter-cycle delta ~173), and the
+   * 34% vertical overscan keeps the layer's edges covered at every stop.
    */
   @keyframes waves {
     0% {
-      transform: translate3d(-18px, -8px, 0);
+      transform: translate3d(-2%, -20%, 0);
     }
 
     25% {
-      transform: translate3d(18px, 8px, 0);
+      transform: translate3d(2%, 20%, 0);
     }
 
     50% {
@@ -57,11 +59,11 @@
     }
 
     75% {
-      transform: translate3d(18px, -8px, 0);
+      transform: translate3d(2%, -20%, 0);
     }
 
     100% {
-      transform: translate3d(-18px, 8px, 0);
+      transform: translate3d(-2%, 20%, 0);
     }
   }
 
@@ -70,7 +72,7 @@
       position: absolute;
       display: block;
       content: "";
-      inset: -28px -60px;
+      inset: -34% -60px;
       background-image: var(--background-url);
       /* cover, not 105% auto: with a fixed position the flanks must always
          be filled or the grit loading layer shows through as speckles */
@@ -82,18 +84,10 @@
       z-index: -1;
     }
 
-    /* Dissolve into the page instead of slamming against light paper */
-    &::after {
-      position: absolute;
-      display: block;
-      content: "";
-      inset: auto 0 0;
-      height: 40%;
-      background-image: linear-gradient(to bottom, transparent, var(--background));
-      z-index: -1;
-      pointer-events: none;
-    }
-
+    /* No bottom dissolve: it wiped the flanks while the photo was still
+       vivid and left a mismatched seam over light paper. The backdrop
+       ending flush with the cover's bottom edge reads as the hero
+       simply ending, which is the better line. */
     @apply shadow-2xl;
 
     &:hover,
@@ -146,10 +140,6 @@
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
 
-    /* The wordmark face, loaded by the blog layout only */
-    --font-display:
-      var(--font-fraunces, "Fraunces"), georgia, cambria, serif;
-
     &[data-theme="light"] {
       --shelf-gaming: hsl(351deg 58% 40%);
       --shelf-the-inner-crisis: hsl(266deg 50% 55%);
@@ -158,7 +148,6 @@
       --aurora-c: hsl(210deg 75% 42%);
     }
   }
-
 }
 
 /* The name speaks Fraunces; weights and tracking tuned in the wordmark
