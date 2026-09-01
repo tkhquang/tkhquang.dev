@@ -41,16 +41,17 @@ const STARS: RailStar[] = [
 ];
 
 /* Figure lines in ignition order, each fading in just after its two
-   endpoint stars; endpoints pre-trimmed clear of the glyphs they join */
+   endpoint stars; drawn star to star like the bio chart (owner review
+   killed the trimmed-gap atlas convention as looking cut off) */
 const LINKS = [
-  { x1: 117.3, y1: 87.5, x2: 90.7, y2: 162.5 },
-  { x1: 93.4, y1: 175.9, x2: 146.6, y2: 234.1 },
-  { x1: 148.5, y1: 247.2, x2: 111.5, y2: 322.8 },
-  { x1: 104.2, y1: 337.1, x2: 63.8, y2: 412.9 },
-  { x1: 108.9, y1: 338, x2: 127.1, y2: 502 },
-  { x1: 131.5, y1: 517.2, x2: 172.5, y2: 602.8 },
-  { x1: 126.7, y1: 517.9, x2: 97.3, y2: 692.1 },
-  { x1: 99.2, y1: 707.3, x2: 136.8, y2: 792.7 },
+  { x1: 120, y1: 80, x2: 88, y2: 170 },
+  { x1: 88, y1: 170, x2: 152, y2: 240 },
+  { x1: 152, y1: 240, x2: 108, y2: 330 },
+  { x1: 108, y1: 330, x2: 60, y2: 420 },
+  { x1: 108, y1: 330, x2: 128, y2: 510 },
+  { x1: 128, y1: 510, x2: 176, y2: 610 },
+  { x1: 128, y1: 510, x2: 96, y2: 700 },
+  { x1: 96, y1: 700, x2: 140, y2: 800 },
 ];
 
 /* Seeded once and hardcoded, like the bio chart's field */

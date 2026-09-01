@@ -11,7 +11,7 @@
 
 /* Chart tokens live on the row so the TOC star can share them */
 .post-row {
-  --rail-line: color-mix(in srgb, var(--on-surface) 30%, transparent);
+  --rail-line: color-mix(in srgb, var(--on-surface) 16%, transparent);
   --rail-star: hsl(199deg 90% 85%);
   --rail-main-opacity: 0.9;
   --rail-field-opacity: 0.45;
@@ -62,8 +62,7 @@
 
 .rail-sky .rail-figure {
   stroke: var(--rail-line);
-  stroke-width: 0.9;
-  stroke-linecap: round;
+  stroke-width: 0.75;
   fill: none;
 }
 
@@ -302,7 +301,7 @@
 /* Day: printed lapis ink, no glow, and only the two mag-1 stars keep the
    printed chart's quiet glint */
 html[data-theme="light"] .post-row {
-  --rail-line: color-mix(in srgb, var(--primary) 40%, transparent);
+  --rail-line: color-mix(in srgb, var(--primary) 28%, transparent);
   --rail-star: var(--primary);
   --rail-main-opacity: 0.55;
   --rail-field-opacity: 0.3;

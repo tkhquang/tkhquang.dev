@@ -5,6 +5,7 @@ import PostAside from "@/components/blog/PostAside";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import RailSky from "@/components/blog/RailSky";
+import RailSkyDriver from "@/components/blog/RailSkyDriver";
 import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
@@ -207,6 +208,9 @@ export default async function Post({
             posts={relatedPosts}
           />
           <RailSky />
+          <Suspense>
+            <RailSkyDriver />
+          </Suspense>
         </div>
       </div>
     </div>

@@ -8,9 +8,10 @@ import React from "react";
  * via, the one quiet bridge back to the circuit board this replaces.
  * By night it lives (aurora wash, twinkle, shooting stars); by day it is
  * a printed lapis chart. The bio text rectangle stays free of figures.
- * The plate furniture (frame, graticule, gilt ecliptic, Old Norse
- * labels, magnitude legend) is static and painted under the star
- * layers, Harmonia Macrocosmica style.
+ * The only cartography is crop-safe linework painted under the stars:
+ * dotted graticule arcs and a gilt ecliptic. Bounded furniture (frame,
+ * ticks, labels, legend) died in owner review: the slice crop cuts any
+ * plate border into a broken outline at real card aspects.
  */
 
 interface ChartStar {
@@ -24,14 +25,6 @@ interface ChartStar {
 interface ChartFigure {
   stars: ChartStar[];
   links: [number, number][];
-}
-
-interface ChartLabel {
-  ink?: number;
-  rotate?: boolean;
-  text: string;
-  x: number;
-  y: number;
 }
 
 const FIGURES: ChartFigure[] = [
@@ -257,9 +250,6 @@ const COMETS = [
 
 const COMET_LAYERS = ["halo", "trail", "head"];
 
-/* Inside-edge rail ticks every 40px, both rails of the plate frame */
-const TICK_YS = Array.from({ length: 15 }, (_, index) => 49 + index * 40);
-
 /* Graticule: 3 right-ascension and 2 declination arcs, gently swept */
 const GRATICULE = [
   "M 84 12 A 900 900 0 0 1 70 630",
@@ -277,40 +267,8 @@ const ECLIPTIC = [
   { d: "M 258 434 C 274 482 292 520 310 556" },
 ];
 
-/* Old Norse figure names; the top-third pair survives the wide-card
-   crop. One label per third of the chart inks up (ink is the delay). */
-const LABELS: ChartLabel[] = [
-  { ink: 0, text: "LJÓSKER", x: 48, y: 168 },
-  { text: "ÁR", x: 216, y: 150 },
-  { ink: 8, rotate: true, text: "SVEIGR", x: 22, y: 316 },
-  { rotate: true, text: "SEF", x: 304, y: 186 },
-  { text: "ARINN", x: 44, y: 486 },
-  { ink: 16, text: "GANGLERI", x: 172, y: 494 },
-];
-
 const CORE_RADIUS = { 1: 2.2, 2: 1.6, 3: 1.2 } as const;
 const RING_RADIUS = { 1: 4.5, 2: 3.2 } as const;
-
-/* Atlas convention: figure lines stop short of the glyphs they join */
-const LINK_CLEARANCE = 2;
-
-const glyphRadius = (star: ChartStar) =>
-  (star.mag < 3 ? RING_RADIUS[star.mag as 1 | 2] : CORE_RADIUS[3]) +
-  LINK_CLEARANCE;
-
-const trimLink = (a: ChartStar, b: ChartStar) => {
-  const length = Math.hypot(b.x - a.x, b.y - a.y);
-  const ux = (b.x - a.x) / length;
-  const uy = (b.y - a.y) / length;
-  const round = (value: number) => Math.round(value * 100) / 100;
-
-  return {
-    x1: round(a.x + ux * glyphRadius(a)),
-    y1: round(a.y + uy * glyphRadius(a)),
-    x2: round(b.x - ux * glyphRadius(b)),
-    y2: round(b.y - uy * glyphRadius(b)),
-  };
-};
 
 const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
   <g
@@ -404,20 +362,6 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
         style={{ "--chart-wash-delay": "12s" } as React.CSSProperties}
       />
 
-      <rect
-        className="chart-frame"
-        x="9"
-        y="9"
-        width="302"
-        height="622"
-        rx="1"
-      />
-      {TICK_YS.map((y) => (
-        <React.Fragment key={y}>
-          <line className="chart-frame-tick" x1="9" y1={y} x2="12" y2={y} />
-          <line className="chart-frame-tick" x1="311" y1={y} x2="308" y2={y} />
-        </React.Fragment>
-      ))}
       {GRATICULE.map((d) => (
         <path key={d} className="chart-graticule" d={d} />
       ))}
@@ -432,61 +376,16 @@ const ConstellationChart = (props: React.ComponentProps<"svg">) => {
           d={segment.d}
         />
       ))}
-      {LABELS.map((label) => (
-        <text
-          key={label.text}
-          x={label.x}
-          y={label.y}
-          transform={
-            label.rotate ? `rotate(90 ${label.x} ${label.y})` : undefined
-          }
-          className={
-            label.ink === undefined
-              ? "chart-label"
-              : "chart-label chart-label--ink"
-          }
-          style={
-            label.ink === undefined
-              ? undefined
-              : ({
-                  "--chart-ink-delay": `${label.ink}s`,
-                } as React.CSSProperties)
-          }
-        >
-          {label.text}
-        </text>
-      ))}
-      <g className="chart-legend">
-        <g transform="translate(24 612)">
-          <circle r={CORE_RADIUS[1]} className="chart-legend-core" />
-          <circle r={RING_RADIUS[1]} className="chart-legend-ring" />
-          <line x1="5.2" y1="0" x2="8" y2="0" />
-          <line x1="-5.2" y1="0" x2="-8" y2="0" />
-          <line x1="0" y1="5.2" x2="0" y2="8" />
-          <line x1="0" y1="-5.2" x2="0" y2="-8" />
-        </g>
-        <g transform="translate(48 612)">
-          <circle r={CORE_RADIUS[2]} className="chart-legend-core" />
-          <circle r={RING_RADIUS[2]} className="chart-legend-ring" />
-        </g>
-        <circle
-          cx="64"
-          cy="612"
-          r={CORE_RADIUS[3]}
-          className="chart-legend-core"
-        />
-        <text x="76" y="614.5" className="chart-legend-text">
-          MAG · I II III
-        </text>
-      </g>
-
       {FIGURES.map((figure, figureIndex) => (
         <g key={figureIndex}>
           {figure.links.map(([from, to], linkIndex) => (
             <line
               key={linkIndex}
               className="chart-figure"
-              {...trimLink(figure.stars[from], figure.stars[to])}
+              x1={figure.stars[from].x}
+              y1={figure.stars[from].y}
+              x2={figure.stars[to].x}
+              y2={figure.stars[to].y}
             />
           ))}
           {figure.stars.map((star, starIndex) => (

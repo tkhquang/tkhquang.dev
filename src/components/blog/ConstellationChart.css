@@ -6,7 +6,7 @@
  */
 
 #constellation-chart {
-  --chart-line: color-mix(in srgb, var(--on-surface) 30%, transparent);
+  --chart-line: color-mix(in srgb, var(--on-surface) 16%, transparent);
   --chart-star: hsl(199deg 90% 85%);
   --chart-gilt: hsl(42deg 60% 70%);
   --chart-main-opacity: 0.9;
@@ -23,23 +23,11 @@
 
 #constellation-chart .chart-figure {
   stroke: var(--chart-line);
-  stroke-width: 0.8;
-  stroke-linecap: round;
-  fill: none;
-}
-
-/* Plate furniture: static engraved linework painted under the stars */
-#constellation-chart .chart-frame {
-  fill: none;
-  stroke: color-mix(in srgb, var(--on-surface) 14%, transparent);
   stroke-width: 0.75;
+  fill: none;
 }
 
-#constellation-chart .chart-frame-tick {
-  stroke: color-mix(in srgb, var(--on-surface) 20%, transparent);
-  stroke-width: 0.5;
-}
-
+/* Crop-safe cartography: dotted arcs and the gilt ecliptic, no frame */
 #constellation-chart .chart-graticule {
   fill: none;
   stroke: var(--on-surface);
@@ -59,57 +47,6 @@
 
 #constellation-chart .chart-ecliptic--quiet {
   stroke-opacity: 0.08;
-}
-
-#constellation-chart .chart-label {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  letter-spacing: 0.18em;
-  fill: var(--on-surface);
-  opacity: 0.32;
-}
-
-/* One label per third of the plate slowly inks up, nothing else moves */
-#constellation-chart .chart-label--ink {
-  animation: chart-label-ink 24s ease-in-out var(--chart-ink-delay, 0s) infinite;
-}
-
-@keyframes chart-label-ink {
-  0%,
-  100% {
-    opacity: 0.28;
-  }
-
-  50% {
-    opacity: 0.38;
-  }
-}
-
-#constellation-chart .chart-legend {
-  opacity: 0.42;
-}
-
-#constellation-chart .chart-legend-core {
-  fill: var(--chart-star);
-}
-
-#constellation-chart .chart-legend-ring {
-  fill: none;
-  stroke: var(--chart-star);
-  stroke-width: 0.6;
-}
-
-#constellation-chart .chart-legend line {
-  stroke: var(--chart-star);
-  stroke-width: 0.7;
-}
-
-#constellation-chart .chart-legend-text {
-  font-family: var(--font-mono);
-  font-size: 6.5px;
-  letter-spacing: 0.14em;
-  fill: var(--on-surface);
-  fill-opacity: 0.3;
 }
 
 #constellation-chart .chart-star {
@@ -241,6 +178,29 @@
   --comet-o: 0.95;
 }
 
+/*
+ * The article's wide closing card crops the chart to its showpiece third
+ * and every visible pixel sits behind text there, so that placement drops
+ * the whole sky to quiet-zone ink.
+ */
+.article #constellation-chart {
+  --chart-main-opacity: 0.5;
+  --chart-field-opacity: 0.3;
+  --chart-field-quiet-opacity: 0.2;
+  --chart-line: color-mix(in srgb, var(--on-surface) 10%, transparent);
+}
+
+html[data-theme="light"] .article #constellation-chart {
+  --chart-main-opacity: 0.4;
+  --chart-line: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+/* The Lantern's mag-1 ticks land on the subscribe copy at the wide
+   crop and read as stray dashes, so the article card goes tickless */
+.article #constellation-chart .chart-star-tick {
+  display: none;
+}
+
 /* Day: firmer engraved lines, lapis ink, stillness except two glints */
 html[data-theme="light"] #constellation-chart {
   --chart-line: color-mix(in srgb, var(--primary) 28%, transparent);
@@ -263,15 +223,7 @@ html[data-theme="light"] #constellation-chart {
     animation: none;
   }
 
-  /* Printed plate: firmer furniture ink, gilt ecliptic and mag-1 rings */
-  .chart-frame {
-    stroke: color-mix(in srgb, var(--primary) 22%, transparent);
-  }
-
-  .chart-frame-tick {
-    stroke: color-mix(in srgb, var(--primary) 32%, transparent);
-  }
-
+  /* Printed chart: lapis arcs, gilt ecliptic and mag-1 rings */
   .chart-graticule {
     stroke: var(--primary);
     stroke-opacity: 0.1;
@@ -283,20 +235,6 @@ html[data-theme="light"] #constellation-chart {
 
   .chart-ecliptic--quiet {
     stroke-opacity: 0.14;
-  }
-
-  .chart-label {
-    fill: var(--primary);
-    opacity: 0.45;
-  }
-
-  .chart-label--ink {
-    animation: none;
-  }
-
-  .chart-legend-text {
-    fill: var(--primary);
-    fill-opacity: 0.45;
   }
 
   .chart-star-ring--mag1 {
@@ -328,8 +266,7 @@ html[data-theme="light"] #constellation-chart {
   #constellation-chart .chart-comet,
   #constellation-chart .chart-twinkle,
   #constellation-chart .chart-glint,
-  #constellation-chart .chart-wash,
-  #constellation-chart .chart-label--ink {
+  #constellation-chart .chart-wash {
     animation: none;
   }
 }
