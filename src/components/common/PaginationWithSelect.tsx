@@ -124,21 +124,10 @@ const PaginationWithSelect = ({
 
   const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    page: number,
-    isDisabled: boolean = false
+    page: number
   ) => {
-    // Prevent click if disabled
-    if (isDisabled) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-
-    // If using custom URLs (like Next.js Link), let the Link handle navigation
-    if (getPageUrl && LinkComponent) {
-      return;
-    }
-    // Otherwise prevent default and use callback
+    /* Follow the callback, not the href: without a LinkComponent the
+       href only serves crawlers (or is just "#") */
     e.preventDefault();
     handlePageChange(page);
   };
@@ -148,19 +137,11 @@ const PaginationWithSelect = ({
     page: number,
     props: any = {}
   ) => {
-    const isDisabled = props["aria-disabled"] === true;
-
-    const linkProps = {
-      ...props,
-      onClick: (e: React.MouseEvent<HTMLAnchorElement>) =>
-        handleLinkClick(e, page, isDisabled),
-    };
-
     /* An anchor without an href is uncrawlable and fails Lighthouse; the
        disabled edge renders as a same-styled span instead. aria-label is
        prohibited on a plain span (aria-prohibited-attr), and the visible
        text already names the edge, so the label stays off here */
-    if (isDisabled) {
+    if (props["aria-disabled"] === true) {
       const { "aria-label": _ariaLabel, ...spanProps } = props;
 
       return (
@@ -170,10 +151,24 @@ const PaginationWithSelect = ({
       );
     }
 
-    if (LinkComponent && getPageUrl && !isDisabled) {
+    if (LinkComponent && getPageUrl) {
+      /* Name and current-state go on the real anchor: aria-label on the
+         inner role-less span is the same aria-prohibited-attr hit, and
+         the anchor needs a name of its own once the edge text hides
+         below xs. Clicks are the Link's to handle. */
+      const {
+        "aria-current": ariaCurrent,
+        "aria-label": ariaLabel,
+        ...spanProps
+      } = props;
+
       return (
-        <LinkComponent href={createPageLink(page)}>
-          <PaginationLink {...linkProps} as="span">
+        <LinkComponent
+          href={createPageLink(page)}
+          aria-label={ariaLabel}
+          aria-current={ariaCurrent}
+        >
+          <PaginationLink {...spanProps} as="span">
             {content}
           </PaginationLink>
         </LinkComponent>
@@ -182,8 +177,11 @@ const PaginationWithSelect = ({
 
     return (
       <PaginationLink
-        href={isDisabled ? undefined : createPageLink(page)}
-        {...linkProps}
+        href={createPageLink(page)}
+        {...props}
+        onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+          handleLinkClick(e, page)
+        }
       >
         {content}
       </PaginationLink>

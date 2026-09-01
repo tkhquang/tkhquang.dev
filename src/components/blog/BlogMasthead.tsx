@@ -3,7 +3,7 @@ import AuroraCanvas from "@/components/blog/AuroraCanvas";
 interface BlogMastheadProps {
   totalPosts: number;
   shelfCount: number;
-  /* Print-masthead years: volume increments on each founding anniversary */
+  /* Print-masthead years: volume increments each new calendar year */
   volume: number;
 }
 

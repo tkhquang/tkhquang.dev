@@ -11,7 +11,7 @@ import React from "react";
  * a printed lapis chart. The bio text rectangle stays free of figures.
  * Three skies share the card. The portrait wide slice keeps only
  * crop-safe linework (dotted graticule arcs, a gilt ecliptic), because
- * a plate border cut by the slice crop died in owner review; it serves
+ * a plate border cut by the slice crop reads as broken; it serves
  * the phone-narrow cards, where its zoom stays near 1x. Horizontal
  * cards at md and up get the land sky, the same figures re-laid on a
  * 720x240 canvas at the card's own aspect, because slicing the portrait

@@ -1,5 +1,5 @@
 import { ImageProps } from "@/components/common/NextImage";
-import { getProcessedImage } from "@/utils/image";
+import { checkIfRemoteResource, getProcessedImage } from "@/utils/image";
 import { Element, Root } from "hast";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
@@ -51,6 +51,13 @@ export default function rehypeCustomNextImage(
             source: originalSrc,
             shouldStore: true,
           });
+
+          // A failed remote fetch falls back to output = the remote URL
+          // itself; keep the plain <img> pointing at it rather than
+          // mangling it into a local "/https://..." src below
+          if (checkIfRemoteResource(output)) {
+            return;
+          }
 
           // Keep the src relative: an absolute URL makes next/image treat it
           // as an upstream fetch, which Next 16 blocks in dev because

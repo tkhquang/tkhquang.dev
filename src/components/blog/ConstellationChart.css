@@ -22,7 +22,7 @@
   --chart-tail-quiet-opacity: 0.15;
   --chart-wash-opacity: 1;
 
-  /* Comet timing mirrors the old circuit sparks: one pulse per cycle */
+  /* One comet pulse per cycle; the dash gap fills the rest of the span */
   --comet-cycle: 17s;
   --comet-span: 760px;
 }
@@ -224,7 +224,7 @@
   }
 }
 
-/* Stars twinkle by briefly dimming, the inverse of the old LED blink */
+/* Stars twinkle by briefly dimming, never brightening past resting ink */
 .constellation-chart .chart-twinkle {
   --tw-hi: var(--chart-field-opacity);
   animation: chart-twinkle 9s ease-in-out var(--chart-twinkle-delay, 0s)
@@ -256,8 +256,8 @@
 }
 
 /*
- * One comet per pulse: halo, trail and head share a leading edge, the same
- * dash mechanics the circuit sparks used.
+ * One comet per pulse: halo, trail and head share a leading edge, each
+ * layer's own dash length and lag aligned on the same cycle.
  */
 .constellation-chart .chart-comet {
   fill: none;

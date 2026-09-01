@@ -22,8 +22,8 @@
    */
   /* Balance suits the centered post h1; on the left-aligned feed card
      titles it evened the lines into a short ragged block that stopped
-     well clear of the card's right edge, which the owner read as broken
-     alignment, so cards wrap naturally instead */
+     well clear of the card's right edge, reading as broken alignment,
+     so cards wrap naturally instead */
   .blog-masthead__title,
   .code-container > h1 {
     text-wrap: balance;

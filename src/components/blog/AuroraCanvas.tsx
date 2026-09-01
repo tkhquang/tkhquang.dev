@@ -10,9 +10,9 @@ const VERTEX_SHADER =
  * Two skies for one band. Night: three noise-driven aurora curtains with a
  * sharp lower edge fading upward, vertical ray structure, and a macro
  * envelope so bands come and go along the horizon. Day (u_day): Dawn
- * Horizon, ported from the judged prototype: warped-fbm pastel stratus
- * decks with gilded under-edges, a warm horizon haze, and a veiled low sun,
- * alpha-composited over the CSS dawn gradient.
+ * Horizon: warped-fbm pastel stratus decks with gilded under-edges, a
+ * warm horizon haze, and a veiled low sun, alpha-composited over the
+ * CSS dawn gradient.
  *
  * Both skies carry the Spirit Light idle program: when the pointer rests
  * for a few seconds the flare hands off to a slow two-sine wanderer and
@@ -199,8 +199,9 @@ const PALETTES = {
     stars: 1,
   },
   light: {
-    /* Cloud-shadow ink for the multiply pass; c2/c3 unused in day mode */
-    c1: [0.13, 0.16, 0.24],
+    /* Only day matters: the shader's day branch returns before the
+       night uniforms (c1/c2/c3, intensity, stars) are read */
+    c1: [0, 0, 0],
     c2: [0, 0, 0],
     c3: [0, 0, 0],
     day: 1,
@@ -355,6 +356,11 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
+      /* The reduced-motion still composition: 174250ms crests both
+         breathing sines (174.25s is 10.25 * 17 and 4.25 * 41) and lands
+         24s into a 30s meteor slot, past every possible 0.7s streak
+         window, so the frame never freezes a meteor mid-fall. */
+      const STILL_MS = 174250;
 
       const drawFrame = (now: number) => {
         const t = now / 1000;
@@ -409,23 +415,33 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
 
       resize();
       setPalette();
-      const resizeObserver = new ResizeObserver(resize);
+      /* resize() clears the drawing buffer and setPalette() only sets
+         uniforms, so with no rAF loop the still must repaint by hand.
+         Re-pinning lastPointerMove keeps idle at zero, so every repaint
+         keeps its full-strength flare at the resting pointer. */
+      const redrawStill = () => {
+        if (reducedMotion) {
+          lastPointerMove = STILL_MS;
+          drawFrame(STILL_MS);
+        }
+      };
+      const resizeObserver = new ResizeObserver(() => {
+        resize();
+        redrawStill();
+      });
       resizeObserver.observe(canvas);
-      const themeObserver = new MutationObserver(setPalette);
+      const themeObserver = new MutationObserver(() => {
+        setPalette();
+        redrawStill();
+      });
       themeObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ["data-theme"],
       });
 
       if (reducedMotion) {
-        /* One still composition. 174250ms puts both breathing sines at
-           their crest (174.25s is 10.25 * 17 and 4.25 * 41) and lands 24s
-           into a 30s meteor slot, past every possible 0.7s streak window,
-           so the frame never freezes a meteor mid-fall. Pinning
-           lastPointerMove to the same instant keeps idle at zero, so the
-           still keeps its full-strength flare at the resting pointer. */
-        lastPointerMove = 174250;
-        drawFrame(174250);
+        lastPointerMove = STILL_MS;
+        drawFrame(STILL_MS);
       } else {
         rafId = requestAnimationFrame(loop);
       }
@@ -460,6 +476,9 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
       for (const dispose of disposers) {
         dispose();
       }
+      /* Client-side revisits would otherwise stack live contexts until
+         the browser starts evicting the oldest */
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
 

@@ -8,7 +8,7 @@ interface PostAsideProps {
   posts: MarkdownPost[];
 }
 
-/* Fills the article's right flank (formerly an empty spacer) on wide screens */
+/* Fills the article's right flank on wide screens */
 const PostAside = ({ categorySlug, categoryTitle, posts }: PostAsideProps) => {
   return (
     <aside className="post-aside group hidden min-w-0 flex-1 flex-col pr-4 xl:flex">

@@ -111,12 +111,14 @@
    */
   .blog-pagination {
     ul {
-      @apply border-theme-hairline-soft w-full flex-nowrap items-center gap-1 pt-5 whitespace-nowrap;
+      @apply border-theme-hairline-soft w-full flex-nowrap items-center gap-1 border-t pt-5 whitespace-nowrap;
     }
 
-    /* De-box everything; the design is text on the rail, not chips */
+    /* De-box everything; the design is text on the rail, not chips.
+       The bare-span row is the disabled edge, rendered without an anchor. */
     li > a,
     li > a > span,
+    li > span.pagination-nav,
     [role="combobox"] {
       @apply h-auto rounded-none border-0 bg-transparent font-mono text-xs font-semibold shadow-none;
     }

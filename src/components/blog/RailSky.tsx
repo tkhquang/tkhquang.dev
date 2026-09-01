@@ -41,8 +41,8 @@ const STARS: RailStar[] = [
 ];
 
 /* Figure lines in ignition order, each fading in just after its two
-   endpoint stars; drawn star to star like the bio chart (owner review
-   killed the trimmed-gap atlas convention as looking cut off) */
+   endpoint stars; drawn star to star like the bio chart (trimmed-gap
+   atlas ends read as cut off at this hairline weight) */
 const LINKS = [
   { x1: 120, y1: 80, x2: 88, y2: 170 },
   { x1: 88, y1: 170, x2: 152, y2: 240 },

@@ -72,7 +72,9 @@
       position: absolute;
       display: block;
       content: "";
-      inset: -34% -60px;
+      /* The flank must outrun the 2% translate throw, which passes
+         60px on viewports wider than 2880px */
+      inset: -34% min(-60px, -3%);
       background-image: var(--background-url);
       /* cover, not 105% auto: with a fixed position the flanks must always
          be filled or the grit loading layer shows through as speckles */

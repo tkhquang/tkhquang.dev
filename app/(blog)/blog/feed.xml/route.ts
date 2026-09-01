@@ -23,9 +23,16 @@ export async function GET() {
     categories.map((category) => [category.slug, category.title])
   );
 
-  // Posts arrive newest first, so the first one dates the feed
+  // Posts sort by created_at, so an edit to an older post must still
+  // bump the feed stamp: take the max updated across entries
   const feedUpdated = posts.length
-    ? new Date(posts[0].updated_at || posts[0].created_at)
+    ? new Date(
+        Math.max(
+          ...posts.map((post) =>
+            new Date(post.updated_at || post.created_at).getTime()
+          )
+        )
+      )
     : new Date();
 
   const entries = posts
