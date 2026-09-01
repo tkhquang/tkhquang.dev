@@ -126,7 +126,7 @@ const BlogHeader = ({
             </button>
             <Link
               href="/"
-              className="inline-flex items-center gap-0.5 font-mono text-xs font-bold tracking-wide opacity-80 transition-opacity hover:opacity-100"
+              className="inline-flex items-center gap-0.5 font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
             >
               · By Aleks
               <FiArrowUpRight aria-hidden className="size-3.5" />
