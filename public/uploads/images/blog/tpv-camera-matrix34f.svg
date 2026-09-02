@@ -2,7 +2,7 @@
   <rect width="760" height="372" rx="8" fill="#282a36"/>
 
   <text x="380" y="34" fill="#f8f8f2" font-size="15" font-weight="600" text-anchor="middle">Matrix34f: row-major storage, column-vector basis</text>
-  <text x="380" y="54" fill="#6272a4" font-size="12" text-anchor="middle">float m[3][4] — rows are contiguous in memory, but the axes read DOWN the columns</text>
+  <text x="380" y="54" fill="#6272a4" font-size="12" text-anchor="middle">float m[3][4] - rows are contiguous in memory, but the axes read DOWN the columns</text>
 
   <!-- column headers -->
   <text x="203" y="88" fill="#8be9fd" font-size="12" font-weight="600" text-anchor="middle">col 0 · Right</text>

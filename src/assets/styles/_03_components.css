@@ -435,7 +435,7 @@
         &::before {
           pointer-events: none;
           color: var(--on-surface);
-          content: "\2014 \2009";
+          content: "\2013 \2009";
           margin-right: 0.1em;
         }
       }
