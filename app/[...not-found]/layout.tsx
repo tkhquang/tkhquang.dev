@@ -1,6 +1,7 @@
 import "@/assets/styles/index.css";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Footer, Header, Main } from "@/components/layout";
+import { DEFAULT_LOCALE, getMessages } from "@/lib/i18n";
 import AppProvider from "@/providers/AppProvider";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -16,7 +17,10 @@ export default async function NotFoundLayout({
 }) {
   return (
     <>
-      <AppProvider>
+      <AppProvider
+        locale={DEFAULT_LOCALE}
+        messages={getMessages(DEFAULT_LOCALE)}
+      >
         <Header useScroll={false} />
         <Main className="flex-1">{children}</Main>
         <Footer />

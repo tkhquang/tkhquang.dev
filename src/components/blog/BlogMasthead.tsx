@@ -1,5 +1,6 @@
 import AuroraCanvas from "@/components/blog/AuroraCanvas";
-import { intl } from "@/lib/intl";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
+import { getIntl } from "@/lib/intl";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 
@@ -18,6 +19,8 @@ const BlogMasthead = ({
   totalPosts,
   volume,
 }: BlogMastheadProps) => {
+  const intl = getIntl(DEFAULT_LOCALE);
+
   return (
     /* Pulled under the transparent header so the sky runs behind it.
        data-masthead is the handle BlogHeader watches: the header stays

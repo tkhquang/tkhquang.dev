@@ -6,7 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { intl } from "@/lib/intl";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
+import { getIntl } from "@/lib/intl";
 import { MarkdownPost } from "@/models/markdown.types";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -31,6 +32,8 @@ const PostList = <
   count?: number;
   defaultOpen?: string[];
 }) => {
+  const intl = getIntl(DEFAULT_LOCALE);
+
   return (
     <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
