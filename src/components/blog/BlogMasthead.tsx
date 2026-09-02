@@ -1,4 +1,6 @@
 import AuroraCanvas from "@/components/blog/AuroraCanvas";
+import Link from "next/link";
+import { FiArrowUpRight } from "react-icons/fi";
 
 interface BlogMastheadProps {
   totalPosts: number;
@@ -54,8 +56,21 @@ const BlogMasthead = ({
           moves over it anyway because its listener sits on the section,
           which both this block and the sky underneath bubble up to */}
       <div className="masthead-set relative z-1 mx-auto max-w-xl px-4 py-14 sm:px-6 lg:max-w-(--breakpoint-xl) lg:px-8 lg:py-16">
-        <span className="kicker text-theme-on-band mb-2 block opacity-80">
-          The blog · by Aleks
+        {/* The byline is the same door home as the header's, so it carries
+            the same arrow. The opacity sits on the two halves rather than
+            on the line, since a nested opacity can only dim a child, never
+            let it brighten back to full on hover */}
+        <span className="kicker text-theme-on-band mb-2 block opacity-100">
+          {/* A real space, not a flex gap: the line is selectable now, so
+              what gets copied has to read as a sentence */}
+          <span className="opacity-80">The blog ·</span>{" "}
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1 opacity-80 transition-opacity hover:opacity-100"
+          >
+            by Aleks
+            <FiArrowUpRight aria-hidden className="size-3" />
+          </Link>
         </span>
         <h1 className="blog-masthead__title text-theme-on-band text-5xl leading-tight lg:text-6xl">
           Ljóss
