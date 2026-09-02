@@ -5,21 +5,21 @@ import React from "react";
 /*
  * A star chart, not a tile: six invented constellations drawn to real
  * star-atlas conventions (5-8 stars, chain/tree figures plus one closed
- * crown, magnitude-coded glyphs). The dot-plus-ring glyph is also a PCB
- * via, the one quiet bridge back to the circuit board this replaces.
- * By night it lives (aurora wash, twinkle, shooting stars); by day it is
- * a printed lapis chart. The bio text rectangle stays free of figures.
+ * crown, magnitude-coded glyphs). By night it lives (aurora wash,
+ * twinkle, shooting stars); by day it is a printed lapis chart. The bio
+ * text rectangle stays free of figures.
  * Three skies share the card. The portrait wide slice keeps only
  * crop-safe linework (dotted graticule arcs, a gilt ecliptic), because
  * a plate border cut by the slice crop reads as broken; it serves
- * the phone-narrow cards, where its zoom stays near 1x. Horizontal
- * cards at md and up get the land sky, the same figures re-laid on a
- * 720x240 canvas at the card's own aspect, because slicing the portrait
- * canvas into a 3:1 card magnified every glyph and comet 2x and up.
- * The rail-narrow card at lg and up meet-fits the full Harmonia plate
- * (frame, ticks, boundary meanders, Old Norse labels, magnitude
- * legend), whole outline always visible; the media queries in the CSS
- * pick which sky renders.
+ * every card until it has somewhere better to go. The wide card turns
+ * horizontal at md and takes the land sky, the same figures re-laid on a
+ * 720x240 canvas at that aspect, because slicing the portrait canvas
+ * into a 3:1 card magnified every glyph and comet 2x and up. The rail
+ * card stays narrow until lg, where it becomes the 240px sidebar and
+ * meet-fits the full Harmonia plate (frame, ticks, boundary meanders,
+ * Old Norse labels, magnitude legend), whole outline always visible.
+ * The media queries in the CSS key off the card's variant class to pick
+ * which sky renders.
  */
 
 interface ChartStar {
@@ -344,7 +344,7 @@ const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
       } as React.CSSProperties
     }
   >
-    <circle r={CORE_RADIUS[star.mag]} className="chart-star-core" />
+    <circle r={CORE_RADIUS[star.mag]} />
     {star.mag < 3 && (
       <circle
         r={RING_RADIUS[star.mag as 1 | 2]}

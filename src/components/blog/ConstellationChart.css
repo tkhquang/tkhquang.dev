@@ -28,13 +28,17 @@
 }
 
 /*
- * Three skies, one card. The wide slice is the default; at md and up
- * every bio card runs horizontal (the article's closing card, the
+ * Three skies, one card, and the card's own variant picks the pair it
+ * switches between. The wide slice is the default everywhere. The wide
+ * card runs horizontal from md up (the article's closing card, the
  * full-width feed cards), so the land sky, authored at that aspect,
- * takes over and the slice zoom returns to 1x. On rail-variant cards
- * the framed plate takes over at lg and up, where the sidebar is its
- * 240px column and the meet fit shows the whole plate. The switches
- * are media queries, not container queries, because inline-size
+ * takes over there and the slice zoom returns to 1x. The rail card is
+ * never that wide: it stays a narrow column until lg, where it becomes
+ * the 240px sidebar and the meet-fit plate shows whole. Switching the
+ * rail to the land sky at md would slice a 3:1 canvas into a roughly
+ * square box and magnify the figure-free corridor the land layout keeps
+ * open, which is the exact crop the land sky exists to avoid. The
+ * switches are media queries, not container queries, because inline-size
  * containment zeroes the card's intrinsic width and collapses the
  * shrink-to-fit feed rows around it.
  */
@@ -44,17 +48,17 @@
 }
 
 @media (min-width: 48rem) {
-  .constellation-chart.chart--wide {
+  .blog-info__content--wide .constellation-chart.chart--wide {
     display: none;
   }
 
-  .constellation-chart.chart--land {
+  .blog-info__content--wide .constellation-chart.chart--land {
     display: block;
   }
 }
 
 @media (min-width: 64rem) {
-  .blog-info__content--rail .constellation-chart.chart--land {
+  .blog-info__content--rail .constellation-chart.chart--wide {
     display: none;
   }
 
@@ -226,20 +230,20 @@
 
 /* Stars twinkle by briefly dimming, never brightening past resting ink */
 .constellation-chart .chart-twinkle {
-  --tw-hi: var(--chart-field-opacity);
+  --chart-twinkle-hi: var(--chart-field-opacity);
   animation: chart-twinkle 9s ease-in-out var(--chart-twinkle-delay, 0s)
     infinite;
 }
 
 .constellation-chart .chart-star.chart-twinkle {
-  --tw-hi: var(--chart-main-opacity);
+  --chart-twinkle-hi: var(--chart-main-opacity);
 }
 
 @keyframes chart-twinkle {
   0%,
   82%,
   100% {
-    opacity: var(--tw-hi);
+    opacity: var(--chart-twinkle-hi);
   }
 
   86% {
@@ -247,7 +251,7 @@
   }
 
   92% {
-    opacity: calc(var(--tw-hi) * 0.6);
+    opacity: calc(var(--chart-twinkle-hi) * 0.6);
   }
 
   95% {
