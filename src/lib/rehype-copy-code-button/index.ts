@@ -45,8 +45,11 @@ interface Options {
 
 const WHITESPACE_PATTERN = /\s*\n\s*/g;
 
+/* Collapses each line break to a single space, never to nothing: a
+   selector prettier wraps across lines keeps its descendant combinator
+   that way, and the stray spaces CSS gains elsewhere cost nothing */
 export function trimWhitespace(input: string) {
-  return input.replaceAll(WHITESPACE_PATTERN, "").trim();
+  return input.replaceAll(WHITESPACE_PATTERN, " ").trim();
 }
 
 export default function rehypeCopyCodeButton(
