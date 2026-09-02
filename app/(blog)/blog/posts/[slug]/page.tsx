@@ -210,9 +210,7 @@ export default async function Post({
             posts={relatedPosts}
           />
           <RailSky />
-          <Suspense>
-            <RailSkyDriver />
-          </Suspense>
+          <RailSkyDriver />
         </div>
       </div>
     </div>
