@@ -144,7 +144,7 @@ const BlogHeader = ({
         "band--day h-header-height sticky inset-0 z-(--z-header) m-0 w-full flex-wrap p-0 transition-[background-color,color,box-shadow] duration-300",
         transparent
           ? "text-theme-on-band bg-transparent"
-          : "header__background-transparent--blog text-theme-on-background shadow-box-md",
+          : "header__background-transparent--blog text-theme-on-background shadow-box-md backdrop-blur-xs",
         className
       )}
     >
