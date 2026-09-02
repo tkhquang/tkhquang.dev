@@ -16,8 +16,13 @@ const BlogMasthead = ({
   volume,
 }: BlogMastheadProps) => {
   return (
-    /* Pulled under the transparent header so the sky runs behind it */
-    <section className="band band--day -mt-header-height pt-header-height relative overflow-hidden">
+    /* Pulled under the transparent header so the sky runs behind it.
+       data-masthead is the handle BlogHeader watches: the header stays
+       transparent for exactly as long as this section is behind it. */
+    <section
+      className="band band--day -mt-header-height pt-header-height relative overflow-hidden"
+      data-masthead
+    >
       {/* The sky wrapper must fill the section: the canvas inside positions
           against inset-0, and once this wrapper animates its transform it
           becomes the canvas's containing block, which is also the box the

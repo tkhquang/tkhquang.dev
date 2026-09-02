@@ -4,15 +4,22 @@ import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
+import { useThemeValue } from "@/store/theme";
 import { ScrollManager } from "@/utils/dom";
 import classNames from "classnames";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 
 /* Same rest threshold as the landing Header */
 const SCROLLED_AT = 16;
+
+/* Stands in for --header-height until the theme store reports it */
+const DEFAULT_HEADER_HEIGHT = 60;
+
+/* The fraction of the sky still under the header when the band takes over */
+const HANDOVER_AT = 0.5;
 
 const NAV_LINKS = [
   { href: "/blog", label: "Posts" },
@@ -39,9 +46,45 @@ const BlogHeader = ({
 
   const shouldRestoreScrollOnBack = prevAsPath === "/blog";
 
+  const { cssVariables } = useThemeValue();
+  const headerHeight = useMemo(() => {
+    const height = cssVariables?.["header-height"];
+    return height ? parseFloat(String(height)) : DEFAULT_HEADER_HEIGHT;
+  }, [cssVariables]);
+
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    /*
+     * Over the masthead the switch is geometric rather than a pixel
+     * count, because the sky is 317px tall on a phone and 385px from lg
+     * up. Pulling the observer's top edge down by the header height puts
+     * the measure on the header's own bottom line, and the ratio there
+     * is the share of sky still below it: the band comes in at the
+     * halfway mark rather than waiting for the last of it.
+     */
+    const masthead = isHomeBlog
+      ? document.querySelector("[data-masthead]")
+      : null;
+
+    if (masthead) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const skyLeft = entries[0]?.intersectionRatio ?? 1;
+          setScrolled(skyLeft < HANDOVER_AT);
+        },
+        {
+          rootMargin: `-${headerHeight}px 0px 0px 0px`,
+          threshold: HANDOVER_AT,
+        }
+      );
+      observer.observe(masthead);
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+
     /* The house scroll pub/sub, same as BackToTop and BackButtonIcon */
     const scrollManager = new ScrollManager();
     scrollManager.subscribe({
@@ -54,7 +97,7 @@ const BlogHeader = ({
     return () => {
       scrollManager.destroy();
     };
-  }, []);
+  }, [headerHeight, isHomeBlog]);
 
   /*
    * Transparent only over the list page masthead, whose band extends under
