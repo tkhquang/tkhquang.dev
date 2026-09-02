@@ -61,8 +61,8 @@ const BlogMasthead = ({
             on the line, since a nested opacity can only dim a child, never
             let it brighten back to full on hover */}
         <span className="kicker text-theme-on-band mb-2 block opacity-100">
-          {/* A real space, not a flex gap: the line is selectable now, so
-              what gets copied has to read as a sentence */}
+          {/* A real space, not a flex gap: the line is selectable, so what
+              gets copied has to read as a sentence */}
           <span className="opacity-80">The blog ·</span>{" "}
           <Link
             href="/"

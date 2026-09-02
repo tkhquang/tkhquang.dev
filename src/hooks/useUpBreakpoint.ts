@@ -11,8 +11,8 @@ const getScreens = (): Record<string, string> => {
     return screens;
   }
 
-  // One declaration for the whole pass: the old chain re-read the computed
-  // style inside the reduce, forcing a style resolve per breakpoint.
+  // One declaration for the whole pass: reading the computed style inside
+  // the reduce would force a style resolve per breakpoint.
   const style = window.getComputedStyle(document.body);
 
   screens = Array.from(style).reduce<Record<string, string>>(
@@ -47,8 +47,7 @@ const getQueryList = (query: string): MediaQueryList => {
 };
 
 // The server has no viewport and no computed styles to match against, so it
-// renders false and the store corrects the value right after hydration, which
-// is exactly what the old mount effect did.
+// renders false and the store corrects the value right after hydration.
 const getServerSnapshot = (): boolean => false;
 
 const useUpBreakpoint = (query: string): boolean => {

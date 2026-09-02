@@ -5,9 +5,10 @@ import React from "react";
  * The Reader's Constellation: one invented figure (Lesarinn, the Reader)
  * drawn for the post page's right flank in the bio chart's glyph language:
  * dot-plus-ring magnitude glyphs, hairline figure lines, a few field
- * stars. Where scroll-driven animations are supported the stars ignite one
- * by one as the article is read; everywhere else the chart rests as the
- * finished figure. All choreography lives in RailSky.css; this stays a
+ * stars. The stars ignite one by one as the article is read, driven by
+ * RailSky.css where CSS scroll timelines exist and by RailSkyDriver where
+ * they do not; under reduced motion or below xl the chart rests as the
+ * finished figure. All choreography lives outside this file, which stays a
  * pure server SVG with no pointer story at all.
  */
 

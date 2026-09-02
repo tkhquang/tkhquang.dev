@@ -40,10 +40,10 @@
 
   /*
    * The 45s wander, on a transform so the blurred layer stays composited
-   * instead of repainting. Percentages are of the oversized layer itself;
-   * the throw is tuned by pixel-delta measurement to match the original
-   * background-position sweep (mean quarter-cycle delta ~173), and the
-   * 34% vertical overscan keeps the layer's edges covered at every stop.
+   * instead of repainting. Percentages are of the oversized layer itself,
+   * so the 2% and 20% throw works out to a mean quarter-cycle travel of
+   * roughly 173px at a typical cover width, and the 34% vertical overscan
+   * keeps the layer's edges covered at every stop.
    */
   @keyframes waves {
     0% {
@@ -86,10 +86,6 @@
       z-index: -1;
     }
 
-    /* No bottom dissolve: it wiped the flanks while the photo was still
-       vivid and left a mismatched seam over light paper. The backdrop
-       ending flush with the cover's bottom edge reads as the hero
-       simply ending, which is the better line. */
     @apply shadow-2xl;
 
     &:hover,
@@ -137,7 +133,8 @@
     --shelf-gaming: hsl(352deg 62% 73%);
     --shelf-the-inner-crisis: hsl(267deg 56% 75%);
 
-    /* Aurora hues, shared by the masthead shader and the circuit current */
+    /* Aurora hues. The masthead shader reads them for the sky, the blog
+       base stylesheet for the selection wash and the reading-progress bar */
     --aurora-a: hsl(168deg 70% 62%);
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
@@ -152,10 +149,10 @@
   }
 }
 
-/* The name speaks Fraunces; weights and tracking tuned in the wordmark
-   study (620 at masthead size, 650 at logo size). The markup carries no
-   weight or tracking utilities here so these components-layer rules own
-   the letterforms. */
+/* The name speaks Fraunces. The two sizes need different weights to read
+   at the same density: 620 at masthead size, 650 at the smaller logo size.
+   The markup carries no weight or tracking utilities for either, so these
+   rules own the letterforms outright. */
 .blog-masthead__title {
   font-family: var(--font-display);
   font-optical-sizing: auto;

@@ -1,9 +1,8 @@
 @layer base {
   /*
-   * Typesetter's pass: the craft felt while actually reading. Selection
-   * carries the aurora by night and a lapis wash by day; the --aurora-*
-   * tokens live on html in (blog)/_03_components.css, so they resolve
-   * anywhere in the blog scope.
+   * Selection carries the aurora by night and a lapis wash by day. The
+   * --aurora-* tokens live on html in (blog)/_03_components.css, so they
+   * resolve anywhere in the blog scope.
    */
   ::selection {
     background-color: color-mix(in srgb, var(--aurora-a) 30%, transparent);
@@ -16,14 +15,13 @@
   }
 
   /*
-   * Balanced display lines, orphan-free running text. The post h1 is the
-   * only direct h1 child of the post page wrapper; article-body headings
-   * sit deeper. Browsers without balance/pretty wrap normally.
+   * Balanced display lines. The post h1 is the only direct h1 child of the
+   * post page wrapper, so this reaches it without touching article-body
+   * headings, which sit deeper. Feed card titles are left out on purpose:
+   * balancing a left-aligned title evens it into a short ragged block that
+   * stops well clear of the card's right edge and reads as broken
+   * alignment. Browsers without balance wrap normally.
    */
-  /* Balance suits the centered post h1; on the left-aligned feed card
-     titles it evened the lines into a short ragged block that stopped
-     well clear of the card's right edge, reading as broken alignment,
-     so cards wrap naturally instead */
   .blog-masthead__title,
   .code-container > h1 {
     text-wrap: balance;

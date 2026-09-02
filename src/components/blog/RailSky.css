@@ -2,11 +2,13 @@
  * The Reader's Constellation: the post page's right flank holds a portrait
  * star chart lit by the article's own read position, and the TOC hairline
  * opposite carries a small star riding the same timeline. The scroll
- * choreography is CSS scroll-driven animation animating opacity and
+ * choreography here is CSS scroll-driven animation animating opacity and
  * transform only, gated three ways (scroll timelines, xl width, motion
- * allowed). Everywhere else the resting state is the design: the finished
- * figure at full ink, and the TOC star sitting at the rail top as a
- * finial. Glows are pre-baked radial gradients: no SVG filters, no JS.
+ * allowed). Browsers without scroll timelines get the same choreography
+ * from RailSkyDriver instead; under reduced motion or below xl neither
+ * runs and the resting state is the design: the finished figure at full
+ * ink, and the TOC star sitting at the rail top as a finial. Glows are
+ * pre-baked radial gradients: no SVG filters, no JS.
  */
 
 /* Chart tokens live on the row so the TOC star can share them */
