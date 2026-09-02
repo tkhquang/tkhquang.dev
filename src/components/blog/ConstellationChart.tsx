@@ -332,13 +332,11 @@ const trimLink = (a: ChartStar, b: ChartStar) => {
 const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
   <g
     transform={`translate(${star.x} ${star.y})`}
-    className={[
+    className={classNames(
       "chart-star",
-      star.twinkle ? "chart-twinkle" : "",
-      star.glint ? "chart-glint" : "",
-    ]
-      .filter(Boolean)
-      .join(" ")}
+      star.twinkle && "chart-twinkle",
+      star.glint && "chart-glint"
+    )}
     style={
       {
         "--chart-twinkle-delay": `${(index * 1.7) % 9}s`,
@@ -349,11 +347,10 @@ const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
     {star.mag < 3 && (
       <circle
         r={RING_RADIUS[star.mag as 1 | 2]}
-        className={
-          star.mag === 1
-            ? "chart-star-ring chart-star-ring--mag1"
-            : "chart-star-ring"
-        }
+        className={classNames(
+          "chart-star-ring",
+          star.mag === 1 && "chart-star-ring--mag1"
+        )}
       />
     )}
     {star.mag === 1 && (
@@ -447,11 +444,10 @@ const ChartSky = ({ plate }: { plate?: boolean }) => {
       {ECLIPTIC.map((segment) => (
         <path
           key={segment.d}
-          className={
-            segment.quiet
-              ? "chart-ecliptic chart-ecliptic--quiet"
-              : "chart-ecliptic"
-          }
+          className={classNames(
+            "chart-ecliptic",
+            segment.quiet && "chart-ecliptic--quiet"
+          )}
           d={segment.d}
         />
       ))}
@@ -468,9 +464,10 @@ const ChartSky = ({ plate }: { plate?: boolean }) => {
               transform={
                 label.rotate ? `rotate(90 ${label.x} ${label.y})` : undefined
               }
-              className={
-                label.ink ? "chart-label chart-label--ink" : "chart-label"
-              }
+              className={classNames(
+                "chart-label",
+                label.ink && "chart-label--ink"
+              )}
             >
               {label.text}
             </text>
@@ -849,11 +846,10 @@ const LandSky = () => (
     {ECLIPTIC_LAND.map((segment) => (
       <path
         key={segment.d}
-        className={
-          segment.quiet
-            ? "chart-ecliptic chart-ecliptic--quiet"
-            : "chart-ecliptic"
-        }
+        className={classNames(
+          "chart-ecliptic",
+          segment.quiet && "chart-ecliptic--quiet"
+        )}
         d={segment.d}
       />
     ))}

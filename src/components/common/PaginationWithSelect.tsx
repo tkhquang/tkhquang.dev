@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import clsx from "clsx";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, ComponentType } from "react";
 
@@ -27,6 +28,7 @@ import { useMemo, ComponentType } from "react";
  * @param getPageUrl - Optional function to generate URLs for each page (enables proper links)
  * @param LinkComponent - Optional custom link component (e.g., Next.js Link)
  * @param siblingCount - Number of page buttons to show on each side of current page
+ * @param className - Extra classes for the wrapping nav
  *
  * @example
  * // Basic usage with callback
@@ -205,9 +207,10 @@ const PaginationWithSelect = ({
             {
               "aria-label": "Go to previous page",
               size: "default",
-              className:
-                "pagination-nav" +
-                (currentPage === 1 ? " pagination-nav-disabled" : ""),
+              className: clsx(
+                "pagination-nav",
+                currentPage === 1 && "pagination-nav-disabled"
+              ),
               "aria-disabled": currentPage === 1,
               tabIndex: currentPage === 1 ? -1 : undefined,
             }
@@ -250,9 +253,10 @@ const PaginationWithSelect = ({
             {
               "aria-label": "Go to next page",
               size: "default",
-              className:
-                "pagination-nav" +
-                (currentPage === totalPage ? " pagination-nav-disabled" : ""),
+              className: clsx(
+                "pagination-nav",
+                currentPage === totalPage && "pagination-nav-disabled"
+              ),
               "aria-disabled": currentPage === totalPage,
               tabIndex: currentPage === totalPage ? -1 : undefined,
             }
