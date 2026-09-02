@@ -1,6 +1,6 @@
 import { getCssVariables } from "@/utils/helpers";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 
 export type ThemeMode = "dark" | "light";
 
@@ -35,6 +35,18 @@ export const useThemeValue = () => useAtomValue(themeStore);
 
 export const useThemeInitializer = () => {
   const setTheme = useSetAtom(themeStore);
+
+  /* React 19 strips every script-set attribute from <html> when a hydration
+     failure forces a root client render (react/react#37145), and the inline
+     theme script never re-executes on that path. Re-assert the source of
+     truth in the same commit, before paint, so the theme survives it. */
+  useLayoutEffect(() => {
+    const mode = window.__theme;
+    const root = document.documentElement;
+    if (mode && root.getAttribute("data-theme") !== mode) {
+      root.setAttribute("data-theme", mode);
+    }
+  }, []);
 
   useEffect(() => {
     window.__onThemeChange = setTheme;
