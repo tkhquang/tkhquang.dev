@@ -242,7 +242,15 @@ export const attachResourceInterception = async (page: Page) => {
 
       const fileContent: Uint8Array | undefined = await (async () => {
         try {
-          const absolutePath = path.join(process.cwd(), filePath);
+          /* filePath already carries its root, either "/public" or
+             ".next/static", so the join has no literal segment for
+             Turbopack's file tracer to scope on and it falls back to
+             tracing the project root. The comment opts this call out:
+             it is analysis-only and changes no emitted code. */
+          const absolutePath = path.join(
+            /*turbopackIgnore: true*/ process.cwd(),
+            filePath
+          );
           const buffer = await fsPromise.readFile(absolutePath);
           // console.log(`Intercepted request for ${filePath}: Success`);
 
