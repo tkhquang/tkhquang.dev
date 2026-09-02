@@ -2,7 +2,20 @@ import StackedLayers from "@/components/layout/StackedLayers";
 import { Portfolio, Site } from "@/constants/meta";
 import { cn } from "@/utils/css";
 import type { Metadata } from "next";
-import { Merriweather, Montserrat, Source_Code_Pro } from "next/font/google";
+import {
+  Fraunces,
+  Merriweather,
+  Montserrat,
+  Source_Code_Pro,
+} from "next/font/google";
+
+const fraunces = Fraunces({
+  preload: true,
+  subsets: ["latin"],
+  axes: ["opsz"],
+  display: "swap",
+  variable: "--font-fraunces",
+});
 
 const montserrat = Montserrat({
   preload: true,
@@ -114,7 +127,8 @@ export default async function RootLayout({
       className={cn(
         montserrat.variable,
         merriweather.variable,
-        sourceCodePro.variable
+        sourceCodePro.variable,
+        fraunces.variable
       )}
     >
       <body className="flex min-h-screen flex-col">

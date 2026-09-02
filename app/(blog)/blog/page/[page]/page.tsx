@@ -1,10 +1,10 @@
-import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
-import { getMarkdownParser } from "@/lib/MarkdownParser";
-import { Suspense } from "react";
-
+import BlogMasthead from "@/components/blog/BlogMasthead";
 import NewsFeed from "@/components/blog/NewsFeed";
-import { chunk } from "es-toolkit";
+import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { Blog } from "@/constants/meta";
+import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { chunk } from "es-toolkit";
+import { Suspense } from "react";
 
 export async function generateStaticParams() {
   const markdownParser = await getMarkdownParser();
@@ -30,14 +30,30 @@ export default async function BlogPage({ params }: any) {
   const totalPages = postChunks.length;
   const currentPage = page;
 
+  const shelfCount = new Set(allPosts.map((post) => post.category_slug)).size;
+
+  /* Volume counts calendar years, newspaper style: the first post's
+     year is Vol. I. Frozen at build time, which every deploy refreshes */
+  const sinceYear = allPosts.reduce(
+    (year, post) => Math.min(year, post.created_at.getFullYear()),
+    new Date().getFullYear()
+  );
+  const volume = new Date().getFullYear() - sinceYear + 1;
+
   return (
     <>
+      <BlogMasthead
+        totalPosts={allPosts.length}
+        shelfCount={shelfCount}
+        volume={volume}
+      />
       <NewsFeed
         posts={posts}
         pathSlug="categories"
         pathInfoType="category"
         totalPages={totalPages}
         currentPage={currentPage}
+        hideTitle
       />
       <Suspense>
         <ClientSideGetPageViews

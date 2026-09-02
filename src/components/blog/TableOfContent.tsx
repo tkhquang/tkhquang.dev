@@ -196,19 +196,22 @@ const TocItem = ({
   return (
     <li
       className={cn(
-        "my-2 font-semibold",
+        "font-semibold",
         // Smaller and lighter than the top-level entry it sits under.
-        depth > 0 && "my-1 text-sm font-normal"
+        depth > 0 && "text-sm font-normal"
       )}
     >
       <a
         href={`#${heading.id}`}
         className={cn(
-          "anchor hover:text-theme-primary transition-colors duration-200",
+          "anchor -ml-px block border-l-2 py-1 leading-snug transition-colors duration-200",
           isActive
-            ? "anchor--is-active text-theme-primary"
-            : "text-theme-on-surface"
+            ? "anchor--is-active border-theme-primary text-theme-primary"
+            : /* 85, not 75: under the rail's idle 75 percent dim the product
+                 of the two opacities has to stay past the 4.5 contrast floor */
+              "text-theme-on-surface hover:text-theme-primary border-transparent opacity-85 hover:opacity-100"
         )}
+        style={{ paddingLeft: `${0.75 + depth * 0.75}rem` }}
         onClick={handleClick}
         aria-current={isActive ? "location" : undefined}
       >
@@ -250,8 +253,8 @@ const TocList = ({
   return (
     <ul
       className={cn(
-        "mt-5",
-        !isRoot && "border-theme-on-surface/20 mt-1 ml-2 border-l pl-3"
+        // One shared hairline rail; nesting indents via the link padding
+        isRoot && "border-theme-hairline-soft mt-4 border-l"
       )}
       // Only the outermost list is the landmark; nesting them would announce
       // one per level.
@@ -276,7 +279,7 @@ const TocList = ({
 const MobileTocTrigger = () => (
   <Portal>
     <BsFillMenuButtonWideFill
-      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-hidden lg:hidden"
+      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-hidden xl:hidden"
       aria-label="Open table of contents"
     />
   </Portal>
@@ -301,23 +304,44 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
 
   return (
     <section
-      className="table-of-content fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold transition-opacity duration-500 lg:relative lg:opacity-50 lg:hover:opacity-100"
+      className="table-of-content group fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold xl:relative"
       aria-label="Table of contents navigation"
     >
       {/*
         Nested headings make this list long enough to outgrow the viewport, and a
         sticky element taller than the viewport puts its tail permanently out of
-        reach. `lg:` gates on width, so a short laptop window still hits this.
+        reach. `xl:` gates on width, so a short laptop window still hits this.
+        overflow-y-auto also makes this a scroll container that clips left
+        overflow, so pl-3 keeps the progress star and its glow (which hang
+        left of the rail hairline) inside the clip; items-end on the section
+        pins the right edge, so the padding grows leftward and nothing moves.
+        pb-2 gives the glow's 7px bottom overhang room when the star reaches
+        the rail foot, or the container grows a scrollbar at full scroll.
       */}
       {headings?.length > 0 && (
-        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 lg:block">
-          <h2 className="heading mt-10 text-2xl">Table of Content</h2>
+        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 pb-2 pl-3 xl:block">
+          {/*
+            The idle dim sits on the header and list wrappers instead of the
+            section so the progress star stays legible on the dimmed rail;
+            hovering anywhere in the section still restores full ink.
+            75 percent is the dim floor: the inactive links underneath carry
+            their own 85 percent ink, and 0.75 x 0.85 is the last step that
+            keeps them past the 4.5 contrast ratio the dark theme needs.
+            The dim rides a wrapper rather than the kicker itself, because
+            the kicker utility already sets an opacity: on the same element
+            the two collide at equal specificity and the dim simply replaces
+            the kicker's ink instead of multiplying with it, which would put
+            this header a step brighter than the one PostAside mirrors.
+          */}
+          <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
+            <h2 className="kicker mt-10 mb-1 block">On this page</h2>
+          </div>
 
           {/* Mobile Drawer */}
           <Drawer
             position="left"
             size={300}
-            title="Table of Content"
+            title="On this page"
             trigger={<MobileTocTrigger />}
             className="[&_.drawer\_\_content]:max-w-[calc(100%-2rem)]!"
           >
@@ -329,12 +353,18 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
             />
           </Drawer>
 
-          {/* Desktop TOC List */}
-          <TocList
-            headings={headings}
-            activeAnchor={activeAnchor}
-            onAnchorClick={scrollToHeading}
-          />
+          {/* Desktop TOC List, with the scroll-driven progress star riding
+              the rail hairline (styles and gating in RailSky.css) */}
+          <div className="relative">
+            <span className="toc-progress-star" aria-hidden />
+            <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
+              <TocList
+                headings={headings}
+                activeAnchor={activeAnchor}
+                onAnchorClick={scrollToHeading}
+              />
+            </div>
+          </div>
         </div>
       )}
     </section>

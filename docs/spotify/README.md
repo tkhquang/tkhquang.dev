@@ -38,7 +38,7 @@ SPOTIFY_REFRESH_TOKEN=
 SPOTIFY_AUTH_KEY=
 ```
 
-The refresh token is a single long-lived token for one account (mine) — this is
+The refresh token is a single long-lived token for one account (mine): this is
 a read-only public display, not per-visitor OAuth. The live token lives in
 Upstash Redis under `spotify:refresh_token`. `SPOTIFY_REFRESH_TOKEN` only seeds
 an empty store. `src/services/spotify/token.ts` holds the in-memory access
@@ -69,8 +69,8 @@ body of any non-OK response and renders that section empty rather than failing
 the route, so a 403 shows up as blank sections, not an error page.
 
 1. In the [developer dashboard](https://developer.spotify.com/dashboard), add a
-   redirect URI of `http://127.0.0.1:3000/callback`. Use the loopback IP —
-   Spotify rejects `localhost` as insecure. (The dashboard sometimes displays
+   redirect URI of `http://127.0.0.1:3000/callback`. Use the loopback IP,
+   because Spotify rejects `localhost` as insecure. (The dashboard sometimes displays
    it back as `localhost` after a refresh. Navigate away and return to see the
    saved value.)
 
@@ -80,7 +80,7 @@ the route, so a 403 shows up as blank sections, not an error page.
    https://accounts.spotify.com/authorize?client_id=CLIENT_ID&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fcallback&scope=user-read-currently-playing%20user-read-recently-played%20user-top-read
    ```
 
-3. Approve. The browser lands on a dead `127.0.0.1` URL — nothing needs to be
+3. Approve. The browser lands on a dead `127.0.0.1` URL; nothing needs to be
    listening there. Copy the `code` query parameter out of the address bar.
 
 4. Exchange it (bash, so Git Bash rather than PowerShell):

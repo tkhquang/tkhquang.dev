@@ -1,6 +1,7 @@
 "use client";
 
 import { STACKED_LAYER_1 } from "@/components/layout/StackedLayers";
+import { DEFAULT_LOCALE, type Locale, type Messages } from "@/lib/i18n";
 import StackedLayerProvider from "@/providers/StackedLayerProvider";
 import StoreProvider from "@/providers/StoreProvider";
 import { useSelectedLayoutSegments } from "next/navigation";
@@ -13,19 +14,21 @@ export const AppContext = createContext<
 
 export default function AppProvider({
   children,
+  locale,
+  messages,
 }: {
   children: React.ReactNode;
+  locale: Locale;
+  messages: Messages;
 }) {
   const segments = useSelectedLayoutSegments();
 
   return (
     <StoreProvider>
       <IntlProvider
-        messages={{
-          duration: "{minutes, number, ::00}:{seconds, number, ::00}",
-        }}
-        locale="en"
-        defaultLocale="en"
+        messages={messages}
+        locale={locale}
+        defaultLocale={DEFAULT_LOCALE}
       >
         <StackedLayerProvider id={STACKED_LAYER_1}>
           <AppContext.Provider value={{ segments }}>

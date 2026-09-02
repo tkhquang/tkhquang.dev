@@ -1,0 +1,5 @@
+{
+  "duration": "{minutes, number, ::00}:{seconds, number, ::00}",
+  "postCount": "{count, plural, one {# post} other {# posts}}",
+  "shelfCount": "{count, plural, one {# shelf} other {# shelves}}"
+}

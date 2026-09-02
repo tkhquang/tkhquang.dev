@@ -1,5 +1,5 @@
 import { ImageProps } from "@/components/common/NextImage";
-import { getProcessedImage } from "@/utils/image";
+import { checkIfRemoteResource, getProcessedImage } from "@/utils/image";
 import { Element, Root } from "hast";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
@@ -41,6 +41,7 @@ export default function rehypeCustomNextImage(
 
         try {
           const {
+            placeholder,
             output,
             width = FALLBACK_DIMENSITION.WIDTH,
             height = FALLBACK_DIMENSITION.HEIGHT,
@@ -51,25 +52,27 @@ export default function rehypeCustomNextImage(
             shouldStore: true,
           });
 
-          const isProcessedImage = output.includes(
-            targetPath.replace(/^\.\/public/, "")
-          );
+          // A failed remote fetch falls back to output = the remote URL
+          // itself; keep the plain <img> pointing at it rather than
+          // mangling it into a local "/https://..." src below
+          if (checkIfRemoteResource(output)) {
+            return;
+          }
 
-          const normalizedOutput = output.startsWith("/")
-            ? output
-            : `/${output}`;
-
-          const src = isProcessedImage
-            ? `${process.env.NEXT_PUBLIC_BASE_URL}${normalizedOutput}`
-            : normalizedOutput;
+          // Keep the src relative: an absolute URL makes next/image treat it
+          // as an upstream fetch, which Next 16 blocks in dev because
+          // localhost resolves to a private IP
+          const src = output.startsWith("/") ? output : `/${output}`;
 
           // Update the <img> node to <next-image>
           node.tagName = "next-image";
           node.properties = {
             alt: originalAlt as string,
-            height,
             // No placeholder="blur": next/image wraps it in an SVG feGaussianBlur
-            // filter, which tanks rendering perf on some browsers (Android Firefox)
+            // filter, which tanks rendering perf on some browsers (Android
+            // Firefox). NextImage paints blurDataURL as a CSS background instead
+            blurDataURL: placeholder,
+            height,
             sizes: "(max-width: 768px) 100vw, 768px",
             src,
             width,

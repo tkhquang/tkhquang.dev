@@ -1,8 +1,11 @@
 import BlogInfo from "@/components/blog/BlogInfo";
 import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
+import PostAside from "@/components/blog/PostAside";
 import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
+import RailSky from "@/components/blog/RailSky";
+import RailSkyDriver from "@/components/blog/RailSkyDriver";
 import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
@@ -78,6 +81,19 @@ export default async function Post({
 
   const category = await markdownParser.getCategoryBySlug(post.category_slug);
 
+  /* Posts embed diagrams as raw <pre class="mermaid"> blocks (fenced form
+     kept for safety); skip the CDN module entirely when neither appears */
+  const hasMermaidDiagram =
+    post.content.includes('class="mermaid') ||
+    post.content.includes("```mermaid");
+
+  const relatedPosts = (await markdownParser.getAllPosts())
+    .filter(
+      (other) =>
+        other.category_slug === post.category_slug && other.slug !== post.slug
+    )
+    .slice(0, 3);
+
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;
 
@@ -95,7 +111,6 @@ export default async function Post({
     sizes: "(max-width: 768px) 100vw, 1024px",
     width: coverWidth ?? 1280,
     blurDataURL: post.coverData.blurDataURL,
-    placeholder: "blur",
     backgroundClassName: "dark:invert-0 invert",
     ...(coverWidth && coverHeight
       ? {
@@ -126,24 +141,31 @@ export default async function Post({
         {post.cover_image && <NextImage {...post.coverData} {...coverProps} />}
       </header>
 
-      <h1 className="heading mx-auto my-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
+      <h1 className="heading mx-auto mt-4 mb-8 w-full text-center text-3xl md:w-10/12 lg:text-5xl">
         {post.title}
       </h1>
 
-      <div className="flex">
+      {/* The row hosts the article's view timeline (see RailSky.css): the
+          section owns it, and both flanking rails consume it */}
+      <div className="post-row flex">
         <TableOfContent headings={headings} />
 
-        <section className="container max-w-(--breakpoint-md)!">
+        <section className="post-row__article container mx-auto max-w-(--breakpoint-md)!">
           <article className="article">
-            <div className="article__meta my-3">
-              <PostMeta post={post} />
-            </div>
             <div className="article__path-info">
               <PathInfo<MarkdownCategory, "slug">
                 item={category}
                 pathInfoType="category"
                 pathSlug="categories"
               />
+            </div>
+            {post.description && (
+              <p className="article__lede my-4 font-serif text-lg italic opacity-85">
+                {post.description}
+              </p>
+            )}
+            <div className="article__meta border-theme-hairline-soft mt-3 mb-6 border-b pb-4">
+              <PostMeta post={post} />
             </div>
 
             <div
@@ -154,14 +176,19 @@ export default async function Post({
             >
               {html}
             </div>
-            <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
+            {hasMermaidDiagram && (
+              <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
+            )}
 
             <div className="article__footer my-6 flex">
               <TagList post={post} />
             </div>
             <hr className="my-6" />
             <div className="w-full">
-              <BlogInfo className="[&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 md:[&_.author\_\_image--container]:mb-0 [&_img]:size-[120px]! md:[&_img]:size-[80px]!" />
+              <BlogInfo
+                variant="wide"
+                className="[&_.author]:space-x-0 md:[&_.author]:space-x-4 md:[&_.author]:px-8 md:[&_.author\_\_image--container]:mb-0 [&_img]:size-[120px]! md:[&_img]:size-[80px]!"
+              />
             </div>
             <hr className="my-6" />
             <div className="article-comments w-full p-2">
@@ -173,9 +200,18 @@ export default async function Post({
           </article>
         </section>
 
-        <section className="underconstruction hidden flex-auto flex-col lg:flex">
-          <p>&nbsp;</p>
-        </section>
+        {/* The wrapper takes over the flank's flex-item role so the aside
+            keeps its stretch-and-stick behavior while the constellation
+            fills the runway below its rail */}
+        <div className="relative hidden min-w-0 flex-1 xl:flex">
+          <PostAside
+            categoryTitle={category.title}
+            categorySlug={category.slug}
+            posts={relatedPosts}
+          />
+          <RailSky />
+          <RailSkyDriver />
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
+import { getIntl } from "@/lib/intl";
 import { MarkdownPost } from "@/models/markdown.types";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -19,33 +21,51 @@ const PostList = <
   list,
   listSlugField = "slug" as K,
   title,
+  count = list.length,
+  defaultOpen,
 }: {
   title: string;
   list: T[];
   groupedPostsBySlug: Record<string, MarkdownPost[]>;
   listSlugField?: K;
+  /* The archive headlines its post total, not its group count */
+  count?: number;
+  defaultOpen?: string[];
 }) => {
+  const intl = getIntl(DEFAULT_LOCALE);
+
   return (
     <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
         <HorizontalLine className="h-2px mb-3" />
 
         <h1 className="text-center text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-          {title} ({list.length})
+          {title} ({count})
         </h1>
 
         <HorizontalLine className="h-2px mt-3" />
 
-        <Accordion type="multiple" className="my-8">
+        <Accordion type="multiple" className="my-8" defaultValue={defaultOpen}>
           {list.map((item) => {
             const fieldSlug = item[listSlugField] as string;
+            const postCount = groupedPostsBySlug[fieldSlug]?.length ?? 0;
 
             return (
               <AccordionItem value={fieldSlug} key={fieldSlug}>
-                <AccordionTrigger>{item.title}</AccordionTrigger>
+                <AccordionTrigger>
+                  <span className="flex flex-1 items-baseline justify-between gap-4">
+                    <span>{item.title}</span>
+                    <span className="kicker tabular-nums">
+                      {intl.formatMessage(
+                        { id: "postCount" },
+                        { count: postCount }
+                      )}
+                    </span>
+                  </span>
+                </AccordionTrigger>
                 <AccordionContent>
                   <ul className="post__list">
-                    {groupedPostsBySlug[fieldSlug].map((post) => {
+                    {(groupedPostsBySlug[fieldSlug] ?? []).map((post) => {
                       return (
                         <li
                           className="post__item hover:bg-theme-secondary hover:text-theme-on-secondary mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500"

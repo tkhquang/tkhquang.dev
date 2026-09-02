@@ -29,9 +29,11 @@
   @apply text-theme-primary relative leading-tight font-bold tracking-tight;
 }
 
-/* Editorial eyebrow/meta device, exported from the blog's PostMeta styling */
+/* Editorial eyebrow/meta device, exported from the blog's PostMeta styling.
+   85 percent, not 75: at 75 the dark theme's shelf accents and primary land
+   at 4.0 to 4.2 against raised surfaces, under the 4.5 contrast floor */
 @utility kicker {
-  @apply font-mono text-xs font-semibold tracking-wider uppercase opacity-75;
+  @apply font-mono text-xs font-semibold tracking-wider uppercase opacity-85;
 }
 
 @utility primary {

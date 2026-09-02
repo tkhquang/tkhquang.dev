@@ -1,7 +1,6 @@
-import "server-only";
-
 import fs from "fs";
 import path from "path";
+import "server-only";
 
 export const postsDirectory = path.join(process.cwd(), "content", "posts");
 

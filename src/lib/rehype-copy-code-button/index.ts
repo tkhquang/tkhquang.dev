@@ -4,34 +4,36 @@ import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 
 const DEFAULT_STYLES = /* css */ `
-    [data-rehype-pretty-code-figure] pre {
-      position: relative;
-    }
+  [data-rehype-pretty-code-figure] pre {
+    position: relative;
+  }
 
-    [data-rehype-pretty-code-figure][data-visibility="hover"] button[data-rehype-pretty-copy-button] {
-      transition: opacity 300ms ease-in-out;
-      opacity: 0;
-    }
-
-    [data-rehype-pretty-code-figure][data-visibility="hover"]:hover button[data-rehype-pretty-copy-button] {
-      opacity: 1;
-    }
-
+  [data-rehype-pretty-code-figure][data-visibility="hover"]
     button[data-rehype-pretty-copy-button] {
-      position: absolute;
-      top: 0.5em;
-      right: 0.5em;
-      width: 24px;
-      height: 24px;
-    }
+    transition: opacity 300ms ease-in-out;
+    opacity: 0;
+  }
 
-    .rehype-pretty-copy-button-icon {
-      width: 24px;
-      height: 24px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
+  [data-rehype-pretty-code-figure][data-visibility="hover"]:hover
+    button[data-rehype-pretty-copy-button] {
+    opacity: 1;
+  }
+
+  button[data-rehype-pretty-copy-button] {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    width: 24px;
+    height: 24px;
+  }
+
+  .rehype-pretty-copy-button-icon {
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 `;
 
 interface Options {
@@ -43,8 +45,11 @@ interface Options {
 
 const WHITESPACE_PATTERN = /\s*\n\s*/g;
 
+/* Collapses each line break to a single space, never to nothing: a
+   selector prettier wraps across lines keeps its descendant combinator
+   that way, and the stray spaces CSS gains elsewhere cost nothing */
 export function trimWhitespace(input: string) {
-  return input.replaceAll(WHITESPACE_PATTERN, "").trim();
+  return input.replaceAll(WHITESPACE_PATTERN, " ").trim();
 }
 
 export default function rehypeCopyCodeButton(
@@ -57,6 +62,8 @@ export default function rehypeCopyCodeButton(
       visibility = "always",
       passDataCode = false,
     } = options || {};
+
+    let matchedFigure = false;
 
     visit(tree, "element", (node, _index, _parent) => {
       const element = node as Element;
@@ -74,6 +81,8 @@ export default function rehypeCopyCodeButton(
 
       const preNode = element.children[preNodeIndex] as Element;
 
+      matchedFigure = true;
+
       preNode.properties = {
         ...preNode.properties,
         "data-duration": `${feedbackDuration}`,
@@ -86,25 +95,47 @@ export default function rehypeCopyCodeButton(
       };
       preNode.tagName = "rehype-pretty-copy-button-pre";
 
+      /* Hoist the language onto the figure so CSS can badge the frame.
+         "plaintext" is the defaultLang filler, not worth a badge, and a
+         titled figure badges through its title bar instead (the
+         figcaption keeps its own data-language), so no hoist there */
+      const hasTitle = element.children.some((childNode) => {
+        const child = childNode as Element;
+
+        return (
+          child.type === "element" &&
+          (child.properties?.hasOwnProperty("dataRehypePrettyCodeTitle") ||
+            child.properties?.hasOwnProperty("data-rehype-pretty-code-title"))
+        );
+      });
+
+      const language =
+        preNode.properties["data-language"] ?? preNode.properties.dataLanguage;
+
       element.properties = {
         ...element.properties,
         "data-visibility": `${visibility}`,
+        ...(language && language !== "plaintext" && !hasTitle
+          ? { "data-language": `${language}` }
+          : {}),
       };
-
-      if (injectStyles !== false) {
-        tree.children.push({
-          children: [
-            {
-              type: "text",
-              value: trimWhitespace(injectStyles || DEFAULT_STYLES),
-            },
-          ],
-          properties: {},
-          tagName: "style",
-          type: "element",
-        });
-      }
     });
+
+    /* One shared style element per tree, never one per visited figure */
+    if (matchedFigure && injectStyles !== false) {
+      tree.children.push({
+        children: [
+          {
+            type: "text",
+            value: trimWhitespace(injectStyles || DEFAULT_STYLES),
+          },
+        ],
+        properties: {},
+        tagName: "style",
+        type: "element",
+      });
+    }
+
     return tree;
   };
 }

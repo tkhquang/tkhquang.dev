@@ -2,6 +2,7 @@
 
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
+import { ScrollManager } from "@/utils/dom";
 import classNames from "classnames";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -22,23 +23,30 @@ interface HeaderProps extends React.ComponentProps<"header"> {
 }
 
 const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
-  const [scrolled, setScrolled] = useState(!useScroll);
+  const [scrolledPastTop, setScrolledPastTop] = useState(false);
+
+  /*
+   * Without scroll tracking the header is solid from the very first paint,
+   * so the flag is derived here rather than stored: no effect has to flip it.
+   */
+  const scrolled = !useScroll || scrolledPastTop;
 
   useEffect(() => {
     if (!useScroll) {
-      setScrolled(true);
       return;
     }
 
-    const update = () => {
-      setScrolled(window.scrollY > SCROLLED_AT);
-    };
-
-    update();
-    window.addEventListener("scroll", update, { passive: true });
+    /* The house scroll pub/sub, same as BlogHeader and BackToTop */
+    const scrollManager = new ScrollManager();
+    scrollManager.subscribe({
+      id: "landing-header",
+      callback: ({ scrollY }) => {
+        setScrolledPastTop(scrollY > SCROLLED_AT);
+      },
+    });
 
     return () => {
-      window.removeEventListener("scroll", update);
+      scrollManager.destroy();
     };
   }, [useScroll]);
 

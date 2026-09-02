@@ -267,6 +267,13 @@ export default function Drawer({
   useEffect(() => {
     if (mounted && open && !shouldRender) {
       // Show component and trigger entrance animation
+      // The extra render pass is deliberate: the Dialog subtree exists only
+      // while shouldRender is true, so it has to be committed before the double
+      // RAF below can hand animateIn a mounted node, and it has to stay
+      // committed after open flips back to false so animateOut can play against
+      // a live node and unmount it from its own onComplete. Deriving this
+      // during render cannot express that second half.
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- see above
       setShouldRender(true);
 
       // Use RAF to ensure DOM is ready before animating

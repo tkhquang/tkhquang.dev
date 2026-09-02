@@ -24,7 +24,6 @@ const HeroPortrait = async ({
           className="hero-portrait__image object-cover object-[15%_50%]"
           src={portraitImage.source}
           alt="Aleks"
-          placeholder="blur"
           blurDataURL={portraitImage.placeholder}
           loading="eager"
           containerClassName="hero-portrait__image-frame"

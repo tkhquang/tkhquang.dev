@@ -1,4 +1,6 @@
 const config = {
+  // Local scratch space, gitignored
+  ignoreFiles: ["00_idea/**"],
   extends: ["stylelint-config-tailwindcss"],
   plugins: ["stylelint-prettier"],
   rules: {

@@ -128,7 +128,13 @@ export default function NowPlayingHero({
       : 0;
 
   return (
+    // The delegated click is a mouse-only shortcut to the href the title anchor
+    // already exposes, so a keyboard reaches the track by tabbing to that
+    // anchor and the card itself carries no semantics. `presentation` states
+    // that, and since a div's implicit role is generic it exposes nothing to
+    // begin with, so the accessibility tree is unchanged.
     <div
+      role="presentation"
       className={clsx([
         // Same contract as the list rows: the card delegates its clicks, and
         // `group` drives the underline on card hover.

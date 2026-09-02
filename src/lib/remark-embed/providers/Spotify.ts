@@ -20,8 +20,9 @@ class Spotify extends Provider {
 
     this.regexp =
       /^https:\/\/open\.spotify\.com\/(user\/[A-Za-z0-9-_]*\/playlist|track|artist|album)\/([A-Za-z0-9-_?=]+)/i;
-    // cwd-anchored like the content/ reads in MarkdownParser — import.meta.url
-    // points at Turbopack's relocated module path (under .next on Windows dev)
+    // cwd-anchored like the content/ reads in MarkdownParser, because
+    // import.meta.url points at Turbopack's relocated module path (under
+    // .next on Windows dev)
     this.template = path.join(
       process.cwd(),
       "src/lib/remark-embed/templates/Spotify.mustache"

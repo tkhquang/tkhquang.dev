@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import PaginationWithSelect from "@/components/common/PaginationWithSelect";
 import { AppContext } from "@/providers/AppProvider";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 
@@ -14,6 +14,7 @@ const BlogPagination = ({ totalPages }: { totalPages: number }) => {
 
   return (
     <PaginationWithSelect
+      className="blog-pagination"
       currentPage={curentPage}
       totalPage={totalPages}
       getPageUrl={(page) => `/blog/page/${page}`}

@@ -1,5 +1,3 @@
-import "server-only";
-
 import {
   CurrentPlayingResponse,
   RecentlyPlayedResponse,
@@ -9,6 +7,7 @@ import {
   TopItemsTimeRange,
 } from "@/models/samples/spotify.models";
 import { getAccessToken } from "@/services/spotify/token";
+import "server-only";
 
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
@@ -44,7 +43,7 @@ export const getNowPlaying = async () => {
  * Read endpoints backing the /music page. Unlike `getNowPlaying`, these never
  * throw: the page renders four independent sections and one failing endpoint
  * must blank that section, not the route. A 403 here almost always means the
- * stored refresh token predates the scope the endpoint needs — see
+ * stored refresh token predates the scope the endpoint needs; see
  * docs/spotify/README.md.
  */
 const fetchFromSpotify = async <T>(
@@ -83,7 +82,7 @@ const RECENTLY_PLAYED_REVALIDATE = 300;
 const TOP_ITEMS_REVALIDATE = 86400;
 
 /**
- * The last 50 plays. That is the whole window Spotify exposes — `before` and
+ * The last 50 plays. That is the whole window Spotify exposes: `before` and
  * `after` only paginate inside it, so there is no deeper history to request.
  */
 export const getRecentlyPlayed = async (limit = 50) => {

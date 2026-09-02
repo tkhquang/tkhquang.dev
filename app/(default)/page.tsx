@@ -4,8 +4,8 @@ import Contact from "@/components/contact/Contact";
 import Landing from "@/components/landing/Landing";
 import Stacks from "@/components/landing/stacks/Stacks";
 import Writing from "@/components/landing/writing/Writing";
-import Projects from "@/components/projects/Projects";
 import { Footer, Header, Main } from "@/components/layout";
+import Projects from "@/components/projects/Projects";
 import { Suspense } from "react";
 
 export const dynamic = "force-static";

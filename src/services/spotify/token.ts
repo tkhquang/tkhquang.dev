@@ -1,8 +1,7 @@
-import "server-only";
-
 import { SPOTIFY_PROFILE_URL } from "@/constants/spotify";
 import { Redis } from "@upstash/redis";
 import { addMonths, differenceInDays } from "date-fns";
+import "server-only";
 
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 const STORE_KEY = "spotify:refresh_token";

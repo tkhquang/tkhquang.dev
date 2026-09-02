@@ -42,8 +42,10 @@ const FEATURED: FeaturedProject[] = [
 
 const LIST_SIZE = 6;
 
+/* 75 percent, not 65: dark-theme text at 65 measures 4.0 to 1 on the
+   raised card, under the 4.5 contrast floor */
 const REPO_META_CLASS =
-  "flex shrink-0 items-center gap-1 font-mono text-xs opacity-65";
+  "flex shrink-0 items-center gap-1 font-mono text-xs opacity-75";
 
 const Projects = async () => {
   const data = await fetchGitHubProjects();

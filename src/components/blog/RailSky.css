@@ -1,0 +1,343 @@
+/*
+ * The Reader's Constellation: the post page's right flank holds a portrait
+ * star chart lit by the article's own read position, and the TOC hairline
+ * opposite carries a small star riding the same timeline. The scroll
+ * choreography here is CSS scroll-driven animation animating opacity and
+ * transform only, gated three ways (scroll timelines, xl width, motion
+ * allowed). Browsers without scroll timelines get the same choreography
+ * from RailSkyDriver instead; under reduced motion or below xl neither
+ * runs and the resting state is the design: the finished figure at full
+ * ink, and the TOC star sitting at the rail top as a finial. Glows are
+ * pre-baked radial gradients: no SVG filters, no JS.
+ */
+
+/* Chart tokens live on the row so the TOC star can share them */
+.post-row {
+  --rail-line: color-mix(in srgb, var(--on-surface) 16%, transparent);
+  --rail-star: hsl(199deg 90% 85%);
+  --rail-main-opacity: 0.9;
+  --rail-field-opacity: 0.45;
+}
+
+/*
+ * The chart pane is absolutely positioned so it can never stretch the row
+ * under a short post. The inset-top clears the tallest "More from" rail,
+ * and overflow: clip guards short columns without creating a scroll
+ * container (overflow: hidden would pin the sticky frame in place).
+ */
+.rail-sky {
+  position: absolute;
+  inset: 26rem 0 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+/* Sticks just under the stuck category rail, like the rails themselves */
+.rail-sky__frame {
+  position: sticky;
+  top: calc(var(--header-height) + 26rem);
+}
+
+.rail-sky__chart {
+  display: block;
+  width: 100%;
+  max-width: 16rem;
+  height: max(0px, calc(100vh - var(--header-height) - 28rem));
+  max-height: 53.75rem;
+  margin-left: 1rem;
+}
+
+.rail-sky .rail-star-core {
+  fill: var(--rail-star);
+}
+
+.rail-sky .rail-star-ring {
+  fill: none;
+  stroke: var(--rail-star);
+  stroke-width: 0.6;
+}
+
+.rail-sky .rail-star-tick {
+  stroke: var(--rail-star);
+  stroke-width: 0.8;
+}
+
+.rail-sky .rail-figure {
+  stroke: var(--rail-line);
+  stroke-width: 0.75;
+  fill: none;
+}
+
+.rail-sky .rail-field circle {
+  fill: var(--rail-star);
+  opacity: var(--rail-field-opacity);
+}
+
+.rail-sky .rail-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  fill: var(--on-surface);
+  opacity: 0.32;
+}
+
+/* The bio chart's twinkle rhythm, copied locally so this file never
+   depends on ConstellationChart.css loading */
+.rail-sky .rail-twinkle {
+  --rail-twinkle-hi: var(--rail-main-opacity);
+
+  opacity: var(--rail-main-opacity);
+  animation: rail-sky-twinkle 9s ease-in-out var(--rail-twinkle-delay, 0s)
+    infinite;
+}
+
+.rail-sky .rail-twinkle--field {
+  --rail-twinkle-hi: 1;
+
+  opacity: 1;
+}
+
+@keyframes rail-sky-twinkle {
+  0%,
+  82%,
+  100% {
+    opacity: var(--rail-twinkle-hi, 1);
+  }
+
+  86% {
+    opacity: 0.15;
+  }
+
+  92% {
+    opacity: calc(var(--rail-twinkle-hi, 1) * 0.6);
+  }
+
+  95% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes rail-sky-glint {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+/*
+ * The TOC progress star: a full-height strip against the list's hairline
+ * whose glyph sits at the strip's bottom. The base transform parks the
+ * glyph at the rail top (only upward overflow, which is unreachable, so
+ * the strip never grows the list's scroll area); the scroll-driven travel
+ * walks it down to the rail's foot as the article is read. Without scroll
+ * timelines it rests as a finial at the top.
+ */
+.toc-progress-star {
+  position: absolute;
+  inset: 0 auto 0 -3px;
+  width: 7px;
+  transform: translateY(calc(-100% + 7px));
+  pointer-events: none;
+}
+
+.toc-progress-star::before {
+  content: "";
+  position: absolute;
+  bottom: -7px;
+  left: -7px;
+  width: 21px;
+  height: 21px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--rail-star) 45%, transparent),
+    transparent 70%
+  );
+}
+
+.toc-progress-star::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  background: var(--rail-star);
+  clip-path: polygon(
+    50% 0%,
+    61% 39%,
+    100% 50%,
+    61% 61%,
+    50% 100%,
+    39% 61%,
+    0% 50%,
+    39% 39%
+  );
+}
+
+/*
+ * Scroll-driven choreography. The ungated resting state above is the
+ * complete figure, so Firefox stable, reduced motion, and narrow
+ * viewports all see a designed static chart, never a half-lit one. The
+ * animation shorthand resets animation-timeline, so the shorthand always
+ * comes first.
+ */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 80rem) and (prefers-reduced-motion: no-preference) {
+    .post-row {
+      timeline-scope: --article;
+    }
+
+    .post-row__article {
+      view-timeline: --article block;
+    }
+
+    .rail-sky .rail-star,
+    .rail-sky .rail-figure {
+      opacity: 0;
+      animation: rail-sky-ignite linear both;
+      animation-timeline: --article;
+    }
+
+    /* Staggered ignition windows, a relay of light: each figure line
+       opens just after its two endpoint stars. The last windows close
+       near contain 88% because the article section also holds the tags,
+       author card, and comments; the figure completes with the prose.
+       The .rail-sky prefix keeps these at the shorthand rule's
+       specificity, since the shorthand resets animation-range too. */
+    .rail-sky .rail-star--s1 {
+      animation-range: contain 2% contain 9%;
+    }
+
+    .rail-sky .rail-star--s2 {
+      animation-range: contain 8% contain 16%;
+    }
+
+    .rail-sky .rail-star--s3 {
+      animation-range: contain 15% contain 23%;
+    }
+
+    .rail-sky .rail-star--s4 {
+      animation-range: contain 23% contain 31%;
+    }
+
+    .rail-sky .rail-star--s5 {
+      animation-range: contain 31% contain 39%;
+    }
+
+    .rail-sky .rail-star--s6 {
+      animation-range: contain 40% contain 48%;
+    }
+
+    .rail-sky .rail-star--s7 {
+      animation-range: contain 50% contain 58%;
+    }
+
+    .rail-sky .rail-star--s8 {
+      animation-range: contain 60% contain 68%;
+    }
+
+    .rail-sky .rail-star--s9 {
+      animation-range: contain 70% contain 78%;
+    }
+
+    .rail-sky .rail-figure--l1 {
+      animation-range: contain 16% contain 22%;
+    }
+
+    .rail-sky .rail-figure--l2 {
+      animation-range: contain 23% contain 29%;
+    }
+
+    .rail-sky .rail-figure--l3 {
+      animation-range: contain 31% contain 37%;
+    }
+
+    .rail-sky .rail-figure--l4 {
+      animation-range: contain 39% contain 45%;
+    }
+
+    .rail-sky .rail-figure--l5 {
+      animation-range: contain 48% contain 54%;
+    }
+
+    .rail-sky .rail-figure--l6 {
+      animation-range: contain 58% contain 64%;
+    }
+
+    .rail-sky .rail-figure--l7 {
+      animation-range: contain 68% contain 74%;
+    }
+
+    .rail-sky .rail-figure--l8 {
+      animation-range: contain 78% contain 86%;
+    }
+
+    .toc-progress-star {
+      animation: rail-sky-travel linear both;
+      animation-timeline: --article;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+
+@keyframes rail-sky-ignite {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rail-sky-travel {
+  from {
+    transform: translateY(calc(-100% + 7px));
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Day: printed lapis ink, no glow, and only the two mag-1 stars keep the
+   printed chart's quiet glint */
+html[data-theme="light"] .post-row {
+  --rail-line: color-mix(in srgb, var(--primary) 28%, transparent);
+  --rail-star: var(--primary);
+  --rail-main-opacity: 0.55;
+  --rail-field-opacity: 0.3;
+}
+
+html[data-theme="light"] .rail-sky {
+  .rail-glow {
+    display: none;
+  }
+
+  .rail-twinkle {
+    animation: none;
+  }
+
+  .rail-glint {
+    animation: rail-sky-glint 8s ease-in-out var(--rail-twinkle-delay, 0s)
+      infinite;
+  }
+
+  .rail-label {
+    fill: var(--primary);
+    opacity: 0.45;
+  }
+}
+
+html[data-theme="light"] .toc-progress-star::before {
+  display: none;
+}
+
+/* The light glint rule above carries theme specificity, so this kill
+   switch has to match it or light mode keeps glinting under reduce */
+@media (prefers-reduced-motion: reduce) {
+  .rail-sky .rail-twinkle,
+  html[data-theme="light"] .rail-sky .rail-glint {
+    animation: none;
+  }
+}

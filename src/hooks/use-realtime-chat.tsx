@@ -1,7 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface UseRealtimeChatProps {
   roomName: string;
@@ -22,9 +22,9 @@ const EVENT_MESSAGE_TYPE = "message";
 export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
   const supabase = createClient();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [channel, setChannel] = useState<ReturnType<
-    typeof supabase.channel
-  > | null>(null);
+  // The channel is a mutable external resource, not render state: nothing in the
+  // returned API reads it during render, so a ref avoids a second render pass.
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
   // Se renderiza la pagina, y se conecta al channale de supabase
@@ -41,7 +41,7 @@ export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
         }
       });
 
-    setChannel(newChannel);
+    channelRef.current = newChannel;
 
     return () => {
       supabase.removeChannel(newChannel);
@@ -50,6 +50,7 @@ export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
 
   const sendMessage = useCallback(
     async (content: string) => {
+      const channel = channelRef.current;
       if (!channel || !isConnected) return;
 
       const message: ChatMessage = {
@@ -70,7 +71,7 @@ export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
         payload: message,
       });
     },
-    [channel, isConnected, username]
+    [isConnected, username]
   );
 
   return { messages, sendMessage, isConnected };

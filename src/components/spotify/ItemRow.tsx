@@ -224,6 +224,13 @@ export function TrackRow({
   trailing?: React.ReactNode;
 }) {
   return (
+    // Mouse-only affordance. The delegated row click forwards to the same href
+    // the title anchor already exposes, so a keyboard reaches the track by
+    // tabbing to that anchor. Giving the `li` an interactive role, a tab stop
+    // and a key handler would wrap the anchors it already contains in a second
+    // control, which is both invalid nesting and an extra tab stop to the same
+    // destination.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <li
       className={rowClassName}
       onClick={(event) => handleRowClick(track.external_urls?.spotify, event)}
@@ -274,6 +281,10 @@ export function ArtistRow({
   const genres = artist.genres?.slice(0, 2).join(", ");
 
   return (
+    // Mouse-only affordance, same reasoning as `TrackRow`: the artist name
+    // anchor is the keyboard route to this href, so the row click stays a
+    // pointer convenience rather than a second control around that anchor.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
     <li
       className={rowClassName}
       onClick={(event) => handleRowClick(artist.external_urls?.spotify, event)}

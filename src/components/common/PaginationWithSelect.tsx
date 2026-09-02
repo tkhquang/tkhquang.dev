@@ -1,17 +1,8 @@
 "use client";
 
-import { useMemo, ComponentType } from "react";
-import {
-  ChevronFirstIcon,
-  ChevronLastIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "lucide-react";
-
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
@@ -22,6 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import clsx from "clsx";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useMemo, ComponentType } from "react";
 
 /**
  * PaginationWithSelect Component
@@ -34,6 +28,7 @@ import {
  * @param getPageUrl - Optional function to generate URLs for each page (enables proper links)
  * @param LinkComponent - Optional custom link component (e.g., Next.js Link)
  * @param siblingCount - Number of page buttons to show on each side of current page
+ * @param className - Extra classes for the wrapping nav
  *
  * @example
  * // Basic usage with callback
@@ -60,6 +55,7 @@ type Props = {
   siblingCount?: number;
   getPageUrl?: (page: number) => string;
   LinkComponent?: ComponentType<any>;
+  className?: string;
 };
 
 const DOTS = "...";
@@ -70,6 +66,7 @@ const range = (start: number, end: number) => {
 };
 
 const PaginationWithSelect = ({
+  className,
   currentPage,
   totalPage,
   onPageChange,
@@ -128,21 +125,10 @@ const PaginationWithSelect = ({
 
   const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    page: number,
-    isDisabled: boolean = false
+    page: number
   ) => {
-    // Prevent click if disabled
-    if (isDisabled) {
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-
-    // If using custom URLs (like Next.js Link), let the Link handle navigation
-    if (getPageUrl && LinkComponent) {
-      return;
-    }
-    // Otherwise prevent default and use callback
+    /* Follow the callback, not the href: without a LinkComponent the
+       href only serves crawlers (or is just "#") */
     e.preventDefault();
     handlePageChange(page);
   };
@@ -152,18 +138,38 @@ const PaginationWithSelect = ({
     page: number,
     props: any = {}
   ) => {
-    const isDisabled = props["aria-disabled"] === true;
+    /* An anchor without an href is uncrawlable and fails Lighthouse; the
+       disabled edge renders as a same-styled span instead. aria-label is
+       prohibited on a plain span (aria-prohibited-attr), and the visible
+       text already names the edge, so the label stays off here */
+    if (props["aria-disabled"] === true) {
+      const { "aria-label": _ariaLabel, ...spanProps } = props;
 
-    const linkProps = {
-      ...props,
-      onClick: (e: React.MouseEvent<HTMLAnchorElement>) =>
-        handleLinkClick(e, page, isDisabled),
-    };
-
-    if (LinkComponent && getPageUrl && !isDisabled) {
       return (
-        <LinkComponent href={createPageLink(page)}>
-          <PaginationLink {...linkProps} as="span">
+        <PaginationLink as="span" {...spanProps}>
+          {content}
+        </PaginationLink>
+      );
+    }
+
+    if (LinkComponent && getPageUrl) {
+      /* Name and current-state go on the real anchor: aria-label on the
+         inner role-less span is the same aria-prohibited-attr hit, and
+         the anchor needs a name of its own once the edge text hides
+         below xs. Clicks are the Link's to handle. */
+      const {
+        "aria-current": ariaCurrent,
+        "aria-label": ariaLabel,
+        ...spanProps
+      } = props;
+
+      return (
+        <LinkComponent
+          href={createPageLink(page)}
+          aria-label={ariaLabel}
+          aria-current={ariaCurrent}
+        >
+          <PaginationLink {...spanProps} as="span">
             {content}
           </PaginationLink>
         </LinkComponent>
@@ -172,8 +178,11 @@ const PaginationWithSelect = ({
 
     return (
       <PaginationLink
-        href={isDisabled ? undefined : createPageLink(page)}
-        {...linkProps}
+        href={createPageLink(page)}
+        {...props}
+        onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+          handleLinkClick(e, page)
+        }
       >
         {content}
       </PaginationLink>
@@ -181,47 +190,52 @@ const PaginationWithSelect = ({
   };
 
   return (
-    <Pagination>
+    <Pagination className={className}>
       <PaginationContent>
-        <PaginationItem className="2xs:block hidden">
-          {renderLink(<ChevronFirstIcon className="h-4 w-4" />, 1, {
-            "aria-label": "Go to first page",
-            size: "icon",
-            className: "rounded-full",
-            "aria-disabled": currentPage === 1,
-            tabIndex: currentPage === 1 ? -1 : undefined,
-            style:
-              currentPage === 1
-                ? { pointerEvents: "none", opacity: 0.5 }
-                : undefined,
-          })}
-        </PaginationItem>
+        {/* Colophon status: always visible, anchors the bar to the rail */}
+        <li className="kicker mr-auto whitespace-nowrap tabular-nums">
+          Page {currentPage} of {totalPage}
+        </li>
+
         <PaginationItem className="2xs:block hidden">
           {renderLink(
-            <ChevronLeftIcon className="h-4 w-4" />,
+            <>
+              <ChevronLeftIcon className="size-3.5" aria-hidden />
+              <span className="xs:inline hidden">Newer</span>
+            </>,
             Math.max(1, currentPage - 1),
             {
               "aria-label": "Go to previous page",
-              size: "icon",
-              className: "rounded-full",
+              size: "default",
+              className: clsx(
+                "pagination-nav",
+                currentPage === 1 && "pagination-nav-disabled"
+              ),
               "aria-disabled": currentPage === 1,
               tabIndex: currentPage === 1 ? -1 : undefined,
-              style:
-                currentPage === 1
-                  ? { pointerEvents: "none", opacity: 0.5 }
-                  : undefined,
             }
           )}
         </PaginationItem>
 
         {paginationRange.map((pageNumber, index) => {
           if (pageNumber === DOTS) {
-            return <PaginationEllipsis key={`${pageNumber}-${index}`} />;
+            return (
+              <PaginationItem
+                key={`${pageNumber}-${index}`}
+                className="2xs:block hidden"
+              >
+                <span aria-hidden className="px-1 font-mono text-xs opacity-60">
+                  ...
+                </span>
+                <span className="sr-only">More pages</span>
+              </PaginationItem>
+            );
           }
 
           return (
             <PaginationItem key={pageNumber} className="2xs:block hidden">
               {renderLink(pageNumber, pageNumber as number, {
+                className: "pagination-number",
                 isActive: currentPage === pageNumber,
                 "aria-current": currentPage === pageNumber ? "page" : undefined,
               })}
@@ -231,43 +245,35 @@ const PaginationWithSelect = ({
 
         <PaginationItem className="2xs:block hidden">
           {renderLink(
-            <ChevronRightIcon className="h-4 w-4" />,
+            <>
+              <span className="xs:inline hidden">Older</span>
+              <ChevronRightIcon className="size-3.5" aria-hidden />
+            </>,
             Math.min(totalPage, currentPage + 1),
             {
               "aria-label": "Go to next page",
-              size: "icon",
-              className: "rounded-full",
+              size: "default",
+              className: clsx(
+                "pagination-nav",
+                currentPage === totalPage && "pagination-nav-disabled"
+              ),
               "aria-disabled": currentPage === totalPage,
               tabIndex: currentPage === totalPage ? -1 : undefined,
-              style:
-                currentPage === totalPage
-                  ? { pointerEvents: "none", opacity: 0.5 }
-                  : undefined,
             }
           )}
         </PaginationItem>
-        <PaginationItem className="2xs:block hidden">
-          {renderLink(<ChevronLastIcon className="h-4 w-4" />, totalPage, {
-            "aria-label": "Go to last page",
-            size: "icon",
-            className: "rounded-full",
-            "aria-disabled": currentPage === totalPage,
-            tabIndex: currentPage === totalPage ? -1 : undefined,
-            style:
-              currentPage === totalPage
-                ? { pointerEvents: "none", opacity: 0.5 }
-                : undefined,
-          })}
-        </PaginationItem>
-        <PaginationItem>
+
+        <PaginationItem className="ml-4">
           <Select
             value={String(currentPage)}
             onValueChange={(value) => handlePageChange(Number(value))}
           >
-            <SelectTrigger className="w-[120px]" size="sm">
-              <SelectValue placeholder="Select page">
-                Page {currentPage}
-              </SelectValue>
+            <SelectTrigger
+              className="w-auto"
+              size="sm"
+              aria-label="Jump to page"
+            >
+              <SelectValue placeholder="Jump to">Jump to</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {range(1, totalPage).map((page) => (

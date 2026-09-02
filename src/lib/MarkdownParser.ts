@@ -1,8 +1,5 @@
-/* eslint-disable no-var */
-import "server-only";
-
 import Image from "@/components/common/NextImage";
-import { CustomPreWithCopy } from "@/components/common/PreWithCopy";
+import PreWithCopy from "@/components/common/PreWithCopy";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import remarkEmbed from "@/lib/remark-embed";
@@ -27,6 +24,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import "server-only";
 import { unified, Processor } from "unified";
 import { VFile } from "vfile";
 
@@ -91,7 +89,7 @@ function getProcessor(): Processor {
     })
     .use(rehypeReact, {
       components: {
-        "rehype-pretty-copy-button-pre": CustomPreWithCopy,
+        "rehype-pretty-copy-button-pre": PreWithCopy,
         "next-image": Image,
       },
       Fragment: prod.Fragment,

@@ -27,3 +27,17 @@
     --lang-color-tune: black;
   }
 }
+
+/* The name drop: the wordmark's face and weight in the theme's own
+   accent violet, the analogous neighbor of the heading's primary blue,
+   so Ljóss lifts out of the line without leaving the palette */
+.writing__blog-title {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 650;
+  color: var(--accent);
+
+  /* The same x-height leveling as .font-serif: pinned to the sans ratio
+     so the inline Ljóss sits at the surrounding heading's optical size */
+  font-size-adjust: 0.525;
+}

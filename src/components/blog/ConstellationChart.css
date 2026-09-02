@@ -1,0 +1,448 @@
+/*
+ * Night: a living sky (aurora wash, twinkling stars, shooting stars).
+ * Day: a printed lapis star chart; no wash, no comets, two quiet glints.
+ * All animation is CSS keyframes on opacity/dashoffset: no SVG filters
+ * (feGaussianBlur is what janked Android Firefox), no JS.
+ *
+ * The component renders three svgs and this file picks one: the
+ * portrait wide slice for phone-narrow cards, the landscape land sky
+ * for horizontal cards at md and up, the meet-fit Harmonia plate when
+ * the card runs rail-narrow at lg and up. The hook is a class because
+ * all svgs are in the DOM at once and an id could not be.
+ */
+
+.constellation-chart {
+  --chart-line: color-mix(in srgb, var(--on-surface) 16%, transparent);
+  --chart-star: hsl(199deg 90% 85%);
+  --chart-gilt: hsl(42deg 60% 70%);
+  --chart-main-opacity: 0.9;
+  --chart-field-opacity: 0.45;
+  --chart-field-quiet-opacity: 0.28;
+  --chart-tail-opacity: 0.22;
+  --chart-tail-quiet-opacity: 0.15;
+  --chart-wash-opacity: 1;
+
+  /* One comet pulse per cycle; the dash gap fills the rest of the span */
+  --comet-cycle: 17s;
+  --comet-span: 760px;
+}
+
+/*
+ * Three skies, one card, and the card's own variant picks the pair it
+ * switches between. The wide slice is the default everywhere. The wide
+ * card runs horizontal from md up (the article's closing card, the
+ * full-width feed cards), so the land sky, authored at that aspect,
+ * takes over there and the slice zoom returns to 1x. The rail card is
+ * never that wide: it stays a narrow column until lg, where it becomes
+ * the 240px sidebar and the meet-fit plate shows whole. Switching the
+ * rail to the land sky at md would slice a 3:1 canvas into a roughly
+ * square box and magnify the figure-free corridor the land layout keeps
+ * open, which is the exact crop the land sky exists to avoid. The
+ * switches are media queries, not container queries, because inline-size
+ * containment zeroes the card's intrinsic width and collapses the
+ * shrink-to-fit feed rows around it.
+ */
+.constellation-chart.chart--land,
+.constellation-chart.chart--plate {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .blog-info__content--wide .constellation-chart.chart--wide {
+    display: none;
+  }
+
+  .blog-info__content--wide .constellation-chart.chart--land {
+    display: block;
+  }
+}
+
+@media (min-width: 64rem) {
+  .blog-info__content--rail .constellation-chart.chart--wide {
+    display: none;
+  }
+
+  .blog-info__content--rail .constellation-chart.chart--plate {
+    display: block;
+  }
+}
+
+.constellation-chart .chart-figure {
+  stroke: var(--chart-line);
+  stroke-width: 0.75;
+  fill: none;
+}
+
+/* The plate follows atlas ink: firmer figure lines with round caps,
+   trimmed short of the glyphs they join */
+.constellation-chart.chart--plate .chart-figure {
+  stroke: var(--on-surface);
+  stroke-opacity: 0.3;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+
+/* Crop-safe cartography: dotted arcs and the gilt ecliptic, no frame */
+.constellation-chart .chart-graticule {
+  fill: none;
+  stroke: var(--on-surface);
+  stroke-opacity: 0.08;
+  stroke-width: 0.5;
+  stroke-dasharray: 0.1 4;
+  stroke-linecap: round;
+}
+
+.constellation-chart .chart-ecliptic {
+  fill: none;
+  stroke: var(--chart-gilt);
+  stroke-opacity: 0.12;
+  stroke-width: 0.8;
+  stroke-dasharray: 6 4;
+}
+
+.constellation-chart .chart-ecliptic--quiet {
+  stroke-opacity: 0.08;
+}
+
+/* Plate furniture, Harmonia Macrocosmica style: static engraved
+   linework painted under the stars, plate svg only */
+.constellation-chart .chart-frame {
+  fill: none;
+  stroke: var(--on-surface);
+  stroke-opacity: 0.14;
+  stroke-width: 0.75;
+}
+
+.constellation-chart .chart-frame-tick {
+  stroke: var(--on-surface);
+  stroke-opacity: 0.2;
+  stroke-width: 0.5;
+}
+
+.constellation-chart .chart-boundary {
+  fill: none;
+  stroke: var(--aurora-b);
+  stroke-opacity: 0.16;
+  stroke-width: 0.6;
+  stroke-dasharray: 2 5;
+}
+
+.constellation-chart .chart-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  fill: var(--on-surface);
+  fill-opacity: 0.32;
+}
+
+/* The showpiece label slowly inks up, nothing else on the plate moves */
+.constellation-chart .chart-label--ink {
+  animation: chart-label-ink 24s ease-in-out infinite;
+}
+
+@keyframes chart-label-ink {
+  0%,
+  100% {
+    fill-opacity: 0.28;
+  }
+
+  50% {
+    fill-opacity: 0.4;
+  }
+}
+
+.constellation-chart .chart-legend {
+  opacity: 0.42;
+}
+
+.constellation-chart .chart-legend-core {
+  fill: var(--chart-star);
+}
+
+.constellation-chart .chart-legend-ring {
+  fill: none;
+  stroke: var(--chart-star);
+  stroke-width: 0.6;
+}
+
+.constellation-chart .chart-legend line {
+  stroke: var(--chart-star);
+  stroke-width: 0.7;
+}
+
+.constellation-chart .chart-legend-text {
+  font-family: var(--font-mono);
+  font-size: 6.5px;
+  letter-spacing: 0.14em;
+  fill: var(--on-surface);
+  fill-opacity: 0.3;
+}
+
+.constellation-chart .chart-star {
+  fill: var(--chart-star);
+  opacity: var(--chart-main-opacity);
+}
+
+.constellation-chart .chart-star-ring {
+  fill: none;
+  stroke: var(--chart-star);
+  stroke-width: 0.6;
+}
+
+.constellation-chart .chart-star-tick {
+  stroke: var(--chart-star);
+  stroke-width: 0.8;
+}
+
+.constellation-chart .chart-field circle {
+  fill: var(--chart-star);
+  opacity: var(--chart-field-opacity);
+}
+
+.constellation-chart .chart-field--quiet circle {
+  opacity: var(--chart-field-quiet-opacity);
+}
+
+.constellation-chart .chart-tail circle {
+  fill: var(--chart-star);
+  opacity: var(--chart-tail-opacity);
+}
+
+.constellation-chart .chart-tail circle.chart-tail--quiet {
+  opacity: var(--chart-tail-quiet-opacity);
+}
+
+.constellation-chart .chart-wash {
+  opacity: var(--chart-wash-opacity);
+  animation: chart-wash-breathe 18s ease-in-out var(--chart-wash-delay, 0s)
+    infinite alternate;
+}
+
+@keyframes chart-wash-breathe {
+  from {
+    opacity: calc(var(--chart-wash-opacity) * 0.65);
+  }
+
+  to {
+    opacity: var(--chart-wash-opacity);
+  }
+}
+
+/* Stars twinkle by briefly dimming, never brightening past resting ink */
+.constellation-chart .chart-twinkle {
+  --chart-twinkle-hi: var(--chart-field-opacity);
+  animation: chart-twinkle 9s ease-in-out var(--chart-twinkle-delay, 0s)
+    infinite;
+}
+
+.constellation-chart .chart-star.chart-twinkle {
+  --chart-twinkle-hi: var(--chart-main-opacity);
+}
+
+@keyframes chart-twinkle {
+  0%,
+  82%,
+  100% {
+    opacity: var(--chart-twinkle-hi);
+  }
+
+  86% {
+    opacity: 0.15;
+  }
+
+  92% {
+    opacity: calc(var(--chart-twinkle-hi) * 0.6);
+  }
+
+  95% {
+    opacity: 0.15;
+  }
+}
+
+/*
+ * One comet per pulse: halo, trail and head share a leading edge, each
+ * layer's own dash length and lag aligned on the same cycle.
+ */
+.constellation-chart .chart-comet {
+  fill: none;
+  stroke: var(--comet-color, var(--aurora-c));
+  stroke-width: var(--comet-w);
+  stroke-opacity: var(--comet-o);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: var(--comet-dash)
+    calc(var(--comet-span) - var(--comet-dash));
+  animation: chart-comet-travel var(--comet-cycle) linear var(--comet-delay, 0s)
+    infinite;
+}
+
+@keyframes chart-comet-travel {
+  from {
+    stroke-dashoffset: calc(var(--comet-span) + var(--comet-lag));
+  }
+
+  to {
+    stroke-dashoffset: var(--comet-lag);
+  }
+}
+
+.constellation-chart .chart-comet--halo {
+  --comet-dash: 72px;
+  --comet-lag: 59px;
+  --comet-w: 5;
+  --comet-o: 0.09;
+}
+
+.constellation-chart .chart-comet--trail {
+  --comet-dash: 34px;
+  --comet-lag: 21px;
+  --comet-w: 2.2;
+  --comet-o: 0.24;
+}
+
+.constellation-chart .chart-comet--head {
+  --comet-dash: 13px;
+  --comet-lag: 0px;
+  --comet-w: 1.15;
+  --comet-o: 0.95;
+}
+
+/*
+ * Below md the article's closing card still crops the portrait sky to
+ * its showpiece third and every visible pixel sits behind text, so that
+ * slice drops to quiet-zone ink. The land sky above md keeps its
+ * figures clear of the text and runs at full night ink like the rail.
+ */
+.article .constellation-chart.chart--wide {
+  --chart-main-opacity: 0.5;
+  --chart-field-opacity: 0.3;
+  --chart-field-quiet-opacity: 0.2;
+  --chart-line: color-mix(in srgb, var(--on-surface) 10%, transparent);
+}
+
+html[data-theme="light"] .article .constellation-chart.chart--wide {
+  --chart-main-opacity: 0.4;
+  --chart-line: color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+/* The Lantern's mag-1 ticks land on the subscribe copy at the wide
+   crop and read as stray dashes, so the article card's wide sky goes
+   tickless; the meet-fit plate keeps its glyphs whole */
+.article .constellation-chart.chart--wide .chart-star-tick {
+  display: none;
+}
+
+/* Day: firmer engraved lines, lapis ink, stillness except two glints */
+html[data-theme="light"] .constellation-chart {
+  --chart-line: color-mix(in srgb, var(--primary) 28%, transparent);
+  --chart-star: var(--primary);
+  --chart-gilt: hsl(40deg 60% 42%);
+  --chart-main-opacity: 0.55;
+  --chart-field-opacity: 0.3;
+  --chart-field-quiet-opacity: 0.2;
+  --chart-tail-opacity: 0.14;
+  --chart-tail-quiet-opacity: 0.08;
+  --chart-wash-opacity: 0;
+
+  .chart-comet-layer {
+    display: none;
+  }
+
+  .chart-comet,
+  .chart-twinkle,
+  .chart-wash {
+    animation: none;
+  }
+
+  /* Printed chart: lapis arcs, gilt ecliptic and mag-1 rings */
+  .chart-graticule {
+    stroke: var(--primary);
+    stroke-opacity: 0.1;
+  }
+
+  .chart-ecliptic {
+    stroke-opacity: 0.32;
+  }
+
+  .chart-ecliptic--quiet {
+    stroke-opacity: 0.14;
+  }
+
+  /* Printed plate: firmer lapis furniture, still ink */
+  .chart-frame {
+    stroke: var(--primary);
+    stroke-opacity: 0.3;
+  }
+
+  .chart-frame-tick {
+    stroke: var(--primary);
+    stroke-opacity: 0.32;
+  }
+
+  .chart-boundary {
+    stroke-opacity: 0.2;
+  }
+
+  .chart-label {
+    fill: var(--primary);
+    fill-opacity: 0.45;
+  }
+
+  .chart-label--ink {
+    animation: none;
+  }
+
+  .chart-legend-text {
+    fill: var(--primary);
+    fill-opacity: 0.45;
+  }
+
+  &.chart--plate .chart-graticule {
+    stroke-opacity: 0.15;
+  }
+
+  &.chart--plate .chart-figure {
+    stroke: var(--primary);
+    stroke-opacity: 0.4;
+  }
+
+  .chart-star-ring--mag1 {
+    stroke: var(--chart-gilt);
+  }
+
+  .chart-glint {
+    animation: chart-glint 8s ease-in-out var(--chart-twinkle-delay, 0s)
+      infinite;
+  }
+}
+
+@keyframes chart-glint {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .constellation-chart .chart-comet-layer {
+    display: none;
+  }
+
+  .constellation-chart .chart-comet,
+  .constellation-chart .chart-twinkle,
+  .constellation-chart .chart-glint,
+  .constellation-chart .chart-wash,
+  .constellation-chart .chart-label--ink {
+    animation: none;
+  }
+
+  /* The light glint rule above carries theme specificity, so this kill
+     switch has to match it or light mode keeps glinting under reduce */
+  html[data-theme="light"] .constellation-chart .chart-glint {
+    animation: none;
+  }
+}

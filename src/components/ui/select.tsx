@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { cn } from "@/utils/css";
 import * as Ariakit from "@ariakit/react/select";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-
-import { cn } from "@/utils/css";
+import * as React from "react";
 
 type SelectContextValue = {
   value?: string;
@@ -108,7 +107,7 @@ function SelectTrigger({
 
   // Extract SelectValue component from children to render it inside the button
   let selectValue: React.ReactNode = null;
-  let otherChildren: React.ReactNode[] = [];
+  const otherChildren: React.ReactNode[] = [];
 
   React.Children.forEach(children, (child) => {
     if (React.isValidElement(child) && child.type === SelectValue) {

@@ -7,6 +7,21 @@
     transition: transform 0.3s;
     transform-origin: 50% 0;
     transform-style: preserve-3d;
+
+    /* The flip's two faces differ in width (Home runs wider than Ljóss),
+       so a hidden zero-height copy of the hover text sizes the box to
+       the widest face: both faces center in one stable box and the
+       byline beside it never shifts between states */
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo__text::after {
+    content: attr(data-hover);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .logo__text::before {
@@ -23,25 +38,32 @@
     display: none;
   }
 
+  /*
+   * The 45s wander, on a transform so the blurred layer stays composited
+   * instead of repainting. Percentages are of the oversized layer itself,
+   * so the 2% and 20% throw works out to a mean quarter-cycle travel of
+   * roughly 173px at a typical cover width, and the 34% vertical overscan
+   * keeps the layer's edges covered at every stop.
+   */
   @keyframes waves {
     0% {
-      background-position: top left;
+      transform: translate3d(-2%, -20%, 0);
     }
 
     25% {
-      background-position: bottom right;
+      transform: translate3d(2%, 20%, 0);
     }
 
     50% {
-      background-position: center;
+      transform: translate3d(0, 0, 0);
     }
 
     75% {
-      background-position: top right;
+      transform: translate3d(2%, -20%, 0);
     }
 
     100% {
-      background-position: bottom left;
+      transform: translate3d(-2%, 20%, 0);
     }
   }
 
@@ -50,9 +72,13 @@
       position: absolute;
       display: block;
       content: "";
-      inset: -16px -40px;
+      /* The flank must outrun the 2% translate throw, which passes
+         60px on viewports wider than 2880px */
+      inset: -34% min(-60px, -3%);
       background-image: var(--background-url);
-      background-size: 105% auto;
+      /* cover, not 105% auto: with a fixed position the flanks must always
+         be filled or the grit loading layer shows through as speckles */
+      background-size: cover;
       background-position: center;
       animation: waves 45s linear infinite alternate both;
       filter: blur(20px) brightness(75%);
@@ -96,6 +122,50 @@
       background-color: var(--surface);
     }
   }
+
+  /*
+   * Shelf accents: one identity hue per category, tuned per theme the same
+   * way the landing tunes GitHub language colors. Named by category slug so
+   * components can resolve var(--shelf-<slug>).
+   */
+  html {
+    --shelf-technical: var(--primary);
+    --shelf-gaming: hsl(352deg 62% 73%);
+    --shelf-the-inner-crisis: hsl(267deg 56% 75%);
+
+    /* Aurora hues, read by the selection wash and reading-progress bar in
+       the blog base stylesheet and by the bio card's constellation chart.
+       The masthead shader is not one of them: its palette lives in
+       AuroraCanvas so the GL uniforms need no per-frame style read. */
+    --aurora-a: hsl(168deg 70% 62%);
+    --aurora-b: hsl(267deg 60% 76%);
+    --aurora-c: hsl(199deg 90% 66%);
+
+    &[data-theme="light"] {
+      --shelf-gaming: hsl(351deg 58% 40%);
+      --shelf-the-inner-crisis: hsl(266deg 50% 55%);
+      --aurora-a: hsl(168deg 55% 34%);
+      --aurora-b: hsl(266deg 45% 48%);
+      --aurora-c: hsl(210deg 75% 42%);
+    }
+  }
+}
+
+/* The name speaks Fraunces. The two sizes need different weights to read
+   at the same density: 620 at masthead size, 650 at the smaller logo size.
+   The markup carries no weight or tracking utilities for either, so these
+   rules own the letterforms outright. */
+.blog-masthead__title {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 620;
+  letter-spacing: -0.01em;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 650;
 }
 
 .code-container {
@@ -190,5 +260,82 @@
     code {
       overflow-x: auto;
     }
+  }
+
+  /* Untitled figures grow the same header bar the titled ones have,
+     holding just the language at the right, where the titled bar rides
+     its badge. The bar is the figure's ::before, so no markup changes:
+     the copy-button plugin still hoists data-language onto untitled
+     figures only, and the language can never touch the code below.
+     0.875rem padding lands the same bar height as the 1rem-type
+     figcaption despite the kicker's smaller line box, and matches the
+     titled badge's right inset. */
+  figure[data-rehype-pretty-code-figure][data-language]::before {
+    @apply kicker shadow-md;
+    content: attr(data-language);
+    display: block;
+    padding: 0.875rem;
+    text-align: right;
+    background: linear-gradient(
+        90deg,
+        var(--background) 0%,
+        var(--surface) 20%,
+        var(--surface) 50%,
+        var(--surface) 80%,
+        var(--background) 100%
+      )
+      var(--surface);
+  }
+
+  /* Titled figures ride the badge on the title bar instead: the
+     figcaption already carries data-language from rehype-pretty-code, so
+     no hoist is needed. Symmetric inline padding keeps the centered
+     title clear of the badge without pushing it off center, and this
+     badge needs no hover fade because the copy button anchors to the
+     pre, a corner the title bar never shares. */
+  figure[data-rehype-pretty-code-figure]
+    > [data-rehype-pretty-code-title]:not([data-language="plaintext"]) {
+    position: relative;
+    padding-inline: 4.5rem;
+
+    &::after {
+      @apply kicker;
+      content: attr(data-language);
+      position: absolute;
+      top: 50%;
+      right: 0.875rem;
+      transform: translateY(-50%);
+      font-style: normal;
+      pointer-events: none;
+    }
+  }
+
+  /* Copy button: only the ink and cursor are ours, placement and behavior
+     stay with the plugin's injected styles (which set neither, and the
+     preflight leaves buttons on the default arrow) */
+  button[data-rehype-pretty-copy-button] {
+    color: var(--on-surface);
+    cursor: pointer;
+
+    &.rehype-pretty-copied {
+      color: var(--success);
+    }
+  }
+
+  /* Icons redrawn as mask cutouts of the same shapes so the glyph takes the
+     button's currentColor instead of the SVG files' hardcoded fills. The
+     important flag is needed to beat the component's inline background-image. */
+  .rehype-pretty-copy-button-icon {
+    background-image: none !important;
+    background-color: currentColor;
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M16.187 9.5H12.25a1.75 1.75 0 0 0-1.75 1.75v28.5c0 .967.784 1.75 1.75 1.75h23.5a1.75 1.75 0 0 0 1.75-1.75v-28.5a1.75 1.75 0 0 0-1.75-1.75h-3.937a4.25 4.25 0 0 1-4.063 3h-7.5a4.25 4.25 0 0 1-4.063-3M31.813 7h3.937A4.25 4.25 0 0 1 40 11.25v28.5A4.25 4.25 0 0 1 35.75 44h-23.5A4.25 4.25 0 0 1 8 39.75v-28.5A4.25 4.25 0 0 1 12.25 7h3.937a4.25 4.25 0 0 1 4.063-3h7.5a4.25 4.25 0 0 1 4.063 3M18.5 8.25c0 .966.784 1.75 1.75 1.75h7.5a1.75 1.75 0 1 0 0-3.5h-7.5a1.75 1.75 0 0 0-1.75 1.75'/%3E%3C/svg%3E");
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+  }
+
+  button[data-rehype-pretty-copy-button].rehype-pretty-copied
+    .rehype-pretty-copy-button-icon {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L5.53 12.7a.996.996 0 1 0-1.41 1.41l4.18 4.18c.39.39 1.02.39 1.41 0L20.29 7.71a.996.996 0 1 0-1.41-1.41z'/%3E%3C/svg%3E");
   }
 }

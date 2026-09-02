@@ -1,22 +1,20 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 
-import nextPlugin from "@next/eslint-plugin-next";
 import prettier from "eslint-config-prettier";
 import tailwindcss from "eslint-plugin-tailwindcss";
-import tseslint from "@typescript-eslint/eslint-plugin";
-import importPlugin from "eslint-plugin-import";
 import sortPlugin from "eslint-plugin-sort";
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
+/*
+ * eslint-config-next has shipped flat config since Next 15, so it is spread
+ * in directly. Running it back through FlatCompat fed a flat config to the
+ * eslintrc schema, which rejects an object-valued `plugins`, and eslintrc
+ * then crashed stringifying the circular eslint-plugin-react object while
+ * formatting that very error. The plugins below are only the ones Next's
+ * config does not already register: redeclaring its own would be a
+ * "Cannot redefine plugin" error.
+ */
 const config = [
   {
     ignores: [
@@ -30,18 +28,29 @@ const config = [
       "**/generated/*",
       "eslint.config.js",
       "public",
+      /* Local scratch space, gitignored: never lint or format it */
+      "00_idea/**",
     ],
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
-      "@next/next": nextPlugin,
-      "@typescript-eslint": tseslint,
-      "jsx-a11y": jsxA11yPlugin,
       tailwindcss,
-      import: importPlugin,
       sort: sortPlugin,
+    },
+    /*
+     * Tailwind 4 dropped tailwindcss/lib/util/resolveConfigPath, so the
+     * plugin cannot find a JS config and warned once per file, 676 lines a
+     * run. Its own fallback is {}, so declaring that changes no behaviour
+     * and only silences the warning. There is no JS config to point at:
+     * the theme is CSS-first in src/assets/styles.
+     */
+    settings: {
+      tailwindcss: {
+        config: {},
+      },
     },
     rules: {
       ...tailwindcss.configs.recommended.rules,
@@ -49,7 +58,6 @@ const config = [
       "tailwindcss/no-custom-classname": "off",
       "sort/imports": "warn",
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-namespace": "off",
       "@typescript-eslint/no-unused-vars": [
