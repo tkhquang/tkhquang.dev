@@ -14,11 +14,14 @@
       --on-band-dim: hsl(221deg 26% 32%);
 
       /* The gradient belongs to the band only; the header reuses this
-         class purely for its ink tokens. The zenith and paper stops are
-         the band tokens themselves, so the four-stop dawn ramp and the
-         two-stop recipe .band falls back to never drift apart. */
+         class purely for its ink tokens. Swapping the ramp token rather
+         than background-image keeps .band's grain layer over the dawn,
+         which the pastel stops need more than the dark sky does. The
+         zenith and paper stops are the band tokens themselves, so this
+         ramp and the two-stop recipe .band falls back to cannot drift
+         apart. */
       &.band {
-        background-image: linear-gradient(
+        --band-gradient: linear-gradient(
           180deg,
           var(--band-a) 0%,
           hsl(220deg 40% 93%) 55%,

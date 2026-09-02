@@ -15,6 +15,19 @@
     position: relative;
 
     /*
+     * The ramp is a token, not a literal in the stack below, so a band that
+     * wants a different sky swaps this one property and keeps the grain.
+     * Overriding background-image instead would replace the whole layer
+     * list, dropping the dither and leaving the two-value blend mode
+     * describing a single layer.
+     */
+    --band-gradient: linear-gradient(
+      165deg,
+      var(--band-a) 0%,
+      var(--band-b) 100%
+    );
+
+    /*
      * The grain rides in the background stack via background-blend-mode,
      * not on a ::before with mix-blend-mode: a cross-element blend group
      * must rasterize as one unit, and on a stalled Gecko main thread it
@@ -26,7 +39,7 @@
      */
     background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.0275'/%3E%3C/svg%3E"),
-      linear-gradient(165deg, var(--band-a) 0%, var(--band-b) 100%);
+      var(--band-gradient);
     background-blend-mode: overlay, normal;
     color: var(--on-band);
   }
