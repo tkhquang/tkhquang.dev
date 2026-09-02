@@ -12,12 +12,13 @@ import React from "react";
  * crop-safe linework (dotted graticule arcs, a gilt ecliptic), because
  * a plate border cut by the slice crop reads as broken; it serves
  * every card until it has somewhere better to go. The wide card turns
- * horizontal at md and takes the land sky, the same figures re-laid on a
- * 720x240 canvas at that aspect, because slicing the portrait canvas
- * into a 3:1 card magnified every glyph and comet 2x and up. The rail
- * card stays narrow until lg, where it becomes the 240px sidebar and
- * meet-fits the full Harmonia plate (frame, ticks, boundary meanders,
- * Old Norse labels, magnitude legend), whole outline always visible.
+ * horizontal at md and takes the land sky, five of the six figures
+ * re-laid on a 720x240 canvas at that aspect, because slicing the
+ * portrait canvas into a 3:1 card magnified every glyph and comet 2x
+ * and up. The rail card stays narrow until lg, where it becomes the
+ * 240px sidebar and meet-fits the full Harmonia plate (frame, ticks,
+ * boundary meanders, Old Norse labels, magnitude legend), whole outline
+ * always visible.
  * The media queries in the CSS key off the card's variant class to pick
  * which sky renders.
  */

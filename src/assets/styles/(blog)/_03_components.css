@@ -133,8 +133,10 @@
     --shelf-gaming: hsl(352deg 62% 73%);
     --shelf-the-inner-crisis: hsl(267deg 56% 75%);
 
-    /* Aurora hues. The masthead shader reads them for the sky, the blog
-       base stylesheet for the selection wash and the reading-progress bar */
+    /* Aurora hues, read by the selection wash and reading-progress bar in
+       the blog base stylesheet and by the bio card's constellation chart.
+       The masthead shader is not one of them: its palette lives in
+       AuroraCanvas so the GL uniforms need no per-frame style read. */
     --aurora-a: hsl(168deg 70% 62%);
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
