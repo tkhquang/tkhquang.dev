@@ -44,6 +44,7 @@ const PostList = <
         <Accordion type="multiple" className="my-8" defaultValue={defaultOpen}>
           {list.map((item) => {
             const fieldSlug = item[listSlugField] as string;
+            const postCount = groupedPostsBySlug[fieldSlug]?.length ?? 0;
 
             return (
               <AccordionItem value={fieldSlug} key={fieldSlug}>
@@ -51,13 +52,13 @@ const PostList = <
                   <span className="flex flex-1 items-baseline justify-between gap-4">
                     <span>{item.title}</span>
                     <span className="kicker tabular-nums">
-                      {groupedPostsBySlug[fieldSlug]?.length ?? 0} posts
+                      {postCount} post{postCount === 1 ? "" : "s"}
                     </span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
                   <ul className="post__list">
-                    {groupedPostsBySlug[fieldSlug].map((post) => {
+                    {(groupedPostsBySlug[fieldSlug] ?? []).map((post) => {
                       return (
                         <li
                           className="post__item hover:bg-theme-secondary hover:text-theme-on-secondary mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500"
