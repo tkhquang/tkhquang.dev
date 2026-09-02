@@ -40,7 +40,7 @@ const PostCard = ({ index, post }: PostCardProps) => {
         href={`/blog/posts/${post.slug}`}
         className="news-feed__list-item__link inline"
       >
-        <h2 className="news-feed__list-item__title heading xs:text-2xl mt-1 mb-2 inline-block text-xl hover:opacity-75 sm:text-3xl sm:leading-10">
+        <h2 className="news-feed__list-item__title heading xs:text-2xl mt-1 inline-block pb-3 text-xl hover:opacity-75 sm:text-3xl sm:leading-10">
           {post.title}
         </h2>
       </Link>
