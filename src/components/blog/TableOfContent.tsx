@@ -325,19 +325,23 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
             section so the progress star stays legible on the dimmed rail;
             hovering anywhere in the section still restores full ink.
             75 percent is the dim floor: the inactive links underneath carry
-            their own 75 percent ink, and 0.75 x 0.75 is the last step that
-            keeps them past the 4.5 contrast ratio the audit requires in the
-            dark theme (50 measured 2.78 to 3.56). PostAside mirrors this.
+            their own 85 percent ink, and 0.75 x 0.85 is the last step that
+            keeps them past the 4.5 contrast ratio the dark theme needs.
+            The dim rides a wrapper rather than the kicker itself, because
+            the kicker utility already sets an opacity: on the same element
+            the two collide at equal specificity and the dim simply replaces
+            the kicker's ink instead of multiplying with it, which would put
+            this header a step brighter than the one PostAside mirrors.
           */}
-          <h2 className="kicker mt-10 mb-1 block transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
-            On this page
-          </h2>
+          <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
+            <h2 className="kicker mt-10 mb-1 block">On this page</h2>
+          </div>
 
           {/* Mobile Drawer */}
           <Drawer
             position="left"
             size={300}
-            title="Table of Content"
+            title="On this page"
             trigger={<MobileTocTrigger />}
             className="[&_.drawer\_\_content]:max-w-[calc(100%-2rem)]!"
           >
