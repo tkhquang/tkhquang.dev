@@ -1,7 +1,6 @@
 import PostCard from "./PostCard";
 import BlogPagination from "@/components/blog/BlogPagination";
 import { PathInfo } from "@/components/blog/PathInfo";
-import { ClientOnly } from "@/components/ui/client-only";
 import { MarkdownPost } from "@/models/markdown.types";
 
 const FeedList = <T,>({
@@ -52,9 +51,7 @@ const FeedList = <T,>({
           <div className="my-6" />
 
           {totalPages && totalPages > 1 && (
-            <ClientOnly>
-              <BlogPagination totalPages={totalPages} />
-            </ClientOnly>
+            <BlogPagination totalPages={totalPages} />
           )}
         </>
       )}
