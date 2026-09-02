@@ -153,6 +153,13 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
       };
 
       const host = canvas.parentElement ?? canvas;
+      /* Moves are heard one level up, on the section: the masthead text
+         sits above the sky and is selectable, so it swallows every move
+         that lands on it before the wrapper hears one. The flare still
+         measures against the sky wrapper's own rect, since that is the
+         box the canvas is laid out in and the scroll transform moves the
+         two of them together. */
+      const pointerHost = host.parentElement ?? host;
       let mouseX = 0.5;
       let mouseY = 0.62;
       let targetX = mouseX;
@@ -164,7 +171,7 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
         targetY = 1 - (event.clientY - rect.top) / rect.height;
         lastPointerMove = performance.now();
       };
-      host.addEventListener("pointermove", onPointerMove);
+      pointerHost.addEventListener("pointermove", onPointerMove);
 
       let visible = true;
       const observer = new IntersectionObserver((entries) => {
@@ -267,7 +274,7 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
       setReady(true);
 
       disposers.push(() => {
-        host.removeEventListener("pointermove", onPointerMove);
+        pointerHost.removeEventListener("pointermove", onPointerMove);
         observer.disconnect();
         resizeObserver.disconnect();
         themeObserver.disconnect();
