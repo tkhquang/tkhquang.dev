@@ -138,18 +138,18 @@ export const FRAGMENT_SHADER = /* glsl */ `
     if (u_day > 0.5) {
       float x = uv.x;
       float y = 1.0 - uv.y;
-      float asp = u_res.x / u_res.y;
+      float aspX = asp.x;
       vec3 GOLD = vec3(0.99, 0.84, 0.57);
       vec3 BLUSH = vec3(0.96, 0.67, 0.7);
       vec3 LAV = vec3(0.77, 0.7, 0.93);
       vec3 SUN = vec3(1.0, 0.96, 0.86);
       /* Slow occlusion envelope: a cloud drifts across the sun and it
-     re-emerges; the gilded rim below flares on each return via sunw */
+         re-emerges; the gilded rim below flares on each return via sunw */
       float vp =
         0.55 + 0.45 * smoothstep(0.4, 0.6, noise(vec2(u_time * 0.02, 5.0)));
       vec4 acc = vec4(0.0);
       {
-        vec2 q = vec2(x * asp * 0.85, y * 10.0);
+        vec2 q = vec2(x * aspX * 0.85, y * 10.0);
         float n = bandsN(q, 3.7, 0.03);
         float m =
           smoothstep(0.5, 0.575, n) * (1.0 - smoothstep(0.575, 0.72, n));
@@ -159,7 +159,7 @@ export const FRAGMENT_SHADER = /* glsl */ `
       }
       float sunw;
       {
-        vec2 q = vec2(x * asp * 0.62, y * 6.0);
+        vec2 q = vec2(x * aspX * 0.62, y * 6.0);
         float n = bandsN(q, 1.3, 0.018);
         float m = smoothstep(0.455, 0.525, n);
         float core = smoothstep(0.545, 0.76, n);
@@ -167,8 +167,8 @@ export const FRAGMENT_SHADER = /* glsl */ `
           smoothstep(0.16, 0.34, y) * (1.0 - smoothstep(0.66, 0.8, y));
         vec3 c = mix(LAV, BLUSH, smoothstep(0.18, 0.45, y));
         c = mix(c, GOLD, smoothstep(0.45, 0.68, y));
-        sunw =
-          exp(-pow(length(vec2((x - 0.72) * asp, y - 0.74)), 2.0) * 2.5) * vp;
+        vec2 sd = vec2((x - 0.72) * aspX, y - 0.74);
+        sunw = exp(-dot(sd, sd) * 2.5) * vp;
         c = mix(c, GOLD, sunw * 0.45);
         acc = over(acc, c, (m * 0.68 + core * 0.32) * env);
         float n2 = bandsN(vec2(q.x, q.y + 0.24), 1.3, 0.018);
@@ -177,7 +177,7 @@ export const FRAGMENT_SHADER = /* glsl */ `
         acc = over(acc, mix(GOLD, SUN, 0.6), rim * env * (0.35 + 0.65 * sunw));
       }
       {
-        vec2 q = vec2(x * asp * 0.75, y * 7.5);
+        vec2 q = vec2(x * aspX * 0.75, y * 7.5);
         float n = bandsN(q, 8.9, -0.012);
         float m = smoothstep(0.485, 0.555, n);
         float env = smoothstep(0.3, 0.48, y) * (1.0 - smoothstep(0.7, 0.84, y));
@@ -185,15 +185,17 @@ export const FRAGMENT_SHADER = /* glsl */ `
         acc = over(acc, c, m * env * 0.58);
       }
       {
-        float hz = exp(-pow((y - 0.72) * 5.5, 2.0));
-        float hx = 0.55 + 0.45 * exp(-pow((x - 0.72) * asp * 0.45, 2.0));
+        float hy = (y - 0.72) * 5.5;
+        float hd = (x - 0.72) * aspX * 0.45;
+        float hz = exp(-hy * hy);
+        float hx = 0.55 + 0.45 * exp(-hd * hd);
         acc = over(acc, mix(GOLD, SUN, 0.35), hz * hx * 0.4);
       }
       {
-        vec2 d = vec2((x - 0.72) * asp, (y - 0.74) * 1.2);
+        vec2 d = vec2((x - 0.72) * aspX, (y - 0.74) * 1.2);
         float ds = dot(d, d);
         float veil =
-          0.75 + 0.5 * fbm5(vec2(x * asp * 1.6 + u_time * 0.014, y * 4.5));
+          0.75 + 0.5 * fbm5(vec2(x * aspX * 1.6 + u_time * 0.014, y * 4.5));
         float glow = exp(-ds * 3.0) * vp;
         float score = exp(-ds * 12.0) * veil * vp;
         float hot = exp(-ds * 38.0) * veil * vp;
@@ -202,17 +204,18 @@ export const FRAGMENT_SHADER = /* glsl */ `
         acc = over(acc, vec3(1.0, 0.98, 0.92), hot * 0.7);
       }
       /*
-   * The day sky answers the pointer like the night one: clouds thin where
-   * you point and a patch of warm sunlight follows, a beam breaking
-   * through. u_mouse is bottom-origin, y here is top-origin. When idle,
-   * JS hands the target to a wanderer biased toward the sun quadrant and
-   * u_flare (normalized against its pointer strength) dims the beam.
-   */
+       * The day sky answers the pointer like the night one: clouds thin
+       * where you point and a patch of warm sunlight follows, a beam
+       * breaking through. u_mouse is bottom-origin, y here is top-origin.
+       * When idle, JS hands the target to a wanderer biased toward the sun
+       * quadrant and u_flare (normalized against its pointer strength)
+       * dims the beam.
+       */
       {
         float k = u_flare / 0.35;
         float mdd = distance(
-          vec2(x * asp, y),
-          vec2(u_mouse.x * asp, 1.0 - u_mouse.y)
+          vec2(x * aspX, y),
+          vec2(u_mouse.x * aspX, 1.0 - u_mouse.y)
         );
         float beam = exp(-mdd * mdd * 7.0);
         acc.a *= 1.0 - 0.3 * k * beam;
@@ -233,8 +236,8 @@ export const FRAGMENT_SHADER = /* glsl */ `
     col *= 1.0 + u_flare * exp(-md * 3.5);
     if (u_stars > 0.5) {
       /* Stars hash a CSS-pixel grid (u_dpr) so density survives DPR and
-     resize; pow(hash,3.) keeps most as steady dust so only the bright
-     few twinkle, and per-cell jitter breaks the grid alignment */
+         resize; pow(hash,3.) keeps most as steady dust so only the bright
+         few twinkle, and per-cell jitter breaks the grid alignment */
       vec2 sp = gl_FragCoord.xy / (u_dpr * 3.0);
       vec2 cell = floor(sp);
       float s = hash(cell);
@@ -255,10 +258,10 @@ export const FRAGMENT_SHADER = /* glsl */ `
     }
     col *= u_intensity * u_breath;
     /* Shooting star: slot-hashed so one falls every 20 to 40 seconds and
-    the block is skipped outside its 0.7s life. A hot blooming head
-    draws a thin trail whose luminance dies exponentially behind it, so
-    the streak dissolves into the sky instead of ending on an edge.
-    Distances are aspect-corrected so it stays true on wide bands. */
+       the block is skipped outside its 0.7s life. A hot blooming head
+       draws a thin trail whose luminance dies exponentially behind it, so
+       the streak dissolves into the sky instead of ending on an edge.
+       Distances are aspect-corrected so it stays true on wide bands. */
     float slot = floor(u_time / 30.0);
     float e = u_time - (slot + 0.35 + hash(vec2(slot, 7.0)) / 3.0) * 30.0;
     if (e > 0.0 && e < 0.7) {
