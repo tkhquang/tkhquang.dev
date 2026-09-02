@@ -4,34 +4,36 @@ import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 
 const DEFAULT_STYLES = /* css */ `
-    [data-rehype-pretty-code-figure] pre {
-      position: relative;
-    }
+  [data-rehype-pretty-code-figure] pre {
+    position: relative;
+  }
 
-    [data-rehype-pretty-code-figure][data-visibility="hover"] button[data-rehype-pretty-copy-button] {
-      transition: opacity 300ms ease-in-out;
-      opacity: 0;
-    }
-
-    [data-rehype-pretty-code-figure][data-visibility="hover"]:hover button[data-rehype-pretty-copy-button] {
-      opacity: 1;
-    }
-
+  [data-rehype-pretty-code-figure][data-visibility="hover"]
     button[data-rehype-pretty-copy-button] {
-      position: absolute;
-      top: 0.5em;
-      right: 0.5em;
-      width: 24px;
-      height: 24px;
-    }
+    transition: opacity 300ms ease-in-out;
+    opacity: 0;
+  }
 
-    .rehype-pretty-copy-button-icon {
-      width: 24px;
-      height: 24px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
+  [data-rehype-pretty-code-figure][data-visibility="hover"]:hover
+    button[data-rehype-pretty-copy-button] {
+    opacity: 1;
+  }
+
+  button[data-rehype-pretty-copy-button] {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    width: 24px;
+    height: 24px;
+  }
+
+  .rehype-pretty-copy-button-icon {
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 `;
 
 interface Options {
