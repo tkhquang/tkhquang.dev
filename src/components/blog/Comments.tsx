@@ -1,11 +1,11 @@
 "use client";
 
+import LoaderLines from "@/components/common/loader/LoaderLines";
 import { useThemeValue } from "@/store/theme";
 import type { BooleanString, InputPosition, Mapping } from "@giscus/react";
 import GiscusComponent from "@giscus/react";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
-import LoaderLines from "@/components/common/loader/LoaderLines";
 
 interface GiscusConfigs {
   themeURL: string;

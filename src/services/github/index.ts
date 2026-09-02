@@ -1,9 +1,8 @@
-import "server-only";
-
 import {
   GitHubCommitStatsQuery,
   GitHubProjectsQuery,
 } from "@/graphql/generated/types";
+import "server-only";
 
 const GITHUB_API_ENDPOINT = "https://api.github.com/graphql";
 

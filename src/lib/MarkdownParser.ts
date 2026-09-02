@@ -1,6 +1,3 @@
-/* eslint-disable no-var */
-import "server-only";
-
 import Image from "@/components/common/NextImage";
 import { CustomPreWithCopy } from "@/components/common/PreWithCopy";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
@@ -27,6 +24,7 @@ import rehypeStringify from "rehype-stringify";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import "server-only";
 import { unified, Processor } from "unified";
 import { VFile } from "vfile";
 

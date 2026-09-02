@@ -1,8 +1,5 @@
 "use client";
 
-import { useMemo, ComponentType } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-
 import {
   Pagination,
   PaginationContent,
@@ -16,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useMemo, ComponentType } from "react";
 
 /**
  * PaginationWithSelect Component

@@ -2,7 +2,6 @@
 
 import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
-import { FiArrowUpRight } from "react-icons/fi";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
 import { ScrollManager } from "@/utils/dom";
@@ -10,6 +9,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FiArrowUpRight } from "react-icons/fi";
 
 /* Same rest threshold as the landing Header */
 const SCROLLED_AT = 16;

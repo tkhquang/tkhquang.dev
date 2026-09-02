@@ -1,8 +1,8 @@
 import PostCard from "./PostCard";
-import { PathInfo } from "@/components/blog/PathInfo";
-import { MarkdownPost } from "@/models/markdown.types";
 import BlogPagination from "@/components/blog/BlogPagination";
+import { PathInfo } from "@/components/blog/PathInfo";
 import { ClientOnly } from "@/components/ui/client-only";
+import { MarkdownPost } from "@/models/markdown.types";
 
 const FeedList = <T,>({
   hideTitle,

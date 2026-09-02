@@ -1,10 +1,9 @@
-import "server-only";
-
-import { lookup } from "mime-types";
 import chromium from "@sparticuz/chromium";
 import fsPromise from "fs/promises";
+import { lookup } from "mime-types";
 import path from "path";
 import puppeteer, { type Browser, type Page } from "puppeteer-core";
+import "server-only";
 
 /**
  * Creates and launches a new Puppeteer browser instance with predefined configurations.

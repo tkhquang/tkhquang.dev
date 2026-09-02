@@ -1,5 +1,3 @@
-import "server-only";
-
 import {
   CurrentPlayingResponse,
   RecentlyPlayedResponse,
@@ -9,6 +7,7 @@ import {
   TopItemsTimeRange,
 } from "@/models/samples/spotify.models";
 import { getAccessToken } from "@/services/spotify/token";
+import "server-only";
 
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;

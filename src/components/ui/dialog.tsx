@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/utils/css";
 import {
   Dialog as AriaDialog,
   DialogDismiss,
@@ -8,7 +9,6 @@ import {
   useDialogStore,
 } from "@ariakit/react/dialog";
 import { X } from "lucide-react";
-import { cn } from "@/utils/css";
 
 interface DialogProps {
   children: React.ReactNode;

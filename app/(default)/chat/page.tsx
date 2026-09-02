@@ -1,15 +1,15 @@
 "use client";
 
-import { ChatJoin, User } from "@/components/chat-join";
-import { createClient } from "@/lib/supabase/client";
-import { Activity, useEffect, useState } from "react";
 import { AuthForm } from "@/components/auth/auth-form";
 import { UserMenu } from "@/components/auth/user-menu";
-import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { ChatJoin, User } from "@/components/chat-join";
 import { RealtimeChat } from "@/components/realtime-chat";
-import { Dialog } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
+import { createClient } from "@/lib/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { LogIn } from "lucide-react";
+import { Activity, useEffect, useState } from "react";
 
 interface MessageType {
   id: string;

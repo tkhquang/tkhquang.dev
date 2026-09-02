@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { cn } from "@/utils/css";
 import * as Ariakit from "@ariakit/react/select";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
-
-import { cn } from "@/utils/css";
+import * as React from "react";
 
 type SelectContextValue = {
   value?: string;
