@@ -1,4 +1,5 @@
 import AuroraCanvas from "@/components/blog/AuroraCanvas";
+import { intl } from "@/lib/intl";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 
@@ -84,10 +85,10 @@ const BlogMasthead = ({
         </p>
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-1">
           <span className="kicker text-theme-on-band tabular-nums">
-            {totalPosts} posts
+            {intl.formatMessage({ id: "postCount" }, { count: totalPosts })}
           </span>
           <span className="kicker text-theme-on-band tabular-nums">
-            {shelfCount} shelves
+            {intl.formatMessage({ id: "shelfCount" }, { count: shelfCount })}
           </span>
           <span className="kicker text-theme-on-band">
             Vol. {ROMAN[volume - 1] ?? volume}

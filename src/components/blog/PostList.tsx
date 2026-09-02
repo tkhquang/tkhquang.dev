@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { intl } from "@/lib/intl";
 import { MarkdownPost } from "@/models/markdown.types";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -52,7 +53,10 @@ const PostList = <
                   <span className="flex flex-1 items-baseline justify-between gap-4">
                     <span>{item.title}</span>
                     <span className="kicker tabular-nums">
-                      {postCount} post{postCount === 1 ? "" : "s"}
+                      {intl.formatMessage(
+                        { id: "postCount" },
+                        { count: postCount }
+                      )}
                     </span>
                   </span>
                 </AccordionTrigger>

@@ -1,6 +1,7 @@
 "use client";
 
 import { STACKED_LAYER_1 } from "@/components/layout/StackedLayers";
+import messages from "@/locales/en.json";
 import StackedLayerProvider from "@/providers/StackedLayerProvider";
 import StoreProvider from "@/providers/StoreProvider";
 import { useSelectedLayoutSegments } from "next/navigation";
@@ -20,13 +21,7 @@ export default function AppProvider({
 
   return (
     <StoreProvider>
-      <IntlProvider
-        messages={{
-          duration: "{minutes, number, ::00}:{seconds, number, ::00}",
-        }}
-        locale="en"
-        defaultLocale="en"
-      >
+      <IntlProvider messages={messages} locale="en" defaultLocale="en">
         <StackedLayerProvider id={STACKED_LAYER_1}>
           <AppContext.Provider value={{ segments }}>
             {children}
