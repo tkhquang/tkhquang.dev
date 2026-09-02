@@ -1,5 +1,5 @@
 import Image from "@/components/common/NextImage";
-import { CustomPreWithCopy } from "@/components/common/PreWithCopy";
+import PreWithCopy from "@/components/common/PreWithCopy";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import remarkEmbed from "@/lib/remark-embed";
@@ -89,7 +89,7 @@ function getProcessor(): Processor {
     })
     .use(rehypeReact, {
       components: {
-        "rehype-pretty-copy-button-pre": CustomPreWithCopy,
+        "rehype-pretty-copy-button-pre": PreWithCopy,
         "next-image": Image,
       },
       Fragment: prod.Fragment,

@@ -29,7 +29,7 @@ const PALETTES = {
   },
 } as const;
 
-const AuroraCanvas = ({ className }: { className?: string }) => {
+const AuroraCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
 
@@ -80,13 +80,14 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
     gl.linkProgram(program);
 
     /*
-     * Everything past the link waits in start() so the main thread never
-     * blocks on shader compilation: the synchronous status query below
-     * stalls until the compile finishes, and in Lighthouse traces that
-     * stall was the feed page's one long task (2.4s of its TBT). With
-     * KHR_parallel_shader_compile the driver compiles in the background
-     * and a rAF poll fires start() once it is done; without the
-     * extension start() runs at once, exactly the old path.
+     * Everything past the link waits in start(), so the main thread never
+     * blocks on shader compilation. The LINK_STATUS query in start() is
+     * synchronous and stalls until the compile finishes, which is long
+     * enough on this shader to become the feed page's single longest task.
+     * With KHR_parallel_shader_compile the driver compiles in the
+     * background and a rAF poll fires start() once COMPLETION_STATUS says
+     * it is done; without the extension start() runs immediately and takes
+     * the stall, since there is nothing to wait on.
      */
     let rafId = 0;
     const disposers: Array<() => void> = [];
@@ -320,10 +321,8 @@ const AuroraCanvas = ({ className }: { className?: string }) => {
       aria-hidden
       className={classNames(
         "pointer-events-none absolute inset-0 size-full",
-        "light:mix-blend-normal mix-blend-screen",
         "transition-opacity duration-1000",
-        ready ? "opacity-100" : "opacity-0",
-        className
+        ready ? "opacity-100" : "opacity-0"
       )}
     />
   );

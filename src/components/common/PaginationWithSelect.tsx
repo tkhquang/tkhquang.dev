@@ -191,7 +191,7 @@ const PaginationWithSelect = ({
     <Pagination className={className}>
       <PaginationContent>
         {/* Colophon status: always visible, anchors the bar to the rail */}
-        <li className="pagination-status kicker mr-auto whitespace-nowrap tabular-nums">
+        <li className="kicker mr-auto whitespace-nowrap tabular-nums">
           Page {currentPage} of {totalPage}
         </li>
 

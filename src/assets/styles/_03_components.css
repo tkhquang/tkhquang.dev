@@ -241,9 +241,9 @@
        * going full primary on hover. It never reaches the icon: underlines
        * skip inline padding (the 1em hit-area below and the icon pseudo's
        * padding), and the pseudo's mask clips its own nbsp's share of the
-       * decoration, so the line stops at the last glyph. Verified with a
-       * headless Chromium pixel test; no inline-block needed, which would
-       * have handed the line breaker a break opportunity before the icon.
+       * decoration, so the line stops at the last glyph. Deliberately not
+       * inline-block on the icon, which would hand the line breaker a break
+       * opportunity right before it.
        */
       text-decoration-line: underline;
       text-decoration-color: color-mix(
@@ -289,8 +289,7 @@
       }
 
       &:hover,
-      &:active,
-      &:visited:hover {
+      &:active {
         text-decoration-color: var(--primary);
       }
     }

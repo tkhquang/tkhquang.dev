@@ -11,7 +11,7 @@ interface PostAsideProps {
 /* Fills the article's right flank on wide screens */
 const PostAside = ({ categorySlug, categoryTitle, posts }: PostAsideProps) => {
   return (
-    <aside className="post-aside group hidden min-w-0 flex-1 flex-col pr-4 xl:flex">
+    <aside className="group hidden min-w-0 flex-1 flex-col pr-4 xl:flex">
       {posts.length > 0 && (
         /* A naked rail mirroring the TOC opposite: same sticky offset, same
            kicker header height, hairline rows instead of a card, and the
