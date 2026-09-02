@@ -85,6 +85,14 @@ const BlogHeader = ({
       };
     }
 
+    /*
+     * Only the list page reads `scrolled`, so anywhere else the subscription
+     * would drive state the render can never consume.
+     */
+    if (!isHomeBlog) {
+      return;
+    }
+
     /* The house scroll pub/sub, same as BackToTop and BackButtonIcon */
     const scrollManager = new ScrollManager();
     scrollManager.subscribe({
