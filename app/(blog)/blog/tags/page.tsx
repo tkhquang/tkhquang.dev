@@ -1,5 +1,5 @@
 import BlogInfo from "@/components/blog/BlogInfo";
-import HorizontalLine from "@/components/common/HorizontalLine";
+import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
@@ -44,13 +44,11 @@ export default async function TagsPage() {
   return (
     <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
-        <HorizontalLine className="h-2px mb-3" />
-
-        <h1 className="text-center text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-          Tags ({rankedTags.length})
-        </h1>
-
-        <HorizontalLine className="h-2px mt-3" />
+        <CatalogueHeadpiece
+          room="The Index"
+          title="Tags"
+          stat={`${rankedTags.length} subjects · ranked by entries`}
+        />
 
         <div className="my-8 flex flex-wrap gap-2">
           {rankedTags.map((tag) => (

@@ -1,5 +1,7 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
+import { getIntl } from "@/lib/intl";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
@@ -43,6 +45,7 @@ export default async function CategoryPage({
   const posts = await markdownParser.getAllPosts();
   const category = await markdownParser.getCategoryBySlug(slug);
   const filteredPost = posts.filter((post) => post.category_slug === slug);
+  const intl = getIntl(DEFAULT_LOCALE);
 
   return (
     <>
@@ -51,6 +54,14 @@ export default async function CategoryPage({
         pathInfoType="category"
         item={category}
         pathSlug="categories"
+        headpiece={{
+          room: `The ${category.title} Shelf`,
+          stat: intl.formatMessage(
+            { id: "postCount" },
+            { count: filteredPost.length }
+          ),
+          hue: `var(--shelf-${slug})`,
+        }}
       />
       <Suspense>
         <ClientSideGetPageViews

@@ -1,5 +1,5 @@
 import BlogInfo from "@/components/blog/BlogInfo";
-import HorizontalLine from "@/components/common/HorizontalLine";
+import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
 import {
   Accordion,
   AccordionContent,
@@ -21,15 +21,21 @@ const PostList = <
   list,
   listSlugField = "slug" as K,
   title,
-  count = list.length,
+  room,
+  stat,
+  getItemHue,
   defaultOpen,
 }: {
   title: string;
+  /* Catalogue headpiece copy: the library room and its stat line */
+  room: string;
+  stat: string;
   list: T[];
   groupedPostsBySlug: Record<string, MarkdownPost[]>;
   listSlugField?: K;
-  /* The archive headlines its post total, not its group count */
-  count?: number;
+  /* Shelf ribbons: a hue per item slug (the Categories page); the archive
+     years stay in plain ink */
+  getItemHue?: (slug: string) => string | undefined;
   defaultOpen?: string[];
 }) => {
   const intl = getIntl(DEFAULT_LOCALE);
@@ -37,24 +43,34 @@ const PostList = <
   return (
     <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
-        <HorizontalLine className="h-2px mb-3" />
-
-        <h1 className="text-center text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-          {title} ({count})
-        </h1>
-
-        <HorizontalLine className="h-2px mt-3" />
+        <CatalogueHeadpiece room={room} title={title} stat={stat} />
 
         <Accordion type="multiple" className="my-8" defaultValue={defaultOpen}>
           {list.map((item) => {
             const fieldSlug = item[listSlugField] as string;
             const postCount = groupedPostsBySlug[fieldSlug]?.length ?? 0;
+            const hue = getItemHue?.(fieldSlug);
 
             return (
-              <AccordionItem value={fieldSlug} key={fieldSlug}>
+              <AccordionItem
+                value={fieldSlug}
+                key={fieldSlug}
+                style={
+                  hue
+                    ? {
+                        borderBottomColor: `color-mix(in srgb, ${hue} 35%, transparent)`,
+                      }
+                    : undefined
+                }
+              >
                 <AccordionTrigger>
                   <span className="flex flex-1 items-baseline justify-between gap-4">
-                    <span>{item.title}</span>
+                    <span
+                      className={hue ? "font-semibold" : undefined}
+                      style={hue ? { color: hue } : undefined}
+                    >
+                      {item.title}
+                    </span>
                     <span className="kicker tabular-nums">
                       {intl.formatMessage(
                         { id: "postCount" },

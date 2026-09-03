@@ -57,6 +57,10 @@ export default async function TagPage({
         pathInfoType="tag"
         pathSlug="tags"
         item={currentTag}
+        headpiece={{
+          room: "The Index",
+          stat: `Tagged in ${filteredPost.length} ${filteredPost.length === 1 ? "post" : "posts"}`,
+        }}
       />
       <Suspense>
         <ClientSideGetPageViews

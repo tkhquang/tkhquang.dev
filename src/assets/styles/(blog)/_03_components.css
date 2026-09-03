@@ -156,6 +156,46 @@
   }
 
   /*
+   * Catalogue Headpiece: the index pages' shared chapter head, the
+   * masthead's typographic system without its sky. Left-set to the
+   * content column; the feed keeps its own full masthead.
+   */
+  .catalogue-headpiece {
+    display: block;
+  }
+
+  .catalogue-headpiece__room {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .catalogue-headpiece__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 620;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.9rem, 4.5vw, 2.35rem);
+    line-height: 1.12;
+    color: var(--primary);
+  }
+
+  .catalogue-headpiece__bar {
+    display: block;
+    height: 2px;
+    width: 4rem;
+    border-radius: 2px;
+    margin-top: 0.75rem;
+    background: color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+
+  .catalogue-headpiece__stat {
+    display: block;
+    margin-top: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
    * The quiet link: the colophon pagination's underline-fill grammar as a
    * reusable device for the serial plate and chapter-close titles. The
    * tint swells in place from zero width; nothing moves.

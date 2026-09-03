@@ -3,6 +3,7 @@ import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { Blog } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { getVolume } from "@/utils/volume";
 import { chunk } from "es-toolkit";
 import { Suspense } from "react";
 
@@ -31,14 +32,7 @@ export default async function BlogPage({ params }: any) {
   const currentPage = page;
 
   const shelfCount = new Set(allPosts.map((post) => post.category_slug)).size;
-
-  /* Volume counts calendar years, newspaper style: the first post's
-     year is Vol. I. Frozen at build time, which every deploy refreshes */
-  const sinceYear = allPosts.reduce(
-    (year, post) => Math.min(year, post.created_at.getFullYear()),
-    new Date().getFullYear()
-  );
-  const volume = new Date().getFullYear() - sinceYear + 1;
+  const volume = getVolume(allPosts);
 
   return (
     <>

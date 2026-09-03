@@ -1,6 +1,8 @@
 import PostList from "@/components/blog/PostList";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
+import { toRoman } from "@/utils/roman";
+import { getVolume } from "@/utils/volume";
 import { Metadata } from "next/types";
 
 export const dynamic = "force-static";
@@ -31,9 +33,10 @@ export default async function ArchivePage() {
   return (
     <PostList
       title="Archive"
+      room="The Ledger"
+      stat={`${posts.length} entries · Vol. ${toRoman(getVolume(posts))}`}
       list={years.map((year) => ({ slug: year, title: year }))}
       groupedPostsBySlug={groupedPostsByYear}
-      count={posts.length}
       defaultOpen={years.slice(0, 1)}
     />
   );
