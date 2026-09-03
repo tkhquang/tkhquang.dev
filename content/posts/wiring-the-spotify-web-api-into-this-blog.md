@@ -32,20 +32,25 @@ That is the Authorization Code flow used in a slightly unusual way. The flow is 
 Which means the integration splits cleanly in two, and the split is the whole point of this post:
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  sequence:
+    actorMargin: 30
+---
 sequenceDiagram
     title One approval, then a loop that never needs you
     autonumber
 
     participant Y as You
-    participant A as Spotify Accounts
+    participant A as Spotify<br/>Accounts
     participant S as Your server
     participant W as Spotify API
 
     Y->>A: GET /authorize
     A-->>Y: Consent screen
     Y->>A: Approve the scopes
-    A-->>Y: Redirect with ?code=
-    Note over Y,A: By hand. Once per account, not once per visitor.
+    A-->>Y: Redirect with<br/>?code=
+    Note over Y,A: By hand. Once per account,<br/>not once per visitor.
     Y->>A: POST /api/token
     A-->>Y: refresh_token, scope
     Y->>S: Into the environment
@@ -53,7 +58,7 @@ sequenceDiagram
     loop Forever, with nobody watching
         S->>A: POST /api/token
         A-->>S: access_token, 1 hour
-        S->>W: GET currently-playing
+        S->>W: GET<br/>currently-playing
         W-->>S: The song
     end
 </pre>

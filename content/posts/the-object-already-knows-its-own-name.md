@@ -128,17 +128,23 @@ else
 `heal_landmark` is the function, and it does the ritual: check the nominal slot first, and if the layout didn't drift, return immediately. Otherwise step outwards through the window around `base + 0x2A0`, pointer-aligned, nearest slot first, reverse-identifying each one, until it finds the slot whose pointee's mangled name is byte-for-byte `T`. The matched slot's offset is the healed offset. The patch moved the field; the mod noticed and followed it.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 24
+---
 graph TD
     subgraph "heal_landmark, allowed to say no"
         START["heal_landmark(lm)"] --> VAL{"descriptor<br/>valid?"};
         VAL -- no --> BAD["BadDescriptor<br/>no memory touched"];
-        VAL -- yes --> NOM{"nominal slot still<br/>resolves to T?"};
-        NOM -- yes --> OK0["healed_offset == nominal<br/>the layout did not drift"];
-        NOM -- no --> SCAN["step outwards by stride,<br/>nearest first, within the window"];
+        VAL -- yes --> NOM{"nominal slot<br/>still resolves<br/>to T?"};
+        NOM -- yes --> OK0["healed_offset ==<br/>nominal, the layout<br/>did not drift"];
+        NOM -- no --> SCAN["step outwards by<br/>stride, nearest first,<br/>within the window"];
         SCAN --> N{"matches?"};
-        N -- none --> NM["HealNoMatch<br/>never the nominal as a guess"];
-        N -- "one uniquely nearest" --> OK1["healed_offset = nominal ± d<br/>the field moved, we followed"];
-        N -- "+d / -d at a tie" --> AMB["HealAmbiguous<br/>a tie never guesses"];
+        N -- none --> NM["HealNoMatch<br/>never the nominal<br/>as a guess"];
+        N -- "one uniquely<br/>nearest" --> OK1["healed_offset =<br/>nominal ± d<br/>the field moved,<br/>we followed"];
+        NM ~~~ AMB["HealAmbiguous<br/>a tie never guesses"];
+        N -- "+d / -d<br/>at a tie" --> AMB;
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;

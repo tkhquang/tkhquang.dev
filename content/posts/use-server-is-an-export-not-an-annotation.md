@@ -174,6 +174,7 @@ graph TD
         C1["Any HTTP client"] -->|"POST, Next-Action id"| A1;
         A1 --> G1["Upstream API<br/>public and private data"];
     end
+    G1 ~~~ S2
     subgraph AFTER["Directive removed, server-only in its place"]
         S2["Server component"] --> A2["Your function"];
         C2["Any HTTP client"] -.->|"404, no entry in the table"| A2;

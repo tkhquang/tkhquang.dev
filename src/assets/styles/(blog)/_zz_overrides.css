@@ -362,12 +362,19 @@
     padding: 8px;
   }
 
-  /* Natural size, centered when narrow, scrolling in the pre when wide:
-     a max-width shrink here is what made dense charts unreadable */
+  /* Centered, and never wider than the column: charts are restructured
+     to sit near the column's width, so the residual fit here is a few
+     percent, not the wholesale downscale that once made them
+     unreadable. height auto keeps the ratio (a stale height attribute
+     is what opened voids above shrunk charts). The 560px floor stops
+     narrow viewports from shrinking type to dust; past it the plate
+     scrolls. */
   .mermaid > svg {
     background-color: transparent;
     display: block;
+    height: auto;
     margin-inline: auto;
+    max-width: max(100%, 560px);
   }
 
   /* The sequence title carries no class and kept the stock theme's dark
@@ -378,6 +385,13 @@
 
   .mermaid svg {
     font-family: var(--font-mono) !important;
+  }
+
+  /* Line breaks are baked into tspans at press time; view-time tracking
+     must not re-flow what was measured */
+  .mermaid svg text,
+  .mermaid svg tspan {
+    letter-spacing: normal;
   }
 
   /* The parts classDefs never reach, re-dressed to the plate: flowchart
@@ -397,6 +411,23 @@
   .mermaid svg .edgeLabel p {
     background-color: var(--background) !important;
     color: var(--on-surface) !important;
+  }
+
+  /* Labels are svg text now: the default ink follows the page, while
+     classDef accents arrive as inline !important styles and outrank
+     this. Edge labels sit on a stock grey wash rect re-dressed to the
+     plate ground. */
+  .mermaid svg .label text {
+    fill: var(--on-surface) !important;
+  }
+
+  .mermaid svg .edgeLabel rect {
+    fill: var(--background) !important;
+    opacity: 1 !important;
+  }
+
+  .mermaid svg .edgeLabel text {
+    fill: var(--on-surface) !important;
   }
 
   .mermaid svg .cluster rect {
