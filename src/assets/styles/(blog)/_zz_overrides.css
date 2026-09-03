@@ -362,10 +362,18 @@
     padding: 8px;
   }
 
+  /* Natural size, centered when narrow, scrolling in the pre when wide:
+     a max-width shrink here is what made dense charts unreadable */
   .mermaid > svg {
     background-color: transparent;
-    max-width: 100%;
-    height: auto;
+    display: block;
+    margin-inline: auto;
+  }
+
+  /* The sequence title carries no class and kept the stock theme's dark
+     ink, near-invisible by night */
+  .mermaid > svg > text {
+    fill: var(--on-surface) !important;
   }
 
   .mermaid svg {

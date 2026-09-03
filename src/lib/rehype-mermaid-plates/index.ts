@@ -45,6 +45,65 @@ const applyInkMap = (value: string) => {
   return out;
 };
 
+/* Mermaid 11.6 hard-caps subgraph titles at 200px, wrapping them onto
+   the nodes beneath (the config wrappingWidth only reaches node labels).
+   Repair on the finished svg: one line, sized to the text, recentered. */
+const collectText = (node: Element): string => {
+  let out = "";
+  for (const child of node.children as ElementContent[]) {
+    if (child.type === "text") out += child.value;
+    else if (child.type === "element") out += collectText(child);
+  }
+  return out;
+};
+
+function unwrapClusterLabels(node: Element) {
+  const isClusterLabel =
+    Array.isArray(node.properties?.className) &&
+    (node.properties.className as string[]).includes("cluster-label");
+
+  if (isClusterLabel) {
+    const foreign = node.children.find(
+      (child): child is Element =>
+        child.type === "element" && child.tagName === "foreignObject"
+    );
+    if (foreign) {
+      const text = collectText(foreign).trim();
+      const oldWidth = Number(foreign.properties?.width) || 200;
+      /* Mono at the cluster-title size runs about 10px per glyph */
+      const width = Math.ceil(text.length * 10.2 + 16);
+      if (width > oldWidth) {
+        foreign.properties.width = width;
+        foreign.properties.height = 24;
+        const div = foreign.children.find(
+          (child): child is Element =>
+            child.type === "element" && child.tagName === "div"
+        );
+        if (div && typeof div.properties?.style === "string") {
+          div.properties.style = div.properties.style
+            .replace(/max-width:\s*[^;]+;?/, "")
+            .replace(/width:\s*[^;]+;?/, "")
+            .concat(";white-space:nowrap;width:max-content");
+        }
+        const transform = node.properties?.transform;
+        if (typeof transform === "string") {
+          const match = transform.match(
+            /translate\(\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\)/
+          );
+          if (match) {
+            const x = Number(match[1]) - (width - oldWidth) / 2;
+            node.properties.transform = `translate(${x}, ${match[2]})`;
+          }
+        }
+      }
+    }
+  }
+
+  for (const child of node.children as ElementContent[]) {
+    if (child.type === "element") unwrapClusterLabels(child);
+  }
+}
+
 /* Re-ink a rendered svg subtree: its <style> text, inline style strings,
    and direct fill/stroke paint attributes */
 function reinkSvg(node: Element) {
@@ -69,13 +128,18 @@ function reinkSvg(node: Element) {
    (surviving whatever the image plugins did to embedded tags), decode
    the way mermaid does, and hand the renderer one pristine text node.
    Without this, block elements the pipeline plants inside a diagram make
-   the text extraction glue lines together and the parse fails. */
+   the text extraction glue lines together and the parse fails. Numeric
+   references matter: toHtml writes an ampersand as &#x26;, and skipping
+   those printed "&#x26;" literally into diagram labels. */
 const innerSource = (node: Element) =>
   toHtml(node.children, { allowDangerousHtml: true })
+    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+      String.fromCodePoint(parseInt(hex, 16))
+    )
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(Number(dec)))
     .replace(/&gt;/g, ">")
     .replace(/&lt;/g, "<")
     .replace(/&quot;/g, '"')
-    .replace(/&#x27;|&#39;/g, "'")
     .replace(/&amp;/g, "&");
 
 export function rehypeMermaidPrepare(): Transformer<Root> {
@@ -112,6 +176,7 @@ export function rehypeMermaidRestore(): Transformer<Root> {
       /* rehype-mermaid numbers output svgs in document order */
       const ordinal = Number(node.properties.id.slice("mermaid-".length));
       reinkSvg(node);
+      unwrapClusterLabels(node);
       const wrapper: Element = {
         type: "element",
         tagName: "pre",
@@ -126,16 +191,28 @@ export function rehypeMermaidRestore(): Transformer<Root> {
   };
 }
 
-/* Passed to rehype-mermaid: mono script measured with the real face (the
-   css option loads it into the render browser), diagrams left on the
-   base theme whose surfaces our stylesheet re-dresses */
+/* Passed to rehype-mermaid. Measured in headless chromium's monospace,
+   whose advance width matches Source Code Pro closely enough that the
+   displayed face fits the measured boxes (a remote font css provably
+   never reaches measurement, so none is loaded). Diagrams render at
+   NATURAL size: useMaxWidth downscaling was what made wide charts
+   unreadably small; the pre scrolls instead. wrappingWidth lifts the
+   200px label cap that wrapped and collided subgraph titles, and
+   subGraphTitleMargin reserves real space beneath them. */
 export const MERMAID_RENDER_OPTIONS = {
   strategy: "inline-svg" as const,
-  css: "https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap",
   mermaidConfig: {
     fontFamily: '"Source Code Pro", monospace',
     themeVariables: {
       fontFamily: '"Source Code Pro", monospace',
+    },
+    flowchart: {
+      useMaxWidth: false,
+      wrappingWidth: 800,
+      subGraphTitleMargin: { top: 8, bottom: 16 },
+    },
+    sequence: {
+      useMaxWidth: false,
     },
   },
 };
