@@ -13,8 +13,10 @@ import { visit } from "unist-util-visit";
  * the Dracula values in its stylesheet and paint attributes become
  * var(--diagram-*) references, so the baked plates follow the page theme
  * at view time with no client mermaid at all. Restore also wraps each
- * svg back into <pre class="(original classes)" data-processed="true">,
- * so every shipped selector keeps working against the same DOM shape.
+ * svg into <mermaid-plate class="(original classes)"
+ * data-processed="true">, which the rehypeReact map hands to the
+ * MermaidPlate component; it renders the same pre.mermaid the page
+ * always shipped, plus the full-view expand control.
  */
 
 /* The corpus's classDefs are perfectly uniform:
@@ -267,7 +269,7 @@ export function rehypeMermaidRestore(): Transformer<Root> {
       }
       const wrapper: Element = {
         type: "element",
-        tagName: "pre",
+        tagName: "mermaid-plate",
         properties: {
           className: (classLists[ordinal] ?? ["mermaid"]).filter(
             (name) => !LEGACY_LAYOUT_CLASSES.has(name)

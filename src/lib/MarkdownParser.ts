@@ -1,7 +1,8 @@
 import lamplightDark from "@/assets/shiki/lamplight-dark.json";
 import lamplightLight from "@/assets/shiki/lamplight-light.json";
-import Image from "@/components/common/NextImage";
+import MermaidPlate from "@/components/common/MermaidPlate";
 import PreWithCopy from "@/components/common/PreWithCopy";
+import ZoomableImage from "@/components/common/ZoomableImage";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import {
@@ -10,17 +11,17 @@ import {
   rehypeMermaidRestore,
 } from "@/lib/rehype-mermaid-plates";
 import remarkEmbed from "@/lib/remark-embed";
-import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from "@shikijs/transformers";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import { getProcessedImage } from "@/utils/image";
 import { getPostFiles, postsDirectory } from "@/utils/posts";
 import { slugifyTag } from "@/utils/slug";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+} from "@shikijs/transformers";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
 import matter from "gray-matter";
@@ -119,7 +120,8 @@ function getProcessor(): Processor {
     .use(rehypeReact, {
       components: {
         "rehype-pretty-copy-button-pre": PreWithCopy,
-        "next-image": Image,
+        "next-image": ZoomableImage,
+        "mermaid-plate": MermaidPlate,
       },
       Fragment: prod.Fragment,
       jsx: prod.jsx,

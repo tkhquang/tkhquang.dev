@@ -500,6 +500,18 @@
     white-space: normal;
   }
 
+  /* Full View: the same baked svg reprinted inside the overlay. The
+     fit-to-screen lives in the overlay's transform, so the 560px floor
+     and the scroll window that serve the column stand down here. */
+  pre.mermaid.chart-plate-full {
+    margin: 0;
+    overflow: visible;
+  }
+
+  .mermaid.chart-plate-full > svg {
+    max-width: none;
+  }
+
   /* The old theme-invariant selection inks for diagrams are gone with
      the pale plate: baked plates sit on the page ground and follow the
      theme, so the page's own selection wash reads correctly on them. */
