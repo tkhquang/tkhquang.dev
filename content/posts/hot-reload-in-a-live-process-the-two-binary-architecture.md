@@ -48,7 +48,7 @@ config:
 ---
 graph TD
     subgraph "The two-binary split"
-        INJ["Injector"] -->|"injects once, at startup"| LOADER["Resident loader<br/>never unloads"];
+        INJ["Injector"] -->|"injects once,<br/>at startup"| LOADER["Resident loader<br/>never unloads"];
         LOADER -->|"spawns"| CTRL["Control thread<br/>runs off the loader lock"];
         CTRL -->|"owns"| POLICY["Reload policy,<br/>staged names,<br/>persistent state,<br/>the verdict"];
         CTRL -->|"loads, and replaces"| GEN["Logic DLL, generation N<br/>hooks, config,<br/>features, bindings"];
@@ -90,7 +90,7 @@ Everything else doesn't reset, and that list is longer. Memory in the host proce
 graph TD
     subgraph "Across one generation boundary"
         direction TB
-        N["Generation N"] -->|"Shutdown, FreeLibrary,<br/>image unmapped"| X(("swap"));
+        N["Generation N"] -->|"Shutdown,<br/>FreeLibrary,<br/>image unmapped"| X(("swap"));
         X -->|"LoadLibrary, Init,<br/>from nothing"| N1["Generation N+1"];
         RESET["Globals and their initialisers<br/>function-local statics and guards<br/>everything Init built"] -.->|"reset, and only<br/>if the image<br/>genuinely unmapped"| X;
         KEEP["Patched host memory,<br/>written files,<br/>leaked handles,<br/>OS registrations,<br/>unjoined threads,<br/>loader-owned state"] ==>|"survives, whether<br/>you meant it<br/>to or not"| N1;
@@ -186,10 +186,10 @@ This is where the unique staged name earns its keep, and it's why that conventio
 graph TD
     subgraph "What the file name decides"
         CALL["LoadLibrary(path)"] --> Q{"Has this exact path<br/>been loaded before?"};
-        Q -->|"yes: the build output,<br/>reused every generation"| HIT["The database already<br/>holds an entry<br/>the count goes up,<br/>the file is never opened"];
+        Q -->|"yes: the build<br/>output, reused<br/>every generation"| HIT["The database already<br/>holds an entry<br/>the count goes up,<br/>the file is never opened"];
         HIT --> STALE["Returns the<br/>generation 1 handle<br/>no error, no warning,<br/>indistinguishable<br/>from a fresh map"];
         STALE -.-> SNOTE(["The build you just<br/>made never runs."]);
-        Q -->|"no: a unique staged name"| MISS["No entry can match<br/>a name that has<br/>never been loaded"];
+        Q -->|"no: a unique<br/>staged name"| MISS["No entry can match<br/>a name that has<br/>never been loaded"];
         MISS --> FRESH["Reads the generation 2<br/>bytes off disk<br/>maps fresh bytes,<br/>or fails loudly"];
         FRESH -.-> FNOTE(["Exactly two outcomes,<br/>and both are honest."]);
     end

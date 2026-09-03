@@ -150,7 +150,7 @@ graph TD;
         A["Camera Position (Vec3)"] --> C["View Matrix Construction Logic<br/>(Math combining position & rotation)"];
         B["Camera Rotation (Quat)"] --> C;
         C --> D["View Matrix (Matrix34)<br/>The final set of numbers for the view<br/>[ r.x  r.y  r.z  tx ]<br/>[ u.x  u.y  u.z  ty ]<br/>[ f.x  f.y  f.z  tz ]"];
-        D --> E["Sent to the Renderer<br/>(The part of the engine that draws everything)"];
+        D --> E["Sent to the Renderer<br/>(The part of the engine<br/>that draws everything)"];
     end
 
     %% Styling

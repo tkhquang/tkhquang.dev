@@ -309,10 +309,10 @@ Three details decide how you have to build around it.
 graph TD
     A["You approve<br/>the six months start here"] --> B["Refresh token"];
     B --> C["Refresh, refresh, refresh<br/>as often as you like"];
-    C -->|"does not extend anything"| B;
+    C -->|"does not<br/>extend anything"| B;
     B --> D["Month 6"];
     D --> E["invalid_grant<br/>on every refresh, forever"];
-    E -->|"only a human can fix this"| A;
+    E -->|"only a human<br/>can fix this"| A;
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
     classDef good fill:#282a36,stroke:#50fa7b,stroke-width:2px,color:#50fa7b;

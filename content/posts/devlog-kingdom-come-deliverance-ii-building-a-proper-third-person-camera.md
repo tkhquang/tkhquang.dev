@@ -149,7 +149,7 @@ graph TD
         D -- No --> F;
         D -- Yes --> E["Build the third-person pose<br/>and overwrite the matrix"];
         E --> F["Original CCamera::UpdateFrustumPlanes<br/>builds cull planes FROM that matrix"];
-        F --> G["Renderer draws, culling matches the view"];
+        F --> G["Renderer draws, culling<br/>matches the view"];
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;

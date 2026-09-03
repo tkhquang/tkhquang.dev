@@ -105,7 +105,7 @@ graph TD
     R1["POST /"] --> M["Global manifest lookup<br/>one table per deployment"];
     R2["POST /blog"] --> M;
     R3["POST /resume<br/>never imports the module"] --> M;
-    M -->|"forwards to a worker that<br/>imported it, never refuses"| FN["Your function"];
+    M -->|"forwards to a worker<br/>that imported it,<br/>never refuses"| FN["Your function"];
     FN --> OUT["Same 35489 bytes<br/>at every door"];
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -177,7 +177,7 @@ graph TD
     G1 ~~~ S2
     subgraph AFTER["Directive removed, server-only in its place"]
         S2["Server component"] --> A2["Your function"];
-        C2["Any HTTP client"] -.->|"404, no entry in the table"| A2;
+        C2["Any HTTP client"] -.->|"404, no entry<br/>in the table"| A2;
         A2 --> G2["Upstream API<br/>public and private data"];
     end
 

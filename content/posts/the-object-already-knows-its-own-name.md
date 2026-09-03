@@ -79,7 +79,7 @@ td  + 0x10      --> the mangled name, e.g. ".?AVHealthComponent@game@@"
 graph TD
     subgraph "Every polymorphic object can be asked its name"
         OBJ["A live object<br/>first qword: the vptr"] --> VT["vtable"];
-        VT -->|"one qword before it: vtable[-1]"| COL["RTTICompleteObjectLocator<br/>signature, offset, pTypeDescriptor, pSelf"];
+        VT -->|"one qword before<br/>it: vtable[-1]"| COL["RTTICompleteObjectLocator<br/>signature, offset,<br/>pTypeDescriptor, pSelf"];
         COL --> CHK{"does col_addr - pSelf<br/>reconstruct the owning<br/>module's base?"};
         CHK -- no --> REJ["forged or relocated<br/>rejected, fail closed"];
         CHK -- yes --> TDESC["TypeDescriptor"];

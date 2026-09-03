@@ -131,7 +131,7 @@ graph TD
         ProfileMgr --> GetLocalOffset["Mod Gets Active Local Offset<br/>(from g_currentCameraOffset)"];
 
         subgraph "Offset Transformation"
-           ReadGamePose -- Camera World Rotation --> TransformOffset;
+           ReadGamePose -- "Camera World<br/>Rotation" --> TransformOffset;
            GetLocalOffset -- Local XYZ Offset --> TransformOffset;
            TransformOffset["Transform Local Offset<br/>to World Offset<br/>(worldOffset = cameraRotation<br/>.Rotate(localOffset))"];
         end
