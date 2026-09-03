@@ -40,13 +40,13 @@ const Writing = async () => {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
           {posts.map((post) => (
             <article key={post.slug} className="flex flex-col">
-              {post.cover_image && (
-                <Link
-                  href={`/blog/posts/${post.slug}`}
-                  aria-label={post.title}
-                  className="block"
-                >
-                  <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-md">
+              <Link
+                href={`/blog/posts/${post.slug}`}
+                aria-label={post.title}
+                className="block"
+              >
+                {post.cover_image ? (
+                  <div className="border-theme-hairline-soft relative aspect-video w-full overflow-hidden rounded-lg border shadow-md">
                     <NextImage
                       {...post.coverData}
                       fill
@@ -60,12 +60,28 @@ const Writing = async () => {
                       }}
                     />
                   </div>
-                </Link>
-              )}
+                ) : (
+                  /* Coverless posts get a bookplate in the same frame so
+                     the cover row never collapses and the grid stays
+                     aligned */
+                  <div className="band border-theme-hairline-soft flex-center aspect-video w-full rounded-lg border shadow-md">
+                    <span
+                      className="writing__bookplate-mark"
+                      aria-hidden="true"
+                    >
+                      Ljóss
+                    </span>
+                  </div>
+                )}
+              </Link>
               <span className="kicker mt-4">
                 {format(post.created_at, "MMM dd, yyyy")}
               </span>
-              <h3 className="m-0 mt-1 text-lg leading-snug font-bold">
+              {/* Two reserved lines, clamped, only while the cards sit in
+                  one row: descriptions start on the same row across the
+                  three cards no matter the title length. Stacked on mobile
+                  there is nothing to align, so titles run free */}
+              <h3 className="m-0 mt-1 text-lg leading-snug font-bold md:line-clamp-2 md:min-h-[2.75em]">
                 <Link
                   href={`/blog/posts/${post.slug}`}
                   className="text-theme-primary transition-opacity hover:opacity-75"

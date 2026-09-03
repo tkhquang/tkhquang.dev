@@ -28,6 +28,18 @@
   }
 }
 
+/* The stand-in cover's wordmark: the blog's face on the band's own sky,
+   sized against the plate so it reads as a pressed mark, not a headline */
+.writing__bookplate-mark {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-size-adjust: 0.525;
+  color: var(--on-band);
+  opacity: 0.9;
+}
+
 /* The name drop: the wordmark's face and weight in the theme's own
    accent violet, the analogous neighbor of the heading's primary blue,
    so Ljóss lifts out of the line without leaving the palette */
