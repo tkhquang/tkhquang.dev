@@ -67,21 +67,26 @@ const BlogFooter = async ({
               </Fragment>
             ))}
           </nav>
-          <HorizontalLine className="blog-colophon__short" />
-          <div className="blog-colophon__wire">
-            <span className="kicker opacity-60">Subscribe by wire</span>
-            <a className="tint-link blog-colophon__wire-link" href="/blog/feed.xml">
-              Atom · feed.xml
-            </a>
-            <a
-              className="tint-link blog-colophon__wire-link"
-              href="https://buttondown.com/ljoss"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Letter · buttondown.com/ljoss
-            </a>
-          </div>
+          <HorizontalLine className="blog-colophon__short blog-colophon__short--after-doors" />
+          <dl className="blog-colophon__imprint">
+            <dt className="kicker">Subscribe by wire</dt>
+            <dd className="blog-colophon__wire">
+              <a
+                className="tint-link blog-colophon__wire-link"
+                href="/blog/feed.xml"
+              >
+                Atom · feed.xml
+              </a>
+              <a
+                className="tint-link blog-colophon__wire-link"
+                href="https://buttondown.com/ljoss"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Letter · buttondown.com/ljoss
+              </a>
+            </dd>
+          </dl>
         </div>
       </div>
 
