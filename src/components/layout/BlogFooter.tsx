@@ -90,6 +90,10 @@ const BlogFooter = async ({
         className={clsx(
           "footer shadow-box-md mt-auto w-full py-4 text-center",
           "header__background-transparent--blog text-theme-on-surface",
+          /* Pinned to the viewport bottom at all times; the translucent
+             blur bar is built to ride over content, and the colophon's
+             end matter flows in the document above it */
+          "sticky bottom-0 z-10",
           className
         )}
       >
