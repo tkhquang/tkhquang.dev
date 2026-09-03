@@ -1,5 +1,6 @@
 ---
 title: "[Devlog] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood"
+short_title: "Customizing the View: TPV Offsets, Input, and What's Under the Hood"
 created_at: 2025-05-7T00:00:00.000Z
 updated_at: 2026-08-28T00:00:00.000Z
 published: true

@@ -83,18 +83,20 @@ export default async function Post({
       other.category_slug === post.category_slug && other.slug !== post.slug
   );
 
+  /* The full serial roster for the instalment plate under the lede */
+  const seriesParts = post.series
+    ? allPosts
+        .filter((other) => other.series === post.series)
+        .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))
+    : [];
+  const seriesIndex = seriesParts.findIndex((part) => part.slug === post.slug);
+
   /* Serial continuity outranks recency: a reader finishing instalment N
      is offered instalment N+1 before the shelf's newest */
-  const nextInSeries = post.series
-    ? allPosts
-        .filter(
-          (other) =>
-            other.series === post.series &&
-            other.slug !== post.slug &&
-            (other.series_part ?? 0) > (post.series_part ?? 0)
-        )
-        .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))[0]
-    : undefined;
+  const nextInSeries =
+    seriesIndex >= 0 ? seriesParts[seriesIndex + 1] : undefined;
+  const previousInSeries =
+    seriesIndex > 0 ? seriesParts[seriesIndex - 1] : undefined;
 
   /* The rail's shelf rows stay pure recency; the next instalment gets
      its own pinned gilt block above them instead of masquerading as one */
@@ -102,30 +104,52 @@ export default async function Post({
     .filter((other) => other.slug !== nextInSeries?.slug)
     .slice(0, 3);
 
-  /* The full serial roster for the instalment plate under the lede */
-  const seriesParts = post.series
-    ? allPosts
-        .filter((other) => other.series === post.series)
-        .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))
-    : [];
+  /* The chapter close turns a page, it does not step through a timeline.
+     A serial hands over its own adjacent instalments and stops at the
+     serial's edges; everything else stays on its shelf. Walking the whole
+     volume by date was the old behaviour, and it closed a devlog with
+     whatever unrelated entry happened to be published next. */
+  const previousPost = post.series
+    ? previousInSeries
+    : categoryPosts.find((other) => other.created_at < post.created_at);
+  const nextPost = post.series
+    ? nextInSeries
+    : /* categoryPosts is bound newest-first, so the oldest entry newer
+         than this one sits at the far end */
+      [...categoryPosts]
+        .reverse()
+        .find((other) => other.created_at > post.created_at);
 
-  /* Chronological neighbors for the chapter close: the volume is bound
-     newest-first, so "next" is the newer entry */
-  const postIndex = allPosts.findIndex((other) => other.slug === post.slug);
-  const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : undefined;
-  const previousPost =
-    postIndex >= 0 && postIndex < allPosts.length - 1
-      ? allPosts[postIndex + 1]
-      : undefined;
+  /* See also gathers kin, not neighbours: the posts sharing the most tags
+     with this one, minus everything the page already prints elsewhere (the
+     two panels above, the serial roster under the lede, and the shelf rows
+     in the right rail). Ties break to the newer entry. */
+  const alreadyPrinted = new Set(
+    [
+      previousPost?.slug,
+      nextPost?.slug,
+      ...seriesParts.map((part) => part.slug),
+      ...relatedPosts.map((other) => other.slug),
+    ].filter((slug): slug is string => Boolean(slug))
+  );
 
-  /* Below xl the right rail is absent, so the plate carries the shelf
-     rows; the neighbors above never repeat in them */
-  const seeAlso = categoryPosts
+  const postTags = new Set(post.tags ?? []);
+  const seeAlso = allPosts
     .filter(
-      (other) =>
-        other.slug !== previousPost?.slug && other.slug !== nextPost?.slug
+      (other) => other.slug !== post.slug && !alreadyPrinted.has(other.slug)
     )
-    .slice(0, 3);
+    .map((other) => ({
+      other,
+      shared: (other.tags ?? []).filter((tag) => postTags.has(tag)).length,
+    }))
+    .filter((entry) => entry.shared > 0)
+    .sort(
+      (a, b) =>
+        b.shared - a.shared ||
+        (a.other.created_at > b.other.created_at ? -1 : 1)
+    )
+    .slice(0, 3)
+    .map((entry) => entry.other);
 
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;

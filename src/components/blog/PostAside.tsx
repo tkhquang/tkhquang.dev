@@ -54,7 +54,7 @@ const PostAside = ({
                   href={`/blog/posts/${nextInstalment.slug}`}
                   className="text-theme-primary leading-snug font-semibold transition-opacity hover:opacity-75"
                 >
-                  {serialDisplayTitle(nextInstalment.title)}
+                  {serialDisplayTitle(nextInstalment)}
                 </Link>
               </div>
             </div>

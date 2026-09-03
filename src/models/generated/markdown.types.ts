@@ -1,5 +1,6 @@
 export interface PostsCollection {
   title: string;
+  short_title?: string;
   created_at: Date;
   updated_at?: Date;
   published: boolean;

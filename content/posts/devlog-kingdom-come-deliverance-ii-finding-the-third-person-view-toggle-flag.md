@@ -1,5 +1,6 @@
 ---
 title: "[Devlog] Kingdom Come: Deliverance II - Finding the Third-Person View Toggle Flag"
+short_title: "Finding the Third-Person View Toggle Flag"
 created_at: 2025-03-29T00:00:00.000Z
 updated_at: 2025-05-25T00:00:00.000Z
 published: true

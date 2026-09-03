@@ -5,12 +5,12 @@ import Link from "next/link";
 
 /* Serial furniture lists parts without their shared running prefix: a
    serial titled "[Devlog] Kingdom Come: Deliverance II - Customizing the
-   View" reads as "Customizing the View" inside its own plate and rail */
-export const serialDisplayTitle = (title: string) => {
-  if (!title.startsWith("[")) return title;
-  const separatorAt = title.indexOf(" - ");
-  return separatorAt === -1 ? title : title.slice(separatorAt + 3);
-};
+   View" reads as "Customizing the View" inside its own plate and rail,
+   where the prefix already sits in the heading above. The short form is
+   authored per post as short_title rather than cut out of the full title
+   by rule, since no rule can tell a running prefix from a real one. */
+export const serialDisplayTitle = (post: MarkdownPost) =>
+  post.short_title?.trim() || post.title;
 
 /* The four-point chart star that marks the instalment being read */
 const CurrentMark = () => (
@@ -63,18 +63,28 @@ const SeriesPlate = ({ currentSlug, parts, series }: SeriesPlateProps) => {
               <span className="series-plate__numeral">
                 {toRoman(index + 1)}.
               </span>
-              {isCurrent ? (
-                <span className="series-plate__title" aria-current="page">
-                  {serialDisplayTitle(part.title)}
-                </span>
-              ) : (
-                <Link
-                  href={`/blog/posts/${part.slug}`}
-                  className="series-plate__title tint-link"
-                >
-                  {serialDisplayTitle(part.title)}
-                </Link>
-              )}
+              {/* The cell is the grid item and the label stays inline
+                  inside it, for two reasons: a grid item is blockified,
+                  and the tint swell on a blockified link sizes to the
+                  whole column instead of the words; and only an inline
+                  box masks the leader running underneath line by line */}
+              <span
+                className="series-plate__title"
+                {...(isCurrent ? { "aria-current": "page" as const } : {})}
+              >
+                {isCurrent ? (
+                  <span className="series-plate__label">
+                    {serialDisplayTitle(part)}
+                  </span>
+                ) : (
+                  <Link
+                    href={`/blog/posts/${part.slug}`}
+                    className="series-plate__label tint-link"
+                  >
+                    {serialDisplayTitle(part)}
+                  </Link>
+                )}
+              </span>
               <span className="series-plate__leader" aria-hidden />
               <span className="series-plate__date">
                 {format(part.created_at, "MMM dd, yyyy")}

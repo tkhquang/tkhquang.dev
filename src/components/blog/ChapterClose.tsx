@@ -21,7 +21,12 @@ const AsterismTailpiece = () => (
           strokeWidth="0.75"
           opacity="0.5"
         />
-        <circle cx="16" cy="12" r="1.3" fill="var(--chart-star, var(--primary))" />
+        <circle
+          cx="16"
+          cy="12"
+          r="1.3"
+          fill="var(--chart-star, var(--primary))"
+        />
         <circle
           cx="48"
           cy="12"
@@ -39,7 +44,12 @@ const AsterismTailpiece = () => (
           strokeWidth="0.75"
           opacity="0.5"
         />
-        <circle cx="80" cy="12" r="1.3" fill="var(--chart-star, var(--primary))" />
+        <circle
+          cx="80"
+          cy="12"
+          r="1.3"
+          fill="var(--chart-star, var(--primary))"
+        />
       </g>
     </svg>
   </div>
@@ -47,10 +57,11 @@ const AsterismTailpiece = () => (
 
 interface ChapterCloseProps {
   post: MarkdownPost;
-  /* Chronological neighbors across the whole volume: next is the newer */
+  /* The page turn: a serial's adjacent instalments, or the shelf's
+     chronological neighbours when the post carries no series */
   previousPost?: MarkdownPost;
   nextPost?: MarkdownPost;
-  /* Same-shelf rows shown only below xl, where the right rail is absent */
+  /* Kin by shared tags, and never a repeat of the panels or the rail */
   seeAlso: MarkdownPost[];
   /* Right head badge: the serial's name, or the shelf's */
   contextLabel: string;
@@ -67,6 +78,9 @@ const ChapterClose = ({
   /* Seven words, per the approved copy: eight landed mid-name */
   const catchword = nextPost ? getOpeningWords(nextPost.content, 7) : "";
   const bothPanels = Boolean(previousPost && nextPost);
+  /* A serial's first and last instalments turn only one page, and a lone
+     post on its shelf turns none: the plate still stands on its rows */
+  const anyPanel = Boolean(previousPost || nextPost);
 
   return (
     <>
@@ -77,69 +91,77 @@ const ChapterClose = ({
         read
       </span>
 
-      {(previousPost || nextPost) && (
+      {(anyPanel || seeAlso.length > 0) && (
         <section className="chapter-close__plate" aria-label="Cross-references">
           <header className="chapter-close__head">
             <span className="kicker">Cross-references</span>
             <span className="kicker opacity-55">{contextLabel}</span>
           </header>
-          <div
-            className={
-              bothPanels
-                ? "chapter-close__spread"
-                : "chapter-close__spread chapter-close__spread--single"
-            }
-          >
-            {previousPost && (
-              <div className="chapter-close__panel">
-                <div className="chapter-close__meta">
-                  <span className="kicker">Previous entry</span>
-                  <span className="kicker opacity-55">
-                    {format(previousPost.created_at, "MMM dd, yyyy")}
-                  </span>
+          {anyPanel && (
+            <div
+              className={
+                bothPanels
+                  ? "chapter-close__spread"
+                  : "chapter-close__spread chapter-close__spread--single"
+              }
+            >
+              {previousPost && (
+                <div className="chapter-close__panel">
+                  <div className="chapter-close__meta">
+                    <span className="kicker">Previous entry</span>
+                    <span className="kicker opacity-55">
+                      {format(previousPost.created_at, "MMM dd, yyyy")}
+                    </span>
+                  </div>
+                  <h3 className="chapter-close__title">
+                    <Link
+                      href={`/blog/posts/${previousPost.slug}`}
+                      className="tint-link"
+                    >
+                      {previousPost.title}
+                    </Link>
+                  </h3>
                 </div>
-                <h3 className="chapter-close__title">
-                  <Link
-                    href={`/blog/posts/${previousPost.slug}`}
-                    className="tint-link"
-                  >
-                    {previousPost.title}
-                  </Link>
-                </h3>
-              </div>
-            )}
-            {nextPost && (
-              <div
-                className={
-                  bothPanels
-                    ? "chapter-close__panel chapter-close__panel--next"
-                    : "chapter-close__panel"
-                }
-              >
-                <div className="chapter-close__meta">
-                  <span className="kicker">Next entry</span>
-                  <span className="kicker opacity-55">
-                    {format(nextPost.created_at, "MMM dd, yyyy")}
-                  </span>
+              )}
+              {nextPost && (
+                <div
+                  className={
+                    bothPanels
+                      ? "chapter-close__panel chapter-close__panel--next"
+                      : "chapter-close__panel"
+                  }
+                >
+                  <div className="chapter-close__meta">
+                    <span className="kicker">Next entry</span>
+                    <span className="kicker opacity-55">
+                      {format(nextPost.created_at, "MMM dd, yyyy")}
+                    </span>
+                  </div>
+                  <h3 className="chapter-close__title">
+                    <Link
+                      href={`/blog/posts/${nextPost.slug}`}
+                      className="tint-link"
+                    >
+                      {nextPost.title}
+                    </Link>
+                  </h3>
+                  {catchword && (
+                    <p className="chapter-close__catchword">
+                      {catchword}&nbsp;&hellip;
+                    </p>
+                  )}
                 </div>
-                <h3 className="chapter-close__title">
-                  <Link
-                    href={`/blog/posts/${nextPost.slug}`}
-                    className="tint-link"
-                  >
-                    {nextPost.title}
-                  </Link>
-                </h3>
-                {catchword && (
-                  <p className="chapter-close__catchword">
-                    {catchword}&nbsp;&hellip;
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
           {seeAlso.length > 0 && (
-            <div className="chapter-close__seealso xl:hidden">
+            <div
+              className={
+                anyPanel
+                  ? "chapter-close__seealso"
+                  : "chapter-close__seealso chapter-close__seealso--only"
+              }
+            >
               <span className="kicker">See also</span>
               <ol className="chapter-close__rows">
                 {seeAlso.map((other) => (
@@ -152,7 +174,7 @@ const ChapterClose = ({
                         {other.title}
                       </Link>
                     </span>
-                    <span className="kicker opacity-55 chapter-close__row-date">
+                    <span className="kicker chapter-close__row-date opacity-55">
                       {format(other.created_at, "MMM dd, yyyy")}
                     </span>
                   </li>

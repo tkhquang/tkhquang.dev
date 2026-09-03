@@ -1,3 +1,12 @@
+/* The tint swell fades only while --ul-a is a registered percentage. An
+   unregistered custom property is not interpolable, so the transition on
+   .tint-link was inert and the underline snapped on at full strength. */
+@property --ul-a {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 @layer components {
   .logo {
     /* perspective: 1000px; */
@@ -1006,6 +1015,11 @@
     background-size: 100% 0.45em;
     background-position: 0 85%;
     background-repeat: no-repeat;
+    /* Every line of a wrapped link gets its own swell. Under the default
+       slice the percentages resolve against the unbroken box, which lays
+       one bar across the first line and misses the rest. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     transition: --ul-a 0.2s ease;
   }
 
@@ -1020,6 +1034,12 @@
    * every width, never folding under the title (owner ruling).
    */
   .series-plate {
+    /* One line of title. The mark pins to it, so a title long enough to
+       wrap cannot drag the furniture down to the middle of the row. */
+    --series-title-size: 0.9375rem;
+    --series-title-leading: 1.4;
+    --series-line: calc(var(--series-title-size) * var(--series-title-leading));
+
     border: 1px solid var(--hairline-soft);
     border-radius: 0.5rem;
     padding: 1.15rem 1.35rem 0.4rem;
@@ -1065,21 +1085,45 @@
   }
 
   /* Five columns: the title takes its natural width, the dot leader fills
-     the slack, and the date column never wraps under anything */
+     the slack, and the date column never wraps under anything. Every cell
+     is placed by hand because the leader deliberately overlaps the title,
+     and auto-placement would push it onto a second row. */
   .series-plate__row {
     display: grid;
     grid-template-columns: 14px 2rem auto minmax(2rem, 1fr) auto;
+    grid-template-rows: auto;
     align-items: baseline;
     column-gap: 0.55rem;
     padding: 0.6rem 0.1rem;
     border-top: 1px solid var(--hairline-soft);
   }
 
+  /* The leader runs under the title as well as beside it, and the title's
+     own ink masks it, so the dots read as starting where the words stop.
+     Bounded to its own column it could only start at the column edge,
+     which on a wrapped row sat a long way right of the first line.
+
+     No align-self either: the leader rides the row's first baseline, as
+     in the approved demo. Bottom-aligning it sank it to the foot of a
+     wrapped row, pointing at nothing. */
   .series-plate__leader {
+    grid-area: 1 / 3 / 2 / 5;
     height: 0.68em;
-    align-self: end;
     border-bottom: 1px dotted
       color-mix(in srgb, var(--on-surface) 30%, transparent);
+  }
+
+  /* The mask. Its right padding is the gap the column gap used to give,
+     so a single-line row is unchanged to the pixel. The colour fills that
+     padding and hides the dots behind it, while background-origin holds
+     the tint swell to the words, which is the only reason the two can
+     share one element. */
+  .series-plate__label {
+    background-color: var(--background);
+    background-origin: content-box;
+    padding-right: 0.55rem;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   @media (max-width: 40rem) {
@@ -1087,15 +1131,28 @@
       grid-template-columns: 14px 2rem minmax(0, 1fr) auto;
     }
 
+    .series-plate__date {
+      grid-area: 1 / 4;
+    }
+
     .series-plate__leader {
       display: none;
     }
+
+    .series-plate__label {
+      background-color: transparent;
+      padding-right: 0;
+    }
   }
 
+  /* Centred within the first line only, never within the whole row */
   .series-plate__mark {
+    grid-area: 1 / 1;
     display: flex;
     justify-content: center;
-    align-self: center;
+    align-items: center;
+    align-self: start;
+    height: var(--series-line);
   }
 
   .series-plate__mark svg {
@@ -1114,6 +1171,7 @@
   }
 
   .series-plate__numeral {
+    grid-area: 1 / 2;
     font-family: var(--font-mono);
     font-size: 0.7rem;
     font-weight: 600;
@@ -1122,14 +1180,21 @@
     opacity: 0.85;
   }
 
+  /* Grid items paint atomically in tree order, like inline blocks, so the
+     leader would otherwise draw its dots straight over the words it is
+     meant to stop at. This lifts the title above it. */
   .series-plate__title {
-    font-size: 0.9375rem;
+    grid-area: 1 / 3;
+    position: relative;
+    z-index: 1;
+    font-size: var(--series-title-size);
     font-weight: 600;
-    line-height: 1.4;
+    line-height: var(--series-title-leading);
     min-width: 0;
   }
 
   .series-plate__date {
+    grid-area: 1 / 5;
     font-family: var(--font-mono);
     font-size: 0.65rem;
     font-weight: 600;
@@ -1266,13 +1331,13 @@
 
   /* Modest by ruling: the suggested next post never grows past this */
   .chapter-close__title {
-    margin: 0;
+    /* margin: 0;
     font-family: var(--font-display);
     font-optical-sizing: auto;
     font-weight: 620;
     font-size: 1.22rem;
     line-height: 1.3;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.01em; */
   }
 
   .chapter-close__title .tint-link {
@@ -1303,6 +1368,12 @@
   .chapter-close__seealso {
     border-top: 1px solid var(--hairline-soft);
     padding: 0.75rem 1.25rem 1rem;
+  }
+
+  /* Nothing to turn to: the head's rule already closes the plate, so the
+     rows must not double it */
+  .chapter-close__seealso--only {
+    border-top: 0;
   }
 
   .chapter-close__rows {
