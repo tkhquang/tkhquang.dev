@@ -61,28 +61,42 @@ const MERMAIDJS_SCRIPT_CONTENT = `
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.esm.min.mjs";
 
-  /* A reader who moves before typesetting finishes owns the scroll; only
-     an untouched deep link gets re-seated below */
+  /* A reader who moves before typesetting finishes owns the scroll; the
+     pin below stands down the moment they do */
   let readerMoved = false;
   const markMoved = () => { readerMoved = true; };
   for (const type of ["wheel", "touchmove", "keydown"]) {
     addEventListener(type, markMoved, { once: true, passive: true });
   }
 
+  /* Pin an untouched deep link through typesetting. Each diagram swaps
+     its source text for an SVG of another height, and every swap would
+     visibly drag the anchored heading if compensation waited for the end.
+     ResizeObserver callbacks run after layout but BEFORE paint, so
+     re-seating inside one means the shifted frame is never shown: the
+     target holds still while the page grows around it. :target's
+     scroll-margin keeps the header offset on every seat. */
+  let id = location.hash.slice(1);
+  try { id = decodeURIComponent(id); } catch {}
+  const target = id ? document.getElementById(id) : null;
+  const seat = () => {
+    if (target && !readerMoved) target.scrollIntoView();
+  };
+  let observer;
+  if (target) {
+    observer = new ResizeObserver(seat);
+    observer.observe(document.body);
+  }
+
   mermaid.initialize({ startOnLoad: false });
-  /* One bad diagram must not cancel the re-seat: the others have already
+  /* One bad diagram must not cancel the pin: the others have already
      rendered and moved the layout by the time run() rejects */
   try { await mermaid.run(); } catch {}
 
-  /* Typesetting swaps each source block for an SVG of another height, so
-     on a direct #hash visit the browser seats the anchor against the
-     pre-render layout and the heading then slides away. Re-seat it once
-     the layout is final; :target's scroll-margin keeps the header offset. */
-  if (location.hash && !readerMoved) {
-    let id = location.hash.slice(1);
-    try { id = decodeURIComponent(id); } catch {}
-    document.getElementById(id)?.scrollIntoView();
-  }
+  seat();
+  /* One more frame catches any straggling reflow, then the pin releases
+     so later growth (comments loading, say) never yanks the reader */
+  requestAnimationFrame(() => observer?.disconnect());
 </script>
 `;
 
