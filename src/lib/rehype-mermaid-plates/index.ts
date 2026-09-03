@@ -1,5 +1,7 @@
+import serverlessChromium from "@sparticuz/chromium";
 import { Element, ElementContent, Root } from "hast";
 import { toHtml } from "hast-util-to-html";
+import { chromium, type BrowserType, type LaunchOptions } from "playwright";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
 
@@ -283,6 +285,23 @@ export function rehypeMermaidRestore(): Transformer<Root> {
   };
 }
 
+/* Vercel's build image cannot run the browser `playwright install`
+   downloads: the binary links against NSS/NSPR system libraries the
+   image does not have, and playwright cannot install those there.
+   @sparticuz/chromium carries the same chrome-headless-shell with the
+   libraries bundled (bin/al2023.tar.br, unpacked to /tmp at first
+   launch); the resume PDF route already renders through it.
+   mermaid-isomorphic only ever calls browserType.launch, so swapping
+   the executable underneath playwright is the entire integration. */
+const vercelChromium = {
+  launch: async (options?: LaunchOptions) =>
+    chromium.launch({
+      ...options,
+      args: serverlessChromium.args,
+      executablePath: await serverlessChromium.executablePath(),
+    }),
+} as unknown as BrowserType;
+
 /* Passed to rehype-mermaid.
 
    htmlLabels false (the root key is the one the v2 renderer honors) is
@@ -304,6 +323,7 @@ export function rehypeMermaidRestore(): Transformer<Root> {
    near the column's width. */
 export const MERMAID_RENDER_OPTIONS = {
   strategy: "inline-svg" as const,
+  ...(process.env.VERCEL ? { browserType: vercelChromium } : null),
   mermaidConfig: {
     fontFamily: '"Courier New", monospace',
     htmlLabels: false,
