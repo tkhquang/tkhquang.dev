@@ -140,7 +140,10 @@ export default function Comments({ className, configs }: CommentsProps) {
       shadowObserverRef.current?.disconnect();
       iframeRef.current?.removeEventListener("load", hasLoaded);
     };
-  }, [mode]);
+    /* Mount-only: the iframe loads once and theme changes restyle it in
+       place via the theme prop below, so re-arming per mode would only
+       flash the loader over a live thread */
+  }, []);
 
   return (
     <div
@@ -165,11 +168,13 @@ export default function Comments({ className, configs }: CommentsProps) {
         reactionsEnabled={reactions}
         emitMetadata={metadata}
         inputPosition={inputPosition}
+        /* No key={mode}: remounting the iframe on theme toggle wiped
+           half-typed drafts and refetched the whole thread; the giscus web
+           component swaps this stylesheet in place via postMessage */
         theme={`${process.env.NEXT_PUBLIC_BASE_URL}/assets/styles/external/giscus-transparent-${mode}.css`}
         lang={lang}
         loading="lazy"
         host="https://giscus.app"
-        key={mode}
       />
     </div>
   );

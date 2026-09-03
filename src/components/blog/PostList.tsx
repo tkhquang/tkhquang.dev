@@ -77,15 +77,10 @@ const PostList = <
                             title={post.description}
                           >
                             <time
-                              className="space-x-2 font-mono"
+                              className="font-mono"
                               dateTime={post.created_at.toISOString()}
                             >
-                              <span className="hidden md:inline">
-                                {format(post.created_at, "HH:mm")}
-                              </span>
-                              <span>
-                                {format(post.created_at, "dd/MM/yyyy")}
-                              </span>
+                              {format(post.created_at, "dd/MM/yyyy")}
                             </time>
                             <span>{post.title}</span>
                           </Link>

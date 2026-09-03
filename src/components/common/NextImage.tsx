@@ -118,7 +118,10 @@ export default function Image(props: ImageProps) {
         src={src}
         alt={alt}
         loading={loading}
-        quality={100}
+        /* 75, not 100: q100 AVIF/WebP is 2x to 4x the bytes for no visible
+           gain at these render sizes. A caller can still pass its own
+           quality; the rest spread below wins over this default. */
+        quality={75}
         style={{
           backgroundRepeat: "no-repeat",
           objectFit: "cover",

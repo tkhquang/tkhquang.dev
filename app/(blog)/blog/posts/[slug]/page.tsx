@@ -87,12 +87,29 @@ export default async function Post({
     post.content.includes('class="mermaid') ||
     post.content.includes("```mermaid");
 
-  const relatedPosts = (await markdownParser.getAllPosts())
-    .filter(
-      (other) =>
-        other.category_slug === post.category_slug && other.slug !== post.slug
-    )
-    .slice(0, 3);
+  const allPosts = await markdownParser.getAllPosts();
+  const categoryPosts = allPosts.filter(
+    (other) =>
+      other.category_slug === post.category_slug && other.slug !== post.slug
+  );
+
+  /* Serial continuity outranks recency: a reader finishing instalment N
+     is offered instalment N+1 before the shelf's newest */
+  const nextInSeries = post.series
+    ? allPosts
+        .filter(
+          (other) =>
+            other.series === post.series &&
+            other.slug !== post.slug &&
+            (other.series_part ?? 0) > (post.series_part ?? 0)
+        )
+        .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))[0]
+    : undefined;
+
+  const relatedPosts = [
+    ...(nextInSeries ? [nextInSeries] : []),
+    ...categoryPosts.filter((other) => other.slug !== nextInSeries?.slug),
+  ].slice(0, 3);
 
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;
@@ -108,7 +125,10 @@ export default async function Post({
     height: coverHeight ?? 720,
     loading: "eager",
     priority: true,
-    sizes: "(max-width: 768px) 100vw, 1024px",
+    /* 1280, not 1024: a 16:9 cover renders up to ~1280 CSS px wide under
+       md:h-[50vw] md:max-h-[50vh] on large desktops, and the old cap
+       upscaled the LCP image about 25 percent */
+    sizes: "(max-width: 768px) 100vw, 1280px",
     width: coverWidth ?? 1280,
     blurDataURL: post.coverData.blurDataURL,
     backgroundClassName: "dark:invert-0 invert",

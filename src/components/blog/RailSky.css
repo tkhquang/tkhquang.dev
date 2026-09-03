@@ -188,11 +188,18 @@
 @supports (animation-timeline: scroll()) {
   @media (min-width: 80rem) and (prefers-reduced-motion: no-preference) {
     .post-row {
-      timeline-scope: --article;
+      timeline-scope: --article, --article-prose;
     }
 
     .post-row__article {
       view-timeline: --article block;
+    }
+
+    /* The prose alone, for the TOC star: the section timeline above also
+       spans tags, the author card, and comments, and against that longer
+       box the star read well past the reader's actual place */
+    .article__content {
+      view-timeline: --article-prose block;
     }
 
     .rail-sky .rail-star,
@@ -278,7 +285,7 @@
 
     .toc-progress-star {
       animation: rail-sky-travel linear both;
-      animation-timeline: --article;
+      animation-timeline: --article-prose;
       animation-range: contain 0% contain 100%;
     }
   }

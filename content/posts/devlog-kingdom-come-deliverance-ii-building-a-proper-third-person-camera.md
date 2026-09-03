@@ -7,13 +7,14 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Reverse Engineering
   - C++
   - Camera
 cover_image: /uploads/images/blog/tpv-camera-1.webp
+series: Third Person Camera
+series_part: 3
 description: "Building a 'proper' third-person camera for Kingdom Come: Deliverance II - One that does not suck."
 ---
 

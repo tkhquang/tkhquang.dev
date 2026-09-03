@@ -56,7 +56,6 @@ const PostCard = ({ index, post }: PostCardProps) => {
               <NextImage {...post.coverData} {...coverProps} />
             </div>
           </Link>
-          <figcaption></figcaption>
         </figure>
       )}
       <p className="news-feed__list-item__description mt-3 text-base leading-7">

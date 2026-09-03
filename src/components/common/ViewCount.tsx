@@ -6,10 +6,14 @@ import { FormattedNumber } from "react-intl";
 const ViewCount = ({ pathname }: { pathname: string }) => {
   const pageViews = usePageViewsValue();
 
-  const viewCount = pageViews[pathname]?.unique || 0;
+  /* No entry yet means loading or a dead API; an entry with 0 is a real
+     count and renders as one instead of hiding behind the placeholder */
+  const entry = pageViews[pathname];
 
   return (
-    <span>{viewCount ? <FormattedNumber value={viewCount} /> : "---"}</span>
+    <span aria-label={entry ? `${entry.unique} views` : "View count pending"}>
+      {entry ? <FormattedNumber value={entry.unique} /> : "---"}
+    </span>
   );
 };
 

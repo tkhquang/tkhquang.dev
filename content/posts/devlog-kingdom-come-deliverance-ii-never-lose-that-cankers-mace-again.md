@@ -7,7 +7,6 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Lua

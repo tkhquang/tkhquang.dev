@@ -10,12 +10,12 @@ const BlogPagination = ({ totalPages }: { totalPages: number }) => {
   const { segments } = useContext(AppContext);
   const { push } = useRouter();
 
-  const curentPage = segments ? +segments[2] : 1;
+  const currentPage = segments ? +segments[2] : 1;
 
   return (
     <PaginationWithSelect
       className="blog-pagination"
-      currentPage={curentPage}
+      currentPage={currentPage}
       totalPage={totalPages}
       getPageUrl={(page) => `/blog/page/${page}`}
       LinkComponent={Link}

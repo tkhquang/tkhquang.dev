@@ -1,9 +1,11 @@
 "use client";
 
-import Drawer, { useDrawerContext } from "@/components/common/Drawer";
+import Drawer, {
+  DrawerTrigger,
+  useDrawerContext,
+} from "@/components/common/Drawer";
 import { useThemeValue } from "@/store/theme";
 import { cn } from "@/utils/css";
-import { Portal } from "@ariakit/react/portal";
 import { Toc, TocEntry } from "@stefanprobst/rehype-extract-toc";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
@@ -138,6 +140,26 @@ const useActiveAnchor = ({
     };
   }, [flatHeadings, headerHeight, handleIntersection, setInitialActiveAnchor]);
 
+  /* The intersection spy picks the heading nearest the header line, so a
+     short final section whose heading never climbs that high can never win.
+     At the document's very bottom, hand the highlight to the last heading. */
+  useEffect(() => {
+    const lastId = flatHeadings[flatHeadings.length - 1]?.id;
+    if (!lastId) return;
+
+    const onScroll = () => {
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2;
+      if (atBottom) {
+        setActiveAnchor(lastId);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [flatHeadings]);
+
   return activeAnchor;
 };
 
@@ -158,10 +180,21 @@ const useScrollToHeading = ({
       const targetY =
         element.getBoundingClientRect().top + window.pageYOffset - headerHeight;
 
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
       window.scrollTo({
-        behavior: "smooth",
+        behavior: prefersReducedMotion ? "auto" : "smooth",
         top: targetY,
       });
+
+      /* Keep the section in the address bar so a copied URL carries it.
+         replaceState, never pushState: an added entry per click would put
+         hash stops between the post and the feed, and the header logo's
+         sacred back()-based return would land on a stale hash of the same
+         article instead of the feed. replaceState adds nothing to walk
+         through and never scrolls, so the offset above stays in charge. */
+      history.replaceState(null, "", `#${heading.id}`);
 
       onActiveChange?.(heading.id);
     },
@@ -275,15 +308,15 @@ const TocList = ({
   );
 };
 
-// Mobile TOC trigger button
-const MobileTocTrigger = () => (
-  <Portal>
-    <BsFillMenuButtonWideFill
-      className="fixed bottom-0 left-0 z-10 mb-20 ml-10 block size-8 cursor-pointer opacity-20 transition-all duration-300 hover:opacity-75 focus:outline-hidden xl:hidden"
-      aria-label="Open table of contents"
-    />
-  </Portal>
-);
+/* The trigger classes live on a real disclosure BUTTON, not on a portaled
+   bare icon: the old shape parked the actual button inside a display:none
+   container, so touch only worked through React event bubbling and
+   keyboard or assistive tech could not open the TOC at all below xl,
+   while at xl an invisible nameless button sat in the tab order. The
+   whole button floats through a Portal, per the house rule for
+   fixed-position controls. */
+const MOBILE_TRIGGER_CLASS =
+  "fixed bottom-0 left-0 z-10 mb-20 ml-10 block cursor-pointer opacity-20 transition-opacity duration-300 hover:opacity-75 focus-visible:opacity-75 xl:hidden";
 
 // Main component
 export default function TableOfContent({ headings }: { headings: Toc }) {
@@ -323,30 +356,54 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
         the rail foot, or the container grows a scrollbar at full scroll.
       */}
       {headings?.length > 0 && (
-        <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 pb-2 pl-3 xl:block">
-          {/*
-            The idle dim sits on the header and list wrappers instead of the
-            section so the progress star stays legible on the dimmed rail;
-            hovering anywhere in the section still restores full ink.
-            75 percent is the dim floor: the inactive links underneath carry
-            their own 85 percent ink, and 0.75 x 0.85 is the last step that
-            keeps them past the 4.5 contrast ratio the dark theme needs.
-            The dim rides a wrapper rather than the kicker itself, because
-            the kicker utility already sets an opacity: on the same element
-            the two collide at equal specificity and the dim simply replaces
-            the kicker's ink instead of multiplying with it, which would put
-            this header a step brighter than the one PostAside mirrors.
-          */}
-          <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
-            <h2 className="kicker mt-10 mb-1 block">On this page</h2>
+        <>
+          <div className="table-of-content__list top-header-height sticky hidden max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pt-5 pb-2 pl-3 xl:block">
+            {/*
+              The idle dim sits on the header and list wrappers instead of the
+              section so the progress star stays legible on the dimmed rail;
+              hovering anywhere in the section still restores full ink.
+              75 percent is the dim floor: the inactive links underneath carry
+              their own 85 percent ink, and 0.75 x 0.85 is the last step that
+              keeps them past the 4.5 contrast ratio the dark theme needs.
+              The dim rides a wrapper rather than the kicker itself, because
+              the kicker utility already sets an opacity: on the same element
+              the two collide at equal specificity and the dim simply replaces
+              the kicker's ink instead of multiplying with it, which would put
+              this header a step brighter than the one PostAside mirrors.
+            */}
+            <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
+              <h2 className="kicker mt-10 mb-1 block">On this page</h2>
+            </div>
+
+            {/* Desktop TOC List, with the scroll-driven progress star riding
+                the rail hairline (styles and gating in RailSky.css) */}
+            <div className="relative">
+              <span className="toc-progress-star" aria-hidden />
+              <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
+                <TocList
+                  headings={headings}
+                  activeAnchor={activeAnchor}
+                  onAnchorClick={scrollToHeading}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Mobile Drawer */}
+          {/* Mobile Drawer, its floating opener composed right here as the
+              trigger: a real portaled button, hidden at xl */}
           <Drawer
             position="left"
             size={300}
             title="On this page"
-            trigger={<MobileTocTrigger />}
+            trigger={
+              <DrawerTrigger
+                portal
+                aria-label="Open table of contents"
+                className={MOBILE_TRIGGER_CLASS}
+              >
+                <BsFillMenuButtonWideFill className="size-8" aria-hidden />
+              </DrawerTrigger>
+            }
             className="[&_.drawer\_\_content]:max-w-[calc(100%-2rem)]!"
           >
             <TocList
@@ -356,20 +413,7 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
               hideDrawer={true}
             />
           </Drawer>
-
-          {/* Desktop TOC List, with the scroll-driven progress star riding
-              the rail hairline (styles and gating in RailSky.css) */}
-          <div className="relative">
-            <span className="toc-progress-star" aria-hidden />
-            <div className="transition-opacity duration-500 xl:opacity-75 xl:group-hover:opacity-100">
-              <TocList
-                headings={headings}
-                activeAnchor={activeAnchor}
-                onAnchorClick={scrollToHeading}
-              />
-            </div>
-          </div>
-        </div>
+        </>
       )}
     </section>
   );

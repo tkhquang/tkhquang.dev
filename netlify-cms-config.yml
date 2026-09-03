@@ -46,6 +46,19 @@ collections:
           widget: "image",
           required: false,
         }
+      - {
+          label: "Series",
+          name: "series",
+          widget: "string",
+          required: false,
+        }
+      - {
+          label: "Series Part",
+          name: "series_part",
+          widget: "number",
+          value_type: "int",
+          required: false,
+        }
       - { label: "Description", name: "description", widget: "markdown" }
       - { label: "Body", name: "body", widget: "markdown" }
   - name: "categories"

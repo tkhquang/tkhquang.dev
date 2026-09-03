@@ -21,10 +21,12 @@ const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
       scrollManager.subscribe({
         id: ID,
         callback({ scrollY, scrollProgress }) {
+          /* visibility rides along so the invisible button is neither a
+             tab stop nor a 40px tap-stealer parked over the corner */
           if (scrollY > 600 - 96) {
-            gsap.set(buttonRef.current, { opacity: 0.2 });
+            gsap.set(buttonRef.current, { opacity: 0.2, visibility: "visible" });
           } else {
-            gsap.set(buttonRef.current, { opacity: 0 });
+            gsap.set(buttonRef.current, { opacity: 0, visibility: "hidden" });
           }
         },
       });
@@ -38,8 +40,11 @@ const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
   );
 
   const scrollToTop = () => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     window.scrollTo({
-      behavior: "smooth",
+      behavior: prefersReducedMotion ? "auto" : "smooth",
       top: 0,
     });
   };
@@ -54,7 +59,7 @@ const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
       )}
       title="Scroll To Top"
       onClick={scrollToTop}
-      style={{ opacity: 0 }}
+      style={{ opacity: 0, visibility: "hidden" }}
       {...props}
     >
       <FaArrowAltCircleUp className="size-10" />

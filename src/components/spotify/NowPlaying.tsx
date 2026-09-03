@@ -13,7 +13,7 @@ import { CurrentPlayingResponse } from "@/models/samples/spotify.models";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SiSpotify } from "react-icons/si";
 
 const Fallback = ({
@@ -61,6 +61,8 @@ export default function SpotifyNowPlaying({
   const pathname = usePathname();
   const [data, setData] = useState<CurrentPlayingResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const hasDataRef = useRef(false);
+  const lastFetchedAtRef = useRef(0);
 
   const durationMs = data?.item?.duration_ms || 0;
   const progressMs = data?.progress_ms || 0;
@@ -69,8 +71,11 @@ export default function SpotifyNowPlaying({
 
   // --- Fetch logic with abort signal ---
   const fetchSpotifyData = async (signal?: AbortSignal) => {
-    setIsLoading(true);
-    setData(null);
+    /* Revalidate silently once a song is showing: wiping to Loading on
+       every in-blog navigation made the footer flicker for the same track */
+    if (!hasDataRef.current) {
+      setIsLoading(true);
+    }
     try {
       const response = await fetch("/api/spotify/current-playing", { signal });
       if (!response.ok) {
@@ -81,6 +86,8 @@ export default function SpotifyNowPlaying({
       }
       const json: CurrentPlayingResponse = await response.json();
       setData(json);
+      hasDataRef.current = true;
+      lastFetchedAtRef.current = Date.now();
     } catch (error: any) {
       if (error.name !== "AbortError") {
         console.error("fetchSpotifyData: ", error);
@@ -94,8 +101,18 @@ export default function SpotifyNowPlaying({
     }
   };
 
-  // Fetch on mount & pathname change, with abort logic
+  // Fetch on mount & pathname change, with abort logic. Navigation alone
+  // is not a reason to ask again: within the staleness window the shown
+  // track is kept and the track-end timer below still forces a refetch.
   useEffect(() => {
+    const STALE_AFTER_MS = 30_000;
+    if (
+      hasDataRef.current &&
+      Date.now() - lastFetchedAtRef.current < STALE_AFTER_MS
+    ) {
+      return;
+    }
+
     const abortController = new AbortController();
     fetchSpotifyData(abortController.signal);
 

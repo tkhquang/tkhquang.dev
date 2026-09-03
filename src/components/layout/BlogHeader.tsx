@@ -33,7 +33,7 @@ const BlogHeader = ({
   ...props
 }: React.ComponentProps<"header">) => {
   const params = useParams();
-  const { matchSegments } = useRouterHelper();
+  const { matchPathSegments, matchSegments } = useRouterHelper();
   const { prevAsPath } = useAsPathValue();
   const { back, prefetch, push } = useRouter();
 
@@ -44,7 +44,12 @@ const BlogHeader = ({
     null, //slug
   ]);
 
-  const shouldRestoreScrollOnBack = prevAsPath === "/blog";
+  /* Any feed page counts: pagination links land readers on /blog/page/N
+     (page 1 included), and losing the restoration for having paged would
+     send them back to page 1, top, place gone */
+  const shouldRestoreScrollOnBack =
+    matchPathSegments(prevAsPath, ["blog"]) ||
+    matchPathSegments(prevAsPath, ["blog", "page", null]);
 
   const { cssVariables } = useThemeValue();
   const headerHeight = useMemo(() => {
@@ -116,8 +121,11 @@ const BlogHeader = ({
 
   const handleLogoClick = () => {
     if (isHomeBlog) {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
       window.scrollTo({
-        behavior: "smooth",
+        behavior: prefersReducedMotion ? "auto" : "smooth",
         top: 0,
       });
       return;
@@ -165,7 +173,7 @@ const BlogHeader = ({
               className="cursor-pointer focus:outline-hidden"
               onClick={handleLogoClick}
             >
-              <div className="logo flip-animate flex-center whitespace-no-wrap no-underine gap-2 select-none focus:outline-hidden">
+              <div className="logo flip-animate flex-center gap-2 whitespace-nowrap no-underline select-none">
                 {!isHomeBlog && <BackButtonIcon className="size-8" />}
                 <span
                   className="logo__text relative inline-flex"

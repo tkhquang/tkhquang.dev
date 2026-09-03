@@ -13,7 +13,7 @@ interface PostDatesProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;
 }
 
-/* Posts only store the slug; the display name is its title-cased form */
+/* Fallback for a post whose category file is missing: title-case the slug */
 const categoryTitleFromSlug = (slug: string) =>
   slug
     .split("-")
@@ -61,12 +61,15 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
             color: `var(--shelf-${post.category_slug}, var(--primary))`,
           }}
         >
-          # {categoryTitleFromSlug(post.category_slug)}
+          # {post.category_title ?? categoryTitleFromSlug(post.category_slug)}
         </Link>
       </div>
 
       <div className="text-theme-on-surface flex items-center space-x-2 font-mono text-xs opacity-75 md:text-sm">
-        <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
+        <FaEye
+          aria-hidden
+          className="inline-block size-3 align-text-bottom md:size-4"
+        />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>
     </div>

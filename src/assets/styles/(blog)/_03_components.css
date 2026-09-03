@@ -133,8 +133,8 @@
     --shelf-gaming: hsl(352deg 62% 73%);
     --shelf-the-inner-crisis: hsl(267deg 56% 75%);
 
-    /* Aurora hues, read by the selection wash and reading-progress bar in
-       the blog base stylesheet and by the bio card's constellation chart.
+    /* Aurora hues, read by the selection wash in the blog base stylesheet
+       and by the bio card's constellation chart.
        The masthead shader is not one of them: its palette lives in
        AuroraCanvas so the GL uniforms need no per-frame style read. */
     --aurora-a: hsl(168deg 70% 62%);
@@ -203,17 +203,23 @@
     width: calc(2.25rem + 0.5rem);
   }
 
+  /* Tokens take their per-theme ink; the panel itself is painted by the
+     figure's own background, so the per-token Shiki backgrounds are
+     deliberately flattened to transparent. (The old two-value
+     background-color here was invalid CSS that only happened to compute
+     to the same transparent; do not "fix" it back to a fallback var() or
+     every token span grows a second glaze over the plate.) */
   code[data-theme*="dark"],
   code[data-theme*="dark"] span {
     color: var(--shiki-dark);
-    background-color: var(--code), var(--shiki-dark-bg);
+    background-color: transparent;
   }
 
   @variant light {
     code[data-theme*="light"],
     code[data-theme*="light"] span {
       color: var(--shiki-light);
-      background-color: var(--code), var(--shiki-light-bg);
+      background-color: transparent;
     }
   }
 

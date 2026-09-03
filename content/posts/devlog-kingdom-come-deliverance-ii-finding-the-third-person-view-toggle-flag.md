@@ -7,13 +7,14 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Reverse Engineering
   - C++
   - Camera
 cover_image: /uploads/images/audentis-fortuna-iuvat.png
+series: Third Person Camera
+series_part: 1
 description: "Enabling Kingdom Come: Deliverance II's hidden third-person view: a walk through memory, vftables, and pointer chains."
 ---
 

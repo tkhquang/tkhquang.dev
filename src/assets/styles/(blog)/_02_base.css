@@ -39,42 +39,8 @@
   }
 
   /*
-   * Reading progress: a 2px aurora hairline pinned to the top of the
-   * viewport, filled by the root scroll with zero JS. .code-container
-   * exists only on post pages. Unsupported browsers and reduced motion
-   * get no bar at all, never a stuck one.
+   * No top reading-progress hairline: the header's back-button circle is
+   * the page's one progress indicator (owner decision, pass 4), and the
+   * TOC rail carries its own star.
    */
-  @supports (animation-timeline: scroll()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .code-container::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        height: 2px;
-        background: linear-gradient(
-          90deg,
-          var(--aurora-a),
-          var(--aurora-b),
-          var(--aurora-c)
-        );
-        transform: scaleX(0);
-        transform-origin: left;
-        animation: reading-progress linear both;
-        animation-timeline: scroll(root);
-        pointer-events: none;
-
-        /* Over the sticky header's backdrop; modal layers live in portals
-           painted later and never meet a 2px strip at the top edge */
-        z-index: calc(var(--z-header) + 1);
-      }
-    }
-  }
-
-  @keyframes reading-progress {
-    to {
-      transform: scaleX(1);
-    }
-  }
 }

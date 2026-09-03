@@ -7,13 +7,14 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Reverse Engineering
   - C++
   - Camera
 cover_image: /uploads/images/tpv-toggle-offset.jpg
+series: Third Person Camera
+series_part: 2
 description: "Following up on the TPV toggle: a technical deep dive into implementing custom camera offsets in Kingdom Come: Deliverance II."
 ---
 

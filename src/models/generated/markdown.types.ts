@@ -6,6 +6,8 @@ export interface PostsCollection {
   category_slug: string;
   tags: string[];
   cover_image?: string;
+  series?: string;
+  series_part?: number;
   description: string;
   body: string;
 }

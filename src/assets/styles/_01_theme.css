@@ -96,5 +96,31 @@
     --z-bg: -1;
     --z-fg: 999;
     --z-header: 1000;
+
+    /* Radix accordion ease: the ui component's animate-accordion-* classes
+       referenced these tokens without them existing, so every shelf on
+       Categories and Archive snapped open and shut */
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+
+    @keyframes accordion-down {
+      from {
+        height: 0;
+      }
+
+      to {
+        height: var(--radix-accordion-content-height);
+      }
+    }
+
+    @keyframes accordion-up {
+      from {
+        height: var(--radix-accordion-content-height);
+      }
+
+      to {
+        height: 0;
+      }
+    }
   }
 }

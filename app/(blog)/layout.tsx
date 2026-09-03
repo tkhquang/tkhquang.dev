@@ -5,7 +5,7 @@ import { Main } from "@/components/layout";
 import BackToTopButton from "@/components/layout/BackToTop";
 import BlogFooter from "@/components/layout/BlogFooter";
 import BlogHeader from "@/components/layout/BlogHeader";
-import { Blog } from "@/constants/meta";
+import { Blog, Site } from "@/constants/meta";
 import { DEFAULT_LOCALE, getMessages } from "@/lib/i18n";
 import AppProvider from "@/providers/AppProvider";
 import { Portal } from "@ariakit/react/portal";
@@ -19,6 +19,18 @@ export const metadata: Metadata = {
     },
   },
   description: Blog.METADATA.description,
+  /* Without this block the segment inherits the root's whole openGraph
+     object, so /blog and every index page unfurled as the portfolio card */
+  openGraph: {
+    description: Blog.METADATA.description,
+    images: [
+      {
+        url: Site.METADATA.coverImageUrl,
+      },
+    ],
+    title: Blog.METADATA.title.default,
+    type: "website",
+  },
   title: Blog.METADATA.title,
 };
 

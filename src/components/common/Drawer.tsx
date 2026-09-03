@@ -10,6 +10,7 @@ import {
   DialogDismiss,
   useDialogContext,
 } from "@ariakit/react/dialog";
+import { Portal } from "@ariakit/react/portal";
 import { useStoreState } from "@ariakit/react/store";
 import { useDrag } from "@use-gesture/react";
 import clsx from "clsx";
@@ -65,6 +66,22 @@ const DrawerBackdrop = forwardRef<
 
 export type DrawerPosition = "top" | "right" | "bottom" | "left";
 
+/**
+ * The disclosure button for a Drawer, passed through its `trigger` prop so
+ * composition happens at the call site while ariakit stays inside this
+ * module. `portal` floats the button per the house rule for fixed-position
+ * controls: the WHOLE button ports, never just its icon, so the visible
+ * control is always the focusable one.
+ */
+export const DrawerTrigger = ({
+  portal = false,
+  children,
+  ...props
+}: React.ComponentProps<"button"> & { portal?: boolean }) => {
+  const button = <DialogDisclosure {...props}>{children}</DialogDisclosure>;
+  return portal ? <Portal>{button}</Portal> : button;
+};
+
 interface DrawerProps extends React.ComponentProps<"div"> {
   /** Position of the drawer relative to the viewport */
   position?: DrawerPosition;
@@ -76,7 +93,10 @@ interface DrawerProps extends React.ComponentProps<"div"> {
   title?: string;
   /** Optional description displayed below the title */
   description?: string;
-  /** Trigger element - can be a string for default button or custom JSX */
+  /** The opener, composed at the call site as a DrawerTrigger (exported
+      below) carrying its own classes, label, and portal flag; rendered
+      inside this drawer's provider so no trigger styling ever drills
+      through the Drawer's own props */
   trigger?: React.ReactNode;
 }
 
@@ -97,7 +117,7 @@ export default function Drawer({
   children,
   title = "Drawer",
   description,
-  trigger = "Show Drawer",
+  trigger,
   style,
   className,
   ...rest
@@ -180,6 +200,19 @@ export default function Drawer({
     isAnimatingRef.current = true;
     const transforms = getTransformValues(position, size);
 
+    /* Reduced motion: appear in place, no slide */
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(drawerRef.current, {
+        transform: transforms.open,
+        visibility: "visible",
+      });
+      if (backdropRef.current) {
+        gsap.set(backdropRef.current, { opacity: 1 });
+      }
+      isAnimatingRef.current = false;
+      return;
+    }
+
     // Set initial closed state
     gsap.set(drawerRef.current, {
       transform: transforms.closed,
@@ -227,6 +260,17 @@ export default function Drawer({
 
     isAnimatingRef.current = true;
     const transforms = getTransformValues(position, size);
+
+    /* Reduced motion: leave in place, no slide */
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(drawerRef.current, { transform: transforms.closed });
+      if (backdropRef.current) {
+        gsap.set(backdropRef.current, { opacity: 0 });
+      }
+      isAnimatingRef.current = false;
+      setShouldRender(false);
+      return;
+    }
 
     const timeline = gsap.timeline({
       onComplete: () => {
@@ -369,7 +413,7 @@ export default function Drawer({
 
   return (
     <DialogProvider store={dialog}>
-      <DialogDisclosure>{trigger}</DialogDisclosure>
+      {trigger}
 
       {shouldRender && (
         <Dialog

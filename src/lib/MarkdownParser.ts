@@ -137,11 +137,27 @@ interface ProcessedVfile extends VFile {
 class MarkdownParser {
   private parser: ReturnType<typeof getProcessor>;
   private imageParser: ReturnType<typeof getImageProcessor>;
+  private categoryTitles = new Map<string, string | undefined>();
 
   constructor() {
     this.parser = getProcessor();
     this.imageParser = getImageProcessor();
     // console.info("MarkdownParser instance created");
+  }
+
+  private async getCategoryTitle(slug: string): Promise<string | undefined> {
+    if (this.categoryTitles.has(slug)) {
+      return this.categoryTitles.get(slug);
+    }
+    let title: string | undefined;
+    try {
+      title = (await this.getCategoryBySlug(slug)).title;
+    } catch {
+      /* A post can name a shelf before its file exists; consumers fall
+         back to the title-cased slug */
+    }
+    this.categoryTitles.set(slug, title);
+    return title;
   }
 
   async parseMarkdown(content: string): Promise<ProcessedVfile> {
@@ -191,7 +207,7 @@ class MarkdownParser {
           {
             src: output,
             blurDataURL: placeholder,
-            alt: "Cover Image",
+            alt: data.title,
             width,
             height,
           },
@@ -204,6 +220,7 @@ class MarkdownParser {
 
       return {
         ...data,
+        category_title: await this.getCategoryTitle(data.category_slug),
         content,
         slug,
         coverData,

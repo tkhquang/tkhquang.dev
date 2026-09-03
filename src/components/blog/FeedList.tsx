@@ -33,13 +33,16 @@ const FeedList = <T,>({
       )}
       {posts.length === 0 ? (
         <h1 className="flex-center mt-6 w-full text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-          {`Sorry, there's nothing here`} :(
+          This shelf awaits its first entry.
         </h1>
       ) : (
         <>
           {!hideTitle && (
             <h1 className="text-theme-primary mx-auto text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-              Latest Posts
+              {/* Filtered pages name their subject; only the unfiltered
+                  feed falls back to the generic headline */}
+              {(item as { title?: string } | undefined)?.title ??
+                "Latest Posts"}
             </h1>
           )}
           <ul className="news-feed__list flex-center flex-col">

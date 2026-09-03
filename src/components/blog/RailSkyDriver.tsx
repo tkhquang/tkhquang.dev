@@ -56,6 +56,12 @@ const RailSkyDriver = () => {
       end,
       start,
     })).filter((target) => target.el);
+    /* The star travels with the PROSE, not the whole article section:
+       tags, the author card, and comments trail inside .post-row__article,
+       and against that longer box the star read well past where the
+       reader actually was */
+    const prose =
+      document.querySelector<HTMLElement>(".article__content") ?? article;
     const tocStar = document.querySelector<HTMLElement>(".toc-progress-star");
     const wide = window.matchMedia("(min-width: 80rem)");
     let rafId = 0;
@@ -89,8 +95,17 @@ const RailSkyDriver = () => {
         );
       }
       if (tocStar) {
+        /* Same contain formula against the prose box (--article-prose in
+           the CSS path), so the star seats as the last section is read */
+        const proseRect = prose.getBoundingClientRect();
+        const proseDenominator = Math.max(
+          proseRect.height - window.innerHeight,
+          1
+        );
+        const proseProgress = clamp01(-proseRect.top / proseDenominator);
+
         const travel = Math.max(tocStar.clientHeight - 7, 0);
-        const offset = (-travel * (1 - progress / 100)).toFixed(1);
+        const offset = (-travel * (1 - proseProgress)).toFixed(1);
         tocStar.style.transform = `translateY(${offset}px)`;
       }
     };

@@ -35,27 +35,33 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
   useGSAP(() => {
     const target = properties[mode];
 
+    /* The morph itself is the design; reduced motion just lands it at once */
+    const duration = window.matchMedia("(prefers-reduced-motion: reduce)")
+      .matches
+      ? 0
+      : 0.5;
+
     gsap.to(svgRef.current, {
       rotation: target.rotation,
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
 
     gsap.to(maskedCircleRef.current, {
       attr: { cx: target.cx, cy: target.cy },
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
 
     gsap.to(centerCircleRef.current, {
       attr: { r: target.r },
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
 
     gsap.to(linesRef.current, {
       opacity: target.opacity,
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
   }, [mode]);
