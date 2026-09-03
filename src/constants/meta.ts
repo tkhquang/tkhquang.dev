@@ -52,4 +52,13 @@ export namespace Blog {
     },
   };
   export const POSTS_PER_PAGE = 15;
+
+  /* One source for the four rooms: the header nav, the index drawer, and
+     the colophon footer's doors row all read from here */
+  export const NAV_LINKS = [
+    { href: "/blog", label: "Posts" },
+    { href: "/blog/categories", label: "Categories" },
+    { href: "/blog/tags", label: "Tags" },
+    { href: "/blog/posts", label: "Archive" },
+  ];
 }

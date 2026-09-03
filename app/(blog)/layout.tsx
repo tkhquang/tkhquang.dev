@@ -7,7 +7,9 @@ import BlogFooter from "@/components/layout/BlogFooter";
 import BlogHeader from "@/components/layout/BlogHeader";
 import { Blog, Site } from "@/constants/meta";
 import { DEFAULT_LOCALE, getMessages } from "@/lib/i18n";
+import { getMarkdownParser } from "@/lib/MarkdownParser";
 import AppProvider from "@/providers/AppProvider";
+import { getVolume } from "@/utils/volume";
 import { Portal } from "@ariakit/react/portal";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
@@ -39,13 +41,30 @@ export default async function BlogLayout({
 }: {
   children: React.ReactNode;
 }) {
+  /* Counts for the phone Index drawer, frozen at build like the masthead
+     stats; every deploy refreshes them */
+  const markdownParser = await getMarkdownParser();
+  const [posts, categories, tags] = await Promise.all([
+    markdownParser.getAllPosts(),
+    markdownParser.getAllCategories(),
+    markdownParser.getAllTags(),
+  ]);
+
   return (
     <>
       <AppProvider
         locale={DEFAULT_LOCALE}
         messages={getMessages(DEFAULT_LOCALE)}
       >
-        <BlogHeader />
+        <BlogHeader
+          indexStats={{
+            posts: posts.length,
+            categories: categories.length,
+            tags: tags.length,
+            volume: getVolume(posts),
+            year: new Date().getFullYear(),
+          }}
+        />
         <Main className="flex-1">{children}</Main>
         <BlogFooter />
 

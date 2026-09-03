@@ -1,11 +1,17 @@
 "use client";
 
+import Drawer, {
+  DrawerTrigger,
+  useDrawerContext,
+} from "@/components/common/Drawer";
 import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { Blog } from "@/constants/meta";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
 import { useThemeValue } from "@/store/theme";
 import { ScrollManager } from "@/utils/dom";
+import { toRoman } from "@/utils/roman";
 import classNames from "classnames";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
@@ -21,17 +27,45 @@ const DEFAULT_HEADER_HEIGHT = 60;
 /* The fraction of the sky still under the header when the band takes over */
 const HANDOVER_AT = 0.5;
 
-const NAV_LINKS = [
-  { href: "/blog", label: "Posts" },
-  { href: "/blog/categories", label: "Categories" },
-  { href: "/blog/tags", label: "Tags" },
-  { href: "/blog/posts", label: "Archive" },
-];
+/* Counts for the phone Index drawer, computed by the server layout */
+export interface IndexStats {
+  posts: number;
+  categories: number;
+  tags: number;
+  volume: number;
+  year: number;
+}
+
+/* A drawer row that closes the drawer as it navigates; the layout
+   persists across routes, so the dialog would otherwise stay open */
+const IndexRow = ({
+  count,
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+  count?: number;
+}) => {
+  const drawer = useDrawerContext();
+
+  return (
+    <li className="index-drawer__row">
+      <Link href={href} onClick={() => drawer?.hide()}>
+        {label}
+      </Link>
+      {typeof count === "number" && (
+        <span className="kicker index-drawer__count">{count}</span>
+      )}
+    </li>
+  );
+};
 
 const BlogHeader = ({
   className,
+  indexStats,
   ...props
-}: React.ComponentProps<"header">) => {
+}: React.ComponentProps<"header"> & { indexStats?: IndexStats }) => {
   const params = useParams();
   const { matchPathSegments, matchSegments } = useRouterHelper();
   const { prevAsPath } = useAsPathValue();
@@ -43,6 +77,19 @@ const BlogHeader = ({
     "posts",
     null, //slug
   ]);
+
+  /* Running heads: which room the reader is in. A post detail counts as
+     Posts; the archive is exactly /blog/posts */
+  const activeHref = matchSegments(["blog", "posts"])
+    ? "/blog/posts"
+    : matchSegments(["blog", "categories"]) ||
+        matchSegments(["blog", "categories", null])
+      ? "/blog/categories"
+      : matchSegments(["blog", "tags"]) || matchSegments(["blog", "tags", null])
+        ? "/blog/tags"
+        : isHomeBlog || isInPostPage
+          ? "/blog"
+          : undefined;
 
   /* Any feed page counts: pagination links land readers on /blog/page/N
      (page 1 included), and losing the restoration for having paged would
@@ -198,16 +245,53 @@ const BlogHeader = ({
               className="hidden items-center gap-5 md:flex"
               aria-label="Blog sections"
             >
-              {NAV_LINKS.map((link) => (
+              {Blog.NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
+                  aria-current={link.href === activeHref ? "page" : undefined}
+                  className="blog-nav__link font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
+            {/* The phones' door into the rooms: the Index drawer, printed
+                as the volume's front matter. The trigger is a real
+                in-flow button; it retires at md where the nav exists. */}
+            <Drawer
+              position="left"
+              size={300}
+              title="The Index"
+              trigger={
+                <DrawerTrigger
+                  aria-label="Open the blog index"
+                  className="kicker cursor-pointer tracking-widest opacity-80 transition-opacity hover:opacity-100 md:hidden"
+                >
+                  Index
+                </DrawerTrigger>
+              }
+            >
+              <ul className="index-drawer__rows">
+                <IndexRow
+                  href="/blog"
+                  label="Posts"
+                  count={indexStats?.posts}
+                />
+                <IndexRow
+                  href="/blog/categories"
+                  label="Categories"
+                  count={indexStats?.categories}
+                />
+                <IndexRow href="/blog/tags" label="Tags" count={indexStats?.tags} />
+                <IndexRow href="/blog/posts" label="Archive" />
+              </ul>
+              {indexStats && (
+                <span className="kicker index-drawer__foot">
+                  Vol. {toRoman(indexStats.volume)} · {toRoman(indexStats.year)}
+                </span>
+              )}
+            </Drawer>
             <div className="ml-4 flex flex-col">
               <ThemeToggle />
             </div>

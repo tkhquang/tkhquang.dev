@@ -1,7 +1,31 @@
-/* Print-register numerals for volumes and instalments; falls back to the
-   arabic number past the table, which no real serial here approaches */
-const ROMAN = "I II III IV V VI VII VIII IX X XI XII XIII XIV XV".split(" ");
+/* Print-register numerals for volumes, instalments, and year stamps */
+const NUMERALS: Array<[number, string]> = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
+];
 
 export function toRoman(value: number): string {
-  return ROMAN[value - 1] ?? String(value);
+  if (!Number.isInteger(value) || value < 1 || value > 3999) {
+    return String(value);
+  }
+  let remainder = value;
+  let out = "";
+  for (const [step, glyph] of NUMERALS) {
+    while (remainder >= step) {
+      out += glyph;
+      remainder -= step;
+    }
+  }
+  return out;
 }

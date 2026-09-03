@@ -156,6 +156,181 @@
   }
 
   /*
+   * The Colophon Footer's end matter: printed above the untouched bar.
+   * Everything centers on the container grid; the one loud ink is the
+   * primary COLOPHON kicker.
+   */
+  .blog-colophon {
+    width: 100%;
+    color: var(--on-surface);
+  }
+
+  .blog-colophon__inner {
+    max-width: var(--breakpoint-xl, 1280px);
+    margin: 0 auto;
+    padding: 0 2rem 2.5rem;
+    text-align: center;
+  }
+
+  .blog-colophon__head {
+    display: block;
+    margin: 2.25rem 0 0;
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+    color: var(--primary);
+    opacity: 1;
+  }
+
+  .blog-colophon__specimen {
+    font-family: var(--font-serif);
+    font-size-adjust: 0.525;
+    font-style: italic;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0.875rem 0 0;
+  }
+
+  .blog-colophon__face-display {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 580;
+    letter-spacing: -0.01em;
+  }
+
+  .blog-colophon__face-serif {
+    font-weight: 400;
+  }
+
+  .blog-colophon__face-sans {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-size: 0.95em;
+  }
+
+  .blog-colophon__face-mono {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.95em;
+  }
+
+  .blog-colophon__volume {
+    display: block;
+    margin: 0.75rem 0 0;
+    opacity: 0.85;
+  }
+
+  .blog-colophon__short {
+    width: 6rem;
+    margin: 1.5rem auto;
+  }
+
+  .blog-colophon__doors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: 1.25rem;
+    row-gap: 0.75rem;
+  }
+
+  .blog-colophon__doors .kicker {
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+
+  .blog-colophon__sep {
+    color: color-mix(in srgb, var(--primary) 70%, transparent);
+  }
+
+  .blog-colophon__wire {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    column-gap: 1.5rem;
+    row-gap: 0.375rem;
+  }
+
+  .blog-colophon__wire-link {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.01em;
+  }
+
+  /*
+   * Running heads: the header nav marks the open section with the
+   * colophon bar's underline-fill grammar, in currentColor so the tint
+   * reads over both the transparent sky state and the blurred band.
+   */
+  .blog-nav__link {
+    padding-bottom: 2px;
+    background:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, currentcolor 35%, transparent),
+        color-mix(in srgb, currentcolor 22%, transparent)
+      )
+      no-repeat left bottom / 0% 38%;
+    transition:
+      background-size 300ms,
+      opacity 300ms;
+  }
+
+  .blog-nav__link:hover,
+  .blog-nav__link[aria-current="page"] {
+    background-size: 100% 38%;
+  }
+
+  .blog-nav__link[aria-current="page"] {
+    opacity: 1;
+  }
+
+  /* The Index drawer: the volume's front matter as phone navigation */
+  .index-drawer__rows {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .index-drawer__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+
+  .index-drawer__row a {
+    flex: 1;
+    padding: 0.85rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    transition: opacity 200ms;
+  }
+
+  .index-drawer__row a:hover {
+    opacity: 0.75;
+  }
+
+  .index-drawer__count {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+
+  .index-drawer__foot {
+    display: block;
+    margin-top: 1.25rem;
+    text-align: center;
+    opacity: 0.6;
+  }
+
+  /*
    * Catalogue Headpiece: the index pages' shared chapter head, the
    * masthead's typographic system without its sky. Left-set to the
    * content column; the feed keeps its own full masthead.
