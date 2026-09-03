@@ -146,8 +146,10 @@ export default async function Post({
       </h1>
 
       {/* The row hosts the article's view timeline (see RailSky.css): the
-          section owns it, and both flanking rails consume it */}
-      <div className="post-row flex">
+          section owns it, and both flanking rails consume it. The xl gap
+          replaces the TOC's one-sided mx-4 so the two flex-1 flanks stay
+          mirror images and the article sits on the true centerline. */}
+      <div className="post-row flex xl:gap-4">
         <TableOfContent headings={headings} />
 
         <section className="post-row__article container mx-auto max-w-(--breakpoint-md)!">
