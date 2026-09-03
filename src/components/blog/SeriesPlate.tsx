@@ -3,10 +3,10 @@ import { toRoman } from "@/utils/roman";
 import { format } from "date-fns";
 import Link from "next/link";
 
-/* The plate lists parts without their shared running prefix: a serial
-   titled "[Devlog] Kingdom Come: Deliverance II - Customizing the View"
-   reads as "Customizing the View" inside its own plate */
-const plateTitle = (title: string) => {
+/* Serial furniture lists parts without their shared running prefix: a
+   serial titled "[Devlog] Kingdom Come: Deliverance II - Customizing the
+   View" reads as "Customizing the View" inside its own plate and rail */
+export const serialDisplayTitle = (title: string) => {
   if (!title.startsWith("[")) return title;
   const separatorAt = title.indexOf(" - ");
   return separatorAt === -1 ? title : title.slice(separatorAt + 3);
@@ -65,16 +65,17 @@ const SeriesPlate = ({ currentSlug, parts, series }: SeriesPlateProps) => {
               </span>
               {isCurrent ? (
                 <span className="series-plate__title" aria-current="page">
-                  {plateTitle(part.title)}
+                  {serialDisplayTitle(part.title)}
                 </span>
               ) : (
                 <Link
                   href={`/blog/posts/${part.slug}`}
                   className="series-plate__title tint-link"
                 >
-                  {plateTitle(part.title)}
+                  {serialDisplayTitle(part.title)}
                 </Link>
               )}
+              <span className="series-plate__leader" aria-hidden />
               <span className="series-plate__date">
                 {format(part.created_at, "MMM dd, yyyy")}
               </span>

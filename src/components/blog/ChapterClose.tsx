@@ -6,7 +6,11 @@ import Link from "next/link";
 /* Three dot-and-ring stars in the house magnitude grammar, the middle one
    a step larger and gilt: the asterism that closes the prose */
 const AsterismTailpiece = () => (
-  <div className="chapter-close__tailpiece" role="separator">
+  <div
+    className="chapter-close__tailpiece"
+    role="separator"
+    aria-label="End of article"
+  >
     <svg width="96" height="24" viewBox="0 0 96 24" aria-hidden>
       <g fill="none">
         <circle
@@ -60,7 +64,8 @@ const ChapterClose = ({
   seeAlso,
 }: ChapterCloseProps) => {
   const { minutes, words } = getProseStats(post.content);
-  const catchword = nextPost ? getOpeningWords(nextPost.content, 8) : "";
+  /* Seven words, per the approved copy: eight landed mid-name */
+  const catchword = nextPost ? getOpeningWords(nextPost.content, 7) : "";
   const bothPanels = Boolean(previousPost && nextPost);
 
   return (

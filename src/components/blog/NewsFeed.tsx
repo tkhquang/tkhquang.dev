@@ -20,7 +20,13 @@ const NewsFeed = <T,>({
   totalPages?: number;
   currentPage?: number;
   hideTitle?: boolean;
-  headpiece?: { room: string; stat: string; hue?: string };
+  headpiece?: {
+    room: string;
+    stat: string;
+    hue?: string;
+    hashed?: boolean;
+    swatchLabel?: string;
+  };
 }) => {
   return (
     <div className="relative mx-auto my-12 flex max-w-xl flex-wrap px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:space-x-16 lg:px-8">

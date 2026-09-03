@@ -143,10 +143,11 @@ export default async function Post({
         .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))[0]
     : undefined;
 
-  const relatedPosts = [
-    ...(nextInSeries ? [nextInSeries] : []),
-    ...categoryPosts.filter((other) => other.slug !== nextInSeries?.slug),
-  ].slice(0, 3);
+  /* The rail's shelf rows stay pure recency; the next instalment gets
+     its own pinned gilt block above them instead of masquerading as one */
+  const relatedPosts = categoryPosts
+    .filter((other) => other.slug !== nextInSeries?.slug)
+    .slice(0, 3);
 
   /* The full serial roster for the instalment plate under the lede */
   const seriesParts = post.series
@@ -276,7 +277,11 @@ export default async function Post({
               previousPost={previousPost}
               nextPost={nextPost}
               seeAlso={seeAlso}
-              contextLabel={post.series ?? category.title}
+              contextLabel={
+                post.series
+                  ? `${category.title} · ${post.series}`
+                  : category.title
+              }
             />
 
             <div className="article__footer my-6 flex">
@@ -307,6 +312,7 @@ export default async function Post({
             categoryTitle={category.title}
             categorySlug={category.slug}
             posts={relatedPosts}
+            nextInstalment={nextInSeries}
           />
           <RailSky />
           <RailSkyDriver />

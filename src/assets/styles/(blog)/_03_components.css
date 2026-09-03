@@ -137,6 +137,11 @@
        deepens it or it dies on paper. For serial marks and tailpieces. */
     --gilt-ink: hsl(42deg 60% 70%);
 
+    /* Star ink at page scope, so tailpieces outside the chart components
+       stop falling back to primary: near-white starlight by night, the
+       lapis primary by day */
+    --chart-star: hsl(199deg 90% 85%);
+
     /* The Plate-Frame Focus cartouche: gilt rule out, starlight rule in
        by night; gilt out, lapis in by day */
     --cartouche-outer: hsl(42deg 60% 70%);
@@ -156,7 +161,8 @@
       --aurora-a: hsl(168deg 55% 34%);
       --aurora-b: hsl(266deg 45% 48%);
       --aurora-c: hsl(210deg 75% 42%);
-      --gilt-ink: hsl(42deg 62% 30%);
+      --gilt-ink: hsl(40deg 65% 38%);
+      --chart-star: var(--primary);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
     }
@@ -916,76 +922,9 @@
     }
   }
 
-  /*
-   * Running heads: the header nav marks the open section with the
-   * colophon bar's underline-fill grammar, in currentColor so the tint
-   * reads over both the transparent sky state and the blurred band.
-   */
-  .blog-nav__link {
-    padding-bottom: 2px;
-    background: linear-gradient(
-        to right,
-        color-mix(in srgb, currentcolor 35%, transparent),
-        color-mix(in srgb, currentcolor 22%, transparent)
-      )
-      no-repeat left bottom / 0% 38%;
-    transition:
-      background-size 300ms,
-      opacity 300ms;
-  }
-
-  .blog-nav__link:hover,
-  .blog-nav__link[aria-current="page"] {
-    background-size: 100% 38%;
-  }
-
-  .blog-nav__link[aria-current="page"] {
-    opacity: 1;
-  }
-
-  /* The Index drawer: the volume's front matter as phone navigation */
-  .index-drawer__rows {
-    list-style: none;
-    margin: 0.5rem 0 0;
-    padding: 0;
-    border-top: 1px solid var(--hairline-soft);
-  }
-
-  .index-drawer__row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    border-bottom: 1px solid var(--hairline-soft);
-  }
-
-  .index-drawer__row a {
-    flex: 1;
-    padding: 0.85rem 0;
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--primary);
-    transition: opacity 200ms;
-  }
-
-  .index-drawer__row a:hover {
-    opacity: 0.75;
-  }
-
-  .index-drawer__count {
-    font-variant-numeric: tabular-nums;
-    opacity: 0.75;
-  }
-
-  .index-drawer__foot {
-    display: block;
-    margin-top: 1.25rem;
-    text-align: center;
-    opacity: 0.6;
-  }
+  /* Running heads and the Index drawer live in the overrides layer and
+     IndexDrawer.css: their recipes fight utility classes and Drawer.css,
+     both of which outrank this components layer */
 
   /*
    * Catalogue Headpiece: the index pages' shared chapter head, the
@@ -999,6 +938,20 @@
   .catalogue-headpiece__room {
     display: block;
     margin-bottom: 0.5rem;
+  }
+
+  /* The hash dims, the subject speaks */
+  .catalogue-headpiece__hash {
+    opacity: 0.45;
+  }
+
+  /* Inline swatch for category stat lines: a small square of the shelf */
+  .catalogue-headpiece__swatch {
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 2px;
+    margin-right: 0.35em;
   }
 
   .catalogue-headpiece__title {
@@ -1028,24 +981,26 @@
   }
 
   /*
-   * The quiet link: the colophon pagination's underline-fill grammar as a
-   * reusable device for the serial plate and chapter-close titles. The
-   * tint swells in place from zero width; nothing moves.
+   * The quiet link, the demos' approved grammar: a full-width underline
+   * band whose ALPHA fades up in place. Nothing wipes and nothing moves;
+   * without @property support the tint simply appears. Weight is the
+   * context's business, never this class's.
    */
   .tint-link {
     color: var(--primary);
-    font-weight: 600;
-    background: linear-gradient(
-        to right,
-        color-mix(in srgb, var(--primary) 30%, transparent),
-        color-mix(in srgb, var(--primary) 18%, transparent)
-      )
-      no-repeat left bottom / 0% 45%;
-    transition: background-size 300ms;
+    background-image: linear-gradient(
+      color-mix(in srgb, var(--primary) var(--ul-a, 0%), transparent),
+      color-mix(in srgb, var(--primary) var(--ul-a, 0%), transparent)
+    );
+    background-size: 100% 0.45em;
+    background-position: 0 85%;
+    background-repeat: no-repeat;
+    transition: --ul-a 0.2s ease;
   }
 
-  .tint-link:hover {
-    background-size: 100% 45%;
+  .tint-link:hover,
+  .tint-link:focus-visible {
+    --ul-a: 30%;
   }
 
   /*
@@ -1084,6 +1039,7 @@
   .series-plate__head .kicker {
     white-space: nowrap;
     font-size: 0.7rem;
+    color: var(--on-surface);
   }
 
   .series-plate__instalment {
@@ -1097,13 +1053,32 @@
     padding: 0;
   }
 
+  /* Five columns: the title takes its natural width, the dot leader fills
+     the slack, and the date column never wraps under anything */
   .series-plate__row {
     display: grid;
-    grid-template-columns: 14px 2rem minmax(0, 1fr) auto;
+    grid-template-columns: 14px 2rem auto minmax(2rem, 1fr) auto;
     align-items: baseline;
     column-gap: 0.55rem;
     padding: 0.6rem 0.1rem;
     border-top: 1px solid var(--hairline-soft);
+  }
+
+  .series-plate__leader {
+    height: 0.68em;
+    align-self: end;
+    border-bottom: 1px dotted
+      color-mix(in srgb, var(--on-surface) 30%, transparent);
+  }
+
+  @media (max-width: 40rem) {
+    .series-plate__row {
+      grid-template-columns: 14px 2rem minmax(0, 1fr) auto;
+    }
+
+    .series-plate__leader {
+      display: none;
+    }
   }
 
   .series-plate__mark {
@@ -1138,6 +1113,7 @@
 
   .series-plate__title {
     font-size: 0.9375rem;
+    font-weight: 600;
     line-height: 1.4;
     min-width: 0;
   }
@@ -1154,10 +1130,15 @@
     justify-self: end;
   }
 
-  .series-plate__row--current .series-plate__numeral,
-  .series-plate__row--current .series-plate__date {
+  .series-plate__row--current .series-plate__numeral {
     color: var(--gilt-ink);
     opacity: 1;
+  }
+
+  /* The current date sits a half-step quieter than its numeral and title */
+  .series-plate__row--current .series-plate__date {
+    color: var(--gilt-ink);
+    opacity: 0.9;
   }
 
   .series-plate__row--current .series-plate__title {
@@ -1165,7 +1146,8 @@
     font-weight: 600;
   }
 
-  /* The feed card's serial token, riding the kicker meta row */
+  /* The feed card's serial token: self-contained anatomy, so it keeps its
+     register wherever it rides */
   .serial-token {
     display: inline-flex;
     align-items: center;
@@ -1173,7 +1155,11 @@
     border: 1px solid color-mix(in srgb, var(--gilt-ink) 45%, transparent);
     border-radius: 0.25rem;
     padding: 0.08rem 0.4rem;
+    font-family: var(--font-mono);
     font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     color: var(--gilt-ink);
     opacity: 1;
   }
@@ -1202,7 +1188,7 @@
   .chapter-close__tailpiece::after {
     content: "";
     height: 1px;
-    width: clamp(48px, 10vw, 84px);
+    width: clamp(48px, 14vw, 84px);
     flex: 0 0 auto;
   }
 
@@ -1222,7 +1208,8 @@
 
   .chapter-close__plate {
     border: 1px solid var(--hairline-soft);
-    border-radius: 0.5rem;
+    /* 2px, per the demo: engraved plates take near-square corners */
+    border-radius: 2px;
     margin-top: 0.5rem;
   }
 
@@ -1275,6 +1262,10 @@
     font-size: 1.22rem;
     line-height: 1.3;
     letter-spacing: -0.01em;
+  }
+
+  .chapter-close__title .tint-link {
+    font-weight: 620;
   }
 
   .chapter-close__catchword {
@@ -1347,6 +1338,10 @@
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 650;
+  /* The 650 was picked for THIS size, not the base 1rem it inherited */
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
 
 .code-container {

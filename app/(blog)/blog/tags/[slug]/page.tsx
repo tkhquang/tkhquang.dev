@@ -58,8 +58,9 @@ export default async function TagPage({
         pathSlug="tags"
         item={currentTag}
         headpiece={{
-          room: "The Index",
+          room: "Entries Tagged",
           stat: `Tagged in ${filteredPost.length} ${filteredPost.length === 1 ? "post" : "posts"}`,
+          hashed: true,
         }}
       />
       <Suspense>

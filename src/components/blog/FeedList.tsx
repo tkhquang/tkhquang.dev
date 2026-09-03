@@ -24,11 +24,20 @@ const FeedList = <T,>({
   hideTitle?: boolean;
   /* Filtered pages open with the catalogue headpiece named after their
      subject; room and stat come from the route */
-  headpiece?: { room: string; stat: string; hue?: string };
+  headpiece?: {
+    room: string;
+    stat: string;
+    hue?: string;
+    hashed?: boolean;
+    swatchLabel?: string;
+  };
 }) => {
   return (
     <section className="news-feed w-full max-w-(--breakpoint-sm) flex-1">
-      {pathInfoType && item && (
+      {/* The headpiece IS the page's opening: the demo composition drops
+          the breadcrumb-between-rules block wherever the room plate
+          stands, so the subject never appears twice */}
+      {pathInfoType && item && !headpiece && (
         <PathInfo<any, "slug">
           item={item}
           pathSlug={pathSlug}
@@ -52,6 +61,8 @@ const FeedList = <T,>({
                   }
                   stat={headpiece.stat}
                   hue={headpiece.hue}
+                  hashed={headpiece.hashed}
+                  swatchLabel={headpiece.swatchLabel}
                 />
               </div>
             ) : (

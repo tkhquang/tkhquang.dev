@@ -61,6 +61,10 @@ export default async function CategoryPage({
             { count: filteredPost.length }
           ),
           hue: `var(--shelf-${slug})`,
+          /* The shelf hue's printed name closes the stat line */
+          swatchLabel:
+            { gaming: "dusty rose", "the-inner-crisis": "lilac" }[slug] ??
+            "lapis",
         }}
       />
       <Suspense>

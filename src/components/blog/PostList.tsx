@@ -57,9 +57,10 @@ const PostList = <
                 key={fieldSlug}
                 style={
                   hue
-                    ? {
+                    ? ({
                         borderBottomColor: `color-mix(in srgb, ${hue} 35%, transparent)`,
-                      }
+                        "--shelf": hue,
+                      } as React.CSSProperties)
                     : undefined
                 }
               >

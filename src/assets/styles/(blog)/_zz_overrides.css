@@ -224,23 +224,38 @@
     outline: 1px solid var(--cartouche-outer);
     outline-offset: 3px;
     box-shadow: 0 0 0 1px var(--cartouche-inner);
+    /* The ring lands like ink, instantly: transitioning it would read
+       as the frame growing, and nothing here moves */
+    transition: none;
   }
 
-  /* The Threshold Lamp: first tab stop on every page, revealed by
-     opacity alone in the header line */
+  /* The skip target itself: no UA ring on a page-sized landing */
+  #main-content:focus,
+  #main-content:focus-visible {
+    outline: none;
+  }
+
+  /* The jump select's inner hairline must land with the ring, not fade
+     behind it */
+  [role="combobox"]:focus-visible {
+    transition: none;
+  }
+
+  /* The Threshold Lamp: a compact plate at the header's left edge,
+     revealed by opacity alone; its own transition survives the ring's
+     transition: none above because this rule is more specific */
   .skip-plate {
     position: fixed;
-    top: 0;
-    left: 1rem;
+    top: calc(var(--header-height) / 2);
+    left: 0.75rem;
+    transform: translateY(-50%);
     z-index: calc(var(--z-header) + 1);
-    height: var(--header-height);
     display: inline-flex;
     align-items: center;
-    padding: 0 0.75rem;
-    color: var(--primary);
+    padding: 0.5rem 0.75rem;
+    color: var(--on-background);
     background: var(--surface-raised);
     border: 1px solid var(--hairline-soft);
-    border-radius: 0 0 0.375rem 0.375rem;
     opacity: 0;
     pointer-events: none;
     transition: opacity 200ms;
@@ -249,6 +264,91 @@
   .skip-plate:focus-visible {
     opacity: 1;
     pointer-events: auto;
+    transition: opacity 200ms;
+  }
+
+  /*
+   * Running heads: the colophon bar's underline-fill grammar one level
+   * up, in currentColor so the tint rides both the transparent sky and
+   * the blurred band. Overrides layer, or the Link's utility classes
+   * out-cascade the fill's transition and the active opacity.
+   */
+  .blog-nav__link {
+    padding-bottom: 2px;
+    background: linear-gradient(
+        to right,
+        color-mix(in srgb, currentcolor 30%, transparent),
+        color-mix(in srgb, currentcolor 18%, transparent)
+      )
+      no-repeat left bottom / 0% 45%;
+    transition:
+      background-size 300ms,
+      opacity 300ms;
+  }
+
+  .blog-nav__link:hover,
+  .blog-nav__link[aria-current="page"] {
+    background-size: 100% 45%;
+  }
+
+  .blog-nav__link[aria-current="page"] {
+    opacity: 1;
+  }
+
+  /* Over the solid band the active head takes the primary ink; over the
+     sky it stays in the band's own ink */
+  .header__background-transparent--blog .blog-nav__link[aria-current="page"] {
+    color: var(--primary);
+  }
+
+  /* The demo's soft two-layer shadow for the solid header, in place of
+     the heavier house shadow-box-md halo */
+  .blog-header-shadow {
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 12%),
+      0 2px 4px -2px rgb(0 0 0 / 12%);
+  }
+
+  /*
+   * Colophon recipes that fight the utilities-layer kicker: hoisted here
+   * so the letterspacing, sizes, and dimming actually apply.
+   */
+  .blog-colophon__head {
+    letter-spacing: 0.22em;
+    text-indent: 0.22em;
+    color: var(--primary);
+    opacity: 1;
+  }
+
+  .blog-colophon__doors {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .blog-colophon__doors .kicker {
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+
+  .blog-colophon__imprint dt {
+    opacity: 0.6;
+  }
+
+  /* Quiet ink for the colophon's links: on-surface at rest, the primary
+     tint only as the hover fade; primary is reserved for the head */
+  .blog-colophon .tint-link {
+    color: var(--on-surface);
+  }
+
+  .blog-colophon__wire-link {
+    font-weight: 400;
+  }
+
+  @media (max-width: 35rem) {
+    .blog-colophon__doors .kicker {
+      padding: 0.125rem 0;
+    }
   }
 
   .mermaid {

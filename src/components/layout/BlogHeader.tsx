@@ -1,5 +1,6 @@
 "use client";
 
+import "./IndexDrawer.css";
 import Drawer, {
   DrawerTrigger,
   useDrawerContext,
@@ -39,6 +40,7 @@ export interface IndexStats {
 /* A drawer row that closes the drawer as it navigates; the layout
    persists across routes, so the dialog would otherwise stay open */
 const IndexRow = ({
+  active,
   count,
   href,
   label,
@@ -46,12 +48,17 @@ const IndexRow = ({
   href: string;
   label: string;
   count?: number;
+  active?: boolean;
 }) => {
   const drawer = useDrawerContext();
 
   return (
     <li className="index-drawer__row">
-      <Link href={href} onClick={() => drawer?.hide()}>
+      <Link
+        href={href}
+        onClick={() => drawer?.hide()}
+        aria-current={active ? "page" : undefined}
+      >
         {label}
       </Link>
       {typeof count === "number" && (
@@ -199,7 +206,7 @@ const BlogHeader = ({
         "band--day h-header-height sticky inset-0 z-(--z-header) m-0 w-full flex-wrap p-0 transition-[background-color,color,box-shadow] duration-300",
         transparent
           ? "text-theme-on-band bg-transparent"
-          : "header__background-transparent--blog text-theme-on-background shadow-box-md backdrop-blur-xs",
+          : "header__background-transparent--blog text-theme-on-background blog-header-shadow backdrop-blur-xs",
         className
       )}
     >
@@ -220,7 +227,7 @@ const BlogHeader = ({
               className="cursor-pointer focus:outline-hidden"
               onClick={handleLogoClick}
             >
-              <div className="logo flip-animate flex-center gap-2 whitespace-nowrap no-underline select-none">
+              <div className="logo flex-center gap-2 whitespace-nowrap no-underline select-none">
                 {!isHomeBlog && <BackButtonIcon className="size-8" />}
                 <span
                   className="logo__text relative inline-flex"
@@ -250,7 +257,9 @@ const BlogHeader = ({
                   key={link.href}
                   href={link.href}
                   aria-current={link.href === activeHref ? "page" : undefined}
-                  className="blog-nav__link font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
+                  /* No transition utility here: it would out-cascade the
+                     fill's own background-size transition */
+                  className="blog-nav__link font-mono text-xs font-bold tracking-widest uppercase opacity-80 hover:opacity-100"
                 >
                   {link.label}
                 </Link>
@@ -263,10 +272,11 @@ const BlogHeader = ({
               position="left"
               size={300}
               title="The Index"
+              className="index-drawer"
               trigger={
                 <DrawerTrigger
                   aria-label="Open the blog index"
-                  className="kicker cursor-pointer tracking-widest opacity-80 transition-opacity hover:opacity-100 md:hidden"
+                  className="blog-nav__link kicker cursor-pointer font-bold tracking-widest opacity-80 hover:opacity-100 md:hidden"
                 >
                   Index
                 </DrawerTrigger>
@@ -277,14 +287,25 @@ const BlogHeader = ({
                   href="/blog"
                   label="Posts"
                   count={indexStats?.posts}
+                  active={activeHref === "/blog"}
                 />
                 <IndexRow
                   href="/blog/categories"
                   label="Categories"
                   count={indexStats?.categories}
+                  active={activeHref === "/blog/categories"}
                 />
-                <IndexRow href="/blog/tags" label="Tags" count={indexStats?.tags} />
-                <IndexRow href="/blog/posts" label="Archive" />
+                <IndexRow
+                  href="/blog/tags"
+                  label="Tags"
+                  count={indexStats?.tags}
+                  active={activeHref === "/blog/tags"}
+                />
+                <IndexRow
+                  href="/blog/posts"
+                  label="Archive"
+                  active={activeHref === "/blog/posts"}
+                />
               </ul>
               {indexStats && (
                 <span className="kicker index-drawer__foot">

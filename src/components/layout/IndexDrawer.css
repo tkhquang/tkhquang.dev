@@ -1,0 +1,95 @@
+/*
+ * The Index drawer's printed-front-matter dress, per the approved demo.
+ * Unlayered on purpose: Drawer.css is unlayered too, so these win by
+ * specificity where they restyle its generic chrome. Scoped to the
+ * .index-drawer dialog; the TOC drawer keeps its shipped look.
+ */
+
+.index-drawer .drawer__title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.index-drawer .drawer__header {
+  border-bottom: 0;
+  background: linear-gradient(90deg, transparent, var(--hairline), transparent)
+    bottom / 100% 1px no-repeat;
+}
+
+.index-drawer .drawer__content {
+  width: min(80vw, 300px) !important;
+  border-right: 1px solid var(--hairline-soft);
+  box-shadow: 12px 0 32px -16px rgb(0 0 0 / 50%);
+}
+
+/* The body becomes a column so the Vol. foot anchors at the bottom */
+.index-drawer .drawer__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.index-drawer__rows {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--hairline-soft);
+}
+
+.index-drawer__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.index-drawer__row a {
+  flex: 1;
+  padding: 0.95rem 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-surface);
+  background: linear-gradient(
+      to right,
+      color-mix(in srgb, var(--primary) 30%, transparent),
+      color-mix(in srgb, var(--primary) 18%, transparent)
+    )
+    no-repeat left bottom / 0% 45%;
+  transition:
+    background-size 300ms,
+    color 200ms;
+}
+
+.index-drawer__row a:hover {
+  background-size: 100% 45%;
+}
+
+/* Only the open room reads as "you are here" */
+.index-drawer__row a[aria-current="page"] {
+  color: var(--primary);
+  background-size: 100% 45%;
+}
+
+.index-drawer__count {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+  opacity: 0.65 !important;
+}
+
+.index-drawer__foot {
+  display: block;
+  margin-top: auto;
+  padding-top: 1.25rem;
+  text-align: center;
+  letter-spacing: 0.14em;
+  opacity: 0.6 !important;
+  background: linear-gradient(90deg, transparent, var(--hairline), transparent)
+    top / 100% 1px no-repeat;
+}
