@@ -60,8 +60,29 @@ export const dynamicParams = false;
 const MERMAIDJS_SCRIPT_CONTENT = `
 <script type="module">
   import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.esm.min.mjs";
-  mermaid.initialize({startOnLoad: true});
-  mermaid.contentLoaded();
+
+  /* A reader who moves before typesetting finishes owns the scroll; only
+     an untouched deep link gets re-seated below */
+  let readerMoved = false;
+  const markMoved = () => { readerMoved = true; };
+  for (const type of ["wheel", "touchmove", "keydown"]) {
+    addEventListener(type, markMoved, { once: true, passive: true });
+  }
+
+  mermaid.initialize({ startOnLoad: false });
+  /* One bad diagram must not cancel the re-seat: the others have already
+     rendered and moved the layout by the time run() rejects */
+  try { await mermaid.run(); } catch {}
+
+  /* Typesetting swaps each source block for an SVG of another height, so
+     on a direct #hash visit the browser seats the anchor against the
+     pre-render layout and the heading then slides away. Re-seat it once
+     the layout is final; :target's scroll-margin keeps the header offset. */
+  if (location.hash && !readerMoved) {
+    let id = location.hash.slice(1);
+    try { id = decodeURIComponent(id); } catch {}
+    document.getElementById(id)?.scrollIntoView();
+  }
 </script>
 `;
 
