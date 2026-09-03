@@ -19,6 +19,13 @@ const DEFAULT_STYLES = /* css */ `
     opacity: 1;
   }
 
+  /* Keyboard reveal: a tabbed-to control must be visible while focused.
+     CSS only; the button's structure and behavior stay frozen. */
+  [data-rehype-pretty-code-figure][data-visibility="hover"]:focus-within
+    button[data-rehype-pretty-copy-button] {
+    opacity: 1;
+  }
+
   button[data-rehype-pretty-copy-button] {
     position: absolute;
     top: 0.5em;

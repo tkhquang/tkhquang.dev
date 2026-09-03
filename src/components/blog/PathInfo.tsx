@@ -80,7 +80,10 @@ export function PathInfo<
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/blog/${pathSlug}/${item[itemSlugField]}`}>
+              <Link
+                href={`/blog/${pathSlug}/${item[itemSlugField]}`}
+                aria-current="page"
+              >
                 {item.title}
               </Link>
             </BreadcrumbLink>

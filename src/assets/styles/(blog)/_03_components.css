@@ -137,6 +137,11 @@
        deepens it or it dies on paper. For serial marks and tailpieces. */
     --gilt-ink: hsl(42deg 60% 70%);
 
+    /* The Plate-Frame Focus cartouche: gilt rule out, starlight rule in
+       by night; gilt out, lapis in by day */
+    --cartouche-outer: hsl(42deg 60% 70%);
+    --cartouche-inner: hsl(199deg 90% 85%);
+
     /* Aurora hues, read by the selection wash in the blog base stylesheet
        and by the bio card's constellation chart.
        The masthead shader is not one of them: its palette lives in
@@ -152,6 +157,8 @@
       --aurora-b: hsl(266deg 45% 48%);
       --aurora-c: hsl(210deg 75% 42%);
       --gilt-ink: hsl(42deg 62% 30%);
+      --cartouche-outer: hsl(40deg 60% 42%);
+      --cartouche-inner: var(--primary);
     }
   }
 

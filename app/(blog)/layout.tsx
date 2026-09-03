@@ -56,6 +56,11 @@ export default async function BlogLayout({
         locale={DEFAULT_LOCALE}
         messages={getMessages(DEFAULT_LOCALE)}
       >
+        {/* The Threshold Lamp: the first tab stop, revealed by opacity
+            alone; tabindex on main lets focus really land in the text */}
+        <a href="#main-content" className="skip-plate kicker">
+          Skip to the text
+        </a>
         <BlogHeader
           indexStats={{
             posts: posts.length,
@@ -65,7 +70,9 @@ export default async function BlogLayout({
             year: new Date().getFullYear(),
           }}
         />
-        <Main className="flex-1">{children}</Main>
+        <Main id="main-content" tabIndex={-1} className="flex-1">
+          {children}
+        </Main>
         <BlogFooter />
 
         <Suspense>
