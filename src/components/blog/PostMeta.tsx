@@ -1,5 +1,6 @@
 import ViewCount from "@/components/common/ViewCount";
 import { MarkdownPost } from "@/models/markdown.types";
+import { toRoman } from "@/utils/roman";
 import classNames from "classnames";
 import { format, isValid } from "date-fns";
 import Link from "next/link";
@@ -63,6 +64,17 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         >
           # {post.category_title ?? categoryTitleFromSlug(post.category_slug)}
         </Link>
+        {/* series_total only rides posts from getAllPosts, so the token
+            appears on feed cards while the post page carries the full
+            instalment plate instead */}
+        {post.series && post.series_part && post.series_total ? (
+          <span className="serial-token" title={post.series}>
+            <svg viewBox="0 0 24 24" aria-hidden>
+              <path d="M12 1.8 C13.2 8.2 15.8 10.8 22.2 12 C15.8 13.2 13.2 15.8 12 22.2 C10.8 15.8 8.2 13.2 1.8 12 C8.2 10.8 10.8 8.2 12 1.8 Z" />
+            </svg>
+            {toRoman(post.series_part)} of {toRoman(post.series_total)}
+          </span>
+        ) : null}
       </div>
 
       <div className="text-theme-on-surface flex items-center space-x-2 font-mono text-xs opacity-75 md:text-sm">

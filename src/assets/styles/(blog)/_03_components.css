@@ -133,6 +133,10 @@
     --shelf-gaming: hsl(352deg 62% 73%);
     --shelf-the-inner-crisis: hsl(267deg 56% 75%);
 
+    /* Gilt as READABLE ink: dark rides the chart's gilt exactly, light
+       deepens it or it dies on paper. For serial marks and tailpieces. */
+    --gilt-ink: hsl(42deg 60% 70%);
+
     /* Aurora hues, read by the selection wash in the blog base stylesheet
        and by the bio card's constellation chart.
        The masthead shader is not one of them: its palette lives in
@@ -147,7 +151,312 @@
       --aurora-a: hsl(168deg 55% 34%);
       --aurora-b: hsl(266deg 45% 48%);
       --aurora-c: hsl(210deg 75% 42%);
+      --gilt-ink: hsl(42deg 62% 30%);
     }
+  }
+
+  /*
+   * The quiet link: the colophon pagination's underline-fill grammar as a
+   * reusable device for the serial plate and chapter-close titles. The
+   * tint swells in place from zero width; nothing moves.
+   */
+  .tint-link {
+    color: var(--primary);
+    font-weight: 600;
+    background: linear-gradient(
+        to right,
+        color-mix(in srgb, var(--primary) 30%, transparent),
+        color-mix(in srgb, var(--primary) 18%, transparent)
+      )
+      no-repeat left bottom / 0% 45%;
+    transition: background-size 300ms;
+  }
+
+  .tint-link:hover {
+    background-size: 100% 45%;
+  }
+
+  /*
+   * Serial Instalments: the ruled plate under a serial post's lede. Rows
+   * are a GRID, not wrapping flex: the date column holds one line at
+   * every width, never folding under the title (owner ruling).
+   */
+  .series-plate {
+    border: 1px solid var(--hairline-soft);
+    border-radius: 0.5rem;
+    padding: 1.15rem 1.35rem 0.4rem;
+    margin: 1.4rem 0 1.6rem;
+  }
+
+  .series-plate__head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .series-plate__head::before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline));
+  }
+
+  .series-plate__head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--hairline), transparent);
+  }
+
+  .series-plate__head .kicker {
+    white-space: nowrap;
+    font-size: 0.7rem;
+  }
+
+  .series-plate__instalment {
+    color: var(--gilt-ink);
+    opacity: 1;
+  }
+
+  .series-plate__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .series-plate__row {
+    display: grid;
+    grid-template-columns: 14px 2rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 0.55rem;
+    padding: 0.6rem 0.1rem;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .series-plate__mark {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+  }
+
+  .series-plate__mark svg {
+    width: 11px;
+    height: 11px;
+    fill: var(--gilt-ink);
+    display: block;
+  }
+
+  .series-plate__ring {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--on-surface) 35%, transparent);
+    display: block;
+  }
+
+  .series-plate__numeral {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--on-surface);
+    opacity: 0.85;
+  }
+
+  .series-plate__title {
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    min-width: 0;
+  }
+
+  .series-plate__date {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--on-surface);
+    opacity: 0.75;
+    white-space: nowrap;
+    justify-self: end;
+  }
+
+  .series-plate__row--current .series-plate__numeral,
+  .series-plate__row--current .series-plate__date {
+    color: var(--gilt-ink);
+    opacity: 1;
+  }
+
+  .series-plate__row--current .series-plate__title {
+    color: var(--gilt-ink);
+    font-weight: 600;
+  }
+
+  /* The feed card's serial token, riding the kicker meta row */
+  .serial-token {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid color-mix(in srgb, var(--gilt-ink) 45%, transparent);
+    border-radius: 0.25rem;
+    padding: 0.08rem 0.4rem;
+    font-size: 0.65rem;
+    color: var(--gilt-ink);
+    opacity: 1;
+  }
+
+  .serial-token svg {
+    width: 9px;
+    height: 9px;
+    fill: var(--gilt-ink);
+    display: block;
+  }
+
+  /*
+   * The Chapter Close: asterism tailpiece, set-down colophon line, and the
+   * cross-reference plate that ends every article as a chapter instead of
+   * a scroll into the comments box.
+   */
+  .chapter-close__tailpiece {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    margin: 2.5rem auto 0.9rem;
+  }
+
+  .chapter-close__tailpiece::before,
+  .chapter-close__tailpiece::after {
+    content: "";
+    height: 1px;
+    width: clamp(48px, 10vw, 84px);
+    flex: 0 0 auto;
+  }
+
+  .chapter-close__tailpiece::before {
+    background: linear-gradient(90deg, transparent, var(--hairline));
+  }
+
+  .chapter-close__tailpiece::after {
+    background: linear-gradient(90deg, var(--hairline), transparent);
+  }
+
+  .chapter-close__colophon {
+    text-align: center;
+    margin: 0 0 2.4rem;
+    display: block;
+  }
+
+  .chapter-close__plate {
+    border: 1px solid var(--hairline-soft);
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .chapter-close__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 1.25rem;
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+
+  .chapter-close__spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chapter-close__spread--single {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-close__panel {
+    padding: 1.1rem 1.25rem 1.25rem;
+    min-width: 0;
+  }
+
+  .chapter-close__panel--next {
+    border-left: 1px solid var(--hairline-soft);
+    text-align: right;
+  }
+
+  .chapter-close__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .chapter-close__panel--next .chapter-close__meta {
+    flex-direction: row-reverse;
+  }
+
+  /* Modest by ruling: the suggested next post never grows past this */
+  .chapter-close__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 620;
+    font-size: 1.22rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .chapter-close__catchword {
+    margin: 0.7rem 0 0;
+    font-family: var(--font-serif);
+    font-size-adjust: 0.525;
+    font-style: italic;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 560px) {
+    .chapter-close__spread {
+      grid-template-columns: 1fr;
+    }
+
+    .chapter-close__panel--next {
+      border-left: 0;
+      border-top: 1px solid var(--hairline-soft);
+    }
+  }
+
+  .chapter-close__seealso {
+    border-top: 1px solid var(--hairline-soft);
+    padding: 0.75rem 1.25rem 1rem;
+  }
+
+  .chapter-close__rows {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .chapter-close__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+
+  .chapter-close__row-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    min-width: 0;
+  }
+
+  .chapter-close__row-date {
+    white-space: nowrap;
+    flex: 0 0 auto;
   }
 }
 

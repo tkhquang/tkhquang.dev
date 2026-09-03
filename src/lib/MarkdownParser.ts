@@ -248,12 +248,28 @@ class MarkdownParser {
       })
     );
 
-    return (
+    const published = (
       posts.filter((post) => {
         if (!post) return false;
         return post.published || shouldShowHiddenPosts;
       }) as MarkdownPost[]
     ).sort((post1, post2) => (post1.created_at > post2.created_at ? -1 : 1));
+
+    /* Serial bookkeeping: every member learns its series' published size,
+       so cards can print "Instalment II of III" without refetching */
+    const seriesSizes = new Map<string, number>();
+    for (const post of published) {
+      if (post.series) {
+        seriesSizes.set(post.series, (seriesSizes.get(post.series) ?? 0) + 1);
+      }
+    }
+    for (const post of published) {
+      if (post.series) {
+        post.series_total = seriesSizes.get(post.series);
+      }
+    }
+
+    return published;
   }
 
   async getCategoryBySlug(fileName: string): Promise<MarkdownCategory> {

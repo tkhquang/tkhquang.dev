@@ -1,4 +1,5 @@
 import BlogInfo from "@/components/blog/BlogInfo";
+import ChapterClose from "@/components/blog/ChapterClose";
 import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
 import PostAside from "@/components/blog/PostAside";
@@ -6,6 +7,7 @@ import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import RailSky from "@/components/blog/RailSky";
 import RailSkyDriver from "@/components/blog/RailSkyDriver";
+import SeriesPlate from "@/components/blog/SeriesPlate";
 import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
@@ -146,6 +148,31 @@ export default async function Post({
     ...categoryPosts.filter((other) => other.slug !== nextInSeries?.slug),
   ].slice(0, 3);
 
+  /* The full serial roster for the instalment plate under the lede */
+  const seriesParts = post.series
+    ? allPosts
+        .filter((other) => other.series === post.series)
+        .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))
+    : [];
+
+  /* Chronological neighbors for the chapter close: the volume is bound
+     newest-first, so "next" is the newer entry */
+  const postIndex = allPosts.findIndex((other) => other.slug === post.slug);
+  const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : undefined;
+  const previousPost =
+    postIndex >= 0 && postIndex < allPosts.length - 1
+      ? allPosts[postIndex + 1]
+      : undefined;
+
+  /* Below xl the right rail is absent, so the plate carries the shelf
+     rows; the neighbors above never repeat in them */
+  const seeAlso = categoryPosts
+    .filter(
+      (other) =>
+        other.slug !== previousPost?.slug && other.slug !== nextPost?.slug
+    )
+    .slice(0, 3);
+
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;
 
@@ -221,6 +248,13 @@ export default async function Post({
                 {post.description}
               </p>
             )}
+            {post.series && seriesParts.length > 1 && (
+              <SeriesPlate
+                series={post.series}
+                parts={seriesParts}
+                currentSlug={post.slug}
+              />
+            )}
             <div className="article__meta border-theme-hairline-soft mt-3 mb-6 border-b pb-4">
               <PostMeta post={post} />
             </div>
@@ -236,6 +270,14 @@ export default async function Post({
             {hasMermaidDiagram && (
               <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
             )}
+
+            <ChapterClose
+              post={post}
+              previousPost={previousPost}
+              nextPost={nextPost}
+              seeAlso={seeAlso}
+              contextLabel={post.series ?? category.title}
+            />
 
             <div className="article__footer my-6 flex">
               <TagList post={post} />
