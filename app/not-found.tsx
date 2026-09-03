@@ -1,12 +1,9 @@
 import "@/assets/styles/(blog)/index.css";
-import LostFolio from "@/components/blog/LostFolio";
-import { Main } from "@/components/layout";
-import BlogFooter from "@/components/layout/BlogFooter";
-import BlogHeader from "@/components/layout/BlogHeader";
+import Image from "@/components/common/NextImage";
+import { Footer, Header, Main } from "@/components/layout";
 import { DEFAULT_LOCALE, getMessages } from "@/lib/i18n";
-import { getMarkdownParser } from "@/lib/MarkdownParser";
 import AppProvider from "@/providers/AppProvider";
-import { getVolume } from "@/utils/volume";
+import Link from "next/link";
 
 /*
  * The one 404 for the whole site: a wrong path is a wrong path, so every
@@ -15,24 +12,34 @@ import { getVolume } from "@/utils/volume";
  * serves for anything nothing else claims.
  */
 export default async function NotFound() {
-  const markdownParser = await getMarkdownParser();
-  const posts = await markdownParser.getAllPosts();
-
   return (
     <AppProvider locale={DEFAULT_LOCALE} messages={getMessages(DEFAULT_LOCALE)}>
-      <BlogHeader
-        indexStats={{
-          posts: posts.length,
-          categories: new Set(posts.map((post) => post.category_slug)).size,
-          tags: new Set(posts.flatMap((post) => post.tags)).size,
-          volume: getVolume(posts),
-          year: new Date().getFullYear(),
-        }}
-      />
+      <Header useScroll={false} />
       <Main className="flex-1">
-        <LostFolio newest={posts.slice(0, 3)} />
+        <div className="typography mt-header-height container flex flex-1 flex-col">
+          <div className="my-4 flex flex-1 flex-col md:my-8">
+            <h1 className="text-theme-primary">
+              Oops! We have looked everywhere...
+            </h1>
+            <p className="">
+              But we couldn&apos;t find what you are looking for.
+              <br />
+              Don&apos;t worry, our{" "}
+              <Link href="/blog/categories">post archive</Link> is full of
+              hidden gems. Maybe your missing post is just playing
+              hide-and-seek!
+            </p>
+            <div className="relative flex min-h-[200px] flex-1 flex-col items-center justify-center">
+              <Image
+                src="/assets/resources/images/404-jim.gif"
+                alt="404"
+                fill
+              />
+            </div>
+          </div>
+        </div>
       </Main>
-      <BlogFooter />
+      <Footer />
     </AppProvider>
   );
 }
