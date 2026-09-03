@@ -64,15 +64,6 @@ const nextConfig = {
       fullUrl: true,
     },
   },
-  /* The press-time diagram renderer cannot be bundled: playwright resolves
-     its browser through require.resolve at runtime, which the server
-     bundle shims away (u.resolve is not a function) */
-  serverExternalPackages: [
-    "rehype-mermaid",
-    "mermaid-isomorphic",
-    "playwright",
-    "playwright-core",
-  ],
   outputFileTracingIncludes: {
     "/blog{,/**/*}": [
       "./content/**",

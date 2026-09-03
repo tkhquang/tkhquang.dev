@@ -8,6 +8,7 @@ import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import {
   MERMAID_RENDER_OPTIONS,
   rehypeMermaidPrepare,
+  rehypeMermaidRender,
   rehypeMermaidRestore,
 } from "@/lib/rehype-mermaid-plates";
 import remarkEmbed from "@/lib/remark-embed";
@@ -29,7 +30,6 @@ import path from "path";
 import * as prod from "react/jsx-runtime";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeExternalLinks from "rehype-external-links";
-import rehypeMermaid from "rehype-mermaid";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeRaw from "rehype-raw";
 import rehypeReact, { Options } from "rehype-react";
@@ -99,11 +99,11 @@ function getProcessor(): Processor {
     .use(rehypeRaw)
     /* Chart Plates: diagrams typeset at press time. The raw pre.mermaid
        blocks only exist as elements after rehypeRaw; prepare re-inks the
-       Dracula classDefs into theme tokens, rehype-mermaid renders them
-       through headless chromium, restore wraps the svgs back into their
-       original pre so every shipped selector still applies. */
+       Dracula classDefs into theme tokens, the in-repo renderer draws
+       them through headless chromium, restore wraps the svgs back into
+       their original pre so every shipped selector still applies. */
     .use(rehypeMermaidPrepare)
-    .use(rehypeMermaid, MERMAID_RENDER_OPTIONS)
+    .use(rehypeMermaidRender, MERMAID_RENDER_OPTIONS)
     .use(rehypeMermaidRestore)
     .use(rehypeSlug)
     .use(rehypeExtractToc)

@@ -1,9 +1,9 @@
-import serverlessChromium from "@sparticuz/chromium";
 import { Element, ElementContent, Root } from "hast";
 import { toHtml } from "hast-util-to-html";
-import { chromium, type BrowserType, type LaunchOptions } from "playwright";
 import { Transformer } from "unified";
 import { visit } from "unist-util-visit";
+
+export { rehypeMermaidRender } from "./render";
 
 /*
  * Chart Plates: the two bookends around rehype-mermaid that turn the
@@ -57,9 +57,9 @@ const sourceClusterTitles = (source: string): string[] => {
   return titles;
 };
 
-/* Labels are measured in the render browser at this metric: 16px Courier
-   New advances 0.6em per glyph, the same as the Source Code Pro the page
-   displays. Estimates from it are exact for mono text. */
+/* Labels are measured in the render browser at this metric: 16px Source
+   Code Pro advances 0.6em per glyph. Estimates from it are exact for
+   mono text. */
 const GLYPH_ADVANCE = 16 * 0.6;
 
 const isMermaidPre = (node: Element) =>
@@ -285,24 +285,7 @@ export function rehypeMermaidRestore(): Transformer<Root> {
   };
 }
 
-/* Vercel's build image cannot run the browser `playwright install`
-   downloads: the binary links against NSS/NSPR system libraries the
-   image does not have, and playwright cannot install those there.
-   @sparticuz/chromium carries the same chrome-headless-shell with the
-   libraries bundled (bin/al2023.tar.br, unpacked to /tmp at first
-   launch); the resume PDF route already renders through it.
-   mermaid-isomorphic only ever calls browserType.launch, so swapping
-   the executable underneath playwright is the entire integration. */
-const vercelChromium = {
-  launch: async (options?: LaunchOptions) =>
-    chromium.launch({
-      ...options,
-      args: serverlessChromium.args,
-      executablePath: await serverlessChromium.executablePath(),
-    }),
-} as unknown as BrowserType;
-
-/* Passed to rehype-mermaid.
+/* Passed to the render plugin.
 
    htmlLabels false (the root key is the one the v2 renderer honors) is
    what makes labels trustworthy: as foreignObject divs they are clipped
@@ -311,24 +294,23 @@ const vercelChromium = {
    the line breaks are baked into tspans and a metric mismatch can only
    overhang, never clip.
 
-   Courier New is the measurement face because its 0.6em advance equals
-   the displayed Source Code Pro exactly (the render browser has no SCP,
-   and a stylesheet provably never reaches measurement); Linux builds
-   fall back to Liberation/DejaVu mono at the same advance. The plate
-   CSS re-fonts the finished svg for display.
+   Source Code Pro is the measurement face, injected into the render
+   page as a data-uri font face so measurement uses the exact face the
+   article displays on every machine; the Vercel-side chromium ships no
+   mono font at all, and the Courier New fallback that serves local
+   machines advances the same 0.6em. The plate CSS re-fonts the
+   finished svg for display.
 
    useMaxWidth would downscale wide charts into the column, which is
    what made their type unreadably small: charts keep natural size and
    the plate scrolls. wrappingWidth folds node labels so flowcharts stay
    near the column's width. */
 export const MERMAID_RENDER_OPTIONS = {
-  strategy: "inline-svg" as const,
-  ...(process.env.VERCEL ? { browserType: vercelChromium } : null),
   mermaidConfig: {
-    fontFamily: '"Courier New", monospace',
+    fontFamily: '"Source Code Pro", "Courier New", monospace',
     htmlLabels: false,
     themeVariables: {
-      fontFamily: '"Courier New", monospace',
+      fontFamily: '"Source Code Pro", "Courier New", monospace',
     },
     flowchart: {
       useMaxWidth: false,
