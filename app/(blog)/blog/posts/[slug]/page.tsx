@@ -11,7 +11,6 @@ import SeriesPlate from "@/components/blog/SeriesPlate";
 import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
-import ScriptLoader from "@/components/common/ScriptLoader";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
@@ -59,48 +58,8 @@ export const dynamic = "force-static";
 export const revalidate = false;
 export const dynamicParams = false;
 
-const MERMAIDJS_SCRIPT_CONTENT = `
-<script type="module">
-  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.esm.min.mjs";
-
-  /* A reader who moves before typesetting finishes owns the scroll; the
-     pin below stands down the moment they do */
-  let readerMoved = false;
-  const markMoved = () => { readerMoved = true; };
-  for (const type of ["wheel", "touchmove", "keydown"]) {
-    addEventListener(type, markMoved, { once: true, passive: true });
-  }
-
-  /* Pin an untouched deep link through typesetting. Each diagram swaps
-     its source text for an SVG of another height, and every swap would
-     visibly drag the anchored heading if compensation waited for the end.
-     ResizeObserver callbacks run after layout but BEFORE paint, so
-     re-seating inside one means the shifted frame is never shown: the
-     target holds still while the page grows around it. :target's
-     scroll-margin keeps the header offset on every seat. */
-  let id = location.hash.slice(1);
-  try { id = decodeURIComponent(id); } catch {}
-  const target = id ? document.getElementById(id) : null;
-  const seat = () => {
-    if (target && !readerMoved) target.scrollIntoView();
-  };
-  let observer;
-  if (target) {
-    observer = new ResizeObserver(seat);
-    observer.observe(document.body);
-  }
-
-  mermaid.initialize({ startOnLoad: false });
-  /* One bad diagram must not cancel the pin: the others have already
-     rendered and moved the layout by the time run() rejects */
-  try { await mermaid.run(); } catch {}
-
-  seat();
-  /* One more frame catches any straggling reflow, then the pin releases
-     so later growth (comments loading, say) never yanks the reader */
-  requestAnimationFrame(() => observer?.disconnect());
-</script>
-`;
+/* Diagrams are typeset at press time (Chart Plates): no client mermaid,
+   no CDN module, no deep-link anchor race to pin against */
 
 export default async function Post({
   params,
@@ -117,12 +76,6 @@ export default async function Post({
   } = await markdownParser.parseMarkdown(post.content);
 
   const category = await markdownParser.getCategoryBySlug(post.category_slug);
-
-  /* Posts embed diagrams as raw <pre class="mermaid"> blocks (fenced form
-     kept for safety); skip the CDN module entirely when neither appears */
-  const hasMermaidDiagram =
-    post.content.includes('class="mermaid') ||
-    post.content.includes("```mermaid");
 
   const allPosts = await markdownParser.getAllPosts();
   const categoryPosts = allPosts.filter(
@@ -268,10 +221,6 @@ export default async function Post({
             >
               {html}
             </div>
-            {hasMermaidDiagram && (
-              <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
-            )}
-
             <ChapterClose
               post={post}
               previousPost={previousPost}

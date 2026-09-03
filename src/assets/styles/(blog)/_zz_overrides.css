@@ -351,59 +351,117 @@
     }
   }
 
-  .mermaid {
-    @apply transition-opacity;
-
-    > svg {
-      background-color: var(--on-surface-dark);
-    }
+  /*
+   * Chart Plates: diagrams arrive as baked SVG in a restored pre.mermaid
+   * wrapper, so no gate, no timeout, no CDN. The plate follows the theme
+   * per the approved demo: page ground, hairline edge, mono script.
+   */
+  pre.mermaid {
+    border: 1px solid var(--hairline-soft);
+    background: var(--background);
+    padding: 8px;
   }
 
-  /* Hide the raw diagram source only while a typeset is actually possible:
-     gated on html.js so script-less readers keep the text, and backed by a
-     6s timeout reveal so a blocked or failed CDN module degrades to the
-     legible source instead of a blank plate forever */
-  html.js .mermaid:not([data-processed="true"]) {
-    opacity: 0;
-    animation: mermaid-source-reveal 0.3s ease 6s forwards;
+  .mermaid > svg {
+    background-color: transparent;
+    max-width: 100%;
+    height: auto;
   }
 
-  @keyframes mermaid-source-reveal {
-    to {
-      opacity: 1;
-    }
+  .mermaid svg {
+    font-family: var(--font-mono) !important;
   }
+
+  /* The parts classDefs never reach, re-dressed to the plate: flowchart
+     edges and their labels, clusters, and the whole sequence-diagram kit */
+  /* stylelint-disable selector-class-pattern -- mermaid's own classes */
+  .mermaid svg .edgePaths path,
+  .mermaid svg .flowchart-link {
+    stroke: color-mix(in srgb, var(--on-surface) 70%, transparent) !important;
+  }
+
+  .mermaid svg marker path {
+    fill: color-mix(in srgb, var(--on-surface) 70%, transparent) !important;
+    stroke: none !important;
+  }
+
+  .mermaid svg .edgeLabel,
+  .mermaid svg .edgeLabel p {
+    background-color: var(--background) !important;
+    color: var(--on-surface) !important;
+  }
+
+  .mermaid svg .cluster rect {
+    fill: color-mix(
+      in srgb,
+      var(--on-surface) 5%,
+      var(--background)
+    ) !important;
+    stroke: var(--hairline-soft) !important;
+  }
+
+  .mermaid svg .cluster text,
+  .mermaid svg .cluster span {
+    fill: var(--on-surface) !important;
+    color: var(--on-surface) !important;
+  }
+
+  .mermaid svg rect.actor {
+    fill: var(--surface-raised) !important;
+    stroke: var(--on-surface) !important;
+  }
+
+  .mermaid svg text.actor,
+  .mermaid svg text.actor tspan {
+    fill: var(--on-surface) !important;
+  }
+
+  .mermaid svg .actor-line {
+    stroke: color-mix(in srgb, var(--on-surface) 35%, transparent) !important;
+  }
+
+  .mermaid svg .messageLine0,
+  .mermaid svg .messageLine1 {
+    stroke: var(--on-surface) !important;
+  }
+
+  .mermaid svg .messageText,
+  .mermaid svg .sequenceNumber {
+    fill: var(--on-surface) !important;
+  }
+
+  .mermaid svg .note {
+    fill: color-mix(in srgb, var(--gilt-ink) 14%, var(--background)) !important;
+    stroke: color-mix(in srgb, var(--gilt-ink) 45%, transparent) !important;
+  }
+
+  .mermaid svg .noteText,
+  .mermaid svg .noteText tspan {
+    fill: var(--on-surface) !important;
+  }
+
+  .mermaid svg .labelBox {
+    fill: var(--surface-raised) !important;
+    stroke: var(--hairline-soft) !important;
+  }
+
+  .mermaid svg .labelText,
+  .mermaid svg .loopText,
+  .mermaid svg .loopText tspan {
+    fill: var(--on-surface) !important;
+  }
+
+  .mermaid svg .loopLine {
+    stroke: color-mix(in srgb, var(--on-surface) 45%, transparent) !important;
+  }
+  /* stylelint-enable selector-class-pattern */
 
   pre.mermaid {
     overflow: auto;
     white-space: normal;
   }
 
-  /*
-   * Selection inside diagrams. The page selection wash tints 30% aurora
-   * behind the glyphs and recolors them --on-background, which assumes
-   * they sit on the page background. Diagrams draw on their own plates
-   * that never change with the theme (mermaid's pale panel, the inline
-   * figures' dark one), so in dark mode a selected mermaid label went
-   * near-white over a still-pale plate and vanished. The inks below are
-   * explicit and theme-invariant like the plates themselves: on the
-   * color property, currentcolor computes as inherit, and ::selection
-   * inherits from the page rule's pale ink, which is the bug this fixes.
-   * Mermaid's dark default text keeps its own #333 over an opaque pale
-   * aurora wash; the light-on-dark node labels and hand-drawn figures
-   * select as Dracula foreground on the Dracula selection slate.
-   */
-  .mermaid ::selection {
-    background-color: color-mix(in srgb, var(--aurora-a) 45%, white);
-    color: #333333;
-  }
-
-  /* stylelint-disable selector-class-pattern -- .nodeLabel is mermaid's own class */
-  .mermaid .nodeLabel::selection,
-  .mermaid .nodeLabel *::selection,
-  svg[role="img"] text::selection {
-    background-color: #44475a;
-    color: #f8f8f2;
-  }
-  /* stylelint-enable selector-class-pattern */
+  /* The old theme-invariant selection inks for diagrams are gone with
+     the pale plate: baked plates sit on the page ground and follow the
+     theme, so the page's own selection wash reads correctly on them. */
 }

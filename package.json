@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "playwright install chromium && next build",
     "start": "next start",
     "lint": "eslint .",
     "fix:style": "npx stylelint src/**/*.css --fix",
@@ -47,6 +47,7 @@
     "graphql": "^16.9.0",
     "gray-matter": "^4.0.3",
     "gsap": "^3.13.0",
+    "hast-util-to-html": "^9.0.5",
     "hast-util-to-string": "^3.0.1",
     "hast-util-whitespace": "^3.0.0",
     "image-size": "^2.0.2",
@@ -145,7 +146,8 @@
       "unrs-resolver"
     ],
     "overrides": {
-      "baseline-browser-mapping": "^2.11.20"
+      "baseline-browser-mapping": "^2.11.20",
+      "mermaid": "11.6.0"
     }
   }
 }

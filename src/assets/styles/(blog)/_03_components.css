@@ -147,6 +147,16 @@
     --cartouche-outer: hsl(42deg 60% 70%);
     --cartouche-inner: hsl(199deg 90% 85%);
 
+    /* Chart Plate inks: what the baked diagrams' var() references resolve
+       to, per the approved concordance. Everything but vermilion rides an
+       existing token pair, so the plates follow the theme for free. */
+    --diagram-ink: var(--on-surface);
+    --diagram-node: var(--surface-raised);
+    --diagram-vermilion: hsl(9deg 68% 70%);
+    --diagram-viridian: var(--success);
+    --diagram-lapis: var(--primary);
+    --diagram-gilt: var(--gilt-ink);
+
     /* Aurora hues, read by the selection wash in the blog base stylesheet
        and by the bio card's constellation chart.
        The masthead shader is not one of them: its palette lives in
@@ -163,6 +173,7 @@
       --aurora-c: hsl(210deg 75% 42%);
       --gilt-ink: hsl(40deg 65% 38%);
       --chart-star: var(--primary);
+      --diagram-vermilion: hsl(11deg 75% 38%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
     }
