@@ -140,7 +140,7 @@ const AuroraCanvas = () => {
       };
 
       /* 1.5x is plenty for a blurred field; full DPR just burns fill rate */
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       gl.uniform1f(uDpr, dpr);
       const resize = () => {
         const { clientHeight, clientWidth } = canvas;
@@ -166,6 +166,7 @@ const AuroraCanvas = () => {
       let targetX = mouseX;
       let targetY = mouseY;
       let lastPointerMove = performance.now();
+      let lastNow = performance.now();
       const onPointerMove = (event: PointerEvent) => {
         const rect = host.getBoundingClientRect();
         targetX = (event.clientX - rect.left) / rect.width;
@@ -183,14 +184,19 @@ const AuroraCanvas = () => {
       const reducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)"
       ).matches;
-      /* The reduced-motion still composition: 174250ms crests both
-         breathing sines (174.25s is 10.25 * 17 and 4.25 * 41) and lands
-         24s into a 30s meteor slot, past every possible 0.7s streak
-         window, so the frame never freezes a meteor mid-fall. */
-      const STILL_MS = 174250;
+      /* The reduced-motion still composition: 104724250ms crests both
+         breathing sines (104724.25s is 6160.25 * 17 and 2554.25 * 41)
+         and lands 24s into a 30s meteor slot, past every possible 0.7s
+         streak window. Among such frames a float64 solve of the field
+         math scores this one brightest for curtains and an unveiled
+         sun; GPU float32 sin hashes reshuffle the exact layout per
+         device, so on hardware that is a strong roll, not a promise. */
+      const STILL_MS = 104724250;
 
       const drawFrame = (now: number) => {
         const t = now / 1000;
+        const dt = Math.min(Math.max(now - lastNow, 0), 100);
+        lastNow = now;
         /* Spirit Light idle scalar: 3s of grace, then a 4s smoothstep
            ramp. Any pointer move zeroes it within a frame. */
         const idleRaw = Math.min(
@@ -214,8 +220,11 @@ const AuroraCanvas = () => {
           mouseX = flareX;
           mouseY = flareY;
         } else {
-          mouseX += (flareX - mouseX) * 0.04;
-          mouseY += (flareY - mouseY) * 0.04;
+          /* 4 percent per 60Hz frame, held to real time so a 120Hz
+             display does not chase twice as fast */
+          const ease = 1 - Math.pow(0.96, dt / (1000 / 60));
+          mouseX += (flareX - mouseX) * ease;
+          mouseY += (flareY - mouseY) * ease;
         }
         /* The flare dims from pointer strength to wisp strength as it
            detaches; breathing rides its own uniform because the day branch
@@ -266,6 +275,40 @@ const AuroraCanvas = () => {
         attributeFilter: ["data-theme"],
       });
 
+      /* A monitor drag can change devicePixelRatio without changing the
+         canvas's CSS size, so no ResizeObserver fires and the buffer
+         scale and star grid would go stale. A resolution media query
+         hears it instead, re-armed after every change because a query
+         only watches the one ratio it was built with. Browsers without
+         resolution-change events just keep the mount-time ratio. */
+      let dprQuery: MediaQueryList | null = null;
+      const handleDprChange = () => {
+        watchDpr();
+        const next = Math.min(window.devicePixelRatio || 1, 1.5);
+        /* Two ratios can clamp to the same 1.5; skip the buffer clear */
+        if (next === dpr) {
+          return;
+        }
+        dpr = next;
+        gl.uniform1f(uDpr, dpr);
+        resize();
+        redrawStill();
+      };
+      const watchDpr = () => {
+        dprQuery?.removeEventListener("change", handleDprChange);
+        dprQuery = window.matchMedia(
+          `(resolution: ${window.devicePixelRatio}dppx)`
+        );
+        if (typeof dprQuery.addEventListener !== "function") {
+          /* Pre-2020 engines lack MediaQueryList events; keep the
+             mount-time ratio rather than throwing mid-setup */
+          dprQuery = null;
+          return;
+        }
+        dprQuery.addEventListener("change", handleDprChange);
+      };
+      watchDpr();
+
       if (reducedMotion) {
         lastPointerMove = STILL_MS;
         drawFrame(STILL_MS);
@@ -279,6 +322,7 @@ const AuroraCanvas = () => {
         observer.disconnect();
         resizeObserver.disconnect();
         themeObserver.disconnect();
+        dprQuery?.removeEventListener("change", handleDprChange);
       });
     };
 
