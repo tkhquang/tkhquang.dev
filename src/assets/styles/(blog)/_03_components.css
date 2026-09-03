@@ -793,6 +793,21 @@
     opacity: 0.85;
   }
 
+  /* The demo's soft single-peak fade, NOT the site hr's 30-70 plateau:
+     the plateau reads as a hard bright bar across the footer. Plain hr
+     elements, no utility classes, so the widths here actually hold. */
+  .blog-colophon__divide {
+    height: 1px;
+    border: 0;
+    margin: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--hairline),
+      transparent
+    );
+  }
+
   .blog-colophon__short {
     width: 6rem;
     margin: 1.625rem auto 1.375rem;

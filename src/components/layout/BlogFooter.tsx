@@ -1,4 +1,3 @@
-import HorizontalLine from "@/components/common/HorizontalLine";
 import SocialLinks from "@/components/common/SocialLinks";
 import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
 import { Blog } from "@/constants/meta";
@@ -34,7 +33,7 @@ const BlogFooter = async ({
           untouched */}
       <div className="blog-colophon mt-auto">
         <div className="blog-colophon__inner">
-          <HorizontalLine />
+          <hr className="blog-colophon__divide" />
           <p className="kicker blog-colophon__head">Colophon</p>
           <p className="blog-colophon__specimen">
             Set in <span className="blog-colophon__face-display">Fraunces</span>
@@ -49,7 +48,7 @@ const BlogFooter = async ({
             Ljóss · Vol. {toRoman(volume)} · {toRoman(sinceYear)} to{" "}
             {toRoman(currentYear)}
           </p>
-          <HorizontalLine className="blog-colophon__short" />
+          <hr className="blog-colophon__divide blog-colophon__short" />
           <nav
             className="blog-colophon__doors"
             aria-label="Blog sections, footer"
@@ -67,7 +66,7 @@ const BlogFooter = async ({
               </Fragment>
             ))}
           </nav>
-          <HorizontalLine className="blog-colophon__short blog-colophon__short--after-doors" />
+          <hr className="blog-colophon__divide blog-colophon__short blog-colophon__short--after-doors" />
           <dl className="blog-colophon__imprint">
             <dt className="kicker">Subscribe by wire</dt>
             <dd className="blog-colophon__wire">
