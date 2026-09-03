@@ -1435,6 +1435,30 @@
     }
   }
 
+  /* Proof marks from fence comments ([!code ++], [!code highlight]):
+     washes and a gilt left hairline, never a moving thing. The glyph
+     column stays with the line numbers, so no +/- pseudo content. */
+  [data-line].diff.add {
+    background-color: color-mix(in srgb, var(--success) 14%, transparent);
+    box-shadow: inset 2px 0 0 var(--gilt-ink);
+  }
+
+  [data-line].diff.remove {
+    background-color: color-mix(in srgb, var(--error) 12%, transparent);
+    opacity: 0.85;
+  }
+
+  [data-line].highlighted {
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+    box-shadow: inset 2px 0 0 var(--gilt-ink);
+  }
+
+  .highlighted-word {
+    background-color: color-mix(in srgb, var(--primary) 18%, transparent);
+    border-radius: 2px;
+    padding: 1px 2px;
+  }
+
   figure[data-rehype-pretty-code-figure] {
     position: relative;
     background-color: var(--code);

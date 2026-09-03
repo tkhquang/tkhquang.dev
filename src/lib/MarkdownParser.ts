@@ -1,3 +1,5 @@
+import lamplightDark from "@/assets/shiki/lamplight-dark.json";
+import lamplightLight from "@/assets/shiki/lamplight-light.json";
 import Image from "@/components/common/NextImage";
 import PreWithCopy from "@/components/common/PreWithCopy";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
@@ -8,6 +10,11 @@ import {
   rehypeMermaidRestore,
 } from "@/lib/rehype-mermaid-plates";
 import remarkEmbed from "@/lib/remark-embed";
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+} from "@shikijs/transformers";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import { getProcessedImage } from "@/utils/image";
@@ -62,11 +69,19 @@ function getProcessor(): Processor {
         inline: "plaintext",
       },
       keepBackground: true,
+      /* The Lamplight printing: the house ink pair replaces the stock
+         GitHub themes, every foreground AA-checked against its panel */
       theme: {
-        dark: "github-dark-dimmed",
-        light: "github-light-default",
+        dark: lamplightDark as unknown as import("shiki").ThemeRegistration,
+        light: lamplightLight as unknown as import("shiki").ThemeRegistration,
       },
-      transformers: [],
+      /* Fence comments like [!code highlight] and [!code ++] become
+         proof marks at build time */
+      transformers: [
+        transformerNotationDiff(),
+        transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
+      ],
     })
     .use(rehypeExternalLinks, {
       properties: {

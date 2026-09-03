@@ -1,0 +1,266 @@
+{
+  "name": "lamplight-light",
+  "displayName": "Lamplight Day",
+  "type": "light",
+  "colors": {
+    "editor.background": "#F8F9FC",
+    "editor.foreground": "#2E3C56"
+  },
+  "tokenColors": [
+    {
+      "name": "Comments · dimmed ink",
+      "scope": ["comment", "punctuation.definition.comment", "string.comment"],
+      "settings": { "foreground": "#5A6577" }
+    },
+    {
+      "name": "Keywords, storage, preprocessor directives · lapis",
+      "scope": [
+        "keyword",
+        "storage",
+        "storage.type",
+        "storage.modifier",
+        "keyword.control.directive",
+        "punctuation.definition.directive",
+        "entity.directive"
+      ],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Symbolic operators print plain",
+      "scope": ["keyword.operator"],
+      "settings": { "foreground": "#2E3C56" }
+    },
+    {
+      "name": "Wordlike operators stay lapis",
+      "scope": [
+        "keyword.operator.new",
+        "keyword.operator.expression",
+        "keyword.operator.cast",
+        "keyword.operator.sizeof",
+        "keyword.operator.alignof",
+        "keyword.operator.instanceof",
+        "keyword.operator.wordlike",
+        "keyword.operator.logical.python",
+        "keyword.operator.word.mnemonic"
+      ],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Pointer and reference glyphs print plain",
+      "scope": ["storage.modifier.pointer", "storage.modifier.reference"],
+      "settings": { "foreground": "#2E3C56" }
+    },
+    {
+      "name": "Strings · darkened gilt",
+      "scope": [
+        "string",
+        "punctuation.definition.string",
+        "string.quoted",
+        "string.template",
+        "string.interpolated",
+        "string.unquoted"
+      ],
+      "settings": { "foreground": "#825E17" }
+    },
+    {
+      "name": "Template expression braces · lapis",
+      "scope": [
+        "punctuation.definition.template-expression",
+        "punctuation.section.embedded"
+      ],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Embedded expression content returns to plain",
+      "scope": ["meta.embedded", "meta.template.expression"],
+      "settings": { "foreground": "#2E3C56" }
+    },
+    {
+      "name": "Functions and builtins · violet",
+      "scope": [
+        "entity.name.function",
+        "support.function",
+        "variable.function",
+        "meta.function-call.generic"
+      ],
+      "settings": { "foreground": "#723BBA" }
+    },
+    {
+      "name": "Types, classes, namespaces, scope resolution · violet",
+      "scope": [
+        "entity.name.type",
+        "entity.name.class",
+        "entity.name.namespace",
+        "entity.name.scope-resolution",
+        "support.type",
+        "support.class",
+        "entity.other.inherited-class",
+        "entity.name.type.module"
+      ],
+      "settings": { "foreground": "#723BBA" }
+    },
+    {
+      "name": "Property keys (JSON, CSS) · lapis",
+      "scope": ["support.type.property-name"],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Constants, numbers, escapes, registers, macros · deep cyan",
+      "scope": [
+        "constant.numeric",
+        "constant.language",
+        "constant.other",
+        "constant.character.escape",
+        "constant.character.register",
+        "variable.language",
+        "variable.language.register",
+        "variable.other.constant",
+        "variable.other.enummember",
+        "support.constant",
+        "entity.name.other.preprocessor.macro",
+        "keyword.other.unit"
+      ],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Tags and YAML keys · lapis",
+      "scope": ["entity.name.tag"],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Attribute names · deep cyan",
+      "scope": ["entity.other.attribute-name"],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Shell variables · deep cyan",
+      "scope": [
+        "variable.other.normal.shell",
+        "variable.other.special.shell",
+        "variable.other.positional.shell",
+        "variable.other.bracket.shell",
+        "punctuation.definition.variable.shell"
+      ],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Module attributes and YAML aliases · deep cyan",
+      "scope": ["variable.other.readwrite.module", "variable.other.alias.yaml"],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Diff inserted · sea-glass",
+      "scope": ["markup.inserted", "punctuation.definition.inserted"],
+      "settings": { "foreground": "#25745A" }
+    },
+    {
+      "name": "Diff deleted · rose",
+      "scope": ["markup.deleted", "punctuation.definition.deleted"],
+      "settings": { "foreground": "#A12B3D" }
+    },
+    {
+      "name": "Diff changed · darkened gilt",
+      "scope": ["markup.changed", "punctuation.definition.changed"],
+      "settings": { "foreground": "#825E17" }
+    },
+    {
+      "name": "Diff file headers · lapis",
+      "scope": [
+        "meta.diff.header",
+        "meta.diff.header.from-file",
+        "meta.diff.header.to-file"
+      ],
+      "settings": { "foreground": "#214AAB", "fontStyle": "bold" }
+    },
+    {
+      "name": "Diff hunk range · deep cyan",
+      "scope": ["meta.diff.range", "punctuation.definition.range.diff"],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Diff index and separators · dimmed ink",
+      "scope": ["meta.diff.index", "meta.separator.diff"],
+      "settings": { "foreground": "#5A6577" }
+    },
+    {
+      "name": "Log errors and exceptions · rose",
+      "scope": ["log.error", "log.exception", "log.exceptiontype"],
+      "settings": { "foreground": "#A12B3D" }
+    },
+    {
+      "name": "Log warnings · darkened gilt",
+      "scope": ["log.warning"],
+      "settings": { "foreground": "#825E17" }
+    },
+    {
+      "name": "Log info · sea-glass",
+      "scope": ["log.info"],
+      "settings": { "foreground": "#25745A" }
+    },
+    {
+      "name": "Log verbose and debug · dimmed ink",
+      "scope": ["log.verbose", "log.debug"],
+      "settings": { "foreground": "#5A6577" }
+    },
+    {
+      "name": "Log dates, constants, serials · deep cyan",
+      "scope": ["log.date", "log.constant", "log.serial"],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Log strings · darkened gilt",
+      "scope": ["log.string"],
+      "settings": { "foreground": "#825E17" }
+    },
+    {
+      "name": "Invalid and errors · rose",
+      "scope": ["invalid", "invalid.illegal", "invalid.deprecated", "message.error"],
+      "settings": { "foreground": "#A12B3D" }
+    },
+    {
+      "name": "Markdown headings · lapis",
+      "scope": ["markup.heading", "entity.name.section", "punctuation.definition.heading"],
+      "settings": { "foreground": "#214AAB", "fontStyle": "bold" }
+    },
+    {
+      "name": "Markdown bold",
+      "scope": ["markup.bold"],
+      "settings": { "fontStyle": "bold" }
+    },
+    {
+      "name": "Markdown italic",
+      "scope": ["markup.italic"],
+      "settings": { "fontStyle": "italic" }
+    },
+    {
+      "name": "Markdown blockquote · dimmed ink italic",
+      "scope": ["markup.quote", "punctuation.definition.quote.begin"],
+      "settings": { "foreground": "#5A6577", "fontStyle": "italic" }
+    },
+    {
+      "name": "Markdown link destinations · deep cyan",
+      "scope": ["markup.underline.link", "string.other.link.destination", "markup.link"],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Markdown link text · lapis",
+      "scope": ["string.other.link.title", "string.other.link.description"],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Markdown raw and inline code · deep cyan",
+      "scope": ["markup.inline.raw", "markup.raw"],
+      "settings": { "foreground": "#0F5E93" }
+    },
+    {
+      "name": "Markdown list bullets · lapis",
+      "scope": ["punctuation.definition.list.begin.markdown"],
+      "settings": { "foreground": "#214AAB" }
+    },
+    {
+      "name": "Markdown strikethrough",
+      "scope": ["markup.strikethrough"],
+      "settings": { "fontStyle": "strikethrough" }
+    }
+  ]
+}
