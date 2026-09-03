@@ -223,4 +223,32 @@
     overflow: auto;
     white-space: normal;
   }
+
+  /*
+   * Selection inside diagrams. The page selection wash tints 30% aurora
+   * behind the glyphs and recolors them --on-background, which assumes
+   * they sit on the page background. Diagrams draw on their own plates
+   * that never change with the theme (mermaid's pale panel, the inline
+   * figures' dark one), so in dark mode a selected mermaid label went
+   * near-white over a still-pale plate and vanished. The inks below are
+   * explicit and theme-invariant like the plates themselves: on the
+   * color property, currentcolor computes as inherit, and ::selection
+   * inherits from the page rule's pale ink, which is the bug this fixes.
+   * Mermaid's dark default text keeps its own #333 over an opaque pale
+   * aurora wash; the light-on-dark node labels and hand-drawn figures
+   * select as Dracula foreground on the Dracula selection slate.
+   */
+  .mermaid ::selection {
+    background-color: color-mix(in srgb, var(--aurora-a) 45%, white);
+    color: #333333;
+  }
+
+  /* stylelint-disable selector-class-pattern -- .nodeLabel is mermaid's own class */
+  .mermaid .nodeLabel::selection,
+  .mermaid .nodeLabel *::selection,
+  svg[role="img"] text::selection {
+    background-color: #44475a;
+    color: #f8f8f2;
+  }
+  /* stylelint-enable selector-class-pattern */
 }

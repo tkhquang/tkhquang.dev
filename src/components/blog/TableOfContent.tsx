@@ -304,7 +304,11 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
 
   return (
     <section
-      className="table-of-content group fixed bottom-0 left-0 mx-4 flex flex-1 flex-col items-end font-bold xl:relative"
+      /* mx-4 pads the fixed mobile box only: at xl the row's gap owns the
+         spacing, and a margin here would widen this flank's footprint past
+         its flex-1 twin and nudge the article off center. min-w-0 matches
+         the right flank so a long heading cannot do the same. */
+      className="table-of-content group fixed bottom-0 left-0 mx-4 flex min-w-0 flex-1 flex-col items-end font-bold xl:relative xl:mx-0"
       aria-label="Table of contents navigation"
     >
       {/*
