@@ -31,8 +31,10 @@ const AccordionTrigger = React.forwardRef<
         ref={ref}
         className={cn(
           /* Hover inks only the chevron, in the item's shelf hue where one
-             is set; trigger text stays put */
-          "flex flex-1 cursor-pointer items-center justify-between gap-4 py-4 font-medium [&:hover>svg]:text-(--shelf,var(--color-theme-primary)) [&[data-state=open]>svg]:rotate-180",
+             is set; trigger text stays put. The hover: variant carries the
+             @media (hover: hover) gate a bare [&:hover] would lose, which
+             is what keeps the ink from sticking after a tap. */
+          "flex flex-1 cursor-pointer items-center justify-between gap-4 py-4 font-medium hover:[&>svg]:text-(--shelf,var(--color-theme-primary)) [&[data-state=open]>svg]:rotate-180",
           className
         )}
         {...props}

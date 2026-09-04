@@ -12,8 +12,10 @@ import Link from "next/link";
 export const serialDisplayTitle = (post: MarkdownPost) =>
   post.short_title?.trim() || post.title;
 
-/* The four-point chart star that marks the instalment being read */
-const CurrentMark = () => (
+/* The four-point chart star that marks a serial: the instalment being read
+   in this plate, the token on a feed card, the next instalment on the
+   rail. Sizing and fill are the caller's, through CSS. */
+export const SerialStar = () => (
   <svg viewBox="0 0 24 24" aria-hidden>
     <path d="M12 1.8 C13.2 8.2 15.8 10.8 22.2 12 C15.8 13.2 13.2 15.8 12 22.2 C10.8 15.8 8.2 13.2 1.8 12 C8.2 10.8 10.8 8.2 12 1.8 Z" />
   </svg>
@@ -55,7 +57,7 @@ const SeriesPlate = ({ currentSlug, parts, series }: SeriesPlateProps) => {
             >
               <span className="series-plate__mark" aria-hidden>
                 {isCurrent ? (
-                  <CurrentMark />
+                  <SerialStar />
                 ) : (
                   <span className="series-plate__ring" />
                 )}

@@ -46,6 +46,12 @@ const AuroraCanvas = () => {
        restored and the sky stays dead for the session after a GPU reset */
     const onContextLost = (event: Event) => {
       event.preventDefault();
+      /* Both the draw loop and the compile poll re-arm unconditionally,
+         and GL calls on a lost context are silent no-ops, so neither one
+         stops on its own. An evicted context is not promised a restore,
+         so the frame is released here rather than waiting for one. */
+      cancelAnimationFrame(rafId);
+      rafId = 0;
       setReady(false);
     };
     const onContextRestored = () => {
@@ -200,9 +206,7 @@ const AuroraCanvas = () => {
       });
       observer.observe(host);
 
-      const motionQuery = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      );
+      const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       let reducedMotion = motionQuery.matches;
       /* The reduced-motion still composition: 104724250ms crests both
          breathing sines (104724.25s is 6160.25 * 17 and 2554.25 * 41)

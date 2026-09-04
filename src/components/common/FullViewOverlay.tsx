@@ -106,10 +106,14 @@ function Stage({ open, caption, children }: StageProps) {
     applyView();
   }, [applyView]);
 
-  useEffect(() => {
-    if (!open) return;
-    /* Measured a frame after mount so the portaled content has layout */
-    const frame = requestAnimationFrame(() => {
+  /* The fit scale is the floor every zoom path clamps against, so it has
+     to track the viewport box. `reset` is the open measurement, which
+     seats the subject; a re-measure after a rotation or a browser-chrome
+     resize keeps the reader's own scale and only lifts it if the new
+     floor is higher, since a stale floor would refuse to zoom back out
+     far enough to see the subject at all. */
+  const measureFit = useCallback(
+    (reset: boolean) => {
       const viewport = viewportRef.current;
       const content = contentRef.current;
       if (!viewport || !content) return;
@@ -129,11 +133,28 @@ function Stage({ open, caption, children }: StageProps) {
         availableHeight / naturalRef.current.height,
         1
       );
-      viewRef.current = { scale: fitRef.current, x: 0, y: 0 };
+      const view = viewRef.current;
+      viewRef.current = reset
+        ? { scale: fitRef.current, x: 0, y: 0 }
+        : { ...view, scale: clampValue(view.scale, fitRef.current, MAX_SCALE) };
+      clampPan();
       applyView();
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [open, applyView]);
+    },
+    [applyView, clampPan]
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    /* Measured a frame after mount so the portaled content has layout */
+    const frame = requestAnimationFrame(() => measureFit(true));
+    const viewport = viewportRef.current;
+    const observer = new ResizeObserver(() => measureFit(false));
+    if (viewport) observer.observe(viewport);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [open, measureFit]);
 
   const pointFromClient = (clientX: number, clientY: number) => {
     const viewport = viewportRef.current;
@@ -171,6 +192,11 @@ function Stage({ open, caption, children }: StageProps) {
       eventOptions: { passive: false },
       drag: { filterTaps: true, pointer: { capture: true } },
       pinch: {
+        /* onWheel above already zooms on every wheel event. The pinch
+           engine binds its own ctrl+wheel listener, and a trackpad pinch
+           arrives as exactly that, so leaving it on runs both handlers
+           against one event and zooms twice per notch. */
+        pinchOnWheel: false,
         from: () => [viewRef.current.scale, 0],
         scaleBounds: () => ({ min: fitRef.current, max: MAX_SCALE }),
       },
@@ -223,7 +249,10 @@ function Stage({ open, caption, children }: StageProps) {
         >
           <Scan className="size-4" aria-hidden />
         </button>
-        <DialogDismiss aria-label="Close full view" className={TOOL_BUTTON_CLASS}>
+        <DialogDismiss
+          aria-label="Close full view"
+          className={TOOL_BUTTON_CLASS}
+        >
           <X className="size-4" aria-hidden />
         </DialogDismiss>
       </div>
@@ -252,6 +281,13 @@ export default function FullViewOverlay({
     <AriaDialog
       store={dialog}
       aria-label={label}
+      /* The children are the article's own plate or figure printed a
+         second time. Without this the duplicate outlives every close,
+         and with it the diagram's duplicated element ids, an eager
+         full-resolution img, and the viewport's gesture listeners.
+         Ariakit holds `mounted` through the leave transition, so the
+         fade below still plays. */
+      unmountOnHide
       className={cn(
         "bg-background fixed inset-0 z-50",
         "opacity-0 transition-opacity duration-200 ease-out data-enter:opacity-100"

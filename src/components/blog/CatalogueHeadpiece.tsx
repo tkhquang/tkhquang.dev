@@ -5,7 +5,7 @@ interface CatalogueHeadpieceProps {
   /* Counts in the masthead's stat-line voice */
   stat: string;
   /* A shelf hue for category rooms: it colors the BAR and the stat
-     swatch only; the room kicker stays neutral ink per the demo */
+     swatch only, so the room kicker stays in neutral ink */
   hue?: string;
   /* Tag pages: the hash dims, the subject speaks */
   hashed?: boolean;

@@ -34,7 +34,6 @@ interface UseActiveAnchorOptions {
 
 interface UseScrollToHeadingOptions {
   headerHeight: number;
-  onActiveChange?: (id: string) => void;
 }
 
 /**
@@ -48,6 +47,13 @@ const flattenHeadings = (headings: Toc): TocEntry[] =>
   ]);
 
 // Custom hook for managing active anchor with intersection observer
+/* The spy picks the heading nearest the header line, so a short final
+   section whose heading never climbs that high can never win it. At the
+   document's very bottom the last heading takes the highlight instead. */
+const isAtDocumentBottom = () =>
+  window.innerHeight + window.scrollY >=
+  document.documentElement.scrollHeight - 2;
+
 const useActiveAnchor = ({
   headings,
   headerHeight,
@@ -58,9 +64,18 @@ const useActiveAnchor = ({
     () => flattenHeadings(headings ?? []),
     [headings]
   );
+  const lastHeadingId = flatHeadings[flatHeadings.length - 1]?.id;
 
   const handleIntersection = useCallback(
     (entries: IntersectionObserverEntry[]) => {
+      /* Intersections are delivered after scroll events in the same frame,
+         so without this the observer would overwrite the pin below on the
+         last frame of a fling and strand the highlight mid-document. */
+      if (lastHeadingId && isAtDocumentBottom()) {
+        setActiveAnchor(lastHeadingId);
+        return;
+      }
+
       let minDelta = Number.POSITIVE_INFINITY;
       let currentId = "";
 
@@ -80,7 +95,7 @@ const useActiveAnchor = ({
         setActiveAnchor(currentId);
       }
     },
-    [headerHeight]
+    [headerHeight, lastHeadingId]
   );
 
   const setInitialActiveAnchor = useCallback(() => {
@@ -140,34 +155,27 @@ const useActiveAnchor = ({
     };
   }, [flatHeadings, headerHeight, handleIntersection, setInitialActiveAnchor]);
 
-  /* The intersection spy picks the heading nearest the header line, so a
-     short final section whose heading never climbs that high can never win.
-     At the document's very bottom, hand the highlight to the last heading. */
+  /* The cheap fast path for the same pin: a scroll that ends at the
+     bottom without moving any heading across the observer's threshold
+     delivers no intersection at all. */
   useEffect(() => {
-    const lastId = flatHeadings[flatHeadings.length - 1]?.id;
-    if (!lastId) return;
+    if (!lastHeadingId) return;
 
     const onScroll = () => {
-      const atBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 2;
-      if (atBottom) {
-        setActiveAnchor(lastId);
+      if (isAtDocumentBottom()) {
+        setActiveAnchor(lastHeadingId);
       }
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [flatHeadings]);
+  }, [lastHeadingId]);
 
   return activeAnchor;
 };
 
 // Custom hook for smooth scrolling to headings
-const useScrollToHeading = ({
-  headerHeight,
-  onActiveChange,
-}: UseScrollToHeadingOptions) => {
+const useScrollToHeading = ({ headerHeight }: UseScrollToHeadingOptions) => {
   const scrollToHeading = useCallback(
     (heading: TocEntry, e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
@@ -195,10 +203,8 @@ const useScrollToHeading = ({
          article instead of the feed. replaceState adds nothing to walk
          through and never scrolls, so the offset above stays in charge. */
       history.replaceState(null, "", `#${heading.id}`);
-
-      onActiveChange?.(heading.id);
     },
-    [headerHeight, onActiveChange]
+    [headerHeight]
   );
 
   return scrollToHeading;
@@ -308,13 +314,12 @@ const TocList = ({
   );
 };
 
-/* The trigger classes live on a real disclosure BUTTON, not on a portaled
-   bare icon: the old shape parked the actual button inside a display:none
-   container, so touch only worked through React event bubbling and
-   keyboard or assistive tech could not open the TOC at all below xl,
-   while at xl an invisible nameless button sat in the tab order. The
-   whole button floats through a Portal, per the house rule for
-   fixed-position controls. */
+/* These classes ride the disclosure BUTTON itself, never a bare icon
+   inside one: the visible control has to be the focusable one, or the real
+   button ends up in a hidden container where only pointer events reach it
+   and keyboard or assistive tech cannot open the drawer at all. The whole
+   button floats through a Portal, per the house rule for fixed-position
+   controls. */
 const MOBILE_TRIGGER_CLASS =
   "fixed bottom-0 left-0 z-10 mb-20 ml-10 block cursor-pointer opacity-20 transition-opacity duration-300 hover:opacity-75 focus-visible:opacity-75 xl:hidden";
 
@@ -330,10 +335,7 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
 
   // Use custom hooks
   const activeAnchor = useActiveAnchor({ headings, headerHeight });
-  const scrollToHeading = useScrollToHeading({
-    headerHeight,
-    onActiveChange: undefined, // Could pass setActiveAnchor if manual override needed
-  });
+  const scrollToHeading = useScrollToHeading({ headerHeight });
 
   return (
     <section

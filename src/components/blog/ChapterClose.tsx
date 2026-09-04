@@ -17,16 +17,11 @@ const AsterismTailpiece = () => (
           cx="16"
           cy="12"
           r="3"
-          stroke="var(--chart-star, var(--primary))"
+          stroke="var(--chart-star)"
           strokeWidth="0.75"
           opacity="0.5"
         />
-        <circle
-          cx="16"
-          cy="12"
-          r="1.3"
-          fill="var(--chart-star, var(--primary))"
-        />
+        <circle cx="16" cy="12" r="1.3" fill="var(--chart-star)" />
         <circle
           cx="48"
           cy="12"
@@ -40,16 +35,11 @@ const AsterismTailpiece = () => (
           cx="80"
           cy="12"
           r="3"
-          stroke="var(--chart-star, var(--primary))"
+          stroke="var(--chart-star)"
           strokeWidth="0.75"
           opacity="0.5"
         />
-        <circle
-          cx="80"
-          cy="12"
-          r="1.3"
-          fill="var(--chart-star, var(--primary))"
-        />
+        <circle cx="80" cy="12" r="1.3" fill="var(--chart-star)" />
       </g>
     </svg>
   </div>
@@ -75,7 +65,7 @@ const ChapterClose = ({
   seeAlso,
 }: ChapterCloseProps) => {
   const { minutes, words } = getProseStats(post.content);
-  /* Seven words, per the approved copy: eight landed mid-name */
+  /* Seven words: the eighth reliably lands mid-name on these titles */
   const catchword = nextPost ? getOpeningWords(nextPost.content, 7) : "";
   const bothPanels = Boolean(previousPost && nextPost);
   /* A serial's first and last instalments turn only one page, and a lone
