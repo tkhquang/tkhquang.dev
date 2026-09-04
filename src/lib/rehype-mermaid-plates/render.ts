@@ -8,19 +8,22 @@ import { visit } from "unist-util-visit";
 
 /*
  * The press: renders the corpus's mermaid sources into finished svgs
- * through headless chromium, replacing the rehype-mermaid chain that
- * drove a playwright client into browsers Vercel's build image cannot
- * run (first the stock download missing its NSS libraries, then a
- * fourteen-major CDP skew against the bundled binary). This renderer
- * uses the same stack as the resume PDF route: puppeteer-core with
- * @sparticuz/chromium on Vercel, the local puppeteer chrome elsewhere,
- * a pairing whose versions ship matched by design.
+ * through headless chromium.
  *
- * Rendering happens only at press time: the posts route is
- * force-static with dynamicParams false, so no deployed function ever
- * runs this. If posts ever move to ISR, the [slug] route must trace
- * node_modules/@sparticuz/chromium, puppeteer-core, the mermaid
- * bundle, and the measurement font.
+ * The stack is the resume PDF route's, deliberately: puppeteer-core with
+ * @sparticuz/chromium on Vercel and the local puppeteer chrome
+ * elsewhere, a pairing whose versions ship matched. A browser client
+ * paired against a chromium it did not ship with is what Vercel's build
+ * image cannot serve, either through a missing system library or through
+ * a CDP protocol skew, and neither failure surfaces until the build runs
+ * there.
+ *
+ * Rendering happens only at press time: the posts route is force-static
+ * with dynamicParams false, so no deployed function ever runs this. If
+ * posts ever move to ISR, the [slug] route must trace
+ * node_modules/@sparticuz/chromium, puppeteer-core, the mermaid bundle,
+ * and the measurement font, which means dropping the turbopackIgnore
+ * markers on the dynamic imports below.
  */
 
 export interface MermaidRenderOptions {
@@ -91,16 +94,24 @@ async function launchBrowser(): Promise<Browser> {
   /* The imports are dynamic and branch-gated: sparticuz extracts a
      linux binary and dies on win32, and the full puppeteer package has
      no business loading on Vercel. Both are on Next's default
-     server-external list, so the requires stay real at runtime. */
+     server-external list, so the requires stay real at runtime.
+     turbopackIgnore keeps the file tracer out of them: it follows every
+     specifier regardless of the branch, and without the marker each of
+     the eleven routes that reach a MarkdownParser drags a copy of
+     puppeteer and a link to the 65MB chromium package into its function
+     bundle for a renderer only press time ever calls. */
   if (process.env.VERCEL) {
-    const { default: chromium } = await import("@sparticuz/chromium");
-    const { default: puppeteer } = await import("puppeteer-core");
+    const { default: chromium } = await import(
+      /* turbopackIgnore: true */ "@sparticuz/chromium"
+    );
+    const { default: puppeteer } = await import(
+      /* turbopackIgnore: true */ "puppeteer-core"
+    );
     const executablePath = await chromium.executablePath();
-    /* ETXTBSY guard: a second build process spawning /tmp/chromium
-       while the first extraction still holds it open is exactly how
-       the playwright attempt died. Within one process the memoized
-       browserPromise already serializes launch; the retry covers a
-       concurrent worker. */
+    /* ETXTBSY guard: a second build worker spawning /tmp/chromium while
+       the first extraction still holds it open. Within one process the
+       memoized browserPromise already serializes the launch; the retry
+       covers a concurrent worker. */
     for (let attempt = 0; ; attempt += 1) {
       try {
         return await puppeteer.launch({
@@ -125,18 +136,46 @@ async function launchBrowser(): Promise<Browser> {
       }
     }
   }
-  const { default: puppeteer } = await import("puppeteer");
+  const { default: puppeteer } = await import(
+    /* turbopackIgnore: true */ "puppeteer"
+  );
   return (await puppeteer.launch({ headless: true })) as unknown as Browser;
 }
 
-function acquireBrowser(): Promise<Browser> {
+/* ||= keeps a rejected promise, which would make one transient failure
+   poison every later page in the process: the dev server survives a page
+   error, so each retry would re-await the same settled rejection and
+   report a stale cause. Clearing the memo on failure lets the next caller
+   try again. */
+const memoize = <T>(run: () => Promise<T>, clear: () => void): Promise<T> =>
+  run().catch((error) => {
+    clear();
+    throw error;
+  });
+
+function acquireAssets(): Promise<RenderAssets> {
+  assetsPromise ||= memoize(loadAssets, () => {
+    assetsPromise = null;
+  });
+  return assetsPromise;
+}
+
+/* The count rises only once a browser actually exists, so the release in
+   the caller's finally is always balanced: a launch that rejects has
+   nothing to hand back, and leaving the count at zero across the launch
+   window is safe because releaseBrowser is the only thing that arms an
+   idle timer, and this function clears any pending one on the way in. */
+async function acquireBrowser(): Promise<Browser> {
   if (idleTimer) {
     clearTimeout(idleTimer);
     idleTimer = undefined;
   }
+  browserPromise ||= memoize(launchBrowser, () => {
+    browserPromise = null;
+  });
+  const browser = await browserPromise;
   inFlight += 1;
-  browserPromise ||= launchBrowser();
-  return browserPromise;
+  return browser;
 }
 
 /* An open CDP connection keeps the event loop alive, which can hang a
@@ -160,13 +199,13 @@ function releaseBrowser() {
 type PageRenderResult = { svg: string } | { error: string };
 
 /* Serialized into the render page, so it must stay self-contained.
-   This is the same sequence the retired mermaid-isomorphic ran: fonts
-   first (mermaid measures through getBBox and memoizes per font key
-   with no invalidation, so a face that loads late poisons every later
-   measurement), one initialize, then each diagram under its ordinal
-   id. mermaid.render stamps the id on the svg root, which is how the
-   restore pass finds each drawing again; the DOMParser round trip
-   reproduces the exact serialization the pipeline has always shipped. */
+   The order is load-bearing: fonts first, because mermaid measures
+   through getBBox and memoizes per font key with no invalidation, so a
+   face that loads late poisons every later measurement; then one
+   initialize; then each diagram under its ordinal id. mermaid.render
+   stamps that id on the svg root, which is how the restore pass finds
+   each drawing again. The DOMParser round trip normalizes the markup
+   into the serialization the rest of the pipeline parses. */
 const renderInPage = async ({
   sources,
   config,
@@ -212,11 +251,10 @@ const isMermaidPre = (node: Element) =>
   Array.isArray(node.properties?.className) &&
   (node.properties.className as string[]).includes("mermaid");
 
-/* Replaces rehype-mermaid's inline-svg strategy for this corpus: every
-   diagram is a pre.mermaid that the prepare pass has already reduced
-   to a single text child of ready-to-parse source. Each pre is
-   replaced in place by its svg; a diagram that fails to render fails
-   the build, the same contract as before. */
+/* Every diagram is a pre.mermaid that the prepare pass has already
+   reduced to a single text child of ready-to-parse source. Each pre is
+   replaced in place by its svg. A diagram that fails to render fails
+   the build rather than shipping a hole in the article. */
 export function rehypeMermaidRender(
   options: MermaidRenderOptions
 ): Transformer<Root> {
@@ -241,12 +279,13 @@ export function rehypeMermaidRender(
       return;
     }
 
-    assetsPromise ||= loadAssets();
-    const [{ shellHtml, mermaidBundle }, browser] = await Promise.all([
-      assetsPromise,
-      acquireBrowser(),
-    ]);
+    /* Started before the launch is awaited so the reads still run against
+       it, but only awaited inside the guarded region: an asset read that
+       rejects must still release the browser it was racing. */
+    const pendingAssets = acquireAssets();
+    const browser = await acquireBrowser();
     try {
+      const { mermaidBundle, shellHtml } = await pendingAssets;
       const page = await browser.newPage();
       try {
         await page.setContent(shellHtml);

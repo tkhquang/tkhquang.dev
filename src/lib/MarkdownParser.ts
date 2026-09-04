@@ -56,77 +56,79 @@ function getCategoryFiles() {
 }
 
 function getProcessor(): Processor {
-  return unified()
-    .use(remarkParse, { fragment: true })
-    .use(remarkEmbed, {
-      enabledProviders: ["Youtube", "Spotify"],
-    })
-    .use(remarkRehype, { allowDangerousHtml: true })
-    .use(remarkFigureCaption, { allowEmptyCaption: true })
-    .use(remarkGfm)
-    .use(rehypePrettyCode, {
-      defaultLang: {
-        block: "plaintext",
-        inline: "plaintext",
-      },
-      keepBackground: true,
-      /* The Lamplight printing: the house ink pair replaces the stock
-         GitHub themes, every foreground AA-checked against its panel */
-      theme: {
-        dark: lamplightDark as unknown as import("shiki").ThemeRegistration,
-        light: lamplightLight as unknown as import("shiki").ThemeRegistration,
-      },
-      /* Fence comments like [!code highlight] and [!code ++] become
+  return (
+    unified()
+      .use(remarkParse, { fragment: true })
+      .use(remarkEmbed, {
+        enabledProviders: ["Youtube", "Spotify"],
+      })
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(remarkFigureCaption, { allowEmptyCaption: true })
+      .use(remarkGfm)
+      .use(rehypePrettyCode, {
+        defaultLang: {
+          block: "plaintext",
+          inline: "plaintext",
+        },
+        keepBackground: true,
+        /* The Lamplight printing: the house ink pair, every foreground
+         checked past 4.5:1 against the panel it sits on */
+        theme: {
+          dark: lamplightDark as unknown as import("shiki").ThemeRegistration,
+          light: lamplightLight as unknown as import("shiki").ThemeRegistration,
+        },
+        /* Fence comments like [!code highlight] and [!code ++] become
          proof marks at build time */
-      transformers: [
-        transformerNotationDiff(),
-        transformerNotationHighlight(),
-        transformerNotationWordHighlight(),
-      ],
-    })
-    .use(rehypeExternalLinks, {
-      properties: {
-        class: "icon icon-link",
-      },
-      rel: ["nofollow", "noopener"],
-      target: "_blank",
-    })
-    .use(rehypeCustomNextImage, {
-      cache: true,
-      publicFolder: "./public",
-      targetPath: "./public/uploads/remote",
-    })
-    .use(rehypeRaw)
-    /* Chart Plates: diagrams typeset at press time. The raw pre.mermaid
+        transformers: [
+          transformerNotationDiff(),
+          transformerNotationHighlight(),
+          transformerNotationWordHighlight(),
+        ],
+      })
+      .use(rehypeExternalLinks, {
+        properties: {
+          class: "icon icon-link",
+        },
+        rel: ["nofollow", "noopener"],
+        target: "_blank",
+      })
+      .use(rehypeCustomNextImage, {
+        cache: true,
+        publicFolder: "./public",
+        targetPath: "./public/uploads/remote",
+      })
+      .use(rehypeRaw)
+      /* Chart Plates: diagrams typeset at press time. The raw pre.mermaid
        blocks only exist as elements after rehypeRaw; prepare re-inks the
        Dracula classDefs into theme tokens, the in-repo renderer draws
        them through headless chromium, restore wraps the svgs back into
        their original pre so every shipped selector still applies. */
-    .use(rehypeMermaidPrepare)
-    .use(rehypeMermaidRender, MERMAID_RENDER_OPTIONS)
-    .use(rehypeMermaidRestore)
-    .use(rehypeSlug)
-    .use(rehypeExtractToc)
-    .use(rehypeAutolinkHeadings, {
-      content: {
-        type: "text",
-        value: "#",
-      },
-    })
-    .use(rehypeCopyCodeButton, {
-      feedbackDuration: 3_000,
-      visibility: "hover",
-    })
-    .use(rehypeReact, {
-      components: {
-        "rehype-pretty-copy-button-pre": PreWithCopy,
-        "next-image": ZoomableImage,
-        "mermaid-plate": MermaidPlate,
-      },
-      Fragment: prod.Fragment,
-      jsx: prod.jsx,
-      jsxs: prod.jsxs,
-    } as Options);
+      .use(rehypeMermaidPrepare)
+      .use(rehypeMermaidRender, MERMAID_RENDER_OPTIONS)
+      .use(rehypeMermaidRestore)
+      .use(rehypeSlug)
+      .use(rehypeExtractToc)
+      .use(rehypeAutolinkHeadings, {
+        content: {
+          type: "text",
+          value: "#",
+        },
+      })
+      .use(rehypeCopyCodeButton, {
+        feedbackDuration: 3_000,
+        visibility: "hover",
+      })
+      .use(rehypeReact, {
+        components: {
+          "rehype-pretty-copy-button-pre": PreWithCopy,
+          "next-image": ZoomableImage,
+          "mermaid-plate": MermaidPlate,
+        },
+        Fragment: prod.Fragment,
+        jsx: prod.jsx,
+        jsxs: prod.jsxs,
+      } as Options)
+  );
 }
 
 function getImageProcessor(): Processor {

@@ -19,8 +19,8 @@ const DEFAULT_STYLES = /* css */ `
     opacity: 1;
   }
 
-  /* Keyboard reveal: a tabbed-to control must be visible while focused.
-     CSS only; the button's structure and behavior stay frozen. */
+  /* Keyboard reveal: a tabbed-to control has to be visible while it holds
+     focus, and the reveal is hover-only above. */
   [data-rehype-pretty-code-figure][data-visibility="hover"]:focus-within
     button[data-rehype-pretty-copy-button] {
     opacity: 1;

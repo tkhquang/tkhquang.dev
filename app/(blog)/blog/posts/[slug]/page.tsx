@@ -58,9 +58,6 @@ export const dynamic = "force-static";
 export const revalidate = false;
 export const dynamicParams = false;
 
-/* Diagrams are typeset at press time (Chart Plates): no client mermaid,
-   no CDN module, no deep-link anchor race to pin against */
-
 export default async function Post({
   params,
 }: {
@@ -104,11 +101,11 @@ export default async function Post({
     .filter((other) => other.slug !== nextInSeries?.slug)
     .slice(0, 3);
 
-  /* The chapter close turns a page, it does not step through a timeline.
-     A serial hands over its own adjacent instalments and stops at the
-     serial's edges; everything else stays on its shelf. Walking the whole
-     volume by date was the old behaviour, and it closed a devlog with
-     whatever unrelated entry happened to be published next. */
+  /* The chapter close turns a page, it does not step through a timeline:
+     a serial hands over its own adjacent instalments and stops at the
+     serial's edges, and everything else stays on its own shelf. Walking
+     the whole volume by date instead would close a devlog with whatever
+     unrelated entry happened to be published next. */
   const previousPost = post.series
     ? previousInSeries
     : categoryPosts.find((other) => other.created_at < post.created_at);
@@ -165,9 +162,9 @@ export default async function Post({
     height: coverHeight ?? 720,
     loading: "eager",
     priority: true,
-    /* 1280, not 1024: a 16:9 cover renders up to ~1280 CSS px wide under
-       md:h-[50vw] md:max-h-[50vh] on large desktops, and the old cap
-       upscaled the LCP image about 25 percent */
+    /* 1280, not 1024: under md:h-[50vw] md:max-h-[50vh] a 16:9 cover
+       renders up to ~1280 CSS px wide on large desktops, and a lower cap
+       upscales the LCP image to reach it */
     sizes: "(max-width: 768px) 100vw, 1280px",
     width: coverWidth ?? 1280,
     blurDataURL: post.coverData.blurDataURL,

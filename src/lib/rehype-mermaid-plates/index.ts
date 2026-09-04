@@ -6,19 +6,19 @@ import { visit } from "unist-util-visit";
 export { rehypeMermaidRender } from "./render";
 
 /*
- * Chart Plates: the two bookends around rehype-mermaid that turn the
- * corpus's Dracula terminal screenshots into Lamplight plates rendered
- * at press time.
+ * Chart Plates: the two bookends around the render pass in ./render,
+ * turning the corpus's Dracula-inked mermaid sources into Lamplight
+ * plates typeset at press time.
  *
  * Mermaid's classDef grammar rejects var(), so the source keeps its
  * hexes through rendering and the restore pass re-inks the FINISHED svg:
  * the Dracula values in its stylesheet and paint attributes become
  * var(--diagram-*) references, so the baked plates follow the page theme
  * at view time with no client mermaid at all. Restore also wraps each
- * svg into <mermaid-plate class="(original classes)"
- * data-processed="true">, which the rehypeReact map hands to the
- * MermaidPlate component; it renders the same pre.mermaid the page
- * always shipped, plus the full-view expand control.
+ * svg into <mermaid-plate class="(original classes)">, which the
+ * rehypeReact map hands to the MermaidPlate component; it renders the
+ * same pre.mermaid the article's CSS already targets, plus the full-view
+ * expand control.
  */
 
 /* The corpus's classDefs are perfectly uniform:
@@ -30,7 +30,7 @@ const INK_MAP: Array<[RegExp, string]> = [
   [/#ffb86c/gi, "var(--diagram-gilt)"],
   [/#282a36/gi, "var(--diagram-node)"],
   [/#f8f8f2/gi, "var(--diagram-ink)"],
-  /* The engraved line weight, per the approved demo */
+  /* The engraved line weight the plate dress is drawn for */
   [/stroke-width:2px/gi, "stroke-width:1.1px"],
 ];
 
@@ -122,8 +122,7 @@ function unwrapClusterLabels(node: Element, titles: string[]) {
       const guess = lineTexts.join(" ");
       const merged =
         titles.find(
-          (title) =>
-            title.replace(/\s+/g, "") === guess.replace(/\s+/g, "")
+          (title) => title.replace(/\s+/g, "") === guess.replace(/\s+/g, "")
         ) ?? guess;
       const oldWidth =
         Math.max(...lineTexts.map((line) => line.length)) * GLYPH_ADVANCE;
@@ -186,15 +185,16 @@ function reinkSvg(node: Element) {
   }
 }
 
-/* The client renderer always read element.innerHTML and decoded the
-   entities itself, which is why labels with <br/> worked. This is that
-   exact reading, done to the hast tree: serialize the pre's children
-   (surviving whatever the image plugins did to embedded tags), decode
-   the way mermaid does, and hand the renderer one pristine text node.
-   Without this, block elements the pipeline plants inside a diagram make
-   the text extraction glue lines together and the parse fails. Numeric
-   references matter: toHtml writes an ampersand as &#x26;, and skipping
-   those printed "&#x26;" literally into diagram labels. */
+/* Mermaid parses a diagram from the raw innerHTML of its container, not
+   from a text extraction, which is what lets labels carry <br/>. This
+   reproduces that reading against the hast tree: serialize the pre's
+   children (so embedded tags survive whatever the image plugins did to
+   them), decode the entities the way mermaid does, and hand the renderer
+   one pristine text node. A plain text extraction instead glues lines
+   together around any block element the pipeline planted inside the
+   diagram, and the parse fails. Numeric references have to be decoded
+   too: toHtml writes an ampersand as &#x26;, which would otherwise print
+   literally into a label. */
 const innerSource = (node: Element) =>
   toHtml(node.children, { allowDangerousHtml: true })
     .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
@@ -239,9 +239,8 @@ export function rehypeMermaidRestore(): Transformer<Root> {
         string[]
       >) ?? [];
     const titleLists =
-      ((file.data as Record<string, unknown>)[TITLES_KEY] as Array<
-        string[]
-      >) ?? [];
+      ((file.data as Record<string, unknown>)[TITLES_KEY] as Array<string[]>) ??
+      [];
 
     visit(tree, "element", (node, index, parent) => {
       if (
@@ -253,7 +252,9 @@ export function rehypeMermaidRestore(): Transformer<Root> {
       ) {
         return;
       }
-      /* rehype-mermaid numbers output svgs in document order */
+      /* The render pass stamps each svg with its document-order ordinal,
+         which is the key into the class and title lists the prepare pass
+         left on the file */
       const ordinal = Number(node.properties.id.slice("mermaid-".length));
       reinkSvg(node);
       unwrapClusterLabels(node, titleLists[ordinal] ?? []);
@@ -276,7 +277,6 @@ export function rehypeMermaidRestore(): Transformer<Root> {
           className: (classLists[ordinal] ?? ["mermaid"]).filter(
             (name) => !LEGACY_LAYOUT_CLASSES.has(name)
           ),
-          dataProcessed: "true",
         },
         children: [node],
       };
