@@ -214,12 +214,21 @@
     },
     {
       "name": "Invalid and errors · rose",
-      "scope": ["invalid", "invalid.illegal", "invalid.deprecated", "message.error"],
+      "scope": [
+        "invalid",
+        "invalid.illegal",
+        "invalid.deprecated",
+        "message.error"
+      ],
       "settings": { "foreground": "#E58F9B" }
     },
     {
       "name": "Markdown headings · lapis",
-      "scope": ["markup.heading", "entity.name.section", "punctuation.definition.heading"],
+      "scope": [
+        "markup.heading",
+        "entity.name.section",
+        "punctuation.definition.heading"
+      ],
       "settings": { "foreground": "#8AB8FF", "fontStyle": "bold" }
     },
     {
@@ -239,7 +248,11 @@
     },
     {
       "name": "Markdown link destinations · lamp cyan",
-      "scope": ["markup.underline.link", "string.other.link.destination", "markup.link"],
+      "scope": [
+        "markup.underline.link",
+        "string.other.link.destination",
+        "markup.link"
+      ],
       "settings": { "foreground": "#8AC6E0" }
     },
     {
@@ -256,11 +269,6 @@
       "name": "Markdown list bullets · lapis",
       "scope": ["punctuation.definition.list.begin.markdown"],
       "settings": { "foreground": "#8AB8FF" }
-    },
-    {
-      "name": "Markdown strikethrough",
-      "scope": ["markup.strikethrough"],
-      "settings": { "fontStyle": "strikethrough" }
     }
   ]
 }
