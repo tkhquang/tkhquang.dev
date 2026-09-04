@@ -40,9 +40,12 @@ graph TD
             direction TB
             D --- G["Deep RPG Systems<br/>Integration<br/>(AI, Quest, Dialogue)"];
             D --- H["Custom Renderer<br/>Optimizations<br/>(Foliage, Global<br/>Illumination, Streaming)"];
-            G ~~~ I["Bespoke Tooling &<br/>Pipeline (World<br/>Editor, Asset Flow)"];
-            H ~~~ J["Targeted Performance<br/>Tuning (CPU/GPU<br/>for dense worlds)"];
-            I ~~~ K["Modern Feature<br/>Implementation<br/>(DLSS/FSR, etc.)"]
+            D --- I["Bespoke Tooling &<br/>Pipeline (World<br/>Editor, Asset Flow)"];
+            D --- J["Targeted Performance<br/>Tuning (CPU/GPU<br/>for dense worlds)"];
+            D --- K["Modern Feature<br/>Implementation<br/>(DLSS/FSR, etc.)"];
+            G ~~~ I;
+            H ~~~ J;
+            I ~~~ K
         end
 
         K ~~~ E;

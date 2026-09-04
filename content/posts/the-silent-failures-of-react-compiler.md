@@ -135,20 +135,20 @@ My research led me to a list of common patterns that cause React Compiler to giv
 
 This is a cardinal sin in React anyway. The compiler cannot safely memoize a component that mutates its props, as it can no longer guarantee the output is a pure function of its inputs.
 
-```js {3}#negative title="❌ UserProfile.jsx (Not Optimized)" showLineNumbers
+```js title="❌ UserProfile.jsx (Not Optimized)" showLineNumbers
 function UserProfile({ user }) {
   // Mutating a prop like this causes the compiler to skip this component.
-  user.name = user.name ?? 'Guest';
+  user.name = user.name ?? 'Guest'; // [!code --]
   return <div>{user.name}</div>;
 }
 ```
 
 The fix is simple: create a new local variable instead of changing the prop itself.
 
-```js {3} title="✅ UserProfile.jsx (Optimized)" showLineNumbers
+```js title="✅ UserProfile.jsx (Optimized)" showLineNumbers
 function UserProfile({ user }) {
   // Create a new variable from the prop.
-  const displayName = user.name ?? 'Guest';
+  const displayName = user.name ?? 'Guest'; // [!code ++]
   return <div>{displayName}</div>;
 }
 ```
@@ -214,12 +214,12 @@ const firstName = watch('firstName');
 
 Thankfully, the `react-hook-form` team provides a compiler-friendly alternative: the `useWatch` hook.
 
-```js {5} title="✅ MyForm.jsx (Optimized)" showLineNumbers
+```js title="✅ MyForm.jsx (Optimized)" showLineNumbers
 import { useForm, useWatch } from 'react-hook-form';
 
 const { control } = useForm();
 // This works perfectly with the compiler.
-const firstName = useWatch({ control, name: 'firstName' });
+const firstName = useWatch({ control, name: 'firstName' }); // [!code highlight]
 ```
 
 #### 4. Other Known Offenders
