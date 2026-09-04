@@ -111,10 +111,10 @@
   /*
    * Colophon Bar pagination: the row closes the feed on its left rail as a
    * stat line with de-boxed mono numbers. Deliberately NO rule of its own:
-   * the last card's hr just above already closes the list, and a second
-   * hairline here reads as clutter (owner decision, pass 4). Lives in the
-   * overrides layer because the shadcn button variants are utility-layer
-   * classes that would out-cascade a components-layer reskin.
+   * the last card's hr just above already closes the list, so a second
+   * hairline here would only read as clutter. Lives in the overrides layer
+   * because the shadcn button variants are utility-layer classes that
+   * would out-cascade a components-layer reskin.
    */
   .blog-pagination {
     ul {
@@ -235,12 +235,6 @@
     outline: none;
   }
 
-  /* The jump select's inner hairline must land with the ring, not fade
-     behind it */
-  [role="combobox"]:focus-visible {
-    transition: none;
-  }
-
   /* The Threshold Lamp: a compact plate at the header's left edge,
      revealed by opacity alone; its own transition survives the ring's
      transition: none above because this rule is more specific */
@@ -301,8 +295,8 @@
     color: var(--primary);
   }
 
-  /* The demo's soft two-layer shadow for the solid header, in place of
-     the heavier house shadow-box-md halo */
+  /* A soft two-layer shadow for the solid header, in place of the heavier
+     house shadow-box-md halo */
   .blog-header-shadow {
     box-shadow:
       0 4px 6px -1px rgb(0 0 0 / 12%),
@@ -310,51 +304,9 @@
   }
 
   /*
-   * Colophon recipes that fight the utilities-layer kicker: hoisted here
-   * so the letterspacing, sizes, and dimming actually apply.
-   */
-  .blog-colophon__head {
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    color: var(--primary);
-    opacity: 1;
-  }
-
-  .blog-colophon__doors {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    font-weight: 600;
-  }
-
-  .blog-colophon__doors .kicker {
-    font-size: 0.8125rem;
-    letter-spacing: 0.08em;
-  }
-
-  .blog-colophon__imprint dt {
-    opacity: 0.6;
-  }
-
-  /* Quiet ink for the colophon's links: on-surface at rest, the primary
-     tint only as the hover fade; primary is reserved for the head */
-  .blog-colophon .tint-link {
-    color: var(--on-surface);
-  }
-
-  .blog-colophon__wire-link {
-    font-weight: 400;
-  }
-
-  @media (max-width: 35rem) {
-    .blog-colophon__doors .kicker {
-      padding: 0.125rem 0;
-    }
-  }
-
-  /*
    * Chart Plates: diagrams arrive as baked SVG in a restored pre.mermaid
-   * wrapper, so no gate, no timeout, no CDN. The plate follows the theme
-   * per the approved demo: page ground, hairline edge, mono script.
+   * wrapper, so there is no gate, no timeout and no CDN to wait on. The
+   * plate follows the theme: page ground, hairline edge, mono script.
    */
   pre.mermaid {
     border: 1px solid var(--hairline-soft);
@@ -407,12 +359,6 @@
     stroke: none !important;
   }
 
-  .mermaid svg .edgeLabel,
-  .mermaid svg .edgeLabel p {
-    background-color: var(--background) !important;
-    color: var(--on-surface) !important;
-  }
-
   /* Labels are svg text now: the default ink follows the page, while
      classDef accents arrive as inline !important styles and outrank
      this. Edge labels sit on a stock grey wash rect re-dressed to the
@@ -439,10 +385,8 @@
     stroke: var(--hairline-soft) !important;
   }
 
-  .mermaid svg .cluster text,
-  .mermaid svg .cluster span {
+  .mermaid svg .cluster text {
     fill: var(--on-surface) !important;
-    color: var(--on-surface) !important;
   }
 
   .mermaid svg rect.actor {
@@ -511,8 +455,4 @@
   .mermaid.chart-plate-full > svg {
     max-width: none;
   }
-
-  /* The old theme-invariant selection inks for diagrams are gone with
-     the pale plate: baked plates sit on the page ground and follow the
-     theme, so the page's own selection wash reads correctly on them. */
 }

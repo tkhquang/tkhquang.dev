@@ -1,11 +1,14 @@
 /*
- * The Index drawer's printed-front-matter dress, per the approved demo.
- * Unlayered on purpose: Drawer.css is unlayered too, so these win by
- * specificity where they restyle its generic chrome. Scoped to the
- * .index-drawer dialog; the TOC drawer keeps its shipped look.
+ * The Index drawer's printed-front-matter dress. Unlayered on purpose,
+ * because Drawer.css is unlayered too, and compounded onto .drawer rather
+ * than merely descending from .index-drawer: Drawer.css writes its chrome
+ * as nested .drawer .drawer__* rules, which tie this file on specificity
+ * and then win on source order, since BlogHeader imports this stylesheet
+ * before the module that pulls in Drawer.css. Scoped throughout, so the
+ * TOC drawer keeps its shipped look.
  */
 
-.index-drawer .drawer__title {
+.drawer.index-drawer .drawer__title {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
@@ -14,20 +17,24 @@
   opacity: 0.85;
 }
 
-.index-drawer .drawer__header {
+.drawer.index-drawer .drawer__header {
   border-bottom: 0;
   background: linear-gradient(90deg, transparent, var(--hairline), transparent)
     bottom / 100% 1px no-repeat;
 }
 
-.index-drawer .drawer__content {
+/* The width has to outrank Drawer.css's own phone rule, which is (0,3,0)
+   and important, and would otherwise take the box to 320px while the
+   closed transform still travels the 300px of the `size` prop, leaving a
+   20px sliver on screen through the whole slide. */
+.drawer.drawer--left.index-drawer .drawer__content {
   width: min(80vw, 300px) !important;
   border-right: 1px solid var(--hairline-soft);
   box-shadow: 12px 0 32px -16px rgb(0 0 0 / 50%);
 }
 
 /* The body becomes a column so the Vol. foot anchors at the bottom */
-.index-drawer .drawer__body {
+.drawer.index-drawer .drawer__body {
   display: flex;
   flex-direction: column;
 }
@@ -77,6 +84,8 @@
   background-size: 100% 45%;
 }
 
+/* The kicker utility sets its own opacity at the same specificity, so the
+   dim on these two has to be important to land at all */
 .index-drawer__count {
   font-variant-numeric: tabular-nums;
   font-size: 0.75rem;

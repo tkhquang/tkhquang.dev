@@ -157,8 +157,8 @@
     --cartouche-inner: hsl(199deg 90% 85%);
 
     /* Chart Plate inks: what the baked diagrams' var() references resolve
-       to, per the approved concordance. Everything but vermilion rides an
-       existing token pair, so the plates follow the theme for free. */
+       to. Everything but vermilion rides an existing token pair, so the
+       plates follow the theme for free. */
     --diagram-ink: var(--on-surface);
     --diagram-node: var(--surface-raised);
     --diagram-vermilion: hsl(9deg 68% 70%);
@@ -185,760 +185,6 @@
       --diagram-vermilion: hsl(11deg 75% 38%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
-    }
-  }
-
-  /*
-   * Plate 404, ported from the approved demo: the engraved plate object
-   * on its own deeper ground, centered inside the viewport height at
-   * desktop so the reticle and its archive link sit on the first screen.
-   */
-  html {
-    --plate-ground: color-mix(in srgb, black 24%, var(--background));
-
-    &[data-theme="light"] {
-      /* Dawn paper: the engraved plate prints on warm stock, gilt kept */
-      --plate-ground: hsl(45deg 40% 94%);
-    }
-  }
-
-  .plate-wrap {
-    background: var(--plate-ground);
-  }
-
-  .plate-wrap svg {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  @media (min-width: 64rem) {
-    .plate-wrap {
-      display: grid;
-      place-items: center;
-      min-height: min(
-        calc(100dvh - var(--header-height) - 3.75rem),
-        calc(56.25vw + 4rem)
-      );
-    }
-  }
-
-  /* Frame and graduation furniture */
-  .plate-rule-outer {
-    fill: none;
-    stroke: var(--on-surface);
-    stroke-opacity: 0.32;
-    stroke-width: 1;
-  }
-
-  .plate-rule-inner {
-    fill: none;
-    stroke: var(--on-surface);
-    stroke-opacity: 0.2;
-    stroke-width: 0.6;
-  }
-
-  .plate-tick {
-    stroke: var(--on-surface);
-    stroke-opacity: 0.32;
-    stroke-width: 0.6;
-  }
-
-  .plate-num {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.12em;
-    fill: var(--on-surface);
-    fill-opacity: 0.5;
-  }
-
-  .plate-cap {
-    font-family: var(--font-mono);
-    font-size: 9.5px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    fill: var(--on-surface);
-    fill-opacity: 0.42;
-  }
-
-  .plate-register {
-    stroke: var(--on-surface);
-    stroke-opacity: 0.22;
-    stroke-width: 0.5;
-    fill: none;
-  }
-
-  /* Star grammar, ported from ConstellationChart */
-  .p404 {
-    --chart-star: hsl(199deg 90% 85%);
-    --chart-gilt: hsl(42deg 60% 70%);
-    --chart-main-opacity: 0.9;
-    --chart-field-opacity: 0.45;
-    --chart-tail-opacity: 0.22;
-    --chart-wash-opacity: 1;
-  }
-
-  .p404 .chart-figure {
-    stroke: var(--on-surface);
-    stroke-opacity: 0.3;
-    stroke-width: 0.9;
-    stroke-linecap: round;
-    fill: none;
-  }
-
-  .p404 .chart-graticule {
-    fill: none;
-    stroke: var(--on-surface);
-    stroke-opacity: 0.1;
-    stroke-width: 0.6;
-    stroke-dasharray: 0.1 4.5;
-    stroke-linecap: round;
-  }
-
-  .p404 .chart-ecliptic {
-    fill: none;
-    stroke: var(--chart-gilt);
-    stroke-opacity: 0.3;
-    stroke-width: 1;
-    stroke-dasharray: 6 4;
-  }
-
-  .p404 .chart-boundary {
-    fill: none;
-    stroke: var(--aurora-b);
-    stroke-opacity: 0.16;
-    stroke-width: 0.6;
-    stroke-dasharray: 2 5;
-  }
-
-  .p404 .chart-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    fill: var(--on-surface);
-    fill-opacity: 0.32;
-  }
-
-  /* Engraved knockout: lettering interrupts the linework beneath it,
-     the way it does on a printed plate */
-  .p404 .chart-label,
-  .p404 .plate-note,
-  .p404 .plate-note-sub {
-    paint-order: stroke;
-    stroke: var(--plate-ground);
-    stroke-width: 4px;
-    stroke-linejoin: round;
-  }
-
-  .p404 .chart-star {
-    fill: var(--chart-star);
-    opacity: var(--chart-main-opacity);
-  }
-
-  .p404 .chart-star-ring {
-    fill: none;
-    stroke: var(--chart-star);
-    stroke-width: 0.6;
-  }
-
-  .p404 .chart-star-tick {
-    stroke: var(--chart-star);
-    stroke-width: 0.8;
-  }
-
-  .p404 .chart-field circle {
-    fill: var(--chart-star);
-    opacity: var(--chart-field-opacity);
-  }
-
-  .p404 .chart-tail circle {
-    fill: var(--chart-star);
-    opacity: var(--chart-tail-opacity);
-  }
-
-  /* The washes are STILL: the demo's breathe and twinkle loops repainted
-     the full-viewport SVG continuously and sank performance, so this
-     plate animates nothing in either theme */
-  .p404 .chart-wash {
-    opacity: var(--chart-wash-opacity);
-  }
-
-  /* Cartouche */
-  .plate-cartouche-ground {
-    fill: var(--plate-ground);
-  }
-
-  .plate-cartouche-rule {
-    fill: none;
-    stroke: var(--on-surface);
-    stroke-opacity: 0.38;
-    stroke-width: 0.9;
-  }
-
-  .plate-cartouche-rule--inner {
-    stroke-opacity: 0.24;
-    stroke-width: 0.5;
-  }
-
-  .plate-cartouche-kicker {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    fill: var(--on-surface);
-    fill-opacity: 0.55;
-  }
-
-  .plate-cartouche-title {
-    font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-weight: 620;
-    font-size: 38px;
-    letter-spacing: -0.01em;
-    fill: var(--on-surface);
-    fill-opacity: 0.95;
-  }
-
-  .plate-cartouche-divide {
-    stroke: var(--on-surface);
-    stroke-opacity: 0.3;
-    stroke-width: 0.6;
-  }
-
-  /* Legend */
-  .plate-legend-panel {
-    fill: var(--plate-ground);
-    stroke: var(--on-surface);
-    stroke-opacity: 0.22;
-    stroke-width: 0.5;
-  }
-
-  .plate-legend {
-    opacity: 0.55;
-  }
-
-  .plate-legend .chart-legend-core {
-    fill: var(--chart-star);
-  }
-
-  .plate-legend .chart-legend-ring {
-    fill: none;
-    stroke: var(--chart-star);
-    stroke-width: 0.6;
-  }
-
-  .plate-legend line.chart-legend-tick {
-    stroke: var(--chart-star);
-    stroke-width: 0.7;
-  }
-
-  .plate-legend-text {
-    font-family: var(--font-mono);
-    font-size: 9.5px;
-    letter-spacing: 0.14em;
-    fill: var(--on-surface);
-    fill-opacity: 0.6;
-  }
-
-  .plate-legend .ecliptic-sample {
-    stroke: var(--chart-gilt);
-    stroke-opacity: 0.6;
-    stroke-width: 1;
-    stroke-dasharray: 6 4;
-  }
-
-  /* Survey reticle: THE special mark, so it takes the gilt */
-  .plate-reticle-main {
-    fill: none;
-    stroke: var(--chart-gilt);
-    stroke-opacity: 0.85;
-    stroke-width: 1.1;
-    stroke-dasharray: 6 5;
-  }
-
-  .plate-reticle-outer {
-    fill: none;
-    stroke: var(--chart-gilt);
-    stroke-opacity: 0.38;
-    stroke-width: 0.8;
-    stroke-dasharray: 0.1 5;
-    stroke-linecap: round;
-  }
-
-  .plate-reticle-tick {
-    stroke: var(--chart-gilt);
-    stroke-opacity: 0.7;
-    stroke-width: 1;
-  }
-
-  .plate-leader {
-    fill: none;
-    stroke: var(--on-surface);
-    stroke-opacity: 0.35;
-    stroke-width: 0.6;
-  }
-
-  .plate-leader-dot {
-    fill: var(--on-surface);
-    fill-opacity: 0.5;
-  }
-
-  .plate-note {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    fill: var(--on-surface);
-    fill-opacity: 0.85;
-  }
-
-  .plate-note-sub {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.14em;
-    fill: var(--on-surface);
-    fill-opacity: 0.5;
-  }
-
-  /* The archive action in the central text: gilt, brightening in place */
-  .p404 .plate-note-link {
-    fill: var(--chart-gilt);
-    fill-opacity: 0.9;
-    transition: fill-opacity 200ms;
-  }
-
-  .p404 a:hover .plate-note-link,
-  .p404 a:focus-visible .plate-note-link {
-    fill-opacity: 1;
-  }
-
-  /* Day: a printed lapis chart. Stillness, firmer ink, gilt kept. */
-  html[data-theme="light"] .p404 {
-    --chart-star: var(--primary);
-    --chart-gilt: hsl(40deg 60% 42%);
-    --chart-main-opacity: 0.55;
-    --chart-field-opacity: 0.3;
-    --chart-tail-opacity: 0.14;
-    --chart-wash-opacity: 0;
-  }
-
-  html[data-theme="light"] .p404 .chart-figure {
-    stroke: var(--primary);
-    stroke-opacity: 0.4;
-  }
-
-  html[data-theme="light"] .p404 .chart-graticule {
-    stroke: var(--primary);
-    stroke-opacity: 0.15;
-  }
-
-  html[data-theme="light"] .p404 .chart-ecliptic {
-    stroke-opacity: 0.42;
-  }
-
-  html[data-theme="light"] .p404 .chart-boundary {
-    stroke-opacity: 0.2;
-  }
-
-  html[data-theme="light"] .p404 .chart-label {
-    fill: var(--primary);
-    fill-opacity: 0.45;
-  }
-
-  html[data-theme="light"] .p404 .chart-star-ring--mag1 {
-    stroke: var(--chart-gilt);
-  }
-
-  html[data-theme="light"] .plate-rule-outer {
-    stroke: var(--primary);
-    stroke-opacity: 0.45;
-  }
-
-  html[data-theme="light"] .plate-rule-inner {
-    stroke: var(--primary);
-    stroke-opacity: 0.28;
-  }
-
-  html[data-theme="light"] .plate-tick {
-    stroke: var(--primary);
-    stroke-opacity: 0.45;
-  }
-
-  html[data-theme="light"] .plate-num {
-    fill: var(--primary);
-    fill-opacity: 0.6;
-  }
-
-  html[data-theme="light"] .plate-cap {
-    fill: var(--primary);
-    fill-opacity: 0.5;
-  }
-
-  html[data-theme="light"] .plate-register {
-    stroke: var(--primary);
-    stroke-opacity: 0.3;
-  }
-
-  html[data-theme="light"] .plate-cartouche-rule {
-    stroke: var(--primary);
-    stroke-opacity: 0.45;
-  }
-
-  html[data-theme="light"] .plate-cartouche-rule--inner {
-    stroke-opacity: 0.28;
-  }
-
-  html[data-theme="light"] .plate-cartouche-kicker {
-    fill: var(--primary);
-    fill-opacity: 0.6;
-  }
-
-  html[data-theme="light"] .plate-cartouche-divide {
-    stroke: var(--primary);
-    stroke-opacity: 0.35;
-  }
-
-  html[data-theme="light"] .plate-legend-text {
-    fill: var(--primary);
-    fill-opacity: 0.65;
-  }
-
-  html[data-theme="light"] .plate-legend-panel {
-    stroke: var(--primary);
-    stroke-opacity: 0.28;
-  }
-
-  /* The finding aid below the plate */
-  .p404-aid {
-    max-width: var(--breakpoint-xl, 1280px);
-    margin: 0 auto;
-    padding: 2.5rem 2rem 3rem;
-  }
-
-  .p404-aid__rule {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--hairline),
-      transparent
-    );
-    height: 1px;
-    border: 0;
-    margin: 0;
-  }
-
-  .p404-aid__rule--foot {
-    margin-top: 2rem;
-  }
-
-  .p404-aid__lede {
-    font-family: var(--font-serif);
-    font-size-adjust: 0.525;
-    font-style: italic;
-    font-size: 1.02rem;
-    opacity: 0.85;
-    margin: 1.75rem 0 2rem;
-    max-width: 46rem;
-  }
-
-  .p404-aid__grid {
-    display: grid;
-    gap: 2.5rem;
-  }
-
-  @media (min-width: 56rem) {
-    .p404-aid__grid {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      gap: 4rem;
-    }
-  }
-
-  .p404-aid__head {
-    display: block;
-    margin: 0 0 0.9rem;
-    color: var(--on-surface);
-  }
-
-  .p404-aid__row {
-    display: flex;
-    align-items: baseline;
-    padding: 0.78rem 0;
-    border-top: 1px solid var(--hairline-soft);
-  }
-
-  .p404-aid__row:last-of-type {
-    border-bottom: 1px solid var(--hairline-soft);
-  }
-
-  .p404-aid__label {
-    font-weight: 600;
-    color: var(--on-surface);
-    transition: color 200ms;
-  }
-
-  .p404-aid__row:hover .p404-aid__label {
-    color: var(--primary);
-  }
-
-  .p404-aid__leader {
-    flex: 1;
-    border-bottom: 1px dotted
-      color-mix(in srgb, var(--on-surface) 32%, transparent);
-    margin: 0 0.65em 0.3em;
-    align-self: flex-end;
-    min-width: 2rem;
-  }
-
-  .p404-aid__ref {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.7;
-    transition: opacity 200ms;
-  }
-
-  .p404-aid__row:hover .p404-aid__ref {
-    opacity: 1;
-  }
-
-  .p404-aid__entry {
-    display: block;
-    padding: 0.85rem 0;
-    border-top: 1px solid var(--hairline-soft);
-  }
-
-  .p404-aid__entry:last-of-type {
-    border-bottom: 1px solid var(--hairline-soft);
-  }
-
-  .p404-aid__meta {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    opacity: 0.85;
-    margin-bottom: 0.25rem;
-  }
-
-  .p404-aid__cat {
-    font-style: normal;
-  }
-
-  .p404-aid__title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
-    color: var(--primary);
-    background: linear-gradient(
-        to right,
-        color-mix(in srgb, var(--primary) 30%, transparent),
-        color-mix(in srgb, var(--primary) 18%, transparent)
-      )
-      no-repeat left bottom / 0% 45%;
-    transition: background-size 300ms;
-  }
-
-  .p404-aid__entry:hover .p404-aid__title {
-    background-size: 100% 45%;
-  }
-
-  .p404-aid__foot {
-    display: block;
-    text-align: center;
-    margin: 1.75rem 0 0;
-    opacity: 0.55;
-  }
-
-  /*
-   * The Colophon Footer's end matter: printed above the untouched bar.
-   * Everything centers on the container grid; the one loud ink is the
-   * primary COLOPHON kicker.
-   */
-  .blog-colophon {
-    width: 100%;
-    color: var(--on-surface);
-  }
-
-  .blog-colophon__inner {
-    max-width: var(--breakpoint-xl, 1280px);
-    margin: 0 auto;
-    padding: 0 2rem 2.75rem;
-    text-align: center;
-  }
-
-  .blog-colophon__head {
-    display: block;
-    margin: 2.25rem 0 0;
-    letter-spacing: 0.22em;
-    text-indent: 0.22em;
-    color: var(--primary);
-    opacity: 1;
-  }
-
-  .blog-colophon__specimen {
-    font-family: var(--font-serif);
-    font-size-adjust: 0.525;
-    font-style: italic;
-    font-size: 1.125rem;
-    line-height: 1.6;
-    margin: 0.875rem 0 0;
-  }
-
-  .blog-colophon__face-display {
-    font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-style: normal;
-    font-weight: 580;
-    letter-spacing: -0.01em;
-  }
-
-  .blog-colophon__face-serif {
-    font-weight: 400;
-  }
-
-  .blog-colophon__face-sans {
-    font-family: var(--font-sans);
-    font-style: normal;
-    font-size: 0.95em;
-  }
-
-  .blog-colophon__face-mono {
-    font-family: var(--font-mono);
-    font-style: normal;
-    font-size: 0.95em;
-  }
-
-  .blog-colophon__volume {
-    display: block;
-    margin: 0.75rem 0 0;
-    opacity: 0.85;
-  }
-
-  /* The demo's soft single-peak fade, NOT the site hr's 30-70 plateau:
-     the plateau reads as a hard bright bar across the footer. Plain hr
-     elements, no utility classes, so the widths here actually hold. */
-  .blog-colophon__divide {
-    height: 1px;
-    border: 0;
-    margin: 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--hairline),
-      transparent
-    );
-  }
-
-  .blog-colophon__short {
-    width: 6rem;
-    margin: 1.625rem auto 1.375rem;
-    opacity: 0.8;
-  }
-
-  .blog-colophon__short--after-doors {
-    margin: 1.375rem auto 1.625rem;
-  }
-
-  .blog-colophon__doors {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: baseline;
-    column-gap: 1.25rem;
-    row-gap: 0.75rem;
-  }
-
-  .blog-colophon__doors .kicker {
-    font-size: 0.8125rem;
-    letter-spacing: 0.08em;
-  }
-
-  .blog-colophon__sep {
-    color: color-mix(in srgb, var(--primary) 70%, transparent);
-  }
-
-  .blog-colophon__imprint {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    justify-content: center;
-    column-gap: 1.375rem;
-    row-gap: 0.625rem;
-    align-items: baseline;
-    margin: 0;
-  }
-
-  .blog-colophon__imprint dt {
-    text-align: right;
-    opacity: 0.6;
-  }
-
-  .blog-colophon__imprint dd {
-    margin: 0;
-    text-align: left;
-  }
-
-  .blog-colophon__wire {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    column-gap: 1.5rem;
-    row-gap: 0.25rem;
-  }
-
-  .blog-colophon__wire-link {
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.01em;
-  }
-
-  /* Narrow collapse, per the demo: doors fold to a two-column grid and
-     the imprint stacks centered */
-  @media (max-width: 35rem) {
-    .blog-colophon__inner {
-      padding: 0 1.25rem 2.25rem;
-    }
-
-    .blog-colophon__head {
-      margin-top: 1.75rem;
-    }
-
-    .blog-colophon__specimen {
-      font-size: 1rem;
-    }
-
-    .blog-colophon__doors {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      row-gap: 1rem;
-      column-gap: 0;
-      max-width: 20rem;
-      margin: 0 auto;
-    }
-
-    .blog-colophon__sep {
-      display: none;
-    }
-
-    .blog-colophon__imprint {
-      grid-template-columns: 1fr;
-      row-gap: 0.25rem;
-    }
-
-    .blog-colophon__imprint dt {
-      text-align: center;
-    }
-
-    .blog-colophon__imprint dd {
-      text-align: center;
-    }
-
-    .blog-colophon__wire {
-      justify-content: center;
     }
   }
 
@@ -1001,10 +247,10 @@
   }
 
   /*
-   * The quiet link, the demos' approved grammar: a full-width underline
-   * band whose ALPHA fades up in place. Nothing wipes and nothing moves;
-   * without @property support the tint simply appears. Weight is the
-   * context's business, never this class's.
+   * The quiet link: a full-width underline band whose ALPHA fades up in
+   * place. Nothing wipes and nothing moves; without @property support the
+   * tint simply appears. Weight is the context's business, never this
+   * class's.
    */
   .tint-link {
     color: var(--primary);
@@ -1103,9 +349,9 @@
      Bounded to its own column it could only start at the column edge,
      which on a wrapped row sat a long way right of the first line.
 
-     No align-self either: the leader rides the row's first baseline, as
-     in the approved demo. Bottom-aligning it sank it to the foot of a
-     wrapped row, pointing at nothing. */
+     No align-self either: the leader rides the row's first baseline.
+     Bottom-aligning it sinks it to the foot of a wrapped row, where it
+     points at nothing. */
   .series-plate__leader {
     grid-area: 1 / 3 / 2 / 5;
     height: 0.68em;
@@ -1247,6 +493,23 @@
     display: block;
   }
 
+  /* The right rail's gilt serial header, one step up from the feed token.
+     Full ink, so it holds against the rail's idle dim. */
+  .post-aside__serial-head {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--gilt-ink);
+    opacity: 1;
+  }
+
+  .post-aside__serial-head svg {
+    width: 10px;
+    height: 10px;
+    fill: var(--gilt-ink);
+    display: block;
+  }
+
   /*
    * The Chapter Close: asterism tailpiece, set-down colophon line, and the
    * cross-reference plate that ends every article as a chapter instead of
@@ -1284,7 +547,7 @@
 
   .chapter-close__plate {
     border: 1px solid var(--hairline-soft);
-    /* 2px, per the demo: engraved plates take near-square corners */
+    /* Near-square corners, as an engraved plate takes */
     border-radius: 2px;
     margin-top: 0.5rem;
   }
@@ -1327,17 +590,6 @@
 
   .chapter-close__panel--next .chapter-close__meta {
     flex-direction: row-reverse;
-  }
-
-  /* Modest by ruling: the suggested next post never grows past this */
-  .chapter-close__title {
-    /* margin: 0;
-    font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-weight: 620;
-    font-size: 1.22rem;
-    line-height: 1.3;
-    letter-spacing: -0.01em; */
   }
 
   .chapter-close__title .tint-link {
@@ -1492,11 +744,26 @@
   }
 
   [data-line] {
-    &[data-highlighted-line] {
+    /* Two ways to say the same thing, so they print the same thing: the
+       fence meta ({3}) sets data-highlighted-line, the inline notation
+       ([!code highlight]) sets .highlighted. Which one an author reaches
+       for is an authoring convenience, never a visual difference. */
+    &[data-highlighted-line],
+    &.highlighted {
       @apply bg-theme-surface! min-w-full border-l-4 shadow-sm;
     }
 
-    &:not([data-highlighted-line]) {
+    /* A diff line wears the same rule as a highlighted one, only inked
+       differently below. Same border, not a box-shadow: a border occupies
+       layout, so anything drawn another way would seat its text 4px off
+       the column every other line sits on. */
+    &.diff {
+      @apply min-w-full border-l-4;
+    }
+
+    /* The 4px margin stands in for that rule, so an unmarked line's text
+       lands on the same column as a marked one */
+    &:not([data-highlighted-line]):not(.highlighted):not(.diff) {
       @apply ml-1;
     }
 
@@ -1506,22 +773,30 @@
     }
   }
 
-  /* Proof marks from fence comments ([!code ++], [!code highlight]):
-     washes and a gilt left hairline, never a moving thing. The glyph
-     column stays with the line numbers, so no +/- pseudo content. */
+  /* Diff marks from fence notation ([!code ++] / [!code --]), never a
+     moving thing. Each carries its meaning in the RULE as well as the
+     wash, viridian for an added line and vermilion for a removed one: a
+     wash alone cannot separate the two on the dark panel, where both
+     tokens resolve to pale pastels. The glyph column belongs to the line
+     numbers, so there is no +/- pseudo content to lean on.
+     Alphas differ per theme because the tokens invert: the dark inks are
+     pastels that need weight, the light ones are deep and print heavy. */
   [data-line].diff.add {
-    background-color: color-mix(in srgb, var(--success) 14%, transparent);
-    box-shadow: inset 2px 0 0 var(--gilt-ink);
+    border-left-color: var(--success);
+    background-color: color-mix(in srgb, var(--success) 24%, transparent);
+
+    @variant light {
+      background-color: color-mix(in srgb, var(--success) 14%, transparent);
+    }
   }
 
   [data-line].diff.remove {
-    background-color: color-mix(in srgb, var(--error) 12%, transparent);
-    opacity: 0.85;
-  }
+    border-left-color: var(--error);
+    background-color: color-mix(in srgb, var(--error) 24%, transparent);
 
-  [data-line].highlighted {
-    background-color: color-mix(in srgb, var(--primary) 10%, transparent);
-    box-shadow: inset 2px 0 0 var(--gilt-ink);
+    @variant light {
+      background-color: color-mix(in srgb, var(--error) 14%, transparent);
+    }
   }
 
   .highlighted-word {

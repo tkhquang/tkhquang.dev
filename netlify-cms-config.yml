@@ -55,12 +55,7 @@ collections:
           widget: "image",
           required: false,
         }
-      - {
-          label: "Series",
-          name: "series",
-          widget: "string",
-          required: false,
-        }
+      - { label: "Series", name: "series", widget: "string", required: false }
       - {
           label: "Series Part",
           name: "series_part",

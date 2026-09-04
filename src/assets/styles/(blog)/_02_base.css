@@ -37,10 +37,4 @@
   .article__lede {
     hanging-punctuation: first allow-end;
   }
-
-  /*
-   * No top reading-progress hairline: the header's back-button circle is
-   * the page's one progress indicator (owner decision, pass 4), and the
-   * TOC rail carries its own star.
-   */
 }

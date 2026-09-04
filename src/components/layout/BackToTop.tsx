@@ -24,7 +24,10 @@ const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
           /* visibility rides along so the invisible button is neither a
              tab stop nor a 40px tap-stealer parked over the corner */
           if (scrollY > 600 - 96) {
-            gsap.set(buttonRef.current, { opacity: 0.2, visibility: "visible" });
+            gsap.set(buttonRef.current, {
+              opacity: 0.2,
+              visibility: "visible",
+            });
           } else {
             gsap.set(buttonRef.current, { opacity: 0, visibility: "hidden" });
           }
