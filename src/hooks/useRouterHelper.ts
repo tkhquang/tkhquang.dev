@@ -7,7 +7,7 @@ export function useRouterHelper() {
    * The one matcher both helpers share: exact length, null/undefined as a
    * wildcard in that position.
    */
-  function segmentsMatch(
+  function matchPattern(
     actualSegments: string[],
     checkSegments: (string | null | undefined)[]
   ) {
@@ -24,23 +24,19 @@ export function useRouterHelper() {
    * @param pattern Array of segment strings (or null for wildcard)
    */
   function matchSegments(checkSegments: (string | null | undefined)[]) {
-    return segmentsMatch(segments, checkSegments);
+    return matchPattern(segments, checkSegments);
   }
 
   /**
    * matchSegments for an arbitrary path string (e.g. a stored prevAsPath)
-   * instead of the current route. Query strings, hashes, and trailing
-   * slashes are ignored.
+   * instead of the current route. Leading and trailing slashes are ignored.
    */
   function matchPathSegments(
     path: string | null | undefined,
     checkSegments: (string | null | undefined)[]
   ) {
     if (path == null) return false;
-    return segmentsMatch(
-      path.split(/[?#]/)[0].split("/").filter(Boolean),
-      checkSegments
-    );
+    return matchPattern(path.split("/").filter(Boolean), checkSegments);
   }
 
   /**

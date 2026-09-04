@@ -1,5 +1,6 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
+import { Blog } from "@/constants/meta";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getIntl } from "@/lib/intl";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
@@ -51,20 +52,18 @@ export default async function CategoryPage({
     <>
       <NewsFeed
         posts={filteredPost}
-        pathInfoType="category"
         item={category}
-        pathSlug="categories"
         headpiece={{
-          room: `The ${category.title} Shelf`,
+          /* The article is the title's, not the room label's: the shelf
+             file for the-inner-crisis is titled "The Inner Crisis" */
+          room: `The ${category.title.replace(/^The\s+/i, "")} Shelf`,
           stat: intl.formatMessage(
             { id: "postCount" },
             { count: filteredPost.length }
           ),
           hue: `var(--shelf-${slug})`,
-          /* The shelf hue's printed name closes the stat line */
           swatchLabel:
-            { gaming: "dusty rose", "the-inner-crisis": "lilac" }[slug] ??
-            "lapis",
+            Blog.SHELF_HUE_NAMES[slug] ?? Blog.DEFAULT_SHELF_HUE_NAME,
         }}
       />
       <Suspense>

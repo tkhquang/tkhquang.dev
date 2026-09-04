@@ -11,9 +11,7 @@ const FullViewOverlay = dynamic(
   { ssr: false }
 );
 
-export interface ZoomableImageProps extends ImageProps {
-  "data-ratio"?: number | string;
-}
+export type ZoomableImageProps = ImageProps;
 
 /*
  * Article images, click-to-zoom. The column squeezes every figure to

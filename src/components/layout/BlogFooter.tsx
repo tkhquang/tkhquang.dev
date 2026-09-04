@@ -3,7 +3,7 @@ import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
 import clsx from "clsx";
 import React, { Suspense } from "react";
 
-const BlogFooter = async ({
+const BlogFooter = ({
   children,
   className,
   ...props

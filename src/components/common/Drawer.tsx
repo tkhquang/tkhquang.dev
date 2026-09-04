@@ -93,11 +93,12 @@ interface DrawerProps extends React.ComponentProps<"div"> {
   title?: string;
   /** Optional description displayed below the title */
   description?: string;
-  /** The opener, composed at the call site as a DrawerTrigger (exported
-      below) carrying its own classes, label, and portal flag; rendered
-      inside this drawer's provider so no trigger styling ever drills
-      through the Drawer's own props */
-  trigger?: React.ReactNode;
+  /** The opener, composed at the call site as the DrawerTrigger exported
+      from this module, carrying its own classes, label, and portal flag;
+      rendered inside this drawer's provider so no trigger styling ever
+      drills through the Drawer's own props. Required: the store is
+      internal, so a Drawer without a trigger can never be opened. */
+  trigger: React.ReactNode;
 }
 
 /**

@@ -1,5 +1,7 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
+import { getIntl } from "@/lib/intl";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
@@ -49,17 +51,19 @@ export default async function TagPage({
   const filteredPost = posts.filter((post) =>
     post.tags.includes(currentTag?.title)
   );
+  const intl = getIntl(DEFAULT_LOCALE);
 
   return (
     <>
       <NewsFeed
         posts={filteredPost}
-        pathInfoType="tag"
-        pathSlug="tags"
         item={currentTag}
         headpiece={{
           room: "Entries Tagged",
-          stat: `Tagged in ${filteredPost.length} ${filteredPost.length === 1 ? "post" : "posts"}`,
+          stat: `Tagged in ${intl.formatMessage(
+            { id: "postCount" },
+            { count: filteredPost.length }
+          )}`,
           hashed: true,
         }}
       />

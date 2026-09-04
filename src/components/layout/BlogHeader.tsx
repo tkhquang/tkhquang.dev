@@ -37,6 +37,18 @@ export interface IndexStats {
   year: number;
 }
 
+/* The count printed beside each room. The Archive is deliberately absent:
+   it lists the same entries the feed does, so a second total would only
+   restate the first. */
+const INDEX_COUNTS: Record<
+  string,
+  ((stats: IndexStats) => number) | undefined
+> = {
+  "/blog": (stats) => stats.posts,
+  "/blog/categories": (stats) => stats.categories,
+  "/blog/tags": (stats) => stats.tags,
+};
+
 /* A drawer row that closes the drawer as it navigates; the layout
    persists across routes, so the dialog would otherwise stay open */
 const IndexRow = ({
@@ -72,7 +84,7 @@ const BlogHeader = ({
   className,
   indexStats,
   ...props
-}: React.ComponentProps<"header"> & { indexStats?: IndexStats }) => {
+}: React.ComponentProps<"header"> & { indexStats: IndexStats }) => {
   const params = useParams();
   const { matchPathSegments, matchSegments } = useRouterHelper();
   const { prevAsPath } = useAsPathValue();
@@ -283,35 +295,19 @@ const BlogHeader = ({
               }
             >
               <ul className="index-drawer__rows">
-                <IndexRow
-                  href="/blog"
-                  label="Posts"
-                  count={indexStats?.posts}
-                  active={activeHref === "/blog"}
-                />
-                <IndexRow
-                  href="/blog/categories"
-                  label="Categories"
-                  count={indexStats?.categories}
-                  active={activeHref === "/blog/categories"}
-                />
-                <IndexRow
-                  href="/blog/tags"
-                  label="Tags"
-                  count={indexStats?.tags}
-                  active={activeHref === "/blog/tags"}
-                />
-                <IndexRow
-                  href="/blog/posts"
-                  label="Archive"
-                  active={activeHref === "/blog/posts"}
-                />
+                {Blog.NAV_LINKS.map((link) => (
+                  <IndexRow
+                    key={link.href}
+                    href={link.href}
+                    label={link.label}
+                    count={INDEX_COUNTS[link.href]?.(indexStats)}
+                    active={activeHref === link.href}
+                  />
+                ))}
               </ul>
-              {indexStats && (
-                <span className="kicker index-drawer__foot">
-                  Vol. {toRoman(indexStats.volume)} · {toRoman(indexStats.year)}
-                </span>
-              )}
+              <span className="kicker index-drawer__foot">
+                Vol. {toRoman(indexStats.volume)} · {toRoman(indexStats.year)}
+              </span>
             </Drawer>
             <div className="ml-4 flex flex-col">
               <ThemeToggle />

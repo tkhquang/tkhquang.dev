@@ -29,7 +29,6 @@ export default async function BlogPage({ params }: any) {
   const postChunks = chunk(allPosts, Blog.POSTS_PER_PAGE);
   const posts = postChunks[page - 1];
   const totalPages = postChunks.length;
-  const currentPage = page;
 
   const shelfCount = new Set(allPosts.map((post) => post.category_slug)).size;
   const volume = getVolume(allPosts);
@@ -41,14 +40,7 @@ export default async function BlogPage({ params }: any) {
         shelfCount={shelfCount}
         volume={volume}
       />
-      <NewsFeed
-        posts={posts}
-        pathSlug="categories"
-        pathInfoType="category"
-        totalPages={totalPages}
-        currentPage={currentPage}
-        hideTitle
-      />
+      <NewsFeed posts={posts} totalPages={totalPages} />
       <Suspense>
         <ClientSideGetPageViews
           pathnames={posts.map((post) => `/blog/posts/${post.slug}`)}
