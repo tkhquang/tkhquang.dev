@@ -14,11 +14,16 @@ export type WindowWithTheme = Window &
 export type ThemeStore = {
   mode: ThemeMode;
   cssVariables: Record<string, string | number>;
+  /* False until the initializer has copied the inline script's choice in.
+     Before that `mode` is only the server default, not the reader's theme,
+     and anything that bakes the mode into a URL or a request has to wait. */
+  ready: boolean;
 };
 
 export const themeModeStore = atom<ThemeStore>({
   cssVariables: {},
   mode: "dark",
+  ready: false,
 });
 
 export const themeStore = atom(
@@ -26,7 +31,7 @@ export const themeStore = atom(
   (get, set, mode: ThemeMode) => {
     set(themeModeStore, (prevState) => {
       const cssVariables = getCssVariables();
-      return { cssVariables, mode };
+      return { cssVariables, mode, ready: true };
     });
   }
 );
