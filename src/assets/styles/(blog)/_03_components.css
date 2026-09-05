@@ -174,6 +174,16 @@
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
 
+    /* The Catalogue Headpiece's ground: the masthead sky, faded to paper.
+       By night the band's own zenith mixed down into the page ground; by
+       day the Dawn Horizon's pastel stops. Lifted from the demo verbatim. */
+    --catalogue-tint: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--band-a) 52%, var(--background)) 0%,
+      color-mix(in srgb, var(--band-a) 20%, var(--background)) 55%,
+      var(--background) 100%
+    );
+
     &[data-theme="light"] {
       --shelf-gaming: hsl(351deg 58% 40%);
       --shelf-the-inner-crisis: hsl(266deg 50% 55%);
@@ -185,6 +195,13 @@
       --diagram-vermilion: hsl(11deg 75% 38%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
+      --catalogue-tint: linear-gradient(
+        180deg,
+        hsl(219deg 48% 90%) 0%,
+        hsl(219deg 40% 93%) 45%,
+        hsl(44deg 45% 94%) 80%,
+        var(--background) 100%
+      );
     }
   }
 
@@ -194,11 +211,47 @@
 
   /*
    * Catalogue Headpiece: the index pages' shared chapter head, the
-   * masthead's typographic system without its sky. Left-set to the
-   * content column; the feed keeps its own full masthead.
+   * masthead's typographic system over its sky faded to paper. The head
+   * is the room wrapper's first row, so its text keeps the column's left
+   * edge at every width; the tint is a full-bleed pseudo behind that row,
+   * flush with the header above, paper reached at the row's bottom edge.
+   * The feed keeps its own full masthead.
    */
   .catalogue-headpiece {
+    position: relative;
+    /* The pseudo sits at z-index -1 inside this box, never behind an
+       ancestor's ground */
+    isolation: isolate;
     display: block;
+    width: 100%;
+    /* Both wrapper flavours: spans the grid's two columns, and in the
+       feed's flex-wrap it must not widen the shrink-to-fit wrapper, so
+       it contributes no inline size and drops the wrapper's space-x end
+       margin. That margin is a utility-layer rule, which outranks this
+       layer whatever the specificity, so the reset has to be important;
+       the alternative, a column gap, counts beside a zero-width first
+       line just as the margin did (measured: the feed rooms slid 32px). */
+    grid-column: 1 / -1;
+    contain: inline-size;
+    margin-inline-end: 0 !important;
+    padding: 1.75rem 0 2rem;
+  }
+
+  .catalogue-headpiece::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+    background: var(--catalogue-tint);
+  }
+
+  @media (max-width: 40rem) {
+    .catalogue-headpiece {
+      padding: 1.25rem 0 1.5rem;
+    }
   }
 
   .catalogue-headpiece__room {

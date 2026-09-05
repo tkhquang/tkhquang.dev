@@ -15,7 +15,7 @@ interface CatalogueHeadpieceProps {
 
 /* One header device for every index page: the masthead's own grammar
    (kicker, Fraunces title, accent bar, stat kickers) restated at chapter
-   scale without the sacred sky */
+   scale over the sky faded to paper */
 const CatalogueHeadpiece = ({
   hashed,
   hue,

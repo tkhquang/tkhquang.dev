@@ -41,10 +41,11 @@ const PostList = <
   const intl = getIntl(DEFAULT_LOCALE);
 
   return (
-    <div className="relative mx-auto my-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
+    <div className="relative mx-auto mb-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
+      {/* The grid's first row, spanning both columns, so its band meets
+          the header and the list and the card fall to the row below */}
+      <CatalogueHeadpiece room={room} title={title} stat={stat} />
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
-        <CatalogueHeadpiece room={room} title={title} stat={stat} />
-
         <Accordion type="multiple" className="my-8" defaultValue={defaultOpen}>
           {list.map((item) => {
             const fieldSlug = item[listSlugField] as string;

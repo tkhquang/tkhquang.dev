@@ -295,6 +295,14 @@
     color: var(--primary);
   }
 
+  /* The catalogue headpiece's kickers sit on the demo's 1.5 line box;
+     the kicker utility's text-xs line box would otherwise win from the
+     utilities layer and shave 4px off the band */
+  .catalogue-headpiece__room,
+  .catalogue-headpiece__stat {
+    line-height: 1.5;
+  }
+
   /* A soft two-layer shadow for the solid header, in place of the heavier
      house shadow-box-md halo */
   .blog-header-shadow {
