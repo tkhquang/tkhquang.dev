@@ -65,21 +65,6 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         >
           # {post.category_title ?? categoryTitleFromSlug(post.category_slug)}
         </Link>
-        {/* series_total only rides posts from getAllPosts, so the token
-            appears on feed cards while the post page carries the full
-            instalment plate instead */}
-        {post.series && post.series_part && post.series_total ? (
-          /* The numerals alone read as "I I of I I I" aloud, so the token
-             carries its own spoken form */
-          <span
-            className="serial-token"
-            title={post.series}
-            aria-label={`${post.series}, instalment ${post.series_part} of ${post.series_total}`}
-          >
-            <SerialStar />
-            {toRoman(post.series_part)} of {toRoman(post.series_total)}
-          </span>
-        ) : null}
       </div>
 
       <div className="text-theme-on-surface flex items-center space-x-2 font-mono text-xs opacity-75 md:text-sm">
@@ -89,6 +74,29 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
         />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>
+
+      {/* series_total only rides posts from getAllPosts, so the serial
+          kicker appears on feed cards while the post page carries the
+          full instalment plate instead. Second row of the meta grid: the
+          plate head's phrase, as the title's eyebrow */}
+      {post.series && post.series_part && post.series_total ? (
+        <div className="kicker serial-kicker col-span-2">
+          <SerialStar />
+          <span>{post.series}</span>
+          <span aria-hidden>·</span>
+          {/* The numerals alone read as "I I I of I I I" aloud, so the
+              instalment carries its own spoken form */}
+          <span className="serial-kicker__instalment">
+            <span aria-hidden>
+              Instalment {toRoman(post.series_part)} of{" "}
+              {toRoman(post.series_total)}
+            </span>
+            <span className="sr-only">
+              Instalment {post.series_part} of {post.series_total}
+            </span>
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };

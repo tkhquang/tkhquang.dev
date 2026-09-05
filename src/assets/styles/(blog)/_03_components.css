@@ -533,33 +533,34 @@
     font-weight: 600;
   }
 
-  /* The feed card's serial token: self-contained anatomy, so it keeps its
-     register wherever it rides */
-  .serial-token {
-    display: inline-flex;
+  /* The feed card's serial kicker: the second row of the meta grid, in
+     the rail head's recipe (10px star, 0.375rem gap) with the plate
+     head's split ink, series name in on-surface, instalment in gilt */
+  .serial-kicker {
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.3rem;
-    border: 1px solid color-mix(in srgb, var(--gilt-ink) 45%, transparent);
-    border-radius: 0.25rem;
-    padding: 0.08rem 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--gilt-ink);
-    opacity: 1;
+    column-gap: 0.375rem;
+    row-gap: 0.25rem;
+    color: var(--on-surface);
   }
 
-  .serial-token svg {
-    width: 9px;
-    height: 9px;
+  .serial-kicker svg {
+    width: 10px;
+    height: 10px;
     fill: var(--gilt-ink);
     display: block;
   }
 
-  /* The right rail's gilt serial header, one step up from the feed token.
-     Full ink, so it holds against the rail's idle dim. */
+  /* The instalment phrase stays whole when a long series name wraps the
+     line; the dot is its own item, so the break falls either side of it */
+  .serial-kicker__instalment {
+    color: var(--gilt-ink);
+    white-space: nowrap;
+  }
+
+  /* The right rail's gilt serial header, one step up from the feed card's
+     serial kicker. Full ink, so it holds against the rail's idle dim. */
   .post-aside__serial-head {
     display: flex;
     align-items: center;
