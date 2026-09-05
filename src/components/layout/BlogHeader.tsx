@@ -15,7 +15,7 @@ import { ScrollManager } from "@/utils/dom";
 import { toRoman } from "@/utils/roman";
 import classNames from "classnames";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 
@@ -86,6 +86,7 @@ const BlogHeader = ({
   ...props
 }: React.ComponentProps<"header"> & { indexStats: IndexStats }) => {
   const params = useParams();
+  const pathname = usePathname();
   const { matchPathSegments, matchSegments } = useRouterHelper();
   const { prevAsPath } = useAsPathValue();
   const { back, prefetch, push } = useRouter();
@@ -110,6 +111,12 @@ const BlogHeader = ({
           ? "/blog"
           : undefined;
 
+  /* The index rooms (every running head but Posts) open on the catalogue
+     headpiece's band; with the feed masthead they are the pages that
+     carry a sky for the header to stay transparent over */
+  const isIndexRoom = activeHref !== undefined && activeHref !== "/blog";
+  const hasSky = isHomeBlog || isIndexRoom;
+
   /* Any feed page counts: pagination links land readers on /blog/page/N
      (page 1 included), and losing the restoration for having paged would
      send them back to page 1, top, place gone */
@@ -127,12 +134,13 @@ const BlogHeader = ({
 
   useEffect(() => {
     /*
-     * Over the masthead the switch is geometric rather than a pixel
-     * count, because the sky is 317px tall on a phone and 385px from lg
+     * Over the feed masthead the switch is geometric rather than a pixel
+     * count, because the wordmark waits for the big Ljóss below it to
+     * scroll off, and the sky is 317px tall on a phone and 385px from lg
      * up. Pulling the observer's top edge down by the header height puts
-     * the measure on the header's own bottom line, and the ratio there
-     * is the share of sky still below it: the band comes in at the
-     * halfway mark rather than waiting for the last of it.
+     * the measure on the header's own bottom line, and the ratio there is
+     * the share of sky still below it: the band comes in at the halfway
+     * mark rather than waiting for the last of it.
      */
     const masthead = isHomeBlog
       ? document.querySelector("[data-masthead]")
@@ -157,14 +165,20 @@ const BlogHeader = ({
     }
 
     /*
-     * Only the list page reads `scrolled`, so anywhere else the subscription
-     * would drive state the render can never consume.
+     * Only the pages with a sky read `scrolled`, so anywhere else the
+     * subscription would drive state the render can never consume.
      */
-    if (!isHomeBlog) {
+    if (!hasSky) {
       return;
     }
 
-    /* The house scroll pub/sub, same as BackToTop and BackButtonIcon */
+    /*
+     * The index rooms keep their wordmark, so their band needs no
+     * handover: the header goes solid on the first scroll, at the landing
+     * header's rest threshold. The house scroll pub/sub, same as BackToTop
+     * and BackButtonIcon; it reports nothing until a scroll, so the state
+     * is synced by hand for the route just arrived at.
+     */
     const scrollManager = new ScrollManager();
     scrollManager.subscribe({
       id: "blog-header",
@@ -172,18 +186,26 @@ const BlogHeader = ({
         setScrolled(scrollY > SCROLLED_AT);
       },
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- see above
+    setScrolled(window.scrollY > SCROLLED_AT);
 
     return () => {
       scrollManager.destroy();
     };
-  }, [headerHeight, isHomeBlog]);
+  }, [hasSky, headerHeight, isHomeBlog, pathname]);
 
   /*
-   * Transparent only over the list page masthead, whose band extends under
-   * the header; other blog pages have arbitrary covers behind the top edge,
-   * so they keep the readable blurred backdrop at rest too.
+   * Transparent only over a sky that extends under the header: the list
+   * page masthead and the index rooms' headpiece band. Post pages have
+   * arbitrary covers behind the top edge, so they keep the readable
+   * blurred backdrop at rest too.
    */
-  const transparent = isHomeBlog && !scrolled;
+  const transparent = hasSky && !scrolled;
+
+  /* Over the feed masthead the big Ljóss already stands right below, so
+     the wordmark and byline hold back until the sky scrolls away; the
+     rooms' band prints no wordmark of its own, so there they stay */
+  const holdBack = isHomeBlog && transparent;
 
   const handleLogoClick = () => {
     if (isHomeBlog) {
@@ -224,15 +246,13 @@ const BlogHeader = ({
     >
       <div className="flex-center size-full flex-wrap">
         <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Over the masthead the big Ljóss already stands right below,
-              so the wordmark and byline hold back until the sky scrolls
-              away; inert keeps the invisible pair out of the tab order */}
+          {/* inert keeps the held-back pair out of the tab order */}
           <div
             className={classNames(
               "header__left flex h-full items-center gap-2 transition-opacity duration-300",
-              transparent ? "pointer-events-none opacity-0" : "opacity-100"
+              holdBack ? "pointer-events-none opacity-0" : "opacity-100"
             )}
-            inert={transparent || undefined}
+            inert={holdBack || undefined}
           >
             <button
               type="button"

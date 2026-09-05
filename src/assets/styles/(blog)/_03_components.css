@@ -213,8 +213,10 @@
    * Catalogue Headpiece: the index pages' shared chapter head, the
    * masthead's typographic system over its sky faded to paper. The head
    * is the room wrapper's first row, so its text keeps the column's left
-   * edge at every width; the tint is a full-bleed pseudo behind that row,
-   * flush with the header above, paper reached at the row's bottom edge.
+   * edge at every width; the tint is a full-bleed pseudo behind that row
+   * that reaches up under the header, which stays transparent while the
+   * page rests at the top (BlogHeader knows the rooms by route and goes
+   * solid on the first scroll), paper reached at the row's bottom edge.
    * The feed keeps its own full masthead.
    */
   .catalogue-headpiece {
@@ -240,7 +242,10 @@
   .catalogue-headpiece::before {
     content: "";
     position: absolute;
-    inset-block: 0;
+    /* The sky starts at the viewport's top edge, behind the transparent
+       header, so the tint runs unbroken into the head */
+    top: calc(-1 * var(--header-height));
+    bottom: 0;
     left: 50%;
     width: 100vw;
     transform: translateX(-50%);
