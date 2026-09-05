@@ -1148,6 +1148,66 @@
       --extract-mark-left: 0.9rem;
     }
   }
+
+  /*
+   * Embed wells: a frame paints nothing of its own until the provider's
+   * document arrives, so the well behind it shows through the wait and is
+   * covered the moment that panel lands. Nothing listens for the load and
+   * nothing is torn down after it, which is what settles the slow and
+   * blocked cases without a second code path: a frame that never resolves
+   * leaves the well standing in its place.
+   *
+   * The well rides --extract-inset, so it aligns with the extract it usually
+   * hangs under and goes flush at the 480px breakpoint above, where that
+   * token becomes 0px.
+   */
+  .spotify-embed,
+  .youtube-embed {
+    position: relative;
+    margin: 2rem var(--extract-inset);
+    border: 1px solid var(--hairline-soft);
+    /* Near-square corners, as an engraved plate takes */
+    border-radius: 2px;
+    background-color: var(--surface);
+  }
+
+  /* The well has to trace the frame it holds, or the tenant's own corners cut
+     wedges of well out of the picture. Spotify rounds its player panel to
+     0.75rem and paints nothing outside that curve, so this well follows it
+     rather than keeping the plate corner. A Youtube frame fills square to its
+     edges and needs no such exception. */
+  .spotify-embed {
+    border-radius: 0.75rem;
+  }
+
+  /* The waiting mark. Generated content rather than a span keeps it out of a
+     text selection, so it can never be dragged into a copied quote. It names
+     the well itself, which is a different thing from the frame's own title:
+     the announcement stays after the frame resolves, standing for the
+     container the player sits in. The ink is the plain surface role rather
+     than the extract's shelf-tinted cite, because the well is a neutral
+     holder for someone else's panel and not part of the category's voice. */
+  .spotify-embed::after,
+  .youtube-embed::after {
+    @apply kicker;
+
+    content: attr(data-waiting);
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    color: var(--on-surface);
+  }
+
+  /* The frame paints over the mark on z-index alone, both being positioned.
+     The Youtube template carries its own inline position: absolute, which
+     outranks the relative here and is meant to win; Spotify's frame is
+     static and takes the relative. */
+  .spotify-embed iframe,
+  .youtube-embed iframe {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 /* The name speaks Fraunces. The two sizes need different weights to read

@@ -53,7 +53,6 @@ class Provider {
     const template = this.getTemplate();
 
     return Mustache.render(template, {
-      embedData: "",
       id: this.getEmbedId(embedLink),
       link: embedLink,
       options: this.options,

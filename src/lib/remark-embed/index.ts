@@ -1,6 +1,4 @@
-import fs from "fs";
 import { Node, Root } from "hast";
-import path from "path";
 import { visit } from "unist-util-visit";
 
 type ProviderOptions = {
