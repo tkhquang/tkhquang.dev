@@ -170,7 +170,7 @@
 
     /* The select reads as the quiet "Jump to" kicker control */
     [role="combobox"] {
-      @apply kicker gap-1 px-1 py-2;
+      @apply kicker cursor-pointer gap-1 px-1 py-2;
     }
   }
 
