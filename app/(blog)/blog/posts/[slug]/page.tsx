@@ -210,7 +210,17 @@ export default async function Post({
         <TableOfContent headings={headings} />
 
         <section className="post-row__article container mx-auto max-w-(--breakpoint-md)!">
-          <article className="article">
+          {/* Every extract in the post mixes its rules and its field from
+              --shelf, so the article names the category's shelf hue once
+              here; without it every sheet would fall back to lapis. */}
+          <article
+            className="article"
+            style={
+              {
+                "--shelf": `var(--shelf-${category.slug}, var(--primary))`,
+              } as React.CSSProperties
+            }
+          >
             <div className="article__path-info">
               <PathInfo<MarkdownCategory, "slug">
                 item={category}

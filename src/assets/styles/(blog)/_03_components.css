@@ -146,6 +146,51 @@
        deepens it or it dies on paper. For serial marks and tailpieces. */
     --gilt-ink: hsl(42deg 60% 70%);
 
+    /* The day masthead's two hues, named so the extract's light field and
+       its far-corner wash can reach them by token instead of by literal */
+    --dawn-cream: hsl(44deg 55% 93%);
+    --dawn-zenith: hsl(219deg 48% 88%);
+
+    /* The Scotch Sheet's inks. The extract is a sheet held between paired
+       Scotch rules; these are the theme's half of it. The shelf-dependent
+       inks are mixed on .typography, where --shelf is in scope, and take
+       their ratio from a token so the theme still owns it. */
+
+    /* how far the shelf ink leans toward the body ink for the thick rule */
+    --extract-ink-deepen: 0%;
+
+    /* how far the cite lifts toward on-surface: by night the cite sits on
+       the shelf-tinted sheet, a field of the shelf's own hue, so the shelf
+       ink alone would sink into it; three tenths of on-surface holds AA on
+       the violet, lapis and rose sheets alike */
+    --extract-cite-lift: 30%;
+
+    /* the quote ink: by night the sheet is 1.5x the paper, and on-background
+       on a field that bright caps the quote near 6.4; on-surface, the ink
+       the raised plates already read in, clears 7 on every shelf. By day
+       the ink is the body ink as before */
+    --extract-quote-ink: var(--on-surface);
+    --extract-gilt: var(--gilt-ink);
+    --extract-mark: var(--gilt-ink);
+
+    /* the field between the rules: by night the sheet is the shelf's own
+       hue laid opaque over the page, mixed on .typography where --shelf is
+       in scope (declared here, var(--shelf) would resolve on html, where
+       no shelf is set, and every sheet would come out lapis). The theme
+       owns the base and the ratio; by day the ratio is 0 and the base is
+       the cream as before. Eighteen hundredths keeps the sheet at 1.4x
+       the paper and the on-surface quote ink above 7 on every shelf, the
+       lapis one included */
+    --extract-wash-shelf: 18%;
+    --extract-wash: var(--background);
+
+    /* the lamp stays a breath at the mark's corner, so gilt and shelf tint
+       do not fight; the aurora wisps are folded into the tint itself */
+    --extract-lamp: color-mix(in srgb, var(--gilt-ink) 12%, transparent);
+    --extract-lamp-mid: color-mix(in srgb, var(--gilt-ink) 4%, transparent);
+    --extract-violet: transparent;
+    --extract-blue: transparent;
+
     /* Star ink at page scope, so tailpieces outside the chart components
        stop falling back to primary: near-white starlight by night, the
        lapis primary by day */
@@ -190,6 +235,35 @@
       --diagram-gilt: hsl(40deg 72% 31%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
+
+      /* On paper the shelf tint is too pale to carry a rule: deepen it, and
+         lean the gilt toward ink so the thin rule reads as printed, not sunk.
+         The field takes the dawn cream of the day masthead, warmed with a
+         tenth of gilt so it reads as a sheet, with a breath of gilt at the
+         lamp corner where the mark sits. The cite is the deepened ink as is. */
+      --extract-ink-deepen: 25%;
+      --extract-cite-lift: 0%;
+      --extract-wash-shelf: 0%;
+      --extract-quote-ink: var(--on-background);
+      --extract-gilt: color-mix(
+        in srgb,
+        var(--gilt-ink) 78%,
+        var(--on-background)
+      );
+      --extract-mark: var(--gilt-ink);
+      --extract-wash: color-mix(
+        in srgb,
+        var(--dawn-cream, hsl(44deg 55% 93%)) 90%,
+        var(--gilt-ink)
+      );
+      --extract-lamp: hsl(46deg 90% 97% / 60%);
+      --extract-lamp-mid: hsl(46deg 90% 97% / 20%);
+      --extract-violet: transparent;
+      --extract-blue: color-mix(
+        in srgb,
+        var(--dawn-zenith, hsl(219deg 48% 88%)) 28%,
+        transparent
+      );
     }
   }
 
@@ -713,6 +787,341 @@
   .chapter-close__row-date {
     white-space: nowrap;
     flex: 0 0 auto;
+  }
+
+  /* =====================================================================
+     THE SCOTCH SHEET. The extract is a sheet held between paired Scotch
+     rules: a thick rule in the shelf ink over a thin rule in gilt at the
+     head, mirrored at the foot, run the extract's measure. By day the
+     sheet is dawn cream warmed with gilt, lit a breath at the lamp corner;
+     by night it is the shelf's own sheet, the shelf hue laid opaque over
+     the page (violet for The Inner Crisis, lapis for Technical, rose for
+     Gaming), with a breath of gilt at the lamp corner. A lyric carries a
+     gilt Fraunces opening mark seated on the top rule band with paper
+     punched behind it, so the glyph is furniture, not a shove. The cite
+     is a mono kicker pulled right, reached by a gilt leader and led by
+     the tailpiece star. A dialogue speaker is the running head ON the top
+     rule, set exactly as written.
+     ===================================================================== */
+  .typography {
+    --extract-ink: color-mix(
+      in srgb,
+      var(--shelf, var(--primary)),
+      var(--on-background) var(--extract-ink-deepen)
+    );
+    --extract-cite: color-mix(
+      in srgb,
+      var(--extract-ink),
+      var(--on-surface) var(--extract-cite-lift)
+    );
+    --extract-field: color-mix(
+      in srgb,
+      var(--shelf, var(--primary)) var(--extract-wash-shelf),
+      var(--extract-wash)
+    );
+    --extract-paper: var(--background);
+    --extract-thick: 3px;
+    --extract-gap: 2px;
+    --extract-thin: 1px;
+    --extract-rule: calc(
+      var(--extract-thick) + var(--extract-gap) + var(--extract-thin)
+    );
+    --extract-inset: 1.5rem;
+    --extract-pad: 1rem;
+    --extract-head-stub: 1rem;
+    --extract-head-gap: 0.75rem;
+    --extract-mark-size: 4.4rem;
+    --extract-mark-left: 1.1rem;
+  }
+
+  /* The extract body: a Scotch rule above and, mirrored, below, and the
+     field held between them. Seven layers on one element: the lamp, the
+     far corner, the field, then the four rules. */
+  .typography blockquote {
+    /* The inline chip rule in .code-container is
+       `background-color: var(--code) !important`, so a chip takes the
+       field only by way of a blockquote-scoped --code; a background-color
+       of the chip's own would never land. */
+    --code: color-mix(in srgb, var(--on-background) 9%, transparent);
+    position: relative;
+    display: block;
+    margin: 2rem var(--extract-inset);
+    padding: 1.25rem var(--extract-pad) 1.1rem;
+    background-color: transparent;
+    border: 0;
+    quotes: none;
+    background-image:
+      radial-gradient(
+        ellipse 70% 150% at 4% 0%,
+        var(--extract-lamp) 0%,
+        var(--extract-lamp-mid) 24%,
+        var(--extract-violet) 62%,
+        transparent 90%
+      ),
+      radial-gradient(
+        ellipse 50% 90% at 100% 100%,
+        var(--extract-blue) 0%,
+        transparent 72%
+      ),
+      linear-gradient(var(--extract-field), var(--extract-field)),
+      linear-gradient(var(--extract-ink), var(--extract-ink)),
+      linear-gradient(var(--extract-gilt), var(--extract-gilt)),
+      linear-gradient(var(--extract-gilt), var(--extract-gilt)),
+      linear-gradient(var(--extract-ink), var(--extract-ink));
+    background-repeat: no-repeat;
+    background-size:
+      100% calc(100% - 2 * var(--extract-rule)),
+      100% calc(100% - 2 * var(--extract-rule)),
+      100% calc(100% - 2 * var(--extract-rule)),
+      100% var(--extract-thick),
+      100% var(--extract-thin),
+      100% var(--extract-thin),
+      100% var(--extract-thick);
+    background-position:
+      left top var(--extract-rule),
+      left top var(--extract-rule),
+      left top var(--extract-rule),
+      left top,
+      left top calc(var(--extract-thick) + var(--extract-gap)),
+      left bottom calc(var(--extract-thick) + var(--extract-gap)),
+      left bottom;
+  }
+
+  .typography blockquote > p {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size-adjust: 0.525;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.1em;
+    line-height: 1.8;
+    color: var(--extract-quote-ink);
+    text-wrap: pretty;
+  }
+
+  .typography blockquote > p + p:not(:has(> cite)) {
+    margin-top: 0.75em;
+  }
+
+  /* Emphasis inside the italic voice is set roman, the print convention */
+  .typography blockquote > p em {
+    font-style: normal;
+  }
+
+  .typography blockquote > p strong {
+    font-weight: 700;
+  }
+
+  .typography blockquote > p::before,
+  .typography blockquote > p::after {
+    content: none;
+  }
+
+  /* Inline code chips stay upright and sit on the field, not the paper */
+  .typography blockquote span[data-rehype-pretty-code-figure] > code {
+    font-style: normal;
+    font-size: 0.8em;
+    vertical-align: 0.05em;
+  }
+
+  /* The opening mark: gilt Fraunces, seated on the top rule band with the
+     paper punched behind it. The box is exactly the band; the glyph
+     overflows it, and the line-height seats the ink on the band. A lyric
+     only, which the bare DOM names by the cite in its last paragraph.
+     Dialogue and notes carry no cite, so they stay glyph-free. */
+  .typography blockquote:has(> p > cite)::before {
+    content: "\201C";
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: var(--extract-mark-left);
+    height: var(--extract-rule);
+    padding: 0 0.14em;
+    background: var(--extract-paper);
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 144;
+    font-weight: 600;
+    font-style: normal;
+    font-size: var(--extract-mark-size);
+    line-height: var(--extract-seat, 0.585em);
+    color: var(--extract-mark);
+    pointer-events: none;
+  }
+
+  /* The cite: a mono kicker pulled right, reached by a gilt leader and led
+     by the tailpiece star. The cite owns the star, so star and name wrap as
+     one unit; the leader keeps a 2rem stub and absorbs the slack. It has
+     its own ink, --extract-cite, because by night it sits in the far corner
+     of the pool where the aurora blue is brightest. */
+  .typography blockquote > p:has(> cite) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 0.9em;
+    margin-top: 0.85em;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    font-size-adjust: none;
+    color: var(--extract-cite);
+  }
+
+  .typography blockquote > p:has(> cite)::before {
+    content: "";
+    flex: 1 1 auto;
+    min-width: 2rem;
+    height: 1px;
+    margin-top: calc(0.625rem - 0.5px);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--extract-gilt) 30%,
+      var(--extract-gilt)
+    );
+  }
+
+  .typography blockquote cite {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.6em;
+    min-width: 0;
+    font-style: normal;
+    text-align: left;
+  }
+
+  .typography blockquote cite::before {
+    /* the asterism star: dot and ring, gilt, drawn in two rings */
+    content: "";
+    flex: none;
+    width: 9px;
+    height: 9px;
+    margin-top: calc(0.625rem - 4.5px);
+    background-image: radial-gradient(
+      circle at center,
+      var(--extract-gilt) 0 1.2px,
+      transparent 1.9px 3px,
+      var(--extract-gilt) 3.4px 3.9px,
+      transparent 4.5px
+    );
+  }
+
+  .typography blockquote cite a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--extract-gilt) 70%,
+      transparent
+    );
+    text-underline-offset: 4px;
+  }
+
+  .typography blockquote cite a:hover {
+    text-decoration-color: var(--extract-gilt);
+  }
+
+  /* Dialogue: the speaker label becomes the running head ON the top rule,
+     set exactly as the author wrote it. It carries the Scotch rule itself,
+     so the extract beneath keeps only its tail rule, and its text is inset
+     to the label's left edge.
+     The selector reads the bare DOM: a paragraph whose only element child
+     is a strong, followed by a blockquote. CSS cannot tell that from a
+     bold-only lead-in paragraph, so a rehype class hook (extract--dialogue)
+     would be the way to stop matching one, should a post ever carry it. */
+  .typography p:has(> strong:only-child):has(+ blockquote) {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--extract-head-gap);
+    margin: 2rem var(--extract-inset) 0;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--extract-ink);
+  }
+
+  .typography p:has(> strong:only-child):has(+ blockquote) > strong {
+    font-weight: 600;
+  }
+
+  .typography p:has(> strong:only-child):has(+ blockquote)::before,
+  .typography p:has(> strong:only-child):has(+ blockquote)::after {
+    content: "";
+    height: var(--extract-rule);
+    background-image:
+      linear-gradient(var(--extract-ink), var(--extract-ink)),
+      linear-gradient(var(--extract-gilt), var(--extract-gilt));
+    background-repeat: no-repeat;
+    background-size:
+      100% var(--extract-thick),
+      100% var(--extract-thin);
+    background-position:
+      left top,
+      left bottom;
+  }
+
+  .typography p:has(> strong:only-child):has(+ blockquote)::before {
+    flex: 0 0 var(--extract-head-stub);
+  }
+
+  .typography p:has(> strong:only-child):has(+ blockquote)::after {
+    flex: 1 1 auto;
+  }
+
+  /* The body tucks up under the head's rule so the field starts on the rule */
+  .typography p:has(> strong:only-child) + blockquote {
+    margin-top: calc(var(--extract-rule) / 2 - 0.5rem);
+    padding-top: calc(1rem + 0.5rem - var(--extract-rule) / 2);
+    padding-inline: calc(var(--extract-head-stub) + var(--extract-head-gap));
+    background-image:
+      radial-gradient(
+        ellipse 70% 150% at 4% 0%,
+        var(--extract-lamp) 0%,
+        var(--extract-lamp-mid) 24%,
+        var(--extract-violet) 62%,
+        transparent 90%
+      ),
+      radial-gradient(
+        ellipse 50% 90% at 100% 100%,
+        var(--extract-blue) 0%,
+        transparent 72%
+      ),
+      linear-gradient(var(--extract-field), var(--extract-field)),
+      linear-gradient(var(--extract-gilt), var(--extract-gilt)),
+      linear-gradient(var(--extract-ink), var(--extract-ink));
+    background-size:
+      100% calc(100% - var(--extract-rule)),
+      100% calc(100% - var(--extract-rule)),
+      100% calc(100% - var(--extract-rule)),
+      100% var(--extract-thin),
+      100% var(--extract-thick);
+    background-position:
+      left top,
+      left top,
+      left top,
+      left bottom calc(var(--extract-thick) + var(--extract-gap)),
+      left bottom;
+  }
+
+  .typography p:has(> strong:only-child) + blockquote > p {
+    font-size: 1em;
+    line-height: 1.75;
+  }
+
+  /* Narrow column: the rules run the full measure, the mark sits smaller */
+  @media (max-width: 480px) {
+    .typography {
+      --extract-inset: 0px;
+      --extract-mark-size: 3.8rem;
+      --extract-mark-left: 0.9rem;
+    }
   }
 }
 
