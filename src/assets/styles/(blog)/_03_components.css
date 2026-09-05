@@ -156,35 +156,35 @@
        inks are mixed on .typography, where --shelf is in scope, and take
        their ratio from a token so the theme still owns it. */
 
-    /* how far the shelf ink leans toward the body ink for the thick rule */
+    /* How far the shelf ink leans toward the body ink for the thick rule */
     --extract-ink-deepen: 0%;
 
-    /* how far the cite lifts toward on-surface: by night the cite sits on
+    /* How far the cite lifts toward on-surface: by night the cite sits on
        the shelf-tinted sheet, a field of the shelf's own hue, so the shelf
        ink alone would sink into it; three tenths of on-surface holds AA on
        the violet, lapis and rose sheets alike */
     --extract-cite-lift: 30%;
 
-    /* the quote ink: by night the sheet is 1.5x the paper, and on-background
+    /* The quote ink: by night the sheet is 1.5x the paper, and on-background
        on a field that bright caps the quote near 6.4; on-surface, the ink
        the raised plates already read in, clears 7 on every shelf. By day
-       the ink is the body ink as before */
+       the ink is the body ink */
     --extract-quote-ink: var(--on-surface);
     --extract-gilt: var(--gilt-ink);
     --extract-mark: var(--gilt-ink);
 
-    /* the field between the rules: by night the sheet is the shelf's own
+    /* The field between the rules: by night the sheet is the shelf's own
        hue laid opaque over the page, mixed on .typography where --shelf is
        in scope (declared here, var(--shelf) would resolve on html, where
        no shelf is set, and every sheet would come out lapis). The theme
        owns the base and the ratio; by day the ratio is 0 and the base is
-       the cream as before. Eighteen hundredths keeps the sheet at 1.4x
-       the paper and the on-surface quote ink above 7 on every shelf, the
-       lapis one included */
+       the cream. Eighteen hundredths keeps the sheet at 1.4x the paper
+       and the on-surface quote ink above 7 on every shelf, the lapis
+       one included */
     --extract-wash-shelf: 18%;
     --extract-wash: var(--background);
 
-    /* the lamp stays a breath at the mark's corner, so gilt and shelf tint
+    /* The lamp stays a breath at the mark's corner, so gilt and shelf tint
        do not fight; the aurora wisps are folded into the tint itself */
     --extract-lamp: color-mix(in srgb, var(--gilt-ink) 12%, transparent);
     --extract-lamp-mid: color-mix(in srgb, var(--gilt-ink) 4%, transparent);
@@ -789,20 +789,20 @@
     flex: 0 0 auto;
   }
 
-  /* =====================================================================
-     THE SCOTCH SHEET. The extract is a sheet held between paired Scotch
-     rules: a thick rule in the shelf ink over a thin rule in gilt at the
-     head, mirrored at the foot, run the extract's measure. By day the
-     sheet is dawn cream warmed with gilt, lit a breath at the lamp corner;
-     by night it is the shelf's own sheet, the shelf hue laid opaque over
-     the page (violet for The Inner Crisis, lapis for Technical, rose for
-     Gaming), with a breath of gilt at the lamp corner. A lyric carries a
-     gilt Fraunces opening mark seated on the top rule band with paper
-     punched behind it, so the glyph is furniture, not a shove. The cite
-     is a mono kicker pulled right, reached by a gilt leader and led by
-     the tailpiece star. A dialogue speaker is the running head ON the top
-     rule, set exactly as written.
-     ===================================================================== */
+  /*
+   * The Scotch Sheet: the extract is a sheet held between paired Scotch
+   * rules, a thick rule in the shelf ink over a thin rule in gilt at the
+   * head, mirrored at the foot, run the extract's measure. By day the
+   * sheet is dawn cream warmed with gilt, lit a breath at the lamp corner;
+   * by night it is the shelf's own sheet, the shelf hue laid opaque over
+   * the page (violet for The Inner Crisis, lapis for Technical, rose for
+   * Gaming), with a breath of gilt at the lamp corner. A lyric carries a
+   * gilt Fraunces opening mark seated on the top rule band with paper
+   * punched behind it, so the glyph is furniture, not a shove. The cite
+   * is a mono kicker pulled right, reached by a gilt leader and led by
+   * the tailpiece star. A dialogue speaker is the running head ON the top
+   * rule, set exactly as written.
+   */
   .typography {
     --extract-ink: color-mix(
       in srgb,
@@ -820,6 +820,10 @@
       var(--extract-wash)
     );
     --extract-paper: var(--background);
+
+    /* A Scotch rule is a thick and a thin with the page showing between
+       them, so the band is only meaningful as the sum: retune any of the
+       three and every layer that measures off --extract-rule follows. */
     --extract-thick: 3px;
     --extract-gap: 2px;
     --extract-thin: 1px;
@@ -850,6 +854,13 @@
     background-color: transparent;
     border: 0;
     quotes: none;
+
+    /* Backgrounds rather than a border pair: a border edge paints one solid
+       band and cannot leave the gap the page shows through, and that break
+       is what separates a Scotch rule from a double border. The field has
+       to reach under both ends as well, which a border cannot do at all.
+       The cost is that image, size and position are three lists held in one
+       order, so a layer only moves if all three move with it. */
     background-image:
       radial-gradient(
         ellipse 70% 150% at 4% 0%,
@@ -926,9 +937,14 @@
 
   /* The opening mark: gilt Fraunces, seated on the top rule band with the
      paper punched behind it. The box is exactly the band; the glyph
-     overflows it, and the line-height seats the ink on the band. A lyric
-     only, which the bare DOM names by the cite in its last paragraph.
-     Dialogue and notes carry no cite, so they stay glyph-free. */
+     overflows it, and the line-height seats the ink on the band. That seat
+     is tuned to Fraunces variable at opsz 144, so a face that does not
+     resolve to it floats above the band or sinks under it, and
+     --extract-seat is there to re-seat the glyph without disturbing the
+     band itself. The punch carries the page ground so the rules break
+     around the glyph instead of striking through it. A lyric only, which
+     the bare DOM names by the cite in its last paragraph. Dialogue and
+     notes carry no cite, so they stay glyph-free. */
   .typography blockquote:has(> p > cite)::before {
     content: "\201C";
     position: absolute;
@@ -970,6 +986,11 @@
     color: var(--extract-cite);
   }
 
+  /* Leader and star are flex items, so they never sit on the text baseline
+     and have to be walked down to the first line's middle by hand. Aligning
+     to flex-start rather than center is what keeps them on that line when a
+     long cite wraps; the leader's floor and the cite's min-width then settle
+     that the name is what wraps, not the leader that collapses. */
   .typography blockquote > p:has(> cite)::before {
     content: "";
     flex: 1 1 auto;
@@ -994,7 +1015,7 @@
   }
 
   .typography blockquote cite::before {
-    /* the asterism star: dot and ring, gilt, drawn in two rings */
+    /* The asterism star: dot and ring, gilt, drawn in two rings */
     content: "";
     flex: none;
     width: 9px;
@@ -1075,7 +1096,11 @@
     flex: 1 1 auto;
   }
 
-  /* The body tucks up under the head's rule so the field starts on the rule */
+  /* The head owns the top band, so this sheet keeps only its foot and tucks
+     up under the head's rule. Both offsets are expressed against
+     --extract-rule rather than the constants they resolve to so that the
+     halves cancel: retuning the rule moves the seam and leaves the first
+     line exactly where it was. */
   .typography p:has(> strong:only-child) + blockquote {
     margin-top: calc(var(--extract-rule) / 2 - 0.5rem);
     padding-top: calc(1rem + 0.5rem - var(--extract-rule) / 2);
