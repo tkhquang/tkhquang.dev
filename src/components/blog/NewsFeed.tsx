@@ -3,22 +3,20 @@ import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
 import FeedList from "@/components/blog/FeedList";
 import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
-import React from "react";
 
-const NewsFeed = <T,>({
-  item,
+const NewsFeed = ({
   posts,
   totalPages,
   headpiece,
 }: {
   posts: MarkdownPost[];
-  item?: T;
   totalPages?: number;
   /* Filtered pages open with the catalogue headpiece named after their
-     subject; room and stat come from the route. The unfiltered feed
-     passes none and is headlined by the masthead instead. */
+     subject; room, title and stat come from the route. The unfiltered
+     feed passes none and is headlined by the masthead instead. */
   headpiece?: {
     room: string;
+    title: string;
     stat: string;
     hue?: string;
     hashed?: boolean;
@@ -40,7 +38,7 @@ const NewsFeed = <T,>({
       {headpiece && (
         <CatalogueHeadpiece
           room={headpiece.room}
-          title={(item as { title?: string } | undefined)?.title ?? ""}
+          title={headpiece.title}
           stat={headpiece.stat}
           hue={headpiece.hue}
           hashed={headpiece.hashed}

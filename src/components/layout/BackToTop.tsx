@@ -1,6 +1,6 @@
 "use client";
 
-import { ScrollManager } from "@/utils/dom";
+import { prefersReducedMotion, ScrollManager } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
@@ -43,11 +43,8 @@ const BackToTop = ({ className, ...props }: React.ComponentProps<"button">) => {
   );
 
   const scrollToTop = () => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
     window.scrollTo({
-      behavior: prefersReducedMotion ? "auto" : "smooth",
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
       top: 0,
     });
   };

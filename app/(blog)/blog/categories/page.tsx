@@ -39,7 +39,7 @@ export default async function CategoriesPage() {
       groupedPostsBySlug={groupedPostsByCategorySlug}
       /* Shelf ribbons, and every shelf open on arrival: three closed
          hairline rows in a blank column read as an empty page */
-      getItemHue={(slug) => `var(--shelf-${slug})`}
+      getItemHue={(slug) => `var(--shelf-${slug}, var(--primary))`}
       defaultOpen={categories.map((category) => category.slug)}
     />
   );

@@ -23,6 +23,15 @@ export const remToPx = (rem: number, rootFontSize?: number): number => {
   return rem * computedRootFontSize;
 };
 
+/**
+ * Whether the reader has asked for reduced motion. Read at call time, so a
+ * preference flipped mid-session takes effect on the next animation.
+ *
+ * @returns {boolean} True when `prefers-reduced-motion: reduce` matches.
+ */
+export const prefersReducedMotion = (): boolean =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 interface ScrollManagerCallback {
   scrollY: number;
   scrollProgress: number;

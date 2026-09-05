@@ -146,7 +146,6 @@ export default function Comments({ className, configs }: CommentsProps) {
                       shadowObserverRef.current?.disconnect(); // Stop observing once found
 
                       iframeRef.current = iframe;
-                      threadGreeted = false;
 
                       // Not `contentDocument.readyState`: a fresh iframe still
                       // holds the same-origin about:blank document, so it reads

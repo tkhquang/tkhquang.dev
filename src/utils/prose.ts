@@ -51,7 +51,7 @@ export function getProseStats(content: string): {
  * hand-press convention where a page's foot printed the first word of the
  * next page to carry the reader across the turn.
  */
-export function getOpeningWords(content: string, count = 8): string {
+export function getOpeningWords(content: string, count: number): string {
   const lines = stripBlocks(content).split("\n");
 
   for (const line of lines) {

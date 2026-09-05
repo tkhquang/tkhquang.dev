@@ -235,9 +235,17 @@
     outline: none;
   }
 
+  /* The full view's stage fills the dialog, so its frame is drawn inside
+     the edge; at the ring rule's outer offset it would fall off the
+     viewport. The attribute in the selector ties the ring rule's
+     specificity, so source order decides. */
+  .full-view__stage[tabindex]:focus-visible {
+    outline-offset: -4px;
+    box-shadow: inset 0 0 0 1px var(--cartouche-inner);
+  }
+
   /* The Threshold Lamp: a compact plate at the header's left edge,
-     revealed by opacity alone; its own transition survives the ring's
-     transition: none above because this rule is more specific */
+     revealed by opacity alone */
   .skip-plate {
     position: fixed;
     top: calc(var(--header-height) / 2);
@@ -255,6 +263,10 @@
     transition: opacity 200ms;
   }
 
+  /* Restates the transition: while focused, the ring rule's a:focus-visible
+     (0,1,1) outranks .skip-plate (0,1,0) and its transition: none would cut
+     the fade-in; this selector (0,2,0) wins. The fade-out on blur runs from
+     the base rule once the ring rule stops matching. */
   .skip-plate:focus-visible {
     opacity: 1;
     pointer-events: auto;
@@ -265,6 +277,8 @@
    * Running heads: the colophon bar's underline-fill grammar one level
    * up. The tint is the primary ink on both header states, transparent
    * sky and blurred band alike; only the text colour follows the state.
+   * The fill keys on aria-current's presence: the head is current as the
+   * page itself or as the section a post, shelf or tag belongs to.
    * Overrides layer, or the Link's utility classes out-cascade the
    * fill's transition, the active opacity and the kicker's line box.
    */
@@ -284,26 +298,39 @@
   }
 
   .blog-nav__link:hover,
-  .blog-nav__link[aria-current="page"] {
+  .blog-nav__link[aria-current] {
     background-size: 100% 45%;
   }
 
-  .blog-nav__link[aria-current="page"] {
+  .blog-nav__link[aria-current] {
     opacity: 1;
   }
 
   /* Over the solid band the active head takes the primary ink; over the
      sky it stays in the band's own ink */
-  .header__background-transparent--blog .blog-nav__link[aria-current="page"] {
+  .header__background-transparent--blog .blog-nav__link[aria-current] {
     color: var(--primary);
   }
 
-  /* The catalogue headpiece's kickers sit on the demo's 1.5 line box;
-     the kicker utility's text-xs line box would otherwise win from the
-     utilities layer and shave 4px off the band */
+  /* The catalogue headpiece's kickers sit on a 1.5 line box; the kicker
+     utility's text-xs line box would otherwise win from the utilities
+     layer and shave 4px off the band */
   .catalogue-headpiece__room,
   .catalogue-headpiece__stat {
     line-height: 1.5;
+  }
+
+  /* The same precedence, on two more kickers: the serial plate's head
+     steps down to its numerals' 0.7rem, and the rail's serial head keeps
+     full ink so it holds against the rail's idle dim; the kicker utility's
+     text-xs and 85 percent ink would otherwise win from the utilities
+     layer */
+  .series-plate__head .kicker {
+    font-size: 0.7rem;
+  }
+
+  .post-aside__serial-head {
+    opacity: 1;
   }
 
   /* A soft two-layer shadow for the solid header, in place of the heavier
@@ -329,6 +356,8 @@
     border: 1px solid var(--hairline-soft);
     background: var(--plate-ground);
     padding: 8px;
+    overflow: auto;
+    white-space: normal;
   }
 
   /* Centered, and never wider than the column: charts are restructured
@@ -423,8 +452,7 @@
     stroke: var(--on-surface) !important;
   }
 
-  .mermaid svg .messageText,
-  .mermaid svg .sequenceNumber {
+  .mermaid svg .messageText {
     fill: var(--on-surface) !important;
   }
 
@@ -455,8 +483,8 @@
 
   /* Autonumber: mermaid keeps the marker disc black by attribute and the
      numeral in an attribute sans face, so by day the digits vanished into
-     their own disc. The demo's lapis ring in both skies instead, the disc
-     cut from the plate ground. */
+     their own disc. A lapis ring in both skies instead, the disc cut from
+     the plate ground. */
   .mermaid svg #sequencenumber circle {
     fill: var(--plate-ground) !important;
     stroke: var(--diagram-lapis) !important;
@@ -495,9 +523,9 @@
   }
 
   /* Sequence kit: dashed lifelines, line-ink messages, a gilt slip for
-     notes (the brighter cartouche gilt over the raised card: the readable
-     gilt ink mixes to khaki on paper) and the loop panel as a card whose
-     tab reads as a tab */
+     notes (a saturated gilt literal over the raised card: both gilt tokens
+     are deep enough on paper that a 14 percent mix of either reads as
+     khaki) and the loop panel as a card whose tab reads as a tab */
   html[data-theme="light"] .mermaid svg .actor-line {
     stroke: color-mix(in srgb, var(--on-surface) 46%, transparent) !important;
     stroke-dasharray: 3 3;
@@ -526,11 +554,6 @@
     stroke: color-mix(in srgb, var(--on-surface) 46%, transparent) !important;
   }
   /* stylelint-enable selector-class-pattern */
-
-  pre.mermaid {
-    overflow: auto;
-    white-space: normal;
-  }
 
   /* Full View: the same baked svg reprinted inside the overlay. The
      fit-to-screen lives in the overlay's transform, so the 560px floor

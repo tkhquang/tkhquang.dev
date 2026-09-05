@@ -42,6 +42,12 @@ const AuroraCanvas = () => {
       return;
     }
 
+    /* Declared ahead of the loss handler below, which closes over it: the
+       early returns past the context and shader checks leave that handler
+       armed, and a binding declared after them would still be in its
+       temporal dead zone when the event fires */
+    let rafId = 0;
+
     /* Without preventDefault on the lost event the browser never fires
        restored and the sky stays dead for the session after a GPU reset */
     const onContextLost = (event: Event) => {
@@ -114,7 +120,6 @@ const AuroraCanvas = () => {
      * it is done; without the extension start() runs immediately and takes
      * the stall, since there is nothing to wait on.
      */
-    let rafId = 0;
     const disposers: Array<() => void> = [];
 
     const start = () => {

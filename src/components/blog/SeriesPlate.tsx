@@ -21,6 +21,29 @@ export const SerialStar = () => (
   </svg>
 );
 
+/* The instalment phrase, printed in roman numerals and spoken in decimal:
+   the numerals alone read as "I I I of I I I" aloud, so an sr-only copy
+   carries the spoken form. Colour and wrapping are the caller's, through
+   the span around it. */
+export const SerialInstalment = ({
+  part,
+  total,
+}: {
+  part: number;
+  total?: number;
+}) => (
+  <>
+    <span aria-hidden>
+      Instalment {toRoman(part)}
+      {total ? ` of ${toRoman(total)}` : null}
+    </span>
+    <span className="sr-only">
+      Instalment {part}
+      {total ? ` of ${total}` : null}
+    </span>
+  </>
+);
+
 interface SeriesPlateProps {
   series: string;
   parts: MarkdownPost[];
@@ -39,7 +62,7 @@ const SeriesPlate = ({ currentSlug, parts, series }: SeriesPlateProps) => {
         <span className="kicker">
           {series} ·{" "}
           <span className="series-plate__instalment">
-            Instalment {toRoman(currentIndex + 1)} of {toRoman(parts.length)}
+            <SerialInstalment part={currentIndex + 1} total={parts.length} />
           </span>
         </span>
       </div>

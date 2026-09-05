@@ -1,5 +1,6 @@
 import "./Drawer.css";
 import useForkRef from "@/hooks/useForkRef";
+import { prefersReducedMotion } from "@/utils/dom";
 import {
   Dialog,
   DialogProvider,
@@ -69,9 +70,11 @@ export type DrawerPosition = "top" | "right" | "bottom" | "left";
 /**
  * The disclosure button for a Drawer, passed through its `trigger` prop so
  * composition happens at the call site while ariakit stays inside this
- * module. `portal` floats the button per the house rule for fixed-position
- * controls: the WHOLE button ports, never just its icon, so the visible
- * control is always the focusable one.
+ * module. `portal` floats the button through a Portal so a fixed-position
+ * opener is placed against the viewport, not against an ancestor whose
+ * transform or filter would become its containing block: the WHOLE button
+ * ports, never just its icon, so the visible control is always the
+ * focusable one.
  */
 export const DrawerTrigger = ({
   portal = false,
@@ -210,7 +213,7 @@ export default function Drawer({
     const transforms = getTransformValues(position, size);
 
     /* Reduced motion: appear in place, no slide */
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       gsap.set(drawerRef.current, {
         transform: transforms.open,
         visibility: "visible",
@@ -271,7 +274,7 @@ export default function Drawer({
     const transforms = getTransformValues(position, size);
 
     /* Reduced motion: leave in place, no slide */
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       gsap.set(drawerRef.current, { transform: transforms.closed });
       if (backdropRef.current) {
         gsap.set(backdropRef.current, { opacity: 0 });

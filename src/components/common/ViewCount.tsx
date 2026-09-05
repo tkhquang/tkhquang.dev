@@ -11,8 +11,16 @@ const ViewCount = ({ pathname }: { pathname: string }) => {
   const entry = pageViews[pathname];
 
   return (
-    <span aria-label={entry ? `${entry.unique} views` : "View count pending"}>
-      {entry ? <FormattedNumber value={entry.unique} /> : "---"}
+    <span>
+      {entry ? (
+        <FormattedNumber value={entry.unique} />
+      ) : (
+        <span aria-hidden>---</span>
+      )}
+      {/* The eye icon beside the count is decorative, so the unit and the
+          pending state are spoken from here; a bare span cannot carry an
+          aria-label of its own */}
+      <span className="sr-only">{entry ? " views" : "View count pending"}</span>
     </span>
   );
 };

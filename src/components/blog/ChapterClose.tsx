@@ -84,7 +84,9 @@ const ChapterClose = ({
       {(anyPanel || seeAlso.length > 0) && (
         <section className="chapter-close__plate" aria-label="Cross-references">
           <header className="chapter-close__head">
-            <span className="kicker">Cross-references</span>
+            {/* A heading, so the panel titles below nest under the plate
+                instead of under the article's last section */}
+            <h2 className="kicker">Cross-references</h2>
             <span className="kicker opacity-55">{contextLabel}</span>
           </header>
           {anyPanel && (

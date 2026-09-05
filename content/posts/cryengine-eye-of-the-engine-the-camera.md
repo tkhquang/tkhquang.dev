@@ -66,14 +66,12 @@ graph TD
     UserInput --> ViewOrientation;
 
     subgraph "Entity/Body Orientation"
-        direction LR
         BodyOrientation["m_BaseQuat<br/>(Yaw Only)"];
         BodyIcon([fa:fa-male Character Body]);
         BodyOrientation -- "Defines" --> BodyIcon;
     end
 
     subgraph "Camera/View Orientation"
-        direction LR
         ViewOrientation["m_ViewQuat<br/>(Pitch & Yaw)"];
         ViewIcon([fa:fa-camera Camera View]);
         ViewOrientation -- "Defines" --> ViewIcon;

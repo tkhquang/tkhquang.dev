@@ -1,6 +1,9 @@
-import { SerialStar, serialDisplayTitle } from "@/components/blog/SeriesPlate";
+import {
+  SerialInstalment,
+  SerialStar,
+  serialDisplayTitle,
+} from "@/components/blog/SeriesPlate";
 import { MarkdownPost } from "@/models/markdown.types";
-import { toRoman } from "@/utils/roman";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -36,9 +39,12 @@ const PostAside = ({
               </span>
               <div className="border-theme-hairline-soft mt-3 border-y py-2.5 text-sm">
                 <span className="kicker block text-[0.65rem]">
-                  {nextInstalment.series_part
-                    ? `Instalment ${toRoman(nextInstalment.series_part)} · `
-                    : ""}
+                  {nextInstalment.series_part ? (
+                    <>
+                      <SerialInstalment part={nextInstalment.series_part} />
+                      {" · "}
+                    </>
+                  ) : null}
                   {format(nextInstalment.created_at, "MMM dd, yyyy")}
                 </span>
                 <Link

@@ -1,3 +1,4 @@
+import { isMermaidPre } from "./render";
 import { Element, ElementContent, Root } from "hast";
 import { toHtml } from "hast-util-to-html";
 import { Transformer } from "unified";
@@ -61,11 +62,6 @@ const sourceClusterTitles = (source: string): string[] => {
    Code Pro advances 0.6em per glyph. Estimates from it are exact for
    mono text. */
 const GLYPH_ADVANCE = 16 * 0.6;
-
-const isMermaidPre = (node: Element) =>
-  node.tagName === "pre" &&
-  Array.isArray(node.properties?.className) &&
-  (node.properties.className as string[]).includes("mermaid");
 
 const applyInkMap = (value: string) => {
   let out = value;
@@ -287,8 +283,10 @@ export function rehypeMermaidRestore(): Transformer<Root> {
 
 /* Passed to the render plugin.
 
-   htmlLabels false (the root key is the one the v2 renderer honors) is
-   what makes labels trustworthy: as foreignObject divs they are clipped
+   htmlLabels false, at the root and under flowchart because the v2
+   renderer reads the two separately (the root key for node labels,
+   flowchart.htmlLabels for edge labels and subgraph titles), is what
+   makes labels trustworthy: as foreignObject divs they are clipped
    boxes sized in the render browser and re-flowed by the article's
    prose CSS at view time, which cut glyphs off every node; as svg text
    the line breaks are baked into tspans and a metric mismatch can only

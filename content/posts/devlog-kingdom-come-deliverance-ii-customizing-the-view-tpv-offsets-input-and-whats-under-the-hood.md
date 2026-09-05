@@ -251,7 +251,6 @@ graph TD
     EventRouter -- "Mouse Wheel<br/>Scroll" --> Hook_Event["Hook General Event Handler"];
 
     subgraph "UI Overlay Logic (ui_overlay_hooks.cpp)"
-        direction TB
         Hook_UI --> TrackOverlayState["Update g_isOverlayActive<br/>(atomic bool)"];
         TrackOverlayState --> SwitchFPV["If Overlay Opens:<br/>Request FPV<br/>via Main Thread"];
         TrackOverlayState --> RestoreView["If Overlay Closes:<br/>Request Previous<br/>View Restoration"];
@@ -260,10 +259,9 @@ graph TD
     RestoreView ~~~ Hook_Event;
 
     subgraph "Scroll Wheel Filtering (event_hooks.cpp)"
-        direction TB
         Hook_Event --> CheckScrollCondition{"Overlay Active OR<br/>Not Holding<br/>Scroll Key?"};
         CheckScrollCondition -- Yes --> ZeroDelta["Zero Out Scroll<br/>Event's deltaValue"];
-        CheckScrollCondition -- No --> PassThruScroll;
+        CheckScrollCondition -- No --> PassThruScroll["Pass Scroll<br/>Event Through"];
         ZeroDelta --> OriginalEventHandler["Call Original Event Handler"];
         PassThruScroll --> OriginalEventHandler;
     end

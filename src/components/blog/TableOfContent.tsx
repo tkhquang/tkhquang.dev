@@ -6,6 +6,7 @@ import Drawer, {
 } from "@/components/common/Drawer";
 import { useThemeValue } from "@/store/theme";
 import { cn } from "@/utils/css";
+import { prefersReducedMotion } from "@/utils/dom";
 import { Toc, TocEntry } from "@stefanprobst/rehype-extract-toc";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { BsFillMenuButtonWideFill } from "react-icons/bs";
@@ -46,14 +47,19 @@ const flattenHeadings = (headings: Toc): TocEntry[] =>
     ...(heading.children ? flattenHeadings(heading.children) : []),
   ]);
 
-// Custom hook for managing active anchor with intersection observer
 /* The spy picks the heading nearest the header line, so a short final
    section whose heading never climbs that high can never win it. At the
-   document's very bottom the last heading takes the highlight instead. */
-const isAtDocumentBottom = () =>
-  window.innerHeight + window.scrollY >=
-  document.documentElement.scrollHeight - 2;
+   document's very bottom the last heading takes the highlight instead.
+   The range guard keeps the pin quiet while nothing can scroll: a modal's
+   scroll lock on iOS fixes the body out of flow, which collapses the
+   document's scroll range to nothing and clamps scrollY to 0, so a bare
+   bottom test would read true at any reading position. */
+const isAtDocumentBottom = () => {
+  const range = document.documentElement.scrollHeight - window.innerHeight;
+  return range > 0 && window.scrollY >= range - 2;
+};
 
+// Custom hook for managing active anchor with intersection observer
 const useActiveAnchor = ({
   headings,
   headerHeight,
@@ -188,18 +194,15 @@ const useScrollToHeading = ({ headerHeight }: UseScrollToHeadingOptions) => {
       const targetY =
         element.getBoundingClientRect().top + window.pageYOffset - headerHeight;
 
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
       window.scrollTo({
-        behavior: prefersReducedMotion ? "auto" : "smooth",
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
         top: targetY,
       });
 
       /* Keep the section in the address bar so a copied URL carries it.
          replaceState, never pushState: an added entry per click would put
          hash stops between the post and the feed, and the header logo's
-         sacred back()-based return would land on a stale hash of the same
+         back()-based return would land on a stale hash of the same
          article instead of the feed. replaceState adds nothing to walk
          through and never scrolls, so the offset above stays in charge. */
       history.replaceState(null, "", `#${heading.id}`);
@@ -318,8 +321,9 @@ const TocList = ({
    inside one: the visible control has to be the focusable one, or the real
    button ends up in a hidden container where only pointer events reach it
    and keyboard or assistive tech cannot open the drawer at all. The whole
-   button floats through a Portal, per the house rule for fixed-position
-   controls. */
+   button floats through a Portal so its fixed position is resolved
+   against the viewport, not against an ancestor whose transform or filter
+   would become its containing block. */
 const MOBILE_TRIGGER_CLASS =
   "fixed bottom-0 left-0 z-10 mb-20 ml-10 block cursor-pointer opacity-20 transition-opacity duration-300 hover:opacity-75 focus-visible:opacity-75 xl:hidden";
 
@@ -406,7 +410,6 @@ export default function TableOfContent({ headings }: { headings: Toc }) {
                 <BsFillMenuButtonWideFill className="size-8" aria-hidden />
               </DrawerTrigger>
             }
-            className="[&_.drawer\_\_content]:max-w-[calc(100%-2rem)]!"
           >
             <TocList
               headings={headings}

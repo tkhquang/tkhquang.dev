@@ -211,9 +211,18 @@ function Stage({ open, caption, children }: StageProps) {
 
   return (
     <>
+      {/* Focusable, so the arrow-key drag that use-gesture binds on its
+          target has an element to receive keydown. Ariakit seats focus on
+          the first tabbable at open, so the stage takes it and the keys
+          pan from the moment the view opens: the only way back to the
+          edges a centred zoom pushes off screen. The name doubles as the
+          hint. */}
       <div
         ref={viewportRef}
-        className="absolute inset-0 cursor-grab touch-none overflow-hidden select-none active:cursor-grabbing"
+        tabIndex={0}
+        role="group"
+        aria-label="Pan with the arrow keys"
+        className="full-view__stage absolute inset-0 cursor-grab touch-none overflow-hidden select-none active:cursor-grabbing"
         onDoubleClick={handleDoubleClick}
       >
         <div

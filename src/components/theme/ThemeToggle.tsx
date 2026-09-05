@@ -1,4 +1,5 @@
 import { ThemeMode, useThemeValue } from "@/store/theme";
+import { prefersReducedMotion } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
@@ -36,10 +37,7 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
     const target = properties[mode];
 
     /* The morph itself is the design; reduced motion just lands it at once */
-    const duration = window.matchMedia("(prefers-reduced-motion: reduce)")
-      .matches
-      ? 0
-      : 0.5;
+    const duration = prefersReducedMotion() ? 0 : 0.5;
 
     gsap.to(svgRef.current, {
       rotation: target.rotation,

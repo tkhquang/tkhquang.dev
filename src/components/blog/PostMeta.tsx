@@ -1,7 +1,6 @@
-import { SerialStar } from "@/components/blog/SeriesPlate";
+import { SerialInstalment, SerialStar } from "@/components/blog/SeriesPlate";
 import ViewCount from "@/components/common/ViewCount";
 import { MarkdownPost } from "@/models/markdown.types";
-import { toRoman } from "@/utils/roman";
 import classNames from "classnames";
 import { format, isValid } from "date-fns";
 import Link from "next/link";
@@ -84,16 +83,11 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
           <SerialStar />
           <span>{post.series}</span>
           <span aria-hidden>·</span>
-          {/* The numerals alone read as "I I I of I I I" aloud, so the
-              instalment carries its own spoken form */}
           <span className="serial-kicker__instalment">
-            <span aria-hidden>
-              Instalment {toRoman(post.series_part)} of{" "}
-              {toRoman(post.series_total)}
-            </span>
-            <span className="sr-only">
-              Instalment {post.series_part} of {post.series_total}
-            </span>
+            <SerialInstalment
+              part={post.series_part}
+              total={post.series_total}
+            />
           </span>
         </div>
       ) : null}

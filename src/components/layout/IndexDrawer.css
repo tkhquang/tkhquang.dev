@@ -109,8 +109,9 @@
   color: inherit;
 }
 
-/* Only the open room reads as "you are here" */
-.index-drawer__row a[aria-current="page"] {
+/* Only the open room reads as "you are here": the page itself, or the
+   section a post, shelf or tag belongs to */
+.index-drawer__row a[aria-current] {
   color: var(--primary);
 }
 
@@ -138,7 +139,7 @@
 }
 
 .index-drawer__row a:hover .index-drawer__label,
-.index-drawer__row a[aria-current="page"] .index-drawer__label {
+.index-drawer__row a[aria-current] .index-drawer__label {
   background-size: 100% 45%;
 }
 

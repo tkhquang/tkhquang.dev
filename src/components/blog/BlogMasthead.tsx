@@ -1,6 +1,7 @@
 import AuroraCanvas from "@/components/blog/AuroraCanvas";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getIntl } from "@/lib/intl";
+import { toRoman } from "@/utils/roman";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 
@@ -10,8 +11,6 @@ interface BlogMastheadProps {
   /* Print-masthead years: volume increments each new calendar year */
   volume: number;
 }
-
-const ROMAN = "I II III IV V VI VII VIII IX X XI XII XIII XIV XV".split(" ");
 
 /* Ljóss is Old Norse for light: the masthead sky carries a live aurora */
 const BlogMasthead = ({
@@ -94,7 +93,7 @@ const BlogMasthead = ({
             {intl.formatMessage({ id: "shelfCount" }, { count: shelfCount })}
           </span>
           <span className="kicker text-theme-on-band">
-            Vol. {ROMAN[volume - 1] ?? volume}
+            Vol. {toRoman(volume)}
           </span>
         </div>
       </div>

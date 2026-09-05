@@ -1,3 +1,5 @@
+import AuroraCanvas from "@/components/blog/AuroraCanvas";
+
 interface CatalogueHeadpieceProps {
   /* The library room the page belongs to: The Shelves, The Index, ... */
   room: string;
@@ -12,8 +14,6 @@ interface CatalogueHeadpieceProps {
   /* Category stat lines close with an inline swatch and the hue's name */
   swatchLabel?: string;
 }
-
-import AuroraCanvas from "@/components/blog/AuroraCanvas";
 
 /* One header device for every index page: the masthead's own grammar
    (kicker, Fraunces title, accent bar, stat kickers) restated at chapter

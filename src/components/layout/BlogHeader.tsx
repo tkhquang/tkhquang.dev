@@ -11,7 +11,7 @@ import { Blog } from "@/constants/meta";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
 import { useThemeValue } from "@/store/theme";
-import { ScrollManager } from "@/utils/dom";
+import { prefersReducedMotion, ScrollManager } from "@/utils/dom";
 import { toRoman } from "@/utils/roman";
 import classNames from "classnames";
 import Link from "next/link";
@@ -54,25 +54,21 @@ const INDEX_COUNTS: Record<
    The anchor is the whole row, the fill sits on the word alone, and a
    room without a count prints the index's middle dot in its place */
 const IndexRow = ({
-  active,
   count,
+  current,
   href,
   label,
 }: {
   href: string;
   label: string;
   count?: number;
-  active?: boolean;
+  current?: "page" | "true";
 }) => {
   const drawer = useDrawerContext();
 
   return (
     <li className="index-drawer__row">
-      <Link
-        href={href}
-        onClick={() => drawer?.hide()}
-        aria-current={active ? "page" : undefined}
-      >
+      <Link href={href} onClick={() => drawer?.hide()} aria-current={current}>
         <span className="index-drawer__label">{label}</span>
         {typeof count === "number" ? (
           <span className="index-drawer__count">{count}</span>
@@ -116,6 +112,16 @@ const BlogHeader = ({
         : isHomeBlog || isInPostPage
           ? "/blog"
           : undefined;
+
+  /* "page" only when the running head IS this page, the feed's numbered
+     pages included since /blog is a rewrite of the first. A post, a shelf
+     or a tag belongs to a section without being it, and marks the head as
+     the current item of the set instead. */
+  const currentFor = (href: string) => {
+    if (href !== activeHref) return undefined;
+    const isThisPage = pathname === href || (href === "/blog" && isHomeBlog);
+    return isThisPage ? "page" : "true";
+  };
 
   /* The index rooms (every running head but Posts) open on the catalogue
      headpiece's band; with the feed masthead they are the pages that
@@ -182,8 +188,10 @@ const BlogHeader = ({
      * The index rooms keep their wordmark, so their band needs no
      * handover: the header goes solid on the first scroll, at the landing
      * header's rest threshold. The house scroll pub/sub, same as BackToTop
-     * and BackButtonIcon; it reports nothing until a scroll, so the state
-     * is synced by hand for the route just arrived at.
+     * and BackButtonIcon; its first report only lands after its 10ms
+     * debounce, so the state is set synchronously here for the route just
+     * arrived at (pathname re-arms the effect per route) instead of
+     * carrying the previous route's value for a frame.
      */
     const scrollManager = new ScrollManager();
     scrollManager.subscribe({
@@ -215,11 +223,8 @@ const BlogHeader = ({
 
   const handleLogoClick = () => {
     if (isHomeBlog) {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
       window.scrollTo({
-        behavior: prefersReducedMotion ? "auto" : "smooth",
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
         top: 0,
       });
       return;
@@ -294,7 +299,7 @@ const BlogHeader = ({
                 <Link
                   key={link.href}
                   href={link.href}
-                  aria-current={link.href === activeHref ? "page" : undefined}
+                  aria-current={currentFor(link.href)}
                   /* No transition utility here: it would out-cascade the
                      fill's own background-size transition */
                   className="blog-nav__link font-mono text-xs font-bold tracking-widest uppercase opacity-80 hover:opacity-100"
@@ -345,7 +350,7 @@ const BlogHeader = ({
                       href={link.href}
                       label={link.label}
                       count={INDEX_COUNTS[link.href]?.(indexStats)}
-                      active={activeHref === link.href}
+                      current={currentFor(link.href)}
                     />
                   ))}
                 </ul>

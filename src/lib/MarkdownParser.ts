@@ -39,6 +39,7 @@ import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import "server-only";
+import type { ThemeRegistrationRaw } from "shiki";
 import { unified, Processor } from "unified";
 import { VFile } from "vfile";
 
@@ -74,8 +75,8 @@ function getProcessor(): Processor {
         /* The Lamplight printing: the house ink pair, every foreground
          checked past 4.5:1 against the panel it sits on */
         theme: {
-          dark: lamplightDark as unknown as import("shiki").ThemeRegistration,
-          light: lamplightLight as unknown as import("shiki").ThemeRegistration,
+          dark: lamplightDark as unknown as ThemeRegistrationRaw,
+          light: lamplightLight as unknown as ThemeRegistrationRaw,
         },
         /* Fence comments like [!code highlight] and [!code ++] become
          proof marks at build time */

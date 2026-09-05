@@ -57,9 +57,9 @@ export default async function TagPage({
     <>
       <NewsFeed
         posts={filteredPost}
-        item={currentTag}
         headpiece={{
           room: "Entries Tagged",
+          title: currentTag.title,
           stat: `Tagged in ${intl.formatMessage(
             { id: "postCount" },
             { count: filteredPost.length }

@@ -184,11 +184,9 @@
       --chart-star: var(--primary);
       --diagram-vermilion: hsl(11deg 75% 38%);
 
-      /* Diagram gilt sits a step deeper than the serial marks' gilt ink
-         and than the exhibit's light gilt, hsl(41deg 62% 36%): the classDef
-         puts it on node text, where the shared value stops at 3.8:1 and
-         the exhibit's at 4.2:1 on the raised card; this one clears AA in
-         the same hue */
+      /* Diagram gilt sits a step deeper than the serial marks' gilt ink:
+         the classDef puts it on node text, where the shared value stops
+         at 3.8:1 on the raised card; this one clears AA in the same hue */
       --diagram-gilt: hsl(40deg 72% 31%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
@@ -337,7 +335,7 @@
   /*
    * Serial Instalments: the ruled plate under a serial post's lede. Rows
    * are a GRID, not wrapping flex: the date column holds one line at
-   * every width, never folding under the title (owner ruling).
+   * every width, never folding under the title.
    */
   .series-plate {
     /* One line of title. The mark pins to it, so a title long enough to
@@ -373,15 +371,15 @@
     background: linear-gradient(90deg, var(--hairline), transparent);
   }
 
+  /* The head's 0.7rem size lives in the overrides layer, where it can
+     outrank the kicker utility's text-xs */
   .series-plate__head .kicker {
     white-space: nowrap;
-    font-size: 0.7rem;
     color: var(--on-surface);
   }
 
   .series-plate__instalment {
     color: var(--gilt-ink);
-    opacity: 1;
   }
 
   .series-plate__rows {
@@ -555,13 +553,13 @@
   }
 
   /* The right rail's gilt serial header, one step up from the feed card's
-     serial kicker. Full ink, so it holds against the rail's idle dim. */
+     serial kicker. Its full ink is set in the overrides layer, where it
+     can outrank the kicker utility's 85 percent. */
   .post-aside__serial-head {
     display: flex;
     align-items: center;
     gap: 0.375rem;
     color: var(--gilt-ink);
-    opacity: 1;
   }
 
   .post-aside__serial-head svg {
@@ -808,10 +806,19 @@
     /* Two ways to say the same thing, so they print the same thing: the
        fence meta ({3}) sets data-highlighted-line, the inline notation
        ([!code highlight]) sets .highlighted. Which one an author reaches
-       for is an authoring convenience, never a visual difference. */
+       for is an authoring convenience, never a visual difference.
+
+       No min-width here. The lines are items of the code element's grid,
+       and a percentage min-width replaces an item's content-based
+       automatic minimum: the single track then sizes to the widest
+       UNMARKED line, and a marked line longer than that overflows its own
+       box, so its wash and rule stop short of its text once the block
+       scrolls. With the automatic minimum the track grows to the longest
+       line, marked or not, and a short marked line still stretches to
+       the track, which is never narrower than the block. */
     &[data-highlighted-line],
     &.highlighted {
-      @apply bg-theme-surface! min-w-full border-l-4 shadow-sm;
+      @apply bg-theme-surface! border-l-4 shadow-sm;
     }
 
     /* A diff line wears the same rule as a highlighted one, only inked
@@ -819,7 +826,7 @@
        layout, so anything drawn another way would seat its text 4px off
        the column every other line sits on. */
     &.diff {
-      @apply min-w-full border-l-4;
+      @apply border-l-4;
     }
 
     /* The 4px margin stands in for that rule, so an unmarked line's text

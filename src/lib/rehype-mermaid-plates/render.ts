@@ -147,14 +147,17 @@ async function launchBrowser(): Promise<Browser> {
    error, so each retry would re-await the same settled rejection and
    report a stale cause. Clearing the memo on failure lets the next caller
    try again. */
-const memoize = <T>(run: () => Promise<T>, clear: () => void): Promise<T> =>
+const clearOnReject = <T>(
+  run: () => Promise<T>,
+  clear: () => void
+): Promise<T> =>
   run().catch((error) => {
     clear();
     throw error;
   });
 
 function acquireAssets(): Promise<RenderAssets> {
-  assetsPromise ||= memoize(loadAssets, () => {
+  assetsPromise ||= clearOnReject(loadAssets, () => {
     assetsPromise = null;
   });
   return assetsPromise;
@@ -170,7 +173,7 @@ async function acquireBrowser(): Promise<Browser> {
     clearTimeout(idleTimer);
     idleTimer = undefined;
   }
-  browserPromise ||= memoize(launchBrowser, () => {
+  browserPromise ||= clearOnReject(launchBrowser, () => {
     browserPromise = null;
   });
   const browser = await browserPromise;
@@ -246,7 +249,7 @@ const renderInPage = async ({
   return results;
 };
 
-const isMermaidPre = (node: Element) =>
+export const isMermaidPre = (node: Element) =>
   node.tagName === "pre" &&
   Array.isArray(node.properties?.className) &&
   (node.properties.className as string[]).includes("mermaid");
@@ -281,8 +284,12 @@ export function rehypeMermaidRender(
 
     /* Started before the launch is awaited so the reads still run against
        it, but only awaited inside the guarded region: an asset read that
-       rejects must still release the browser it was racing. */
+       rejects must still release the browser it was racing. The no-op
+       catch marks the shared promise handled across the launch window, or
+       a read failing before the launch settles would surface as an
+       unhandled rejection; the await below still rethrows it. */
     const pendingAssets = acquireAssets();
+    void pendingAssets.catch(() => {});
     const browser = await acquireBrowser();
     try {
       const { mermaidBundle, shellHtml } = await pendingAssets;
