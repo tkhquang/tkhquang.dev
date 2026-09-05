@@ -193,6 +193,13 @@
       --gilt-ink: hsl(40deg 65% 38%);
       --chart-star: var(--primary);
       --diagram-vermilion: hsl(11deg 75% 38%);
+
+      /* Diagram gilt sits a step deeper than the serial marks' gilt ink
+         and than the exhibit's light gilt, hsl(41deg 62% 36%): the classDef
+         puts it on node text, where the shared value stops at 3.8:1 and
+         the exhibit's at 4.2:1 on the raised card; this one clears AA in
+         the same hue */
+      --diagram-gilt: hsl(40deg 72% 31%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
       --catalogue-tint: linear-gradient(

@@ -319,9 +319,15 @@
    * wrapper, so there is no gate, no timeout and no CDN to wait on. The
    * plate follows the theme: page ground, hairline edge, mono script.
    */
+  /* The plate ground is one token: the page paper by night, the tinted
+     stone by day (the light block below), and everything that has to
+     vanish into the ground, the edge label rects and the autonumber
+     discs, reads the same token */
   pre.mermaid {
+    --plate-ground: var(--background);
+
     border: 1px solid var(--hairline-soft);
-    background: var(--background);
+    background: var(--plate-ground);
     padding: 8px;
   }
 
@@ -379,7 +385,7 @@
   }
 
   .mermaid svg .edgeLabel rect {
-    fill: var(--background) !important;
+    fill: var(--plate-ground) !important;
     opacity: 1 !important;
   }
 
@@ -387,13 +393,11 @@
     fill: var(--on-surface) !important;
   }
 
+  /* Clusters are neatlines, not washes, in both skies: a wash would
+     print the edge label boxes back in over it */
   .mermaid svg .cluster rect {
-    fill: color-mix(
-      in srgb,
-      var(--on-surface) 5%,
-      var(--background)
-    ) !important;
-    stroke: var(--hairline-soft) !important;
+    fill: none !important;
+    stroke: color-mix(in srgb, var(--on-surface) 46%, transparent) !important;
   }
 
   .mermaid svg .cluster text {
@@ -447,6 +451,79 @@
 
   .mermaid svg .loopLine {
     stroke: color-mix(in srgb, var(--on-surface) 45%, transparent) !important;
+  }
+
+  /* Autonumber: mermaid keeps the marker disc black by attribute and the
+     numeral in an attribute sans face, so by day the digits vanished into
+     their own disc. The demo's lapis ring in both skies instead, the disc
+     cut from the plate ground. */
+  .mermaid svg #sequencenumber circle {
+    fill: var(--plate-ground) !important;
+    stroke: var(--diagram-lapis) !important;
+    stroke-width: 1px !important;
+  }
+
+  .mermaid svg .sequenceNumber {
+    fill: var(--diagram-lapis) !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 600;
+  }
+
+  /*
+   * Light plate: the tinted stone. By day the page ground sits so close
+   * to the node fill (1.03:1) that nothing lifts, so the plate takes
+   * --surface and the nodes print as raised cards on it. Two greys only:
+   * line ink at 80 percent for edges, arrowheads, message lines and
+   * cluster titles; a 46 percent hairline for neatlines, lifelines and
+   * loop frames. Nothing here reaches the night plate.
+   */
+  html[data-theme="light"] pre.mermaid {
+    --plate-ground: var(--surface);
+  }
+
+  html[data-theme="light"] .mermaid svg .edgePaths path,
+  html[data-theme="light"] .mermaid svg .flowchart-link {
+    stroke: color-mix(in srgb, var(--on-surface) 80%, transparent) !important;
+  }
+
+  html[data-theme="light"] .mermaid svg marker path {
+    fill: color-mix(in srgb, var(--on-surface) 80%, transparent) !important;
+  }
+
+  html[data-theme="light"] .mermaid svg .cluster text {
+    fill: color-mix(in srgb, var(--on-surface) 80%, transparent) !important;
+  }
+
+  /* Sequence kit: dashed lifelines, line-ink messages, a gilt slip for
+     notes (the brighter cartouche gilt over the raised card: the readable
+     gilt ink mixes to khaki on paper) and the loop panel as a card whose
+     tab reads as a tab */
+  html[data-theme="light"] .mermaid svg .actor-line {
+    stroke: color-mix(in srgb, var(--on-surface) 46%, transparent) !important;
+    stroke-dasharray: 3 3;
+  }
+
+  html[data-theme="light"] .mermaid svg .messageLine0,
+  html[data-theme="light"] .mermaid svg .messageLine1 {
+    stroke: color-mix(in srgb, var(--on-surface) 80%, transparent) !important;
+  }
+
+  html[data-theme="light"] .mermaid svg .note {
+    fill: color-mix(
+      in srgb,
+      hsl(42deg 90% 52%) 14%,
+      var(--surface-raised)
+    ) !important;
+    stroke: color-mix(in srgb, var(--diagram-gilt) 85%, transparent) !important;
+  }
+
+  html[data-theme="light"] .mermaid svg .labelBox {
+    fill: var(--surface-raised) !important;
+    stroke: color-mix(in srgb, var(--on-surface) 80%, transparent) !important;
+  }
+
+  html[data-theme="light"] .mermaid svg .loopLine {
+    stroke: color-mix(in srgb, var(--on-surface) 46%, transparent) !important;
   }
   /* stylelint-enable selector-class-pattern */
 
