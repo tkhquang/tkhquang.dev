@@ -30,13 +30,17 @@ const AccordionTrigger = React.forwardRef<
       <AccordionPrimitive.Trigger
         ref={ref}
         className={cn(
-          "hover:text-theme-primary flex flex-1 cursor-pointer items-center justify-between py-4 font-medium transition-colors [&[data-state=open]>svg]:rotate-180",
+          /* Hover inks only the chevron, in the item's shelf hue where one
+             is set; trigger text stays put. The hover: variant carries the
+             @media (hover: hover) gate a bare [&:hover] would lose, which
+             is what keeps the ink from sticking after a tap. */
+          "flex flex-1 cursor-pointer items-center justify-between gap-4 py-4 font-medium hover:[&>svg]:text-(--shelf,var(--color-theme-primary)) [&[data-state=open]>svg]:rotate-180",
           className
         )}
         {...props}
       >
         {children}
-        <ChevronDown className="size-4 shrink-0 transition-transform duration-200" />
+        <ChevronDown className="size-4 shrink-0 transition-[transform,color] duration-200" />
       </AccordionPrimitive.Trigger>
     </h2>
   </AccordionPrimitive.Header>

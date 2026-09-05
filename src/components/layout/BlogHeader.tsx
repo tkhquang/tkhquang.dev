@@ -1,14 +1,21 @@
 "use client";
 
+import "./IndexDrawer.css";
+import Drawer, {
+  DrawerTrigger,
+  useDrawerContext,
+} from "@/components/common/Drawer";
 import BackButtonIcon from "@/components/layout/BackButtonIcon";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { Blog } from "@/constants/meta";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { useAsPathValue } from "@/store/router";
 import { useThemeValue } from "@/store/theme";
-import { ScrollManager } from "@/utils/dom";
+import { prefersReducedMotion, ScrollManager } from "@/utils/dom";
+import { toRoman } from "@/utils/roman";
 import classNames from "classnames";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 
@@ -21,19 +28,68 @@ const DEFAULT_HEADER_HEIGHT = 60;
 /* The fraction of the sky still under the header when the band takes over */
 const HANDOVER_AT = 0.5;
 
-const NAV_LINKS = [
-  { href: "/blog", label: "Posts" },
-  { href: "/blog/categories", label: "Categories" },
-  { href: "/blog/tags", label: "Tags" },
-  { href: "/blog/posts", label: "Archive" },
-];
+/* Counts for the phone Index drawer, computed by the server layout */
+export interface IndexStats {
+  posts: number;
+  categories: number;
+  tags: number;
+  volume: number;
+  year: number;
+}
+
+/* The count printed beside each room. The Archive is deliberately absent:
+   it lists the same entries the feed does, so a second total would only
+   restate the first. The row prints the index's middle dot in its place. */
+const INDEX_COUNTS: Record<
+  string,
+  ((stats: IndexStats) => number) | undefined
+> = {
+  "/blog": (stats) => stats.posts,
+  "/blog/categories": (stats) => stats.categories,
+  "/blog/tags": (stats) => stats.tags,
+};
+
+/* A drawer row that closes the drawer as it navigates; the layout
+   persists across routes, so the dialog would otherwise stay open.
+   The anchor is the whole row, the fill sits on the word alone, and a
+   room without a count prints the index's middle dot in its place */
+const IndexRow = ({
+  count,
+  current,
+  href,
+  label,
+}: {
+  href: string;
+  label: string;
+  count?: number;
+  current?: "page" | "true";
+}) => {
+  const drawer = useDrawerContext();
+
+  return (
+    <li className="index-drawer__row">
+      <Link href={href} onClick={() => drawer?.hide()} aria-current={current}>
+        <span className="index-drawer__label">{label}</span>
+        {typeof count === "number" ? (
+          <span className="index-drawer__count">{count}</span>
+        ) : (
+          <span className="index-drawer__count" aria-hidden>
+            ·
+          </span>
+        )}
+      </Link>
+    </li>
+  );
+};
 
 const BlogHeader = ({
   className,
+  indexStats,
   ...props
-}: React.ComponentProps<"header">) => {
+}: React.ComponentProps<"header"> & { indexStats: IndexStats }) => {
   const params = useParams();
-  const { matchSegments } = useRouterHelper();
+  const pathname = usePathname();
+  const { matchPathSegments, matchSegments } = useRouterHelper();
   const { prevAsPath } = useAsPathValue();
   const { back, prefetch, push } = useRouter();
 
@@ -44,7 +100,41 @@ const BlogHeader = ({
     null, //slug
   ]);
 
-  const shouldRestoreScrollOnBack = prevAsPath === "/blog";
+  /* Running heads: which room the reader is in. A post detail counts as
+     Posts; the archive is exactly /blog/posts */
+  const activeHref = matchSegments(["blog", "posts"])
+    ? "/blog/posts"
+    : matchSegments(["blog", "categories"]) ||
+        matchSegments(["blog", "categories", null])
+      ? "/blog/categories"
+      : matchSegments(["blog", "tags"]) || matchSegments(["blog", "tags", null])
+        ? "/blog/tags"
+        : isHomeBlog || isInPostPage
+          ? "/blog"
+          : undefined;
+
+  /* "page" only when the running head IS this page, the feed's numbered
+     pages included since /blog is a rewrite of the first. A post, a shelf
+     or a tag belongs to a section without being it, and marks the head as
+     the current item of the set instead. */
+  const currentFor = (href: string) => {
+    if (href !== activeHref) return undefined;
+    const isThisPage = pathname === href || (href === "/blog" && isHomeBlog);
+    return isThisPage ? "page" : "true";
+  };
+
+  /* The index rooms (every running head but Posts) open on the catalogue
+     headpiece's band; with the feed masthead they are the pages that
+     carry a sky for the header to stay transparent over */
+  const isIndexRoom = activeHref !== undefined && activeHref !== "/blog";
+  const hasSky = isHomeBlog || isIndexRoom;
+
+  /* Any feed page counts: pagination links land readers on /blog/page/N
+     (page 1 included), and losing the restoration for having paged would
+     send them back to page 1, top, place gone */
+  const shouldRestoreScrollOnBack =
+    matchPathSegments(prevAsPath, ["blog"]) ||
+    matchPathSegments(prevAsPath, ["blog", "page", null]);
 
   const { cssVariables } = useThemeValue();
   const headerHeight = useMemo(() => {
@@ -56,12 +146,13 @@ const BlogHeader = ({
 
   useEffect(() => {
     /*
-     * Over the masthead the switch is geometric rather than a pixel
-     * count, because the sky is 317px tall on a phone and 385px from lg
+     * Over the feed masthead the switch is geometric rather than a pixel
+     * count, because the wordmark waits for the big Ljóss below it to
+     * scroll off, and the sky is 317px tall on a phone and 385px from lg
      * up. Pulling the observer's top edge down by the header height puts
-     * the measure on the header's own bottom line, and the ratio there
-     * is the share of sky still below it: the band comes in at the
-     * halfway mark rather than waiting for the last of it.
+     * the measure on the header's own bottom line, and the ratio there is
+     * the share of sky still below it: the band comes in at the halfway
+     * mark rather than waiting for the last of it.
      */
     const masthead = isHomeBlog
       ? document.querySelector("[data-masthead]")
@@ -86,14 +177,22 @@ const BlogHeader = ({
     }
 
     /*
-     * Only the list page reads `scrolled`, so anywhere else the subscription
-     * would drive state the render can never consume.
+     * Only the pages with a sky read `scrolled`, so anywhere else the
+     * subscription would drive state the render can never consume.
      */
-    if (!isHomeBlog) {
+    if (!hasSky) {
       return;
     }
 
-    /* The house scroll pub/sub, same as BackToTop and BackButtonIcon */
+    /*
+     * The index rooms keep their wordmark, so their band needs no
+     * handover: the header goes solid on the first scroll, at the landing
+     * header's rest threshold. The house scroll pub/sub, same as BackToTop
+     * and BackButtonIcon; its first report only lands after its 10ms
+     * debounce, so the state is set synchronously here for the route just
+     * arrived at (pathname re-arms the effect per route) instead of
+     * carrying the previous route's value for a frame.
+     */
     const scrollManager = new ScrollManager();
     scrollManager.subscribe({
       id: "blog-header",
@@ -101,23 +200,31 @@ const BlogHeader = ({
         setScrolled(scrollY > SCROLLED_AT);
       },
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- see above
+    setScrolled(window.scrollY > SCROLLED_AT);
 
     return () => {
       scrollManager.destroy();
     };
-  }, [headerHeight, isHomeBlog]);
+  }, [hasSky, headerHeight, isHomeBlog, pathname]);
 
   /*
-   * Transparent only over the list page masthead, whose band extends under
-   * the header; other blog pages have arbitrary covers behind the top edge,
-   * so they keep the readable blurred backdrop at rest too.
+   * Transparent only over a sky that extends under the header: the list
+   * page masthead and the index rooms' headpiece band. Post pages have
+   * arbitrary covers behind the top edge, so they keep the readable
+   * blurred backdrop at rest too.
    */
-  const transparent = isHomeBlog && !scrolled;
+  const transparent = hasSky && !scrolled;
+
+  /* Over the feed masthead the big Ljóss already stands right below, so
+     the wordmark and byline hold back until the sky scrolls away; the
+     rooms' band prints no wordmark of its own, so there they stay */
+  const holdBack = isHomeBlog && transparent;
 
   const handleLogoClick = () => {
     if (isHomeBlog) {
       window.scrollTo({
-        behavior: "smooth",
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
         top: 0,
       });
       return;
@@ -144,28 +251,26 @@ const BlogHeader = ({
         "band--day h-header-height sticky inset-0 z-(--z-header) m-0 w-full flex-wrap p-0 transition-[background-color,color,box-shadow] duration-300",
         transparent
           ? "text-theme-on-band bg-transparent"
-          : "header__background-transparent--blog text-theme-on-background shadow-box-md backdrop-blur-xs",
+          : "header__background-transparent--blog text-theme-on-background blog-header-shadow backdrop-blur-xs",
         className
       )}
     >
       <div className="flex-center size-full flex-wrap">
         <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
-          {/* Over the masthead the big Ljóss already stands right below,
-              so the wordmark and byline hold back until the sky scrolls
-              away; inert keeps the invisible pair out of the tab order */}
+          {/* inert keeps the held-back pair out of the tab order */}
           <div
             className={classNames(
               "header__left flex h-full items-center gap-2 transition-opacity duration-300",
-              transparent ? "pointer-events-none opacity-0" : "opacity-100"
+              holdBack ? "pointer-events-none opacity-0" : "opacity-100"
             )}
-            inert={transparent || undefined}
+            inert={holdBack || undefined}
           >
             <button
               type="button"
               className="cursor-pointer focus:outline-hidden"
               onClick={handleLogoClick}
             >
-              <div className="logo flip-animate flex-center whitespace-no-wrap no-underine gap-2 select-none focus:outline-hidden">
+              <div className="logo flex-center gap-2 whitespace-nowrap no-underline select-none">
                 {!isHomeBlog && <BackButtonIcon className="size-8" />}
                 <span
                   className="logo__text relative inline-flex"
@@ -190,16 +295,73 @@ const BlogHeader = ({
               className="hidden items-center gap-5 md:flex"
               aria-label="Blog sections"
             >
-              {NAV_LINKS.map((link) => (
+              {Blog.NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="font-mono text-xs font-bold tracking-widest uppercase opacity-80 transition-opacity hover:opacity-100"
+                  aria-current={currentFor(link.href)}
+                  /* No transition utility here: it would out-cascade the
+                     fill's own background-size transition */
+                  className="blog-nav__link font-mono text-xs font-bold tracking-widest uppercase opacity-80 hover:opacity-100"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
+            {/* The phones' door into the rooms: the Index drawer, printed
+                as the volume's front matter. The trigger is a real
+                in-flow button; it retires at md where the nav exists. */}
+            <Drawer
+              position="left"
+              size={300}
+              title="The Index"
+              className="index-drawer"
+              /* The plain two-line X of the printed index; the TOC drawer
+                 keeps the circled one */
+              dismissLabel="Close the index"
+              dismissIcon={
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  aria-hidden
+                >
+                  <line x1="5" y1="5" x2="19" y2="19" />
+                  <line x1="19" y1="5" x2="5" y2="19" />
+                </svg>
+              }
+              trigger={
+                <DrawerTrigger
+                  aria-label="Open the blog index"
+                  className="blog-nav__link kicker cursor-pointer font-bold tracking-widest opacity-80 hover:opacity-100 md:hidden"
+                >
+                  Index
+                </DrawerTrigger>
+              }
+            >
+              <hr className="index-drawer__hairline" />
+              <nav aria-label="Blog sections">
+                <ul className="index-drawer__rows">
+                  {Blog.NAV_LINKS.map((link) => (
+                    <IndexRow
+                      key={link.href}
+                      href={link.href}
+                      label={link.label}
+                      count={INDEX_COUNTS[link.href]?.(indexStats)}
+                      current={currentFor(link.href)}
+                    />
+                  ))}
+                </ul>
+              </nav>
+              <div className="index-drawer__foot">
+                <hr className="index-drawer__hairline" />
+                <p className="index-drawer__colophon">
+                  Vol. {toRoman(indexStats.volume)} · {toRoman(indexStats.year)}
+                </p>
+              </div>
+            </Drawer>
             <div className="ml-4 flex flex-col">
               <ThemeToggle />
             </div>

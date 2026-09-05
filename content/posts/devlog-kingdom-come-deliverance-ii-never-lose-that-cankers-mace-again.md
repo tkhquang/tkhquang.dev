@@ -7,7 +7,6 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Lua
@@ -127,15 +126,16 @@ The `Highlighter` module takes the detected entities and uses `entity:LoadPartic
 graph TD
     subgraph "Loot Beacon Activation Flow"
         A[Hotkey Pressed] --> B{Command Registry};
-        B --> C["LootBeacon.Highlighter:activateHighlights()"];
-        C --> D["LootBeacon.EntityDetector:detectEntities()"];
-        D --> E["System.GetEntitiesInSphere()"];
-        E --> F["Filter & Classify Entities<br/>(Items, Corpses, Animals, Custom)"];
-        F --> G["Highlighter applies<br/>Particle Effects (entity:LoadParticleEffect)"];
+        B --> C["LootBeacon.Highlighter:<br/>activateHighlights()"];
+        C --> D["LootBeacon.EntityDetector:<br/>detectEntities()"];
+        D --> E["System<br/>.GetEntitiesInSphere()"];
+        E --> F["Filter & Classify<br/>Entities (Items,<br/>Corpses, Animals, Custom)"];
+        F --> G["Highlighter applies<br/>Particle Effects<br/>(entity:LoadParticleEffect)"];
         G --> H["Visual Beacons Appear in Game"];
-        C --> I["LootBeacon.UIManager:showHighlightResults()"];
+        C --> I["LootBeacon.UIManager:<br/>showHighlightResults()"];
         I --> J["On-Screen Notification"];
-        C --> K["Script.SetTimer for Auto-Removal"];
+        J ~~~ K["Script.SetTimer<br/>for Auto-Removal"];
+        C --> K;
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;

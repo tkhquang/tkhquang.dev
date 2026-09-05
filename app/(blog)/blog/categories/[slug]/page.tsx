@@ -1,5 +1,8 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
+import { Blog } from "@/constants/meta";
+import { DEFAULT_LOCALE } from "@/lib/i18n";
+import { getIntl } from "@/lib/intl";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
@@ -43,14 +46,25 @@ export default async function CategoryPage({
   const posts = await markdownParser.getAllPosts();
   const category = await markdownParser.getCategoryBySlug(slug);
   const filteredPost = posts.filter((post) => post.category_slug === slug);
+  const intl = getIntl(DEFAULT_LOCALE);
 
   return (
     <>
       <NewsFeed
         posts={filteredPost}
-        pathInfoType="category"
-        item={category}
-        pathSlug="categories"
+        headpiece={{
+          /* The article is the title's, not the room label's: the shelf
+             file for the-inner-crisis is titled "The Inner Crisis" */
+          room: `The ${category.title.replace(/^The\s+/i, "")} Shelf`,
+          title: category.title,
+          stat: intl.formatMessage(
+            { id: "postCount" },
+            { count: filteredPost.length }
+          ),
+          hue: `var(--shelf-${slug}, var(--primary))`,
+          swatchLabel:
+            Blog.SHELF_HUE_NAMES[slug] ?? Blog.DEFAULT_SHELF_HUE_NAME,
+        }}
       />
       <Suspense>
         <ClientSideGetPageViews

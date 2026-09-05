@@ -418,26 +418,31 @@ Now that we have the CSS, the JavaScript Hook, and the HEEx structure in place, 
 This first sequence shows what happens from the moment the browser requests the page until the low-quality placeholder image is visible and the initial skeleton loader (if used) is hidden.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  sequence:
+    actorMargin: 30
+---
 sequenceDiagram
     title LQIP Flow: Initial Display & Placeholder Load
     autonumber
 
     participant B as Browser
-    participant S as Server (LiveView)
-    participant H as JS Hook (ImageLoadingState)
+    participant S as Server<br/>(LiveView)
+    participant H as JS Hook<br/>(ImageLoadingState)
     participant C as CSS Engine
 
-    B->>S: 1. Page Request
-    S->>B: 2. Sends HEEx HTML (img data-js-loading="true", skeleton, placeholder img)
-    B->>B: 3. Renders Initial HTML<br />(Skeleton may be visible via CSS default)
+    B->>S: Page Request
+    S->>B: Sends HEEx HTML<br/>(img data-js-loading=<br/>"true", skeleton,<br/>placeholder img)
+    B->>B: Renders<br/>Initial HTML<br/>(Skeleton may be<br/>visible via<br/>CSS default)
 
-    Note over B,H: Placeholder & Main images start loading concurrently (browser behavior)
+    Note over B,H: Placeholder & Main images start loading<br/>concurrently (browser behavior)
 
-    B->>H: 4. Placeholder `<img>` fires `load` event (placeholder image data received)
-    H->>B: 5. JS Hook updates Placeholder `data-js-image-loading="false"`
-    H->>B: 6. JS Hook (potentially) updates Skeleton `data-js-image-loading="false"`
-    B->>C: 7. CSS Engine applies rules: Skeleton hides (if placeholder loaded first)
-    Note over B: User now sees blurred LQIP smoothly
+    B->>H: Placeholder `<img>` fires `load` event<br/>(placeholder image data received)
+    H->>B: JS Hook updates Placeholder<br/>`data-js-image-loading="false"`
+    H->>B: JS Hook (potentially) updates Skeleton<br/>`data-js-image-loading="false"`
+    B->>C: CSS Engine applies rules: Skeleton hides<br/>(if placeholder loaded first)
+    Note over B: User now sees<br/>blurred LQIP smoothly
 </pre>
 
 **Breakdown of Phase 1:**
@@ -454,34 +459,39 @@ sequenceDiagram
 Next, the main high-resolution image continues to load. This sequence details what happens when it successfully loads or encounters an error.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  sequence:
+    actorMargin: 30
+---
 sequenceDiagram
     title LQIP Flow: Main Image Load & Transition
     autonumber
 
     participant B as Browser
-    participant S as Server (LiveView)
-    participant H as JS Hook (ImageLoadingState)
+    participant S as Server<br/>(LiveView)
+    participant H as JS Hook<br/>(ImageLoadingState)
     participant C as CSS Engine
 
-    Note over B,H: Main image (`id`) continues loading (hook is already mounted)...
-    H->>H: Hook may have already checked `image.complete` on mount
+    Note over B,H: Main image (`id`) continues loading<br/>(hook is already mounted)...
+    H->>H: Hook may have already checked<br/>`image.complete` on mount
 
     opt Main Image Load SUCCESS
         B->>H: Main `<img>` `load` event fires
-        H->>H: Calls `setImageLoadingState(false)`
-        H->>B: Sets `data-js-loading="false"` on main img & related elements
-        H-->>S: Pushes `image_fully_loaded` event (optional)
-        B->>C: CSS Engine applies rules: main image transitions to visible/unblurred
-        B->>C: CSS Engine applies rules: placeholder transitions to hidden/transparent
-        Note over B: User sees sharp, high-resolution image
+        H->>H: Calls<br/>`setImageLoadingState(false)`
+        H->>B: Sets `data-js-loading="false"`<br/>on main img & related elements
+        H-->>S: Pushes<br/>`image_fully_loaded`<br/>event (optional)
+        B->>C: CSS Engine applies rules: main image<br/>transitions to visible/unblurred
+        B->>C: CSS Engine applies rules: placeholder<br/>transitions to hidden/transparent
+        Note over B: User sees sharp,<br/>high-resolution image
     end
 
     opt Main Image Load ERROR
         B->>H: Main `<img>` `error` event fires
         H->>H: Calls `setImageErrorState()`
-        H->>B: Sets `data-js-error="true"` & `data-js-loading="false"` on relevant elements
-        H-->>S: Pushes `image_load_error` event (optional)
-        B->>C: CSS Engine applies rules: error indicator is shown, loading states hidden
+        H->>B: Sets `data-js-error="true"` &<br/>`data-js-loading="false"`<br/>on relevant elements
+        H-->>S: Pushes<br/>`image_load_error`<br/>event (optional)
+        B->>C: CSS Engine applies rules: error indicator<br/>is shown, loading states hidden
     end
 </pre>
 

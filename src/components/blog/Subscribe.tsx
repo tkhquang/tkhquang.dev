@@ -60,15 +60,15 @@ const Subscribe = ({ className }: React.ComponentProps<"div">) => {
         </button>
       </form> */}
       <div className="email-form flex-center relative flex w-full flex-wrap text-center">
+        {/* The anchor wears the button look itself; nesting a real button
+            inside it was invalid and produced two tab stops for one action */}
         <a
-          className="subscribe__button"
+          className="subscribe__button button w-32"
           href="https://buttondown.com/ljoss"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <button type="button" className="button w-32">
-            Subscribe
-          </button>
+          Subscribe
         </a>
       </div>
     </div>

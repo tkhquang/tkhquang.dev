@@ -1,7 +1,16 @@
-import Image from "@/components/common/NextImage";
+import lamplightDark from "@/assets/shiki/lamplight-dark.json";
+import lamplightLight from "@/assets/shiki/lamplight-light.json";
+import MermaidPlate from "@/components/common/MermaidPlate";
 import PreWithCopy from "@/components/common/PreWithCopy";
+import ZoomableImage from "@/components/common/ZoomableImage";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
+import {
+  MERMAID_RENDER_OPTIONS,
+  rehypeMermaidPrepare,
+  rehypeMermaidRender,
+  rehypeMermaidRestore,
+} from "@/lib/rehype-mermaid-plates";
 import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
@@ -9,6 +18,11 @@ import { getProcessedImage } from "@/utils/image";
 import { getPostFiles, postsDirectory } from "@/utils/posts";
 import { slugifyTag } from "@/utils/slug";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
+import {
+  transformerNotationDiff,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight,
+} from "@shikijs/transformers";
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
 import matter from "gray-matter";
@@ -25,6 +39,7 @@ import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import "server-only";
+import type { ThemeRegistrationRaw } from "shiki";
 import { unified, Processor } from "unified";
 import { VFile } from "vfile";
 
@@ -42,60 +57,79 @@ function getCategoryFiles() {
 }
 
 function getProcessor(): Processor {
-  return unified()
-    .use(remarkParse, { fragment: true })
-    .use(remarkEmbed, {
-      enabledProviders: ["Youtube", "Spotify"],
-    })
-    .use(remarkRehype, { allowDangerousHtml: true })
-    .use(remarkFigureCaption, { allowEmptyCaption: true })
-    .use(remarkGfm)
-    .use(rehypePrettyCode, {
-      defaultLang: {
-        block: "plaintext",
-        inline: "plaintext",
-      },
-      keepBackground: true,
-      theme: {
-        dark: "github-dark-dimmed",
-        light: "github-light-default",
-      },
-      transformers: [],
-    })
-    .use(rehypeExternalLinks, {
-      properties: {
-        class: "icon icon-link",
-      },
-      rel: ["nofollow", "noopener"],
-      target: "_blank",
-    })
-    .use(rehypeCustomNextImage, {
-      cache: true,
-      publicFolder: "./public",
-      targetPath: "./public/uploads/remote",
-    })
-    .use(rehypeRaw)
-    .use(rehypeSlug)
-    .use(rehypeExtractToc)
-    .use(rehypeAutolinkHeadings, {
-      content: {
-        type: "text",
-        value: "#",
-      },
-    })
-    .use(rehypeCopyCodeButton, {
-      feedbackDuration: 3_000,
-      visibility: "hover",
-    })
-    .use(rehypeReact, {
-      components: {
-        "rehype-pretty-copy-button-pre": PreWithCopy,
-        "next-image": Image,
-      },
-      Fragment: prod.Fragment,
-      jsx: prod.jsx,
-      jsxs: prod.jsxs,
-    } as Options);
+  return (
+    unified()
+      .use(remarkParse, { fragment: true })
+      .use(remarkEmbed, {
+        enabledProviders: ["Youtube", "Spotify"],
+      })
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(remarkFigureCaption, { allowEmptyCaption: true })
+      .use(remarkGfm)
+      .use(rehypePrettyCode, {
+        defaultLang: {
+          block: "plaintext",
+          inline: "plaintext",
+        },
+        keepBackground: true,
+        /* The Lamplight printing: the house ink pair, every foreground
+         checked past 4.5:1 against the panel it sits on */
+        theme: {
+          dark: lamplightDark as unknown as ThemeRegistrationRaw,
+          light: lamplightLight as unknown as ThemeRegistrationRaw,
+        },
+        /* Fence comments like [!code highlight] and [!code ++] become
+         proof marks at build time */
+        transformers: [
+          transformerNotationDiff(),
+          transformerNotationHighlight(),
+          transformerNotationWordHighlight(),
+        ],
+      })
+      .use(rehypeExternalLinks, {
+        properties: {
+          class: "icon icon-link",
+        },
+        rel: ["nofollow", "noopener"],
+        target: "_blank",
+      })
+      .use(rehypeCustomNextImage, {
+        cache: true,
+        publicFolder: "./public",
+        targetPath: "./public/uploads/remote",
+      })
+      .use(rehypeRaw)
+      /* Chart Plates: diagrams typeset at press time. The raw pre.mermaid
+       blocks only exist as elements after rehypeRaw; prepare re-inks the
+       Dracula classDefs into theme tokens, the in-repo renderer draws
+       them through headless chromium, restore wraps the svgs back into
+       their original pre so every shipped selector still applies. */
+      .use(rehypeMermaidPrepare)
+      .use(rehypeMermaidRender, MERMAID_RENDER_OPTIONS)
+      .use(rehypeMermaidRestore)
+      .use(rehypeSlug)
+      .use(rehypeExtractToc)
+      .use(rehypeAutolinkHeadings, {
+        content: {
+          type: "text",
+          value: "#",
+        },
+      })
+      .use(rehypeCopyCodeButton, {
+        feedbackDuration: 3_000,
+        visibility: "hover",
+      })
+      .use(rehypeReact, {
+        components: {
+          "rehype-pretty-copy-button-pre": PreWithCopy,
+          "next-image": ZoomableImage,
+          "mermaid-plate": MermaidPlate,
+        },
+        Fragment: prod.Fragment,
+        jsx: prod.jsx,
+        jsxs: prod.jsxs,
+      } as Options)
+  );
 }
 
 function getImageProcessor(): Processor {
@@ -137,11 +171,27 @@ interface ProcessedVfile extends VFile {
 class MarkdownParser {
   private parser: ReturnType<typeof getProcessor>;
   private imageParser: ReturnType<typeof getImageProcessor>;
+  private categoryTitles = new Map<string, string | undefined>();
 
   constructor() {
     this.parser = getProcessor();
     this.imageParser = getImageProcessor();
     // console.info("MarkdownParser instance created");
+  }
+
+  private async getCategoryTitle(slug: string): Promise<string | undefined> {
+    if (this.categoryTitles.has(slug)) {
+      return this.categoryTitles.get(slug);
+    }
+    let title: string | undefined;
+    try {
+      title = (await this.getCategoryBySlug(slug)).title;
+    } catch {
+      /* A post can name a shelf before its file exists; consumers fall
+         back to the title-cased slug */
+    }
+    this.categoryTitles.set(slug, title);
+    return title;
   }
 
   async parseMarkdown(content: string): Promise<ProcessedVfile> {
@@ -191,7 +241,7 @@ class MarkdownParser {
           {
             src: output,
             blurDataURL: placeholder,
-            alt: "Cover Image",
+            alt: data.title,
             width,
             height,
           },
@@ -204,6 +254,7 @@ class MarkdownParser {
 
       return {
         ...data,
+        category_title: await this.getCategoryTitle(data.category_slug),
         content,
         slug,
         coverData,
@@ -231,12 +282,28 @@ class MarkdownParser {
       })
     );
 
-    return (
+    const published = (
       posts.filter((post) => {
         if (!post) return false;
         return post.published || shouldShowHiddenPosts;
       }) as MarkdownPost[]
     ).sort((post1, post2) => (post1.created_at > post2.created_at ? -1 : 1));
+
+    /* Serial bookkeeping: every member learns its series' published size,
+       so cards can print "Instalment II of III" without refetching */
+    const seriesSizes = new Map<string, number>();
+    for (const post of published) {
+      if (post.series) {
+        seriesSizes.set(post.series, (seriesSizes.get(post.series) ?? 0) + 1);
+      }
+    }
+    for (const post of published) {
+      if (post.series) {
+        post.series_total = seriesSizes.get(post.series);
+      }
+    }
+
+    return published;
   }
 
   async getCategoryBySlug(fileName: string): Promise<MarkdownCategory> {

@@ -52,4 +52,23 @@ export namespace Blog {
     },
   };
   export const POSTS_PER_PAGE = 15;
+
+  /* One source for the four rooms: the header nav and the phone Index
+     drawer both read from here */
+  export const NAV_LINKS = [
+    { href: "/blog", label: "Posts" },
+    { href: "/blog/categories", label: "Categories" },
+    { href: "/blog/tags", label: "Tags" },
+    { href: "/blog/posts", label: "Archive" },
+  ];
+
+  /* The printed name of each shelf hue, for the catalogue headpiece's
+     stat line. Keyed by category slug, alongside the --shelf-<slug>
+     custom properties the hues themselves live in. A shelf with no entry
+     here takes the default hue and its name together. */
+  export const SHELF_HUE_NAMES: Record<string, string> = {
+    gaming: "dusty rose",
+    "the-inner-crisis": "lilac",
+  };
+  export const DEFAULT_SHELF_HUE_NAME = "lapis";
 }

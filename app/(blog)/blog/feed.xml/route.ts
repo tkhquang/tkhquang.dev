@@ -42,10 +42,13 @@ export async function GET() {
       const category =
         categoryTitleBySlug.get(post.category_slug) || post.category_slug;
 
+      /* published pins the original date: with only updated, an edit to an
+         old post resurfaced it as new in date-sorted readers */
       return `  <entry>
     <title>${escapeXml(post.title)}</title>
     <link href="${escapeXml(url)}" />
     <id>${escapeXml(url)}</id>
+    <published>${new Date(post.created_at).toISOString()}</published>
     <updated>${updated.toISOString()}</updated>
     <summary>${escapeXml(post.description)}</summary>
     <category term="${escapeXml(category)}" />

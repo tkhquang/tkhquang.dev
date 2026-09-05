@@ -8,7 +8,6 @@ tags:
   - CryEngine
   - Game Development
   - "Kingdom Come: Deliverance II"
-  - KCD2
 cover_image: /uploads/images/KCD2.jpg
 description: "Kingdom Come: Deliverance 2 runs on a forked CryEngine, built with licensed source access. A look at what the engine can still do."
 ---
@@ -24,22 +23,32 @@ This isn't just a minor footnote, it's a testament. KCD2 looks to be pushing bou
 This is where it gets interesting for us technically-minded folks. When we say an engine is "forked," it means the studio (in this case, Warhorse) licensed a specific version of CryEngine's source code at some point and then started developing it independently *for their project*. They created their own internal branch, tailored to their specific, highly ambitious needs for a historically-grounded open-world RPG.
 
 <pre class="mermaid flex justify-center">
-graph LR
+---
+config:
+  flowchart:
+    nodeSpacing: 30
+---
+graph TD
     subgraph "CryEngine Development & Licensing"
-        A["CryEngine (Mainline/Original)"] -->|License Source Code under EULA| B(Warhorse Studios);
-        B --> C{Create Internal Fork<br/>Example: CryEngine 3.x base};
+        A["CryEngine (Mainline/Original)"] -->|"License Source Code<br/>under EULA"| B(Warhorse Studios);
+        B --> C{"Create Internal Fork<br/>Example: CryEngine 3.x base"};
         C --> D["Warhorse's Custom<br/>CryEngine Version"];
-        D --> E["Extensive Modifications & Optimizations for KCD/KCD2"];
+        D --> E["Extensive Modifications &<br/>Optimizations<br/>for KCD/KCD2"];
         E --> F[Kingdom Come: Deliverance 2];
 
         subgraph "Warhorse Internal Development (Enabled by Source Access)"
             direction TB
-            D --- G["Deep RPG Systems Integration<br/>(AI, Quest, Dialogue)"];
-            D --- H["Custom Renderer Optimizations<br/>(Foliage, Global Illumination, Streaming)"];
-            D --- I["Bespoke Tooling & Pipeline<br/>(World Editor, Asset Flow)"];
-            D --- J["Targeted Performance Tuning<br/>(CPU/GPU for dense worlds)"];
-            D --- K["Modern Feature Implementation<br/>(DLSS/FSR, etc.)"]
+            D --- G["Deep RPG Systems<br/>Integration<br/>(AI, Quest, Dialogue)"];
+            D --- H["Custom Renderer<br/>Optimizations<br/>(Foliage, Global<br/>Illumination, Streaming)"];
+            D --- I["Bespoke Tooling &<br/>Pipeline (World<br/>Editor, Asset Flow)"];
+            D --- J["Targeted Performance<br/>Tuning (CPU/GPU<br/>for dense worlds)"];
+            D --- K["Modern Feature<br/>Implementation<br/>(DLSS/FSR, etc.)"];
+            G ~~~ I;
+            H ~~~ J;
+            I ~~~ K
         end
+
+        K ~~~ E;
     end
 
     %% Styling

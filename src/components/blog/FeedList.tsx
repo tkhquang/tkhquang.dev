@@ -1,47 +1,22 @@
 import PostCard from "./PostCard";
 import BlogPagination from "@/components/blog/BlogPagination";
-import { PathInfo } from "@/components/blog/PathInfo";
 import { MarkdownPost } from "@/models/markdown.types";
 
-const FeedList = <T,>({
-  hideTitle,
-  item,
-  pathInfoType,
-  pathSlug,
+const FeedList = ({
   posts,
   totalPages,
-  currentPage,
 }: {
-  pathSlug: string;
   posts: MarkdownPost[];
-  pathInfoType: "category" | "tag" | undefined;
-  item?: T;
   totalPages?: number;
-  currentPage?: number;
-  /* The list page headlines itself with the masthead instead */
-  hideTitle?: boolean;
 }) => {
   return (
     <section className="news-feed w-full max-w-(--breakpoint-sm) flex-1">
-      {pathInfoType && item && (
-        <PathInfo<any, "slug">
-          item={item}
-          pathSlug={pathSlug}
-          pathInfoType={pathInfoType}
-          className="mx-auto"
-        />
-      )}
       {posts.length === 0 ? (
-        <h1 className="flex-center mt-6 w-full text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-          {`Sorry, there's nothing here`} :(
-        </h1>
+        <p className="flex-center mt-6 w-full text-lg leading-7">
+          This shelf awaits its first entry.
+        </p>
       ) : (
         <>
-          {!hideTitle && (
-            <h1 className="text-theme-primary mx-auto text-2xl leading-7 font-bold sm:text-3xl sm:leading-9">
-              Latest Posts
-            </h1>
-          )}
           <ul className="news-feed__list flex-center flex-col">
             {posts.map((post, index) => (
               <PostCard key={post.slug} post={post} index={index} />

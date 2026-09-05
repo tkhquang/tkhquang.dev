@@ -13,6 +13,15 @@ collections:
     extension: "md"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - label: "Short Title"
+        name: "short_title"
+        widget: "string"
+        required: false
+        hint: >-
+          The entry's own name, without the running prefix the full title
+          carries. Used by the series plate and the next-instalment rail,
+          where that prefix already sits in the heading. Left empty, both
+          fall back to the full title.
       - { label: "Created At", name: "created_at", widget: "datetime" }
       - {
           label: "Updated At",
@@ -44,6 +53,14 @@ collections:
           label: "Cover Image",
           name: "cover_image",
           widget: "image",
+          required: false,
+        }
+      - { label: "Series", name: "series", widget: "string", required: false }
+      - {
+          label: "Series Part",
+          name: "series_part",
+          widget: "number",
+          value_type: "int",
           required: false,
         }
       - { label: "Description", name: "description", widget: "markdown" }

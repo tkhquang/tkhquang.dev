@@ -104,5 +104,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     };
   }
 
-  return NextResponse.json(data);
+  return NextResponse.json(data, {
+    headers: {
+      /* Counts tolerate a minute of staleness; serving from the CDN spares
+         a function invocation plus an Upstash read per reader per page */
+      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+    },
+  });
 }

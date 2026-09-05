@@ -41,14 +41,19 @@ The second binary is the logic DLL, and it holds everything you actually edit. H
 The split is what makes the problem tractable at all, because it turns "replace running code" into "replace code that something else, which isn't being replaced, holds a handle to". Without it there's no fixed point. Whatever calls the unload has to survive the call, and code that unmaps itself is a stunt rather than a design.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 30
+---
 graph TD
     subgraph "The two-binary split"
-        INJ["Injector"] -->|"injects once, at startup"| LOADER["Resident loader<br/>never unloads"];
+        INJ["Injector"] -->|"injects once,<br/>at startup"| LOADER["Resident loader<br/>never unloads"];
         LOADER -->|"spawns"| CTRL["Control thread<br/>runs off the loader lock"];
-        CTRL -->|"owns"| POLICY["Reload policy, staged names,<br/>persistent state, the verdict"];
-        CTRL -->|"loads, and replaces"| GEN["Logic DLL, generation N<br/>hooks, config, features, bindings"];
+        CTRL -->|"owns"| POLICY["Reload policy,<br/>staged names,<br/>persistent state,<br/>the verdict"];
+        CTRL -->|"loads, and replaces"| GEN["Logic DLL, generation N<br/>hooks, config,<br/>features, bindings"];
         GEN -->|"hooks and patches"| PROC["The running process<br/>memory, threads, registrations"];
-        GEN -.-> SWAP(["Only this half is ever replaced."]);
+        GEN -.-> SWAP(["Only this half<br/>is ever replaced."]);
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -82,13 +87,13 @@ Everything with static storage duration in the logic DLL resets, if and only if 
 Everything else doesn't reset, and that list is longer. Memory in the host process that you patched stays patched, because you wrote it into somebody else's address space and nothing about unmapping your module walks it back. Files you wrote stay written. Handles you leaked stay leaked. OS registrations you made and didn't remove stay registered, now pointing at addresses that are about to stop existing. Threads you started and didn't join keep running. And anything the loader owns survives by construction, because the loader isn't being replaced.
 
 <pre class="mermaid flex justify-center">
-graph LR
+graph TD
     subgraph "Across one generation boundary"
-        direction LR
-        N["Generation N"] -->|"Shutdown, FreeLibrary,<br/>image unmapped"| X(("swap"));
+        direction TB
+        N["Generation N"] -->|"Shutdown,<br/>FreeLibrary,<br/>image unmapped"| X(("swap"));
         X -->|"LoadLibrary, Init,<br/>from nothing"| N1["Generation N+1"];
-        RESET["Globals and their initialisers<br/>function-local statics and guards<br/>everything Init built"] -.->|"reset, and only if the<br/>image genuinely unmapped"| X;
-        KEEP["Patched host memory, written files,<br/>leaked handles, OS registrations,<br/>unjoined threads, loader-owned state"] ==>|"survives, whether<br/>you meant it to or not"| N1;
+        RESET["Globals and their initialisers<br/>function-local statics and guards<br/>everything Init built"] -.->|"reset, and only<br/>if the image<br/>genuinely unmapped"| X;
+        KEEP["Patched host memory,<br/>written files,<br/>leaked handles,<br/>OS registrations,<br/>unjoined threads,<br/>loader-owned state"] ==>|"survives, whether<br/>you meant it<br/>to or not"| N1;
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -138,6 +143,11 @@ With the split, the generation and the boundary in place, the reload itself is a
 More than one of those steps is allowed to say no, and the refusals don't cost the same. A shutdown refusal is cheap: nothing has been destroyed, the live generation carries on serving the game, and the next press tries again against a newer build. A failed release proof is expensive, because by then the teardown has happened and there's nothing to go back to. Design around that asymmetry. Put as much of the checking as you can before the point of no return, and make the cheap refusal the common path.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 30
+---
 graph TD
     subgraph "A reload allowed to say no"
         START["Reload requested"] --> BUD{"Retained<br/>budget left?"};
@@ -176,12 +186,12 @@ This is where the unique staged name earns its keep, and it's why that conventio
 graph TD
     subgraph "What the file name decides"
         CALL["LoadLibrary(path)"] --> Q{"Has this exact path<br/>been loaded before?"};
-        Q -->|"yes: the build output, reused every generation"| HIT["The database already holds an entry<br/>the count goes up, the file is never opened"];
-        HIT --> STALE["Returns the generation 1 handle<br/>no error, no warning,<br/>indistinguishable from a fresh map"];
-        STALE -.-> SNOTE(["The build you just made never runs."]);
-        Q -->|"no: a unique staged name"| MISS["No entry can match a name<br/>that has never been loaded"];
-        MISS --> FRESH["Reads the generation 2 bytes off disk<br/>maps fresh bytes, or fails loudly"];
-        FRESH -.-> FNOTE(["Exactly two outcomes, and both are honest."]);
+        Q -->|"yes: the build<br/>output, reused<br/>every generation"| HIT["The database already<br/>holds an entry<br/>the count goes up,<br/>the file is never opened"];
+        HIT --> STALE["Returns the<br/>generation 1 handle<br/>no error, no warning,<br/>indistinguishable<br/>from a fresh map"];
+        STALE -.-> SNOTE(["The build you just<br/>made never runs."]);
+        Q -->|"no: a unique<br/>staged name"| MISS["No entry can match<br/>a name that has<br/>never been loaded"];
+        MISS --> FRESH["Reads the generation 2<br/>bytes off disk<br/>maps fresh bytes,<br/>or fails loudly"];
+        FRESH -.-> FNOTE(["Exactly two outcomes,<br/>and both are honest."]);
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -195,17 +205,23 @@ graph TD
 **`FreeLibrary` at most decrements a count, and that's the whole of what it tells you.** It returns nonzero when the call succeeded, and the call succeeding has almost no relationship to the thing you wanted to know. It does not even promise a decrement: on a module somebody pinned, `FreeLibrary` returns nonzero and changes nothing at all. It returns `TRUE` on a module with four other references outstanding, `TRUE` on a module that will never unmap again for the life of the process, and `TRUE` on a module that unmapped cleanly. Three different worlds, one return value. Everything downstream in this post depends on separating them.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 28
+---
 graph TD
     subgraph "What nonzero can mean"
         CALL["FreeLibrary(hModule)<br/>returns nonzero: the<br/>call succeeded"];
-        CALL --> W1["5 references, now 4<br/>still mapped<br/>may unmap later"];
-        CALL --> W2["2 references, now 1<br/>a keepalive survives<br/>never unmaps again"];
-        CALL --> W3["1 reference, now 0<br/>nothing else held it<br/>the pages are gone"];
+        CALL --> W1["5 references,<br/>now 4<br/>still mapped<br/>may unmap later"];
+        CALL --> W2["2 references,<br/>now 1<br/>a keepalive survives<br/>never unmaps again"];
+        CALL --> W3["1 reference,<br/>now 0<br/>nothing else held it<br/>the pages are gone"];
         W1 -.-> PROBE;
         W2 -.-> PROBE;
         W3 -.-> PROBE;
+        W1 ~~~ W3;
         PROBE["GetModuleHandleExW with<br/>FROM_ADDRESS and<br/>UNCHANGED_REFCOUNT, on an<br/>address saved before release"];
-        PROBE -.-> ANS(["Failing to resolve it<br/>is the success condition."]);
+        PROBE -.-> ANS(["Failing to resolve it is<br/>the success condition."]);
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -286,6 +302,12 @@ Hot reload isn't an unload operation. It's an authorisation problem, and the aut
 The holders aren't a long list, and none of them are unusual. Another `LoadLibrary` anywhere in the process, taken by code that has nothing to do with you. A [`GetModuleHandleEx`](https://learn.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-getmodulehandleexw) taken without `GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT`, which is easy to write by accident and takes a real reference as a side effect of asking a question. A pinning reference, which by definition nobody can ever release. A static import from another loaded module. A worker that had a counted reference taken for it before it started and then detached instead of being joined. And the interesting one: a reference your own code took on purpose, because it decided that leaking the module would be less bad than unmapping it.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    rankSpacing: 24
+    nodeSpacing: 30
+---
 graph LR
     subgraph "Who can hold your image"
         direction LR
@@ -296,7 +318,7 @@ graph LR
         L5["A detached worker that<br/>kept its own reference"] --> MOD;
         L6["A reference your own code<br/>took and must never release"] --> MOD;
         MOD["Your logic DLL,<br/>generation N"];
-        NOT(["A thread merely executing your code.<br/>This one is the crash, not a pin."]) -. "holds nothing" .-> MOD;
+        NOT(["A thread merely executing<br/>your code. This one is<br/>the crash, not a pin."]) -. "holds nothing" .-> MOD;
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -325,13 +347,13 @@ This is the common case rather than an exotic one. The most widespread instance 
 graph TD
     subgraph "When you are not on top"
         CALL["A call reaches the<br/>hooked function"] --> PRO["The prologue<br/>the newer layer owns it now"];
-        PRO --> RS["Newer layer's stub<br/>the original it saved is<br/>YOUR patch, not the real bytes"];
+        PRO --> RS["Newer layer's stub<br/>the original it saved<br/>is YOUR patch,<br/>not the real bytes"];
         RS --> RD["Newer layer's detour"];
         RD --> RT["Newer layer's trampoline"];
         RT --> YS["Your stub"];
         YS --> YD["Your detour"];
         YD --> REAL["The real function"];
-        PRO -. "you restore your<br/>pre-hook bytes here" .-> BREAK["The newer layer still jumps into<br/>a trampoline you just freed"];
+        PRO -. "you restore your<br/>pre-hook bytes here" .-> BREAK["The newer layer<br/>still jumps into<br/>a trampoline<br/>you just freed"];
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;

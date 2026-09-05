@@ -1,4 +1,5 @@
 import BlogInfo from "@/components/blog/BlogInfo";
+import ChapterClose from "@/components/blog/ChapterClose";
 import Comments from "@/components/blog/Comments";
 import { PathInfo } from "@/components/blog/PathInfo";
 import PostAside from "@/components/blog/PostAside";
@@ -6,10 +7,10 @@ import PostMeta from "@/components/blog/PostMeta";
 import TagList from "@/components/blog/PostTag";
 import RailSky from "@/components/blog/RailSky";
 import RailSkyDriver from "@/components/blog/RailSkyDriver";
+import SeriesPlate from "@/components/blog/SeriesPlate";
 import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
-import ScriptLoader from "@/components/common/ScriptLoader";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
 import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
@@ -57,14 +58,6 @@ export const dynamic = "force-static";
 export const revalidate = false;
 export const dynamicParams = false;
 
-const MERMAIDJS_SCRIPT_CONTENT = `
-<script type="module">
-  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.esm.min.mjs";
-  mermaid.initialize({startOnLoad: true});
-  mermaid.contentLoaded();
-</script>
-`;
-
 export default async function Post({
   params,
 }: {
@@ -81,18 +74,79 @@ export default async function Post({
 
   const category = await markdownParser.getCategoryBySlug(post.category_slug);
 
-  /* Posts embed diagrams as raw <pre class="mermaid"> blocks (fenced form
-     kept for safety); skip the CDN module entirely when neither appears */
-  const hasMermaidDiagram =
-    post.content.includes('class="mermaid') ||
-    post.content.includes("```mermaid");
+  const allPosts = await markdownParser.getAllPosts();
+  const categoryPosts = allPosts.filter(
+    (other) =>
+      other.category_slug === post.category_slug && other.slug !== post.slug
+  );
 
-  const relatedPosts = (await markdownParser.getAllPosts())
-    .filter(
-      (other) =>
-        other.category_slug === post.category_slug && other.slug !== post.slug
-    )
+  /* The full serial roster for the instalment plate under the lede */
+  const seriesParts = post.series
+    ? allPosts
+        .filter((other) => other.series === post.series)
+        .sort((a, b) => (a.series_part ?? 0) - (b.series_part ?? 0))
+    : [];
+  const seriesIndex = seriesParts.findIndex((part) => part.slug === post.slug);
+
+  /* Serial continuity outranks recency: a reader finishing instalment N
+     is offered instalment N+1 before the shelf's newest */
+  const nextInSeries =
+    seriesIndex >= 0 ? seriesParts[seriesIndex + 1] : undefined;
+  const previousInSeries =
+    seriesIndex > 0 ? seriesParts[seriesIndex - 1] : undefined;
+
+  /* The rail's shelf rows stay pure recency; the next instalment gets
+     its own pinned gilt block above them instead of masquerading as one */
+  const relatedPosts = categoryPosts
+    .filter((other) => other.slug !== nextInSeries?.slug)
     .slice(0, 3);
+
+  /* The chapter close turns a page, it does not step through a timeline:
+     a serial hands over its own adjacent instalments and stops at the
+     serial's edges, and everything else stays on its own shelf. Walking
+     the whole volume by date instead would close a devlog with whatever
+     unrelated entry happened to be published next. */
+  const previousPost = post.series
+    ? previousInSeries
+    : categoryPosts.find((other) => other.created_at < post.created_at);
+  const nextPost = post.series
+    ? nextInSeries
+    : /* categoryPosts is bound newest-first, so the oldest entry newer
+         than this one sits at the far end */
+      [...categoryPosts]
+        .reverse()
+        .find((other) => other.created_at > post.created_at);
+
+  /* See also gathers kin, not neighbours: the posts sharing the most tags
+     with this one, minus everything the page already prints elsewhere (the
+     two panels above, the serial roster under the lede, and the shelf rows
+     in the right rail). Ties break to the newer entry. */
+  const alreadyPrinted = new Set(
+    [
+      previousPost?.slug,
+      nextPost?.slug,
+      ...seriesParts.map((part) => part.slug),
+      ...relatedPosts.map((other) => other.slug),
+    ].filter((slug): slug is string => Boolean(slug))
+  );
+
+  const postTags = new Set(post.tags ?? []);
+  const seeAlso = allPosts
+    .filter(
+      (other) => other.slug !== post.slug && !alreadyPrinted.has(other.slug)
+    )
+    .map((other) => ({
+      other,
+      shared: (other.tags ?? []).filter((tag) => postTags.has(tag)).length,
+    }))
+    .filter((entry) => entry.shared > 0)
+    .sort(
+      (a, b) =>
+        b.shared - a.shared ||
+        (a.other.created_at > b.other.created_at ? -1 : 1)
+    )
+    .slice(0, 3)
+    .map((entry) => entry.other);
 
   const coverWidth = post.coverDataExtra?.width;
   const coverHeight = post.coverDataExtra?.height;
@@ -108,7 +162,10 @@ export default async function Post({
     height: coverHeight ?? 720,
     loading: "eager",
     priority: true,
-    sizes: "(max-width: 768px) 100vw, 1024px",
+    /* 1280, not 1024: under md:h-[50vw] md:max-h-[50vh] a 16:9 cover
+       renders up to ~1280 CSS px wide on large desktops, and a lower cap
+       upscales the LCP image to reach it */
+    sizes: "(max-width: 768px) 100vw, 1280px",
     width: coverWidth ?? 1280,
     blurDataURL: post.coverData.blurDataURL,
     backgroundClassName: "dark:invert-0 invert",
@@ -166,6 +223,13 @@ export default async function Post({
                 {post.description}
               </p>
             )}
+            {post.series && seriesParts.length > 1 && (
+              <SeriesPlate
+                series={post.series}
+                parts={seriesParts}
+                currentSlug={post.slug}
+              />
+            )}
             <div className="article__meta border-theme-hairline-soft mt-3 mb-6 border-b pb-4">
               <PostMeta post={post} />
             </div>
@@ -178,9 +242,17 @@ export default async function Post({
             >
               {html}
             </div>
-            {hasMermaidDiagram && (
-              <ScriptLoader content={MERMAIDJS_SCRIPT_CONTENT} />
-            )}
+            <ChapterClose
+              post={post}
+              previousPost={previousPost}
+              nextPost={nextPost}
+              seeAlso={seeAlso}
+              contextLabel={
+                post.series
+                  ? `${category.title} · ${post.series}`
+                  : category.title
+              }
+            />
 
             <div className="article__footer my-6 flex">
               <TagList post={post} />
@@ -210,6 +282,7 @@ export default async function Post({
             categoryTitle={category.title}
             categorySlug={category.slug}
             posts={relatedPosts}
+            nextInstalment={nextInSeries}
           />
           <RailSky />
           <RailSkyDriver />

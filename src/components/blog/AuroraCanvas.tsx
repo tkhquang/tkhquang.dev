@@ -32,12 +32,43 @@ const PALETTES = {
 const AuroraCanvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
+  /* Bumped when the GPU hands the context back after an eviction, so the
+     whole effect re-runs and rebuilds the program on the restored context */
+  const [generation, setGeneration] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) {
       return;
     }
+
+    /* Declared ahead of the loss handler below, which closes over it: the
+       early returns past the context and shader checks leave that handler
+       armed, and a binding declared after them would still be in its
+       temporal dead zone when the event fires */
+    let rafId = 0;
+
+    /* Without preventDefault on the lost event the browser never fires
+       restored and the sky stays dead for the session after a GPU reset */
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      /* Both the draw loop and the compile poll re-arm unconditionally,
+         and GL calls on a lost context are silent no-ops, so neither one
+         stops on its own. An evicted context is not promised a restore,
+         so the frame is released here rather than waiting for one. */
+      cancelAnimationFrame(rafId);
+      rafId = 0;
+      setReady(false);
+    };
+    const onContextRestored = () => {
+      setGeneration((current) => current + 1);
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost);
+    canvas.addEventListener("webglcontextrestored", onContextRestored);
+    const removeLossListeners = () => {
+      canvas.removeEventListener("webglcontextlost", onContextLost);
+      canvas.removeEventListener("webglcontextrestored", onContextRestored);
+    };
 
     let context: WebGLRenderingContext | null = null;
     try {
@@ -50,7 +81,7 @@ const AuroraCanvas = () => {
       /* no WebGL: the band gradient underneath is the fallback */
     }
     if (!context) {
-      return;
+      return removeLossListeners;
     }
     const gl = context;
 
@@ -69,11 +100,11 @@ const AuroraCanvas = () => {
     const vs = compile(gl.VERTEX_SHADER, VERTEX_SHADER);
     const fs = compile(gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
     if (!vs || !fs) {
-      return;
+      return removeLossListeners;
     }
     const program = gl.createProgram();
     if (!program) {
-      return;
+      return removeLossListeners;
     }
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
@@ -89,7 +120,6 @@ const AuroraCanvas = () => {
      * it is done; without the extension start() runs immediately and takes
      * the stall, since there is nothing to wait on.
      */
-    let rafId = 0;
     const disposers: Array<() => void> = [];
 
     const start = () => {
@@ -181,9 +211,8 @@ const AuroraCanvas = () => {
       });
       observer.observe(host);
 
-      const reducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+      const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let reducedMotion = motionQuery.matches;
       /* The reduced-motion still composition: 104724250ms crests both
          breathing sines (104724.25s is 6160.25 * 17 and 2554.25 * 41)
          and lands 24s into a 30s meteor slot, past every possible 0.7s
@@ -317,12 +346,39 @@ const AuroraCanvas = () => {
       }
       setReady(true);
 
+      /* The preference can flip mid-session; a one-shot read would keep
+         the loop running for a reader who just asked for stillness, or
+         leave a frozen frame for one who re-enabled motion */
+      const onMotionChange = () => {
+        reducedMotion = motionQuery.matches;
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+        if (reducedMotion) {
+          lastPointerMove = STILL_MS;
+          drawFrame(STILL_MS);
+        } else {
+          /* Unpin lastPointerMove from the still frame's far-future STILL_MS
+             or idle stays clamped at zero forever and the Spirit Light
+             wander never re-engages; from now, the patrol starts after the
+             same 3s grace a fresh mount gets */
+          lastPointerMove = performance.now();
+          lastNow = performance.now();
+          rafId = requestAnimationFrame(loop);
+        }
+      };
+      if (typeof motionQuery.addEventListener === "function") {
+        motionQuery.addEventListener("change", onMotionChange);
+      }
+
       disposers.push(() => {
         pointerHost.removeEventListener("pointermove", onPointerMove);
         observer.disconnect();
         resizeObserver.disconnect();
         themeObserver.disconnect();
         dprQuery?.removeEventListener("change", handleDprChange);
+        if (typeof motionQuery.removeEventListener === "function") {
+          motionQuery.removeEventListener("change", onMotionChange);
+        }
       });
     };
 
@@ -343,6 +399,7 @@ const AuroraCanvas = () => {
     }
 
     return () => {
+      removeLossListeners();
       cancelAnimationFrame(rafId);
       for (const dispose of disposers) {
         dispose();
@@ -357,7 +414,7 @@ const AuroraCanvas = () => {
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       }
     };
-  }, []);
+  }, [generation]);
 
   return (
     <canvas

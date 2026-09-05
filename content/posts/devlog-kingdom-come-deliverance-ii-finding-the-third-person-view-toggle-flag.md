@@ -1,5 +1,6 @@
 ---
 title: "[Devlog] Kingdom Come: Deliverance II - Finding the Third-Person View Toggle Flag"
+short_title: "Finding the Third-Person View Toggle Flag"
 created_at: 2025-03-29T00:00:00.000Z
 updated_at: 2025-05-25T00:00:00.000Z
 published: true
@@ -7,13 +8,14 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Reverse Engineering
   - C++
   - Camera
 cover_image: /uploads/images/audentis-fortuna-iuvat.png
+series: Third Person Camera
+series_part: 1
 description: "Enabling Kingdom Come: Deliverance II's hidden third-person view: a walk through memory, vftables, and pointer chains."
 ---
 
@@ -104,22 +106,27 @@ The vftables from the disassembly are indispensable for this process. Key vftabl
 *   Others like `wh::game::C_CameraDialog::vftable` (`183a85140`), `wh::game::C_CameraRider::vftable` (`183a85290`), and `wh::game::C_CameraUI::vftable` (`183a851b0`) further paint the picture of a polymorphic camera system where our TPV flag likely instructs the `C_CameraManager` which controller's logic to employ.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 30
+---
 graph TD
     subgraph "TPV Flag Discovery Path"
-        A["Input: Mod Hotkey ('Toggle View')"] --> B{Mod Logic};
-        B --> C["Call getResolvedTpvFlagAddress()"];
-        C --> D["Find Global Context Storage Addr<br/>(AOB Scan for MOV near WHGame.DLL+A0A0A9)"];
+        A["Input: Mod Hotkey<br/>('Toggle View')"] --> B{Mod Logic};
+        B --> C["Call<br/>getResolvedTpvFlagAddress()"];
+        C --> D["Find Global Context Storage Addr<br/>(AOB Scan for MOV near<br/>WHGame.DLL+A0A0A9)"];
         D --> D1["Global Context Storage Address<br/>(e.g., WHGame.DLL+54B23B0)"];
-        D1 --> E["Dereference to get: Global Context Instance Ptr<br/>(e.g., 0x26A07867760)"];
-        E --> |Add Offset_ManagerPtrStorage 0x38| F1["Addr of wh::game::C_CameraManager Instance Ptr Storage"];
-        F1 --> F["Dereference to get: wh::game::C_CameraManager Instance Ptr<br/>(e.g., 0x26C24C1EA20)"];
-        F --> |Verify vftable| F_VTABLE([fa:fa-table wh::game::C_CameraManager::vftable @18406adb8]);
-        F --> |Add Offset_TpvObjPtrStorage 0x28| G1["Addr of wh::game::C_CameraThirdPerson Instance Ptr Storage"];
-        G1 --> G["Dereference to get: wh::game::C_CameraThirdPerson Instance Ptr"];
-        G --> |Verify vftable| G_VTABLE([fa:fa-table wh::game::C_CameraThirdPerson::vftable @183a85220]);
-        G --> |Add Offset_TpvFlag 0x38| H["Address of TPV Flag Byte (within TPV Object)"];
-        H --> I["Mod Reads/Writes Flag Value (0 <-> 1)"];
-        I --> J["Game Calls Active Camera Controller's Update (e.g., FUN_1839ad780 for TPV)"];
+        D1 --> E["Dereference to get:<br/>Global Context Instance Ptr<br/>(e.g., 0x26A07867760)"];
+        E --> |"Add 0x38 Offset_<br/>ManagerPtrStorage"| F1["Addr of wh::game::<br/>C_CameraManager<br/>Instance Ptr Storage"];
+        F1 --> F["Dereference to get:<br/>wh::game::C_CameraManager<br/>Instance Ptr<br/>(e.g., 0x26C24C1EA20)"];
+        F --> |Verify vftable| F_VTABLE([fa:fa-table wh::game::<br/>C_CameraManager<br/>::vftable @18406adb8]);
+        F --> |"Add 0x28 Offset_<br/>TpvObjPtrStorage"| G1["Addr of wh::game::<br/>C_CameraThirdPerson<br/>Instance Ptr Storage"];
+        G1 --> G["Dereference to get:<br/>wh::game::C_CameraThirdPerson<br/>Instance Ptr"];
+        G --> |Verify vftable| G_VTABLE([fa:fa-table wh::game::<br/>C_CameraThirdPerson<br/>::vftable @183a85220]);
+        G --> |"Add 0x38<br/>Offset_TpvFlag"| H["Address of TPV Flag Byte<br/>(within TPV Object)"];
+        H --> I["Mod Reads/Writes<br/>Flag Value (0 <-> 1)"];
+        I --> J["Game Calls Active Camera<br/>Controller's Update<br/>(e.g., FUN_1839ad780 for TPV)"];
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;

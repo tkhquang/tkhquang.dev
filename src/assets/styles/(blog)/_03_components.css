@@ -1,3 +1,12 @@
+/* The tint swell fades only while --ul-a is a registered percentage. An
+   unregistered custom property is not interpolable, so the transition on
+   .tint-link was inert and the underline snapped on at full strength. */
+@property --ul-a {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
 @layer components {
   .logo {
     /* perspective: 1000px; */
@@ -133,8 +142,32 @@
     --shelf-gaming: hsl(352deg 62% 73%);
     --shelf-the-inner-crisis: hsl(267deg 56% 75%);
 
-    /* Aurora hues, read by the selection wash and reading-progress bar in
-       the blog base stylesheet and by the bio card's constellation chart.
+    /* Gilt as READABLE ink: dark rides the chart's gilt exactly, light
+       deepens it or it dies on paper. For serial marks and tailpieces. */
+    --gilt-ink: hsl(42deg 60% 70%);
+
+    /* Star ink at page scope, so tailpieces outside the chart components
+       stop falling back to primary: near-white starlight by night, the
+       lapis primary by day */
+    --chart-star: hsl(199deg 90% 85%);
+
+    /* The Plate-Frame Focus cartouche: gilt rule out, starlight rule in
+       by night; gilt out, lapis in by day */
+    --cartouche-outer: hsl(42deg 60% 70%);
+    --cartouche-inner: hsl(199deg 90% 85%);
+
+    /* Chart Plate inks: what the baked diagrams' var() references resolve
+       to. Everything but vermilion rides an existing token pair, so the
+       plates follow the theme for free. */
+    --diagram-ink: var(--on-surface);
+    --diagram-node: var(--surface-raised);
+    --diagram-vermilion: hsl(9deg 68% 70%);
+    --diagram-viridian: var(--success);
+    --diagram-lapis: var(--primary);
+    --diagram-gilt: var(--gilt-ink);
+
+    /* Aurora hues, read by the selection wash in the blog base stylesheet
+       and by the bio card's constellation chart.
        The masthead shader is not one of them: its palette lives in
        AuroraCanvas so the GL uniforms need no per-frame style read. */
     --aurora-a: hsl(168deg 70% 62%);
@@ -147,7 +180,539 @@
       --aurora-a: hsl(168deg 55% 34%);
       --aurora-b: hsl(266deg 45% 48%);
       --aurora-c: hsl(210deg 75% 42%);
+      --gilt-ink: hsl(40deg 65% 38%);
+      --chart-star: var(--primary);
+      --diagram-vermilion: hsl(11deg 75% 38%);
+
+      /* Diagram gilt sits a step deeper than the serial marks' gilt ink:
+         the classDef puts it on node text, where the shared value stops
+         at 3.8:1 on the raised card; this one clears AA in the same hue */
+      --diagram-gilt: hsl(40deg 72% 31%);
+      --cartouche-outer: hsl(40deg 60% 42%);
+      --cartouche-inner: var(--primary);
     }
+  }
+
+  /* Running heads and the Index drawer live in the overrides layer and
+     IndexDrawer.css: their recipes fight utility classes and Drawer.css,
+     both of which outrank this components layer */
+
+  /*
+   * Catalogue Headpiece: the index pages' shared chapter head, the
+   * masthead's typographic system over the masthead's own sky. The head
+   * is the room wrapper's first row, so its text keeps the column's left
+   * edge at every width; behind that row three full-bleed layers share
+   * one box that reaches up under the header, which stays transparent
+   * while the page rests at the top (BlogHeader knows the rooms by route
+   * and goes solid on the first scroll): the band flag with its grain,
+   * the live aurora blended onto it as on the masthead, and a dissolve
+   * that reaches paper at the row's bottom edge.
+   */
+  .catalogue-headpiece {
+    position: relative;
+    /* The sky layers sit at z-index -1 inside this box, never behind an
+       ancestor's ground */
+    isolation: isolate;
+    display: block;
+    width: 100%;
+    /* Both wrapper flavours: spans the grid's two columns, and in the
+       feed's flex-wrap it must not widen the shrink-to-fit wrapper, so
+       it contributes no inline size and drops the wrapper's space-x end
+       margin. That margin is a utility-layer rule, which outranks this
+       layer whatever the specificity, so the reset has to be important;
+       the alternative, a column gap, counts beside a zero-width first
+       line just as the margin did (measured: the feed rooms slid 32px). */
+    grid-column: 1 / -1;
+    contain: inline-size;
+    margin-inline-end: 0 !important;
+    padding: 1.75rem 0 2rem;
+  }
+
+  /* The sky's box: the three layers share it, starting at the viewport's
+     top edge behind the transparent header so the sky runs unbroken into
+     the head, and ending at the row's bottom edge where the dissolve has
+     reached paper. Scoped under the headpiece so the recipe outranks
+     .band's position: relative whatever the layer order. */
+  .catalogue-headpiece .catalogue-headpiece__band,
+  .catalogue-headpiece .catalogue-headpiece__sky,
+  .catalogue-headpiece .catalogue-headpiece__dissolve {
+    position: absolute;
+    top: calc(-1 * var(--header-height));
+    bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    z-index: -1;
+  }
+
+  /* The masthead dissolves over 128px of its 385px, a third; the band here
+     is shorter, so the third is kept as a ratio rather than the pixels */
+  .catalogue-headpiece .catalogue-headpiece__dissolve {
+    top: auto;
+    height: 33%;
+    background: linear-gradient(to bottom, transparent, var(--background));
+  }
+
+  @media (max-width: 40rem) {
+    .catalogue-headpiece {
+      padding: 1.25rem 0 1.5rem;
+    }
+  }
+
+  .catalogue-headpiece__room {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* The hash dims, the subject speaks */
+  .catalogue-headpiece__hash {
+    opacity: 0.45;
+  }
+
+  /* Inline swatch for category stat lines: a small square of the shelf */
+  .catalogue-headpiece__swatch {
+    display: inline-block;
+    width: 0.55em;
+    height: 0.55em;
+    border-radius: 2px;
+    margin-right: 0.35em;
+  }
+
+  .catalogue-headpiece__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 620;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.9rem, 4.5vw, 2.35rem);
+    line-height: 1.12;
+    color: var(--primary);
+  }
+
+  .catalogue-headpiece__bar {
+    display: block;
+    height: 2px;
+    width: 4rem;
+    border-radius: 2px;
+    margin-top: 0.75rem;
+    background: color-mix(in srgb, var(--primary) 45%, transparent);
+  }
+
+  .catalogue-headpiece__stat {
+    display: block;
+    margin-top: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * The quiet link: a full-width underline band whose ALPHA fades up in
+   * place. Nothing wipes and nothing moves; without @property support the
+   * tint simply appears. Weight is the context's business, never this
+   * class's.
+   */
+  .tint-link {
+    color: var(--primary);
+    background-image: linear-gradient(
+      color-mix(in srgb, var(--primary) var(--ul-a, 0%), transparent),
+      color-mix(in srgb, var(--primary) var(--ul-a, 0%), transparent)
+    );
+    background-size: 100% 0.45em;
+    background-position: 0 85%;
+    background-repeat: no-repeat;
+    /* Every line of a wrapped link gets its own swell. Under the default
+       slice the percentages resolve against the unbroken box, which lays
+       one bar across the first line and misses the rest. */
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: --ul-a 0.2s ease;
+  }
+
+  .tint-link:hover,
+  .tint-link:focus-visible {
+    --ul-a: 30%;
+  }
+
+  /*
+   * Serial Instalments: the ruled plate under a serial post's lede. Rows
+   * are a GRID, not wrapping flex: the date column holds one line at
+   * every width, never folding under the title.
+   */
+  .series-plate {
+    /* One line of title. The mark pins to it, so a title long enough to
+       wrap cannot drag the furniture down to the middle of the row. */
+    --series-title-size: 0.9375rem;
+    --series-title-leading: 1.4;
+    --series-line: calc(var(--series-title-size) * var(--series-title-leading));
+
+    border: 1px solid var(--hairline-soft);
+    border-radius: 0.5rem;
+    padding: 1.15rem 1.35rem 0.4rem;
+    margin: 1.4rem 0 1.6rem;
+  }
+
+  .series-plate__head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding-bottom: 0.7rem;
+  }
+
+  .series-plate__head::before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--hairline));
+  }
+
+  .series-plate__head::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--hairline), transparent);
+  }
+
+  /* The head's 0.7rem size lives in the overrides layer, where it can
+     outrank the kicker utility's text-xs */
+  .series-plate__head .kicker {
+    white-space: nowrap;
+    color: var(--on-surface);
+  }
+
+  .series-plate__instalment {
+    color: var(--gilt-ink);
+  }
+
+  .series-plate__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Five columns: the title takes its natural width, the dot leader fills
+     the slack, and the date column never wraps under anything. Every cell
+     is placed by hand because the leader deliberately overlaps the title,
+     and auto-placement would push it onto a second row. */
+  .series-plate__row {
+    display: grid;
+    grid-template-columns: 14px 2rem auto minmax(2rem, 1fr) auto;
+    grid-template-rows: auto;
+    align-items: baseline;
+    column-gap: 0.55rem;
+    padding: 0.6rem 0.1rem;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  /* The leader runs under the title as well as beside it, and the title's
+     own ink masks it, so the dots read as starting where the words stop.
+     Bounded to its own column it could only start at the column edge,
+     which on a wrapped row sat a long way right of the first line.
+
+     No align-self either: the leader rides the row's first baseline.
+     Bottom-aligning it sinks it to the foot of a wrapped row, where it
+     points at nothing. */
+  .series-plate__leader {
+    grid-area: 1 / 3 / 2 / 5;
+    height: 0.68em;
+    border-bottom: 1px dotted
+      color-mix(in srgb, var(--on-surface) 30%, transparent);
+  }
+
+  /* The mask. Its right padding is the gap the column gap used to give,
+     so a single-line row is unchanged to the pixel. The colour fills that
+     padding and hides the dots behind it, while background-origin holds
+     the tint swell to the words, which is the only reason the two can
+     share one element. */
+  .series-plate__label {
+    background-color: var(--background);
+    background-origin: content-box;
+    padding-right: 0.55rem;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  @media (max-width: 40rem) {
+    .series-plate__row {
+      grid-template-columns: 14px 2rem minmax(0, 1fr) auto;
+    }
+
+    .series-plate__date {
+      grid-area: 1 / 4;
+    }
+
+    .series-plate__leader {
+      display: none;
+    }
+
+    .series-plate__label {
+      background-color: transparent;
+      padding-right: 0;
+    }
+  }
+
+  /* Centred within the first line only, never within the whole row */
+  .series-plate__mark {
+    grid-area: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: start;
+    height: var(--series-line);
+  }
+
+  .series-plate__mark svg {
+    width: 11px;
+    height: 11px;
+    fill: var(--gilt-ink);
+    display: block;
+  }
+
+  .series-plate__ring {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--on-surface) 35%, transparent);
+    display: block;
+  }
+
+  .series-plate__numeral {
+    grid-area: 1 / 2;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--on-surface);
+    opacity: 0.85;
+  }
+
+  /* Grid items paint atomically in tree order, like inline blocks, so the
+     leader would otherwise draw its dots straight over the words it is
+     meant to stop at. This lifts the title above it. */
+  .series-plate__title {
+    grid-area: 1 / 3;
+    position: relative;
+    z-index: 1;
+    font-size: var(--series-title-size);
+    font-weight: 600;
+    line-height: var(--series-title-leading);
+    min-width: 0;
+  }
+
+  .series-plate__date {
+    grid-area: 1 / 5;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--on-surface);
+    opacity: 0.75;
+    white-space: nowrap;
+    justify-self: end;
+  }
+
+  .series-plate__row--current .series-plate__numeral {
+    color: var(--gilt-ink);
+    opacity: 1;
+  }
+
+  /* The current date sits a half-step quieter than its numeral and title */
+  .series-plate__row--current .series-plate__date {
+    color: var(--gilt-ink);
+    opacity: 0.9;
+  }
+
+  .series-plate__row--current .series-plate__title {
+    color: var(--gilt-ink);
+    font-weight: 600;
+  }
+
+  /* The feed card's serial kicker: the second row of the meta grid, in
+     the rail head's recipe (10px star, 0.375rem gap) with the plate
+     head's split ink, series name in on-surface, instalment in gilt */
+  .serial-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.375rem;
+    row-gap: 0.25rem;
+    color: var(--on-surface);
+  }
+
+  .serial-kicker svg {
+    width: 10px;
+    height: 10px;
+    fill: var(--gilt-ink);
+    display: block;
+  }
+
+  /* The instalment phrase stays whole when a long series name wraps the
+     line; the dot is its own item, so the break falls either side of it */
+  .serial-kicker__instalment {
+    color: var(--gilt-ink);
+    white-space: nowrap;
+  }
+
+  /* The right rail's gilt serial header, one step up from the feed card's
+     serial kicker. Its full ink is set in the overrides layer, where it
+     can outrank the kicker utility's 85 percent. */
+  .post-aside__serial-head {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--gilt-ink);
+  }
+
+  .post-aside__serial-head svg {
+    width: 10px;
+    height: 10px;
+    fill: var(--gilt-ink);
+    display: block;
+  }
+
+  /*
+   * The Chapter Close: asterism tailpiece, set-down colophon line, and the
+   * cross-reference plate that ends every article as a chapter instead of
+   * a scroll into the comments box.
+   */
+  .chapter-close__tailpiece {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.9rem;
+    margin: 2.5rem auto 0.9rem;
+  }
+
+  .chapter-close__tailpiece::before,
+  .chapter-close__tailpiece::after {
+    content: "";
+    height: 1px;
+    width: clamp(48px, 14vw, 84px);
+    flex: 0 0 auto;
+  }
+
+  .chapter-close__tailpiece::before {
+    background: linear-gradient(90deg, transparent, var(--hairline));
+  }
+
+  .chapter-close__tailpiece::after {
+    background: linear-gradient(90deg, var(--hairline), transparent);
+  }
+
+  .chapter-close__colophon {
+    text-align: center;
+    margin: 0 0 2.4rem;
+    display: block;
+  }
+
+  .chapter-close__plate {
+    border: 1px solid var(--hairline-soft);
+    /* Near-square corners, as an engraved plate takes */
+    border-radius: 2px;
+    margin-top: 0.5rem;
+  }
+
+  .chapter-close__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.6rem 1.25rem;
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+
+  .chapter-close__spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .chapter-close__spread--single {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-close__panel {
+    padding: 1.1rem 1.25rem 1.25rem;
+    min-width: 0;
+  }
+
+  .chapter-close__panel--next {
+    border-left: 1px solid var(--hairline-soft);
+    text-align: right;
+  }
+
+  .chapter-close__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .chapter-close__panel--next .chapter-close__meta {
+    flex-direction: row-reverse;
+  }
+
+  .chapter-close__title .tint-link {
+    font-weight: 620;
+  }
+
+  .chapter-close__catchword {
+    margin: 0.7rem 0 0;
+    font-family: var(--font-serif);
+    font-size-adjust: 0.525;
+    font-style: italic;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 560px) {
+    .chapter-close__spread {
+      grid-template-columns: 1fr;
+    }
+
+    .chapter-close__panel--next {
+      border-left: 0;
+      border-top: 1px solid var(--hairline-soft);
+    }
+  }
+
+  .chapter-close__seealso {
+    border-top: 1px solid var(--hairline-soft);
+    padding: 0.75rem 1.25rem 1rem;
+  }
+
+  /* Nothing to turn to: the head's rule already closes the plate, so the
+     rows must not double it */
+  .chapter-close__seealso--only {
+    border-top: 0;
+  }
+
+  .chapter-close__rows {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .chapter-close__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+
+  .chapter-close__row-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    min-width: 0;
+  }
+
+  .chapter-close__row-date {
+    white-space: nowrap;
+    flex: 0 0 auto;
   }
 }
 
@@ -166,6 +731,10 @@
   font-family: var(--font-display);
   font-optical-sizing: auto;
   font-weight: 650;
+  /* The 650 was picked for THIS size, not the base 1rem it inherited */
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  line-height: 1;
 }
 
 .code-container {
@@ -203,17 +772,23 @@
     width: calc(2.25rem + 0.5rem);
   }
 
+  /* Tokens take their per-theme ink; the panel itself is painted by the
+     figure's own background, so the per-token Shiki backgrounds are
+     deliberately flattened to transparent. (The old two-value
+     background-color here was invalid CSS that only happened to compute
+     to the same transparent; do not "fix" it back to a fallback var() or
+     every token span grows a second glaze over the plate.) */
   code[data-theme*="dark"],
   code[data-theme*="dark"] span {
     color: var(--shiki-dark);
-    background-color: var(--code), var(--shiki-dark-bg);
+    background-color: transparent;
   }
 
   @variant light {
     code[data-theme*="light"],
     code[data-theme*="light"] span {
       color: var(--shiki-light);
-      background-color: var(--code), var(--shiki-light-bg);
+      background-color: transparent;
     }
   }
 
@@ -228,11 +803,35 @@
   }
 
   [data-line] {
-    &[data-highlighted-line] {
-      @apply bg-theme-surface! min-w-full border-l-4 shadow-sm;
+    /* Two ways to say the same thing, so they print the same thing: the
+       fence meta ({3}) sets data-highlighted-line, the inline notation
+       ([!code highlight]) sets .highlighted. Which one an author reaches
+       for is an authoring convenience, never a visual difference.
+
+       No min-width here. The lines are items of the code element's grid,
+       and a percentage min-width replaces an item's content-based
+       automatic minimum: the single track then sizes to the widest
+       UNMARKED line, and a marked line longer than that overflows its own
+       box, so its wash and rule stop short of its text once the block
+       scrolls. With the automatic minimum the track grows to the longest
+       line, marked or not, and a short marked line still stretches to
+       the track, which is never narrower than the block. */
+    &[data-highlighted-line],
+    &.highlighted {
+      @apply bg-theme-surface! border-l-4 shadow-sm;
     }
 
-    &:not([data-highlighted-line]) {
+    /* A diff line wears the same rule as a highlighted one, only inked
+       differently below. Same border, not a box-shadow: a border occupies
+       layout, so anything drawn another way would seat its text 4px off
+       the column every other line sits on. */
+    &.diff {
+      @apply border-l-4;
+    }
+
+    /* The 4px margin stands in for that rule, so an unmarked line's text
+       lands on the same column as a marked one */
+    &:not([data-highlighted-line]):not(.highlighted):not(.diff) {
       @apply ml-1;
     }
 
@@ -240,6 +839,38 @@
       margin-right: 1rem !important;
       @apply border-r border-gray-500 pr-1;
     }
+  }
+
+  /* Diff marks from fence notation ([!code ++] / [!code --]), never a
+     moving thing. Each carries its meaning in the RULE as well as the
+     wash, viridian for an added line and vermilion for a removed one: a
+     wash alone cannot separate the two on the dark panel, where both
+     tokens resolve to pale pastels. The glyph column belongs to the line
+     numbers, so there is no +/- pseudo content to lean on.
+     Alphas differ per theme because the tokens invert: the dark inks are
+     pastels that need weight, the light ones are deep and print heavy. */
+  [data-line].diff.add {
+    border-left-color: var(--success);
+    background-color: color-mix(in srgb, var(--success) 24%, transparent);
+
+    @variant light {
+      background-color: color-mix(in srgb, var(--success) 14%, transparent);
+    }
+  }
+
+  [data-line].diff.remove {
+    border-left-color: var(--error);
+    background-color: color-mix(in srgb, var(--error) 24%, transparent);
+
+    @variant light {
+      background-color: color-mix(in srgb, var(--error) 14%, transparent);
+    }
+  }
+
+  .highlighted-word {
+    background-color: color-mix(in srgb, var(--primary) 18%, transparent);
+    border-radius: 2px;
+    padding: 1px 2px;
   }
 
   figure[data-rehype-pretty-code-figure] {

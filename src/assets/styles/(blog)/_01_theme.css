@@ -1,5 +1,31 @@
 @layer theme {
   @theme {
+    /* Radix accordion ease. Tailwind resolves accordion.tsx's
+       animate-accordion-* classes through these tokens, and the height
+       endpoints come from Radix's own --radix-accordion-content-height. */
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+
+    @keyframes accordion-down {
+      from {
+        height: 0;
+      }
+
+      to {
+        height: var(--radix-accordion-content-height);
+      }
+    }
+
+    @keyframes accordion-up {
+      from {
+        height: var(--radix-accordion-content-height);
+      }
+
+      to {
+        height: 0;
+      }
+    }
+
     --animate-music-bar-1: music-bar-1 0.8s linear infinite;
     --animate-music-bar-2: music-bar-2 0.8s linear infinite;
     --animate-music-bar-3: music-bar-3 0.8s linear infinite;

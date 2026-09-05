@@ -60,6 +60,7 @@ graph TD
         D1["Stop shipping sw.js"] --> R1["/sw.js returns 404"];
         R1 --> G1["Registration removed,<br/>everyone gets the new site"];
     end
+    G1 ~~~ D2
     subgraph REAL["What actually happens"]
         D2["Stop shipping sw.js"] --> R2["/sw.js returns 404"];
         R2 --> F2["Update fails with a TypeError"];
@@ -166,12 +167,12 @@ sequenceDiagram
     participant N as Netlify
 
     B->>W: Navigation for /
-    W-->>B: Precached shell, no network involved
-    B->>N: GET /sw.js (Service-Worker: script)
+    W-->>B: Precached shell,<br/>no network involved
+    B->>N: GET /sw.js<br/>(Service-Worker: script)
     N-->>B: 200, and the bytes differ
-    Note over B: A byte-different script is a new worker
+    Note over B: A byte-different script<br/>is a new worker
     B->>B: install: skipWaiting()
-    B->>B: activate: registration.unregister()
+    B->>B: activate:<br/>registration.unregister()
     B->>B: clients.navigate(client.url)
     B->>N: GET /
     N-->>B: The site that actually exists

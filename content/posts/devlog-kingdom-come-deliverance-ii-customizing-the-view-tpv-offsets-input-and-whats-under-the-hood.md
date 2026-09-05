@@ -1,5 +1,6 @@
 ---
 title: "[Devlog] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood"
+short_title: "Customizing the View: TPV Offsets, Input, and What's Under the Hood"
 created_at: 2025-05-7T00:00:00.000Z
 updated_at: 2026-08-28T00:00:00.000Z
 published: true
@@ -7,13 +8,14 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Reverse Engineering
   - C++
   - Camera
 cover_image: /uploads/images/tpv-toggle-offset.jpg
+series: Third Person Camera
+series_part: 2
 description: "Following up on the TPV toggle: a technical deep dive into implementing custom camera offsets in Kingdom Come: Deliverance II."
 ---
 
@@ -114,25 +116,30 @@ void __fastcall Detour_TpvCameraUpdate(uintptr_t thisPtr_TPVObject, uintptr_t ou
 This detour is established using an AOB scan for `Constants::TPV_CAMERA_UPDATE_AOB_PATTERN` to find the original `TpvCameraUpdateFunc` within `WHGame.DLL`.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 30
+---
 graph TD
     subgraph "Camera Position Customization Flow"
-        ModControl["Mod (e.g., Profile Change Hotkey<br/>or Live Adjustment Hotkey)"] --> ProfileMgr["CameraProfileManager<br/>(Manages g_currentCameraOffset,<br/>saved profiles, transitions)"];
+        ModControl["Mod (e.g., Profile<br/>Change Hotkey or<br/>Live Adjustment Hotkey)"] --> ProfileMgr["CameraProfileManager<br/>(Manages<br/>g_currentCameraOffset,<br/>saved profiles, transitions)"];
 
         GameCall["Game Calls Original<br/>C_CameraThirdPerson::Update()"] --> Hook_Pos["HOOK: Detour_TpvCameraUpdate<br/>(tpv_camera_hook.cpp)"];
-        Hook_Pos --> CallOrig_Pos["Call Original TpvCameraUpdateFunc()<br/>Game calculates default TPV Pose (Pos & Rot)"];
-        CallOrig_Pos --> ReadGamePose["Mod Reads Game's TPV Position & Rotation"];
+        Hook_Pos --> CallOrig_Pos["Call Original<br/>TpvCameraUpdateFunc()<br/>Game calculates default<br/>TPV Pose (Pos & Rot)"];
+        CallOrig_Pos --> ReadGamePose["Mod Reads Game's<br/>TPV Position & Rotation"];
 
         ProfileMgr --> GetLocalOffset["Mod Gets Active Local Offset<br/>(from g_currentCameraOffset)"];
 
         subgraph "Offset Transformation"
-           ReadGamePose -- Camera World Rotation --> TransformOffset;
+           ReadGamePose -- "Camera World<br/>Rotation" --> TransformOffset;
            GetLocalOffset -- Local XYZ Offset --> TransformOffset;
-           TransformOffset["Transform Local Offset to World Offset<br/>(worldOffset = cameraRotation.Rotate(localOffset))"];
+           TransformOffset["Transform Local Offset<br/>to World Offset<br/>(worldOffset = cameraRotation<br/>.Rotate(localOffset))"];
         end
 
-        TransformOffset --> ApplyWorldOffset["Apply World Offset to Game's Position<br/>(finalPos = gamePos + worldOffset)"];
-        ApplyWorldOffset --> WriteBackPose["Mod Writes Modified Position Back to Game"];
-        WriteBackPose --> Renderer["Game Renderer Uses Modified Position"];
+        TransformOffset --> ApplyWorldOffset["Apply World Offset<br/>to Game's Position<br/>(finalPos =<br/>gamePos + worldOffset)"];
+        ApplyWorldOffset --> WriteBackPose["Mod Writes Modified<br/>Position Back to Game"];
+        WriteBackPose --> Renderer["Game Renderer Uses<br/>Modified Position"];
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -205,18 +212,23 @@ I found this function via AOB (`Constants::TPV_INPUT_PROCESS_AOB_PATTERN`) and d
 *   **Menu Input Blocking:** Crucially, `Detour_TpvCameraInput` *returns early* without calling the original game input function if my UI hooks (`ui_menu_hooks.cpp`) detect that a full-screen game menu (inventory, map, etc.) is active. This stops the TPV camera from erratically moving around while the player is interacting with UI, a common annoyance.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 30
+---
 graph TD
     subgraph "TPV Mouse Input Customization Flow"
         GameMouseInput["Game's TPV Mouse Event Occurs<br/>(with original deltaValue)"] --> Hook_Input["HOOK: Detour_TpvCameraInput<br/>(tpv_input_hook.cpp)"];
         Hook_Input --> CheckMenu{"Is Game Menu Active?"};
-        CheckMenu -- Yes --> ReturnEarly["Return (Block Input Processing)"];
-        CheckMenu -- No --> ProcessInput["Process Mouse Event (Yaw/Pitch)"];
-        ProcessInput --> ApplySensitivity["Apply Sensitivity Multiplier to deltaValue<br/>(from config: tpv_yaw_sensitivity, tpv_pitch_sensitivity)"];
-        ApplySensitivity --> CheckPitchLimits{"Is Pitch Event AND Limits Enabled?"};
-        CheckPitchLimits -- Yes --> ClampPitch["Calculate New Pitch<br/>Clamp Accumulated Pitch (g_currentPitch)<br/>Adjust deltaValue to Respect Limits"];
+        CheckMenu -- Yes --> ReturnEarly["Return<br/>(Block Input Processing)"];
+        CheckMenu -- No --> ProcessInput["Process Mouse Event<br/>(Yaw/Pitch)"];
+        ProcessInput --> ApplySensitivity["Apply Sensitivity Multiplier<br/>to deltaValue (from config:<br/>tpv_yaw_sensitivity,<br/>tpv_pitch_sensitivity)"];
+        ApplySensitivity --> CheckPitchLimits{"Is Pitch Event AND<br/>Limits Enabled?"};
+        CheckPitchLimits -- Yes --> ClampPitch["Calculate New Pitch<br/>Clamp Accumulated Pitch<br/>(g_currentPitch)<br/>Adjust deltaValue<br/>to Respect Limits"];
         CheckPitchLimits -- No --> CallOrig_Input;
-        ClampPitch --> CallOrig_Input["Call Original TpvCameraInputFunc()<br/>(with potentially modified deltaValue)"];
-        CallOrig_Input --> GameCameraLogic["Game Camera Responds to (Modified) Input"];
+        ClampPitch --> CallOrig_Input["Call Original<br/>TpvCameraInputFunc()<br/>(with potentially<br/>modified deltaValue)"];
+        CallOrig_Input --> GameCameraLogic["Game Camera Responds<br/>to (Modified) Input"];
     end
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
     class GameMouseInput,Hook_Input,CheckMenu,ReturnEarly,ProcessInput,ApplySensitivity,CheckPitchLimits,ClampPitch,CallOrig_Input,GameCameraLogic default;
@@ -230,26 +242,28 @@ To prevent the scroll wheel from zooming the TPV camera while also scrolling lis
 
 
 <pre class="mermaid flex justify-center">
+---
+title: UI Overlay & Scroll Wheel Management
+---
 graph TD
-    subgraph "UI Overlay & Scroll Wheel Management"
-        direction LR
-        GameEvents["Game Events"] --> EventRouter{Mod Hooks};
+    GameEvents["Game Events"] --> EventRouter{Mod Hooks};
+    EventRouter -- "Menu Opens/Closes" --> Hook_UI["Hook UI_Overlay_Show/Hide"];
+    EventRouter -- "Mouse Wheel<br/>Scroll" --> Hook_Event["Hook General Event Handler"];
 
-        subgraph "UI Overlay Logic (ui_overlay_hooks.cpp)"
-            GameEvents -- "Menu Opens/Closes" --> Hook_UI["Hook UI_Overlay_Show/Hide"];
-            Hook_UI --> TrackOverlayState["Update g_isOverlayActive (atomic bool)"];
-            TrackOverlayState --> SwitchFPV["If Overlay Opens: Request FPV via Main Thread"];
-            TrackOverlayState --> RestoreView["If Overlay Closes: Request Previous View Restoration"];
-        end
+    subgraph "UI Overlay Logic (ui_overlay_hooks.cpp)"
+        Hook_UI --> TrackOverlayState["Update g_isOverlayActive<br/>(atomic bool)"];
+        TrackOverlayState --> SwitchFPV["If Overlay Opens:<br/>Request FPV<br/>via Main Thread"];
+        TrackOverlayState --> RestoreView["If Overlay Closes:<br/>Request Previous<br/>View Restoration"];
+    end
 
-        subgraph "Scroll Wheel Filtering (event_hooks.cpp)"
-            GameEvents -- "Mouse Wheel Scroll" --> Hook_Event["Hook General Event Handler"];
-            Hook_Event --> CheckScrollCondition{"Overlay Active OR Not Holding Scroll Key?"};
-            CheckScrollCondition -- Yes --> ZeroDelta["Zero Out Scroll Event's deltaValue"];
-            CheckScrollCondition -- No --> PassThruScroll;
-            ZeroDelta --> OriginalEventHandler["Call Original Event Handler"];
-            PassThruScroll --> OriginalEventHandler;
-        end
+    RestoreView ~~~ Hook_Event;
+
+    subgraph "Scroll Wheel Filtering (event_hooks.cpp)"
+        Hook_Event --> CheckScrollCondition{"Overlay Active OR<br/>Not Holding<br/>Scroll Key?"};
+        CheckScrollCondition -- Yes --> ZeroDelta["Zero Out Scroll<br/>Event's deltaValue"];
+        CheckScrollCondition -- No --> PassThruScroll["Pass Scroll<br/>Event Through"];
+        ZeroDelta --> OriginalEventHandler["Call Original Event Handler"];
+        PassThruScroll --> OriginalEventHandler;
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;

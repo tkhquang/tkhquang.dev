@@ -58,23 +58,23 @@ This is where CryEngine (and many engines) does something quite smart. It often 
 *Having separate "direction-keepers" for the body and the camera is key! It lets your character model aim its body generally, while your view (the camera) can look around more freely and precisely. This makes character movement and aiming feel much more natural and responsive.*
 
 <pre class="mermaid flex justify-center">
+---
+title: Orientation Quaternions
+---
 graph TD
-    subgraph "Orientation Quaternions"
-        direction LR
-        UserInput[User Input e.g., Mouse Delta] --> BodyOrientation;
-        UserInput --> ViewOrientation;
+    UserInput["User Input<br/>e.g., Mouse Delta"] --> BodyOrientation;
+    UserInput --> ViewOrientation;
 
-        subgraph "Entity/Body Orientation"
-            BodyOrientation["m_BaseQuat (Yaw Only)"];
-            BodyIcon([fa:fa-male Character Body]);
-            BodyOrientation -- "Defines" --> BodyIcon;
-        end
+    subgraph "Entity/Body Orientation"
+        BodyOrientation["m_BaseQuat<br/>(Yaw Only)"];
+        BodyIcon([fa:fa-male Character Body]);
+        BodyOrientation -- "Defines" --> BodyIcon;
+    end
 
-        subgraph "Camera/View Orientation"
-            ViewOrientation["m_ViewQuat (Pitch & Yaw)"];
-            ViewIcon([fa:fa-camera Camera View]);
-            ViewOrientation -- "Defines" --> ViewIcon;
-        end
+    subgraph "Camera/View Orientation"
+        ViewOrientation["m_ViewQuat<br/>(Pitch & Yaw)"];
+        ViewIcon([fa:fa-camera Camera View]);
+        ViewOrientation -- "Defines" --> ViewIcon;
     end
 
     %% Styling
@@ -148,7 +148,7 @@ graph TD;
         A["Camera Position (Vec3)"] --> C["View Matrix Construction Logic<br/>(Math combining position & rotation)"];
         B["Camera Rotation (Quat)"] --> C;
         C --> D["View Matrix (Matrix34)<br/>The final set of numbers for the view<br/>[ r.x  r.y  r.z  tx ]<br/>[ u.x  u.y  u.z  ty ]<br/>[ f.x  f.y  f.z  tz ]"];
-        D --> E["Sent to the Renderer<br/>(The part of the engine that draws everything)"];
+        D --> E["Sent to the Renderer<br/>(The part of the engine<br/>that draws everything)"];
     end
 
     %% Styling

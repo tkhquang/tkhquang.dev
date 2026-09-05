@@ -1,3 +1,4 @@
+import { SerialInstalment, SerialStar } from "@/components/blog/SeriesPlate";
 import ViewCount from "@/components/common/ViewCount";
 import { MarkdownPost } from "@/models/markdown.types";
 import classNames from "classnames";
@@ -13,7 +14,7 @@ interface PostDatesProps extends React.ComponentProps<"div"> {
   post: MarkdownPost;
 }
 
-/* Posts only store the slug; the display name is its title-cased form */
+/* Fallback for a post whose category file is missing: title-case the slug */
 const categoryTitleFromSlug = (slug: string) =>
   slug
     .split("-")
@@ -61,14 +62,35 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
             color: `var(--shelf-${post.category_slug}, var(--primary))`,
           }}
         >
-          # {categoryTitleFromSlug(post.category_slug)}
+          # {post.category_title ?? categoryTitleFromSlug(post.category_slug)}
         </Link>
       </div>
 
       <div className="text-theme-on-surface flex items-center space-x-2 font-mono text-xs opacity-75 md:text-sm">
-        <FaEye className="inline-block size-3 align-text-bottom md:size-4" />
+        <FaEye
+          aria-hidden
+          className="inline-block size-3 align-text-bottom md:size-4"
+        />
         <ViewCount pathname={`/blog/posts/${post.slug}`} />
       </div>
+
+      {/* series_total only rides posts from getAllPosts, so the serial
+          kicker appears on feed cards while the post page carries the
+          full instalment plate instead. Second row of the meta grid: the
+          plate head's phrase, as the title's eyebrow */}
+      {post.series && post.series_part && post.series_total ? (
+        <div className="kicker serial-kicker col-span-2">
+          <SerialStar />
+          <span>{post.series}</span>
+          <span aria-hidden>·</span>
+          <span className="serial-kicker__instalment">
+            <SerialInstalment
+              part={post.series_part}
+              total={post.series_total}
+            />
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };

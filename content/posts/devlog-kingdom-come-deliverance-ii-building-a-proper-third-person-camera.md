@@ -1,5 +1,6 @@
 ---
 title: "[Devlog] Kingdom Come: Deliverance II - Building a Proper Third Person Camera"
+short_title: "Building a Proper Third Person Camera"
 created_at: 2026-06-06T00:00:00.000Z
 updated_at: 2026-08-28T00:00:00.000Z
 published: true
@@ -7,13 +8,14 @@ category_slug: technical
 tags:
   - CryEngine
   - "Kingdom Come: Deliverance II"
-  - KCD2
   - Modding
   - Devlog
   - Reverse Engineering
   - C++
   - Camera
 cover_image: /uploads/images/blog/tpv-camera-1.webp
+series: Third Person Camera
+series_part: 3
 description: "Building a 'proper' third-person camera for Kingdom Come: Deliverance II - One that does not suck."
 ---
 
@@ -55,15 +57,20 @@ Here's the idea the whole rewrite is built on, and it's simpler than it sounds.
 The engine's data flows one way. The active camera computes a pose, the pose lands in the player's `CView`, and `CView` turns it into the camera the renderer uses. Gameplay never reads that render camera. Aiming, interaction and combat all read the player's eye and look-direction channel, which is the **source** feeding the first-person camera. The render camera is the **sink** at the end of the pipe.
 
 <pre class="mermaid flex justify-center">
+---
+config:
+  flowchart:
+    nodeSpacing: 32
+---
 graph TD
     subgraph "The engine's one-way camera pipeline"
-        IN["Mouse / gamepad input"] --> SRC["Player look-direction and eye channel<br/>THE SOURCE"];
-        SRC --> CAM["Active camera Update()<br/>first person, dialogue, horse, UI"];
+        IN["Mouse / gamepad input"] --> SRC["Player look-direction<br/>and eye channel<br/>THE SOURCE"];
+        SRC --> CAM["Active camera Update()<br/>first person, dialogue,<br/>horse, UI"];
         CAM --> POSE["CView pose"];
         POSE --> SINK["Render CCamera matrix<br/>THE SINK"];
-        SINK --> OUT["Cull planes, then the renderer"];
-        SRC -.-> READS(["Aim, interaction and combat read here.<br/>We never touch it, so they never notice."]);
-        SINK -.-> WRITES(["The mod rewrites this, once per frame.<br/>Nothing downstream reads anything else."]);
+        SINK --> OUT["Cull planes,<br/>then the renderer"];
+        SRC -.-> READS(["Aim, interaction<br/>and combat read here.<br/>We never touch it,<br/>so they never notice."]);
+        SINK -.-> WRITES(["The mod rewrites this,<br/>once per frame.<br/>Nothing downstream<br/>reads anything else."]);
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -143,7 +150,7 @@ graph TD
         D -- No --> F;
         D -- Yes --> E["Build the third-person pose<br/>and overwrite the matrix"];
         E --> F["Original CCamera::UpdateFrustumPlanes<br/>builds cull planes FROM that matrix"];
-        F --> G["Renderer draws, culling matches the view"];
+        F --> G["Renderer draws, culling<br/>matches the view"];
     end
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
@@ -219,13 +226,13 @@ One performance note, since this adds up. Collision only queries static geometry
 <pre class="mermaid flex justify-center">
 graph TD
     subgraph "Collision ladder, pivot to desired camera"
-        S{"Moved more than 6 cm?"} -- No --> Z["Reuse last distance, ease only"];
-        S -- Yes --> A["RWI ray fan (centre + 4 offset)<br/>objtypes 0x101, world solids only"];
+        S{"Moved more than 6 cm?"} -- No --> Z["Reuse last distance,<br/>ease only"];
+        S -- Yes --> A["RWI ray fan<br/>(centre + 4 offset)<br/>objtypes 0x101,<br/>world solids only"];
         A --> B{"See-through mode on?"};
         B -- No --> D;
-        B -- Yes --> C["Walk the arm: measure how much<br/>of the body each hit hides.<br/>Skip thin props, stop at real cover."];
-        C --> D["Cross-check the swept sphere (PWI).<br/>Trust it only if not closer than the fan."];
-        D --> E["Render octree clamp (GetObjectsInBox)<br/>for cloth roofs physics cannot see"];
+        B -- Yes --> C["Walk the arm: measure<br/>how much of the body<br/>each hit hides.<br/>Skip thin props,<br/>stop at real cover."];
+        C --> D["Cross-check the swept<br/>sphere (PWI).<br/>Trust it only if not<br/>closer than the fan."];
+        D --> E["Render octree clamp<br/>(GetObjectsInBox)<br/>for cloth roofs<br/>physics cannot see"];
         E --> F["Ease: fast pull in, slow return out"];
         Z --> F;
         F --> G["camera = pivot + direction * distance"];

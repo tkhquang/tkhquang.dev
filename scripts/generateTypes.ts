@@ -13,6 +13,7 @@ const widgetTypeMap: { [key: string]: string } = {
   list: "string[]",
   image: "string",
   markdown: "string",
+  number: "number",
 };
 
 // Function to map fields to TypeScript properties

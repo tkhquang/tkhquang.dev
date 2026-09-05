@@ -162,10 +162,12 @@ Which is the tell, because my static woff2 embedded anyway. The only way both fa
 graph TD
     F1["Merriweather 400<br/>static woff2"] --> C["SkPDFFont::FontType"];
     F2["Inter<br/>variable woff2"] --> C;
-    F3["Montserrat<br/>variable woff2"] --> C;
-    F4["Source Code Pro<br/>variable woff2"] --> C;
-    C -->|"OTS decompressed it on download:<br/>plain TrueType, no flags, pass"| E["embedded<br/>/FontFile2, subset"];
-    C -->|"fvar survived decompression:<br/>kVariable_FontFlag, no appeal"| T["Type3 fallback<br/>every glyph a drawing"];
+    F1 ~~~ F3["Montserrat<br/>variable woff2"];
+    F2 ~~~ F4["Source Code Pro<br/>variable woff2"];
+    F3 --> C;
+    F4 --> C;
+    C -->|"OTS decompressed<br/>it on download:<br/>plain TrueType,<br/>no flags, pass"| E["embedded<br/>/FontFile2, subset"];
+    C -->|"fvar survived<br/>decompression:<br/>kVariable_FontFlag,<br/>no appeal"| T["Type3 fallback<br/>every glyph a drawing"];
 
     classDef default fill:#282a36,stroke:#f8f8f2,stroke-width:2px,color:#f8f8f2;
     classDef bad fill:#282a36,stroke:#ff5555,stroke-width:2px,color:#ff5555;

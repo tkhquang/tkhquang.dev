@@ -4,16 +4,39 @@ export function useRouterHelper() {
   const segments = useSelectedLayoutSegments();
 
   /**
+   * The one matcher both helpers share: exact length, null/undefined as a
+   * wildcard in that position.
+   */
+  function matchPattern(
+    actualSegments: string[],
+    checkSegments: (string | null | undefined)[]
+  ) {
+    if (checkSegments.length !== actualSegments.length) return false;
+    return checkSegments.every(
+      (checkSegment, index) =>
+        checkSegment == null || actualSegments[index] === checkSegment
+    );
+  }
+
+  /**
    * Checks if the current segments match the given pattern exactly.
    * Use null/undefined as a wildcard (matches anything in that position).
    * @param pattern Array of segment strings (or null for wildcard)
    */
   function matchSegments(checkSegments: (string | null | undefined)[]) {
-    if (checkSegments.length !== segments.length) return false;
-    return checkSegments.every(
-      (checkSegment, index) =>
-        checkSegment == null || segments[index] === checkSegment
-    );
+    return matchPattern(segments, checkSegments);
+  }
+
+  /**
+   * matchSegments for an arbitrary path string (e.g. a stored prevAsPath)
+   * instead of the current route. Leading and trailing slashes are ignored.
+   */
+  function matchPathSegments(
+    path: string | null | undefined,
+    checkSegments: (string | null | undefined)[]
+  ) {
+    if (path == null) return false;
+    return matchPattern(path.split("/").filter(Boolean), checkSegments);
   }
 
   /**
@@ -25,6 +48,7 @@ export function useRouterHelper() {
 
   return {
     getSegment,
+    matchPathSegments,
     matchSegments,
     segments,
   };

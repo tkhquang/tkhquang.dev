@@ -1,4 +1,5 @@
 import { ThemeMode, useThemeValue } from "@/store/theme";
+import { prefersReducedMotion } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
@@ -35,27 +36,30 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
   useGSAP(() => {
     const target = properties[mode];
 
+    /* The morph itself is the design; reduced motion just lands it at once */
+    const duration = prefersReducedMotion() ? 0 : 0.5;
+
     gsap.to(svgRef.current, {
       rotation: target.rotation,
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
 
     gsap.to(maskedCircleRef.current, {
       attr: { cx: target.cx, cy: target.cy },
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
 
     gsap.to(centerCircleRef.current, {
       attr: { r: target.r },
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
 
     gsap.to(linesRef.current, {
       opacity: target.opacity,
-      duration: 0.5,
+      duration,
       ease: "power2.out",
     });
   }, [mode]);
@@ -125,8 +129,10 @@ const ThemeToggle = () => {
   return (
     <button
       type="button"
-      aria-label="Toggle dark/light"
-      className="toggle-theme cursor-pointer border-none bg-transparent hover:opacity-75 focus:outline-hidden"
+      aria-label={
+        theme.mode === "dark" ? "Switch to light theme" : "Switch to dark theme"
+      }
+      className="toggle-theme cursor-pointer border-none bg-transparent transition-opacity hover:opacity-75 focus:outline-hidden"
       onClick={switchTheme}
     >
       <AnimatedIcon mode={theme.mode} />
