@@ -263,21 +263,24 @@
 
   /*
    * Running heads: the colophon bar's underline-fill grammar one level
-   * up, in currentColor so the tint rides both the transparent sky and
-   * the blurred band. Overrides layer, or the Link's utility classes
-   * out-cascade the fill's transition and the active opacity.
+   * up. The tint is the primary ink on both header states, transparent
+   * sky and blurred band alike; only the text colour follows the state.
+   * Overrides layer, or the Link's utility classes out-cascade the
+   * fill's transition, the active opacity and the kicker's line box.
    */
   .blog-nav__link {
     padding-bottom: 2px;
+    line-height: 1.5;
     background: linear-gradient(
         to right,
-        color-mix(in srgb, currentcolor 30%, transparent),
-        color-mix(in srgb, currentcolor 18%, transparent)
+        color-mix(in srgb, var(--primary) 30%, transparent),
+        color-mix(in srgb, var(--primary) 18%, transparent)
       )
       no-repeat left bottom / 0% 45%;
     transition:
       background-size 300ms,
-      opacity 300ms;
+      color 150ms,
+      opacity 150ms;
   }
 
   .blog-nav__link:hover,

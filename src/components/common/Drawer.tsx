@@ -93,6 +93,12 @@ interface DrawerProps extends React.ComponentProps<"div"> {
   title?: string;
   /** Optional description displayed below the title */
   description?: string;
+  /** The glyph inside the dismiss button. The circled X unless a drawer
+      brings its own; the button and its behaviour stay here. */
+  dismissIcon?: React.ReactNode;
+  /** The dismiss button's accessible name. Ariakit names only its own
+      default glyph, so any custom child would leave the button nameless. */
+  dismissLabel?: string;
   /** The opener, composed at the call site as the DrawerTrigger exported
       from this module, carrying its own classes, label, and portal flag;
       rendered inside this drawer's provider so no trigger styling ever
@@ -118,6 +124,8 @@ export default function Drawer({
   children,
   title = "Drawer",
   description,
+  dismissIcon = <IoIosCloseCircleOutline className="size-8" />,
+  dismissLabel = "Close drawer",
   trigger,
   style,
   className,
@@ -445,8 +453,11 @@ export default function Drawer({
           >
             <div className="drawer__header">
               <DialogHeading className="drawer__title">{title}</DialogHeading>
-              <DialogDismiss className="size-8 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-hidden">
-                <IoIosCloseCircleOutline className="size-8" />
+              <DialogDismiss
+                aria-label={dismissLabel}
+                className="size-8 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-hidden"
+              >
+                {dismissIcon}
               </DialogDismiss>
             </div>
 

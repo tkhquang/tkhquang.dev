@@ -39,7 +39,7 @@ export interface IndexStats {
 
 /* The count printed beside each room. The Archive is deliberately absent:
    it lists the same entries the feed does, so a second total would only
-   restate the first. */
+   restate the first. The row prints the index's middle dot in its place. */
 const INDEX_COUNTS: Record<
   string,
   ((stats: IndexStats) => number) | undefined
@@ -50,7 +50,9 @@ const INDEX_COUNTS: Record<
 };
 
 /* A drawer row that closes the drawer as it navigates; the layout
-   persists across routes, so the dialog would otherwise stay open */
+   persists across routes, so the dialog would otherwise stay open.
+   The anchor is the whole row, the fill sits on the word alone, and a
+   room without a count prints the index's middle dot in its place */
 const IndexRow = ({
   active,
   count,
@@ -71,11 +73,15 @@ const IndexRow = ({
         onClick={() => drawer?.hide()}
         aria-current={active ? "page" : undefined}
       >
-        {label}
+        <span className="index-drawer__label">{label}</span>
+        {typeof count === "number" ? (
+          <span className="index-drawer__count">{count}</span>
+        ) : (
+          <span className="index-drawer__count" aria-hidden>
+            ·
+          </span>
+        )}
       </Link>
-      {typeof count === "number" && (
-        <span className="kicker index-drawer__count">{count}</span>
-      )}
     </li>
   );
 };
@@ -305,6 +311,22 @@ const BlogHeader = ({
               size={300}
               title="The Index"
               className="index-drawer"
+              /* The plain two-line X of the printed index; the TOC drawer
+                 keeps the circled one */
+              dismissLabel="Close the index"
+              dismissIcon={
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  aria-hidden
+                >
+                  <line x1="5" y1="5" x2="19" y2="19" />
+                  <line x1="19" y1="5" x2="5" y2="19" />
+                </svg>
+              }
               trigger={
                 <DrawerTrigger
                   aria-label="Open the blog index"
@@ -314,20 +336,26 @@ const BlogHeader = ({
                 </DrawerTrigger>
               }
             >
-              <ul className="index-drawer__rows">
-                {Blog.NAV_LINKS.map((link) => (
-                  <IndexRow
-                    key={link.href}
-                    href={link.href}
-                    label={link.label}
-                    count={INDEX_COUNTS[link.href]?.(indexStats)}
-                    active={activeHref === link.href}
-                  />
-                ))}
-              </ul>
-              <span className="kicker index-drawer__foot">
-                Vol. {toRoman(indexStats.volume)} · {toRoman(indexStats.year)}
-              </span>
+              <hr className="index-drawer__hairline" />
+              <nav aria-label="Blog sections">
+                <ul className="index-drawer__rows">
+                  {Blog.NAV_LINKS.map((link) => (
+                    <IndexRow
+                      key={link.href}
+                      href={link.href}
+                      label={link.label}
+                      count={INDEX_COUNTS[link.href]?.(indexStats)}
+                      active={activeHref === link.href}
+                    />
+                  ))}
+                </ul>
+              </nav>
+              <div className="index-drawer__foot">
+                <hr className="index-drawer__hairline" />
+                <p className="index-drawer__colophon">
+                  Vol. {toRoman(indexStats.volume)} · {toRoman(indexStats.year)}
+                </p>
+              </div>
             </Drawer>
             <div className="ml-4 flex flex-col">
               <ThemeToggle />
