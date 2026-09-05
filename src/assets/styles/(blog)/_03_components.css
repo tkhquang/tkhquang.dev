@@ -174,16 +174,6 @@
     --aurora-b: hsl(267deg 60% 76%);
     --aurora-c: hsl(199deg 90% 66%);
 
-    /* The Catalogue Headpiece's ground: the masthead sky, faded to paper.
-       By night the band's own zenith mixed down into the page ground; by
-       day the Dawn Horizon's pastel stops. Lifted from the demo verbatim. */
-    --catalogue-tint: linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--band-a) 52%, var(--background)) 0%,
-      color-mix(in srgb, var(--band-a) 20%, var(--background)) 55%,
-      var(--background) 100%
-    );
-
     &[data-theme="light"] {
       --shelf-gaming: hsl(351deg 58% 40%);
       --shelf-the-inner-crisis: hsl(266deg 50% 55%);
@@ -202,13 +192,6 @@
       --diagram-gilt: hsl(40deg 72% 31%);
       --cartouche-outer: hsl(40deg 60% 42%);
       --cartouche-inner: var(--primary);
-      --catalogue-tint: linear-gradient(
-        180deg,
-        hsl(219deg 48% 90%) 0%,
-        hsl(219deg 40% 93%) 45%,
-        hsl(44deg 45% 94%) 80%,
-        var(--background) 100%
-      );
     }
   }
 
@@ -218,17 +201,18 @@
 
   /*
    * Catalogue Headpiece: the index pages' shared chapter head, the
-   * masthead's typographic system over its sky faded to paper. The head
+   * masthead's typographic system over the masthead's own sky. The head
    * is the room wrapper's first row, so its text keeps the column's left
-   * edge at every width; the tint is a full-bleed pseudo behind that row
-   * that reaches up under the header, which stays transparent while the
-   * page rests at the top (BlogHeader knows the rooms by route and goes
-   * solid on the first scroll), paper reached at the row's bottom edge.
-   * The feed keeps its own full masthead.
+   * edge at every width; behind that row three full-bleed layers share
+   * one box that reaches up under the header, which stays transparent
+   * while the page rests at the top (BlogHeader knows the rooms by route
+   * and goes solid on the first scroll): the band flag with its grain,
+   * the live aurora blended onto it as on the masthead, and a dissolve
+   * that reaches paper at the row's bottom edge.
    */
   .catalogue-headpiece {
     position: relative;
-    /* The pseudo sits at z-index -1 inside this box, never behind an
+    /* The sky layers sit at z-index -1 inside this box, never behind an
        ancestor's ground */
     isolation: isolate;
     display: block;
@@ -246,18 +230,29 @@
     padding: 1.75rem 0 2rem;
   }
 
-  .catalogue-headpiece::before {
-    content: "";
+  /* The sky's box: the three layers share it, starting at the viewport's
+     top edge behind the transparent header so the sky runs unbroken into
+     the head, and ending at the row's bottom edge where the dissolve has
+     reached paper. Scoped under the headpiece so the recipe outranks
+     .band's position: relative whatever the layer order. */
+  .catalogue-headpiece .catalogue-headpiece__band,
+  .catalogue-headpiece .catalogue-headpiece__sky,
+  .catalogue-headpiece .catalogue-headpiece__dissolve {
     position: absolute;
-    /* The sky starts at the viewport's top edge, behind the transparent
-       header, so the tint runs unbroken into the head */
     top: calc(-1 * var(--header-height));
     bottom: 0;
     left: 50%;
     width: 100vw;
     transform: translateX(-50%);
     z-index: -1;
-    background: var(--catalogue-tint);
+  }
+
+  /* The masthead dissolves over 128px of its 385px, a third; the band here
+     is shorter, so the third is kept as a ratio rather than the pixels */
+  .catalogue-headpiece .catalogue-headpiece__dissolve {
+    top: auto;
+    height: 33%;
+    background: linear-gradient(to bottom, transparent, var(--background));
   }
 
   @media (max-width: 40rem) {
