@@ -30,7 +30,7 @@ If you just want the code:
 
 ## An issue from the person on my credits list
 
-On May 2nd, a Crimson Desert patch broke my transmog mod, and an issue appeared in [CrimsonDesertTools](https://github.com/tkhquang/CrimsonDesertTools) titled "Fix for Transmog for patch 1.00.5". Routine, except for the name on it: **[Frans Bouma](https://github.com/FransBouma)**. Otis_Inf. The person behind the [Injectable Generic Camera System](https://github.com/FransBouma/InjectableGenericCameraSystem) and the photomode camera tools half the virtual photography community runs on, and the reason I got into camera modding in the first place. His name has been sitting in [my first mod's credits](https://github.com/tkhquang/KCD2Tools/tree/main/TPVToggle) since the day it shipped: *"for his camera tools and inspiration"*.
+On May 2nd, a Crimson Desert patch broke my transmog mod, and an issue appeared in [CrimsonDesertTools](https://github.com/tkhquang/CrimsonDesertTools) titled [Fix for Transmog for patch 1.00.5](https://github.com/tkhquang/CrimsonDesertTools/issues/46). Routine, except for the name on it: **[Frans Bouma](https://github.com/FransBouma)**. Otis_Inf. The person behind the [Injectable Generic Camera System](https://github.com/FransBouma/InjectableGenericCameraSystem) and the photomode camera tools half the virtual photography community runs on, and the reason I got into camera modding in the first place. His name has been sitting in [my first mod's credits](https://github.com/tkhquang/KCD2Tools/tree/main/TPVToggle) since the day it shipped: *"for his camera tools and inspiration"*.
 
 ![Issue #46, opened by the person my credits list calls "inspiration"](/uploads/images/blog/rtti-self-heal-issue-46.png)
 
@@ -42,15 +42,170 @@ I saw it a few hours late because GitHub didn't notify me, which was probably fo
 
 The issue never really closed. It turned into a running conversation across patches, and reading it back, it's a catalogue of the ways a binary drifts out from under a mod. Three entries matter for this post.
 
-**A field moved four bytes, and a code signature died of it.** The EquipHide fix he posted is my favourite kind of diff, because exactly one byte changed:
+**A field moved four bytes, and a code signature died of it.** The [EquipHide fix he posted](https://github.com/tkhquang/CrimsonDesertTools/issues/46#issuecomment-4363919777) is my favourite kind of diff, because exactly one byte changed:
 
-```text title="EquipHide's hook-site AOB, before and after the patch"
-old:  48 8B 45 5F 0F B6 40 1C 3C 03
-new:  48 8B 45 5F 0F B6 40 20 3C 03
-                           ^^
+```hex-diff
+# The report publishes these bytes as an AOB, without an address-aligned disassembly:
+# https://github.com/tkhquang/CrimsonDesertTools/issues/46#issuecomment-4363919777
+# The resolver names MOVZX as the hook point and resolves it at match + 4:
+# https://github.com/tkhquang/CrimsonDesertTools/blob/7c6d764ab3e81e54bce32a92eae2aac33446a960/CrimsonDesertEquipHide/src/aob_resolver.hpp#L168-L224
+# Its candidate comments call that location CMP, but CMP starts at match + 8.
+# Keep the leading four bytes as context because decoding an AOB from its first
+# byte would assume that the signature starts at an instruction boundary.
+id: equip-hide-offset
+title: One byte, four bytes of drift.
+architecture: x86-64
+caption: >-
+  The encoded offset increased from 0x1C (28) to 0x20 (32): +4 bytes. In this patch,
+  the visibility field moved. My old signature still asks for 1C, so it no longer
+  matches.
+defaultField: { instructionId: visibility-load, fieldId: field-offset }
+notes:
+  - >-
+    These are the exact EquipHide patterns Frans posted. The first four bytes are
+    kept as surrounding context: the report gives a signature, which need not start
+    at an instruction boundary. The decoded instructions begin at byte offset 4,
+    counting from zero, in x86-64 mode.
+pairs:
+  - id: surrounding-context
+    label: Surrounding bytes
+    kind: context
+    before:
+      fields:
+        - id: context
+          role: unknown
+          hex: "48 8B 45 5F"
+          description: >-
+            Unchanged bytes that help locate the site. Their instruction boundary is
+            not established by the published signature, so they stay together as
+            unannotated context.
+      contextLabel: Unannotated context
+    after:
+      fields:
+        - id: context
+          role: unknown
+          hex: "48 8B 45 5F"
+          description: >-
+            The same surrounding bytes still match. The change that breaks the
+            signature is in the visibility load that follows.
+      contextLabel: Unannotated context
+  - id: visibility-load
+    label: Read the visibility byte
+    kind: instruction
+    before:
+      fields:
+        - id: opcode
+          role: opcode
+          hex: "0F B6"
+          description: >-
+            0F B6 selects MOVZX with an 8-bit source. Here it reads one byte from
+            memory and zero-extends that value into EAX, ready for the compare that
+            follows.
+        - id: addressing
+          role: modrm
+          hex: "40"
+          description: >-
+            40 splits into mod=01, reg=000, r/m=000. In this instruction, that means
+            a signed 8-bit displacement, EAX as the destination, and RAX as the
+            memory base. The next byte supplies the offset from that base.
+        - id: field-offset
+          role: displacement
+          hex: "1C"
+          description: >-
+            1C is the signed 8-bit displacement +28, or +0x1c. The load reads the
+            visibility byte 28 bytes past the address in RAX. This is the byte my old
+            signature expects.
+      assembly:
+        - { text: movzx, fieldIds: [ opcode ] }
+        - { text: " " }
+        - { text: eax, fieldIds: [ addressing ] }
+        - { text: ", " }
+        - { text: byte ptr, fieldIds: [ opcode ] }
+        - { text: " [" }
+        - { text: rax, fieldIds: [ addressing ] }
+        - { text: + }
+        - { text: "0x1c", fieldIds: [ field-offset ] }
+        - { text: "]" }
+    after:
+      fields:
+        - id: opcode
+          role: opcode
+          hex: "0F B6"
+          description: >-
+            The MOVZX opcode is unchanged. The game still reads one byte and
+            zero-extends it into EAX; only the field's offset has moved.
+        - id: addressing
+          role: modrm
+          hex: "40"
+          description: >-
+            The addressing stays mod=01, reg=000, r/m=000: memory through RAX plus a
+            signed 8-bit displacement, with the result in EAX. No register change is
+            hiding in this diff.
+        - id: field-offset
+          role: displacement
+          hex: "20"
+          description: >-
+            20 is the signed 8-bit displacement +32, or +0x20. The visibility byte is
+            now four bytes further into the struct. This one encoded offset, at byte
+            offset 7 in the full signature, counting from zero, is the entire
+            difference between the two signatures.
+      assembly:
+        - { text: movzx, fieldIds: [ opcode ] }
+        - { text: " " }
+        - { text: eax, fieldIds: [ addressing ] }
+        - { text: ", " }
+        - { text: byte ptr, fieldIds: [ opcode ] }
+        - { text: " [" }
+        - { text: rax, fieldIds: [ addressing ] }
+        - { text: + }
+        - { text: "0x20", fieldIds: [ field-offset ] }
+        - { text: "]" }
+  - id: visibility-compare
+    label: Compare with 3
+    kind: instruction
+    before:
+      fields:
+        - id: opcode
+          role: opcode
+          hex: "3C"
+          description: >-
+            3C selects CMP AL, imm8. AL is the low byte of EAX, so this compares the
+            byte just loaded. CMP sets the flags without changing AL.
+        - id: constant
+          role: immediate
+          hex: "03"
+          description: >-
+            03 is the literal value 3 to compare against AL. It is an immediate
+            operand, not a memory offset, and it stays the same on both sides.
+      assembly:
+        - { text: cmp, fieldIds: [ opcode ] }
+        - { text: " " }
+        - { text: al, fieldIds: [ opcode ] }
+        - { text: ", " }
+        - { text: "3", fieldIds: [ constant ] }
+    after:
+      fields:
+        - id: opcode
+          role: opcode
+          hex: "3C"
+          description: >-
+            The compare still uses AL, the byte read by MOVZX. Its opcode and its
+            operands have not changed.
+        - id: constant
+          role: immediate
+          hex: "03"
+          description: >-
+            The literal is still 3. The game asks the same question of a byte that
+            now lives at a different offset.
+      assembly:
+        - { text: cmp, fieldIds: [ opcode ] }
+        - { text: " " }
+        - { text: al, fieldIds: [ opcode ] }
+        - { text: ", " }
+        - { text: "3", fieldIds: [ constant ] }
 ```
 
-That `0F B6 40 1C` is `movzx eax, byte ptr [rax+0x1C]`. The code didn't change at all. A struct member above `+0x1C` got added (or grew), the field slid to `+0x20`, and because x86 bakes the displacement into the instruction bytes, the *data* drift killed the *code* signature. This distinction took a while to fully land for me: a lot of what we call "AOB rot" is layout drift wearing a code costume.
+That `0F B6 40 1C` is `movzx eax, byte ptr [rax+0x1c]`. The operation stayed the same; the encoded field offset changed. The field slid from `+0x1C` to `+0x20`, and because x86 bakes the displacement into the instruction bytes, the *data* drift killed the *code* signature. Adding or growing a member before it would explain the shift, but the byte diff alone can't tell me what changed in the struct. This distinction took a while to fully land for me: a lot of what we call "AOB rot" is layout drift wearing a code costume.
 
 **A register allocation changed, and every byte touching it changed with it.** Patch 1.00.6 broke a feature because the compiler now kept a loop pointer in `rdi` where the old build used `rsi`. Frans posted the full disassembly of the new site, annotated, with a `<<<< HERE` marking the instruction. You cannot pattern-your-way around a register rename; the pattern *is* the register.
 
@@ -212,7 +367,7 @@ What I like most about the failure story is that it's *one* story. The scan casc
 
 ## Credits, the load-bearing kind
 
-The reverse-direction design was inspired by CERTTIExplorer, and that tool has its own lineage, which deserves spelling out: it was originally written by [GhostInTheCamera](https://github.com/ghostinthecamera), building on the [FramedSC RTTI guide](https://framedsc.com/GeneralGuides/using_rtti.htm) (itself distilled from Hatti's video), with COL-validation refinements credited to etra. Frans fixed it up and added the reverse range lookup that set this whole post in motion. DetourModKit's module is an independent C++ reimplementation of the same well-documented MSVC RTTI walk, no code copied; what I took were the ideas (the reverse block scan, the range lookup, the `COL.offset` handling for multiple-inheritance subobjects) and the nudge to build them into something that runs without a human at the keyboard.
+The reverse-direction design was inspired by [CERTTIExplorer](https://github.com/FransBouma/InjectableGenericCameraSystem/tree/master/Tools/CERTTIExplorer), and that tool has its own lineage, which deserves spelling out: it was originally written by [GhostInTheCamera](https://github.com/ghostinthecamera), building on the [FramedSC RTTI guide](https://framedsc.com/GeneralGuides/using_rtti.htm) (itself distilled from Hatti's video), with COL-validation refinements credited to etra. Frans fixed it up and added the reverse range lookup that set this whole post in motion. DetourModKit's module is an independent C++ reimplementation of the same well-documented MSVC RTTI walk, no code copied; what I took were the ideas (the reverse block scan, the range lookup, the `COL.offset` handling for multiple-inheritance subobjects) and the nudge to build them into something that runs without a human at the keyboard.
 
 Thanks, Otis. For the AOBs, for the tool, and for the camera mods that started all of this years before you knew I existed 🙏
 

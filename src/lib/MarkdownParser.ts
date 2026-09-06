@@ -1,11 +1,13 @@
 import lamplightDark from "@/assets/shiki/lamplight-dark.json";
 import lamplightLight from "@/assets/shiki/lamplight-light.json";
 import CameraExplorable from "@/components/blog/camera-explorable/CameraExplorable";
+import HexDiff from "@/components/blog/hex-diff/HexDiff";
 import MermaidPlate from "@/components/common/MermaidPlate";
 import PreWithCopy from "@/components/common/PreWithCopy";
 import ZoomableImage from "@/components/common/ZoomableImage";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
+import rehypeHexDiff from "@/lib/rehype-hex-diff";
 import {
   MERMAID_RENDER_OPTIONS,
   rehypeMermaidPrepare,
@@ -65,6 +67,7 @@ function getProcessor(): Processor {
         enabledProviders: ["Youtube", "Spotify"],
       })
       .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeHexDiff)
       .use(remarkFigureCaption, { allowEmptyCaption: true })
       .use(remarkGfm)
       .use(rehypePrettyCode, {
@@ -123,6 +126,7 @@ function getProcessor(): Processor {
       .use(rehypeReact, {
         components: {
           "camera-explorable": CameraExplorable,
+          "hex-diff": HexDiff,
           "rehype-pretty-copy-button-pre": PreWithCopy,
           "next-image": ZoomableImage,
           "mermaid-plate": MermaidPlate,

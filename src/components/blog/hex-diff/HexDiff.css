@@ -1,0 +1,393 @@
+/* Unlayered rules keep the figure's typography independent of article prose.
+   Code lives under divs and buttons, avoiding the article's span > code rule. */
+.hex-diff {
+  --hex-opcode: #8ab8ff;
+  --hex-addressing: #bc9ce3;
+  --hex-displacement: #e0c585;
+  --hex-immediate: #7dcbb4;
+  --hex-muted: #a1b5c0;
+
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0;
+  max-width: 100%;
+  border: 1px solid var(--hairline);
+  border-top: 3px solid var(--gilt-ink);
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--surface);
+  color: var(--on-surface);
+  font: 0.8125rem/1.6 var(--font-sans);
+  overflow-wrap: anywhere;
+}
+
+html[data-theme="light"] .hex-diff {
+  --hex-opcode: #214aab;
+  --hex-addressing: #723bba;
+  --hex-displacement: #73520f;
+  --hex-immediate: #22634f;
+  --hex-muted: #505b6d;
+}
+
+.hex-diff p,
+.hex-diff ul,
+.hex-diff dl,
+.hex-diff dd {
+  margin: 0;
+}
+
+.hex-diff code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-family: var(--font-mono);
+}
+
+.hex-diff button {
+  min-height: 36px;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--hairline);
+  border-radius: 2px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.hex-diff button:disabled {
+  cursor: default;
+}
+
+.hex-diff :is(button, summary):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.hex-diff :is(button, summary) {
+  scroll-margin-block: calc(var(--header-height) + 1rem) 5rem;
+}
+
+.hex-diff-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.hex-diff-kicker,
+.hex-diff-version,
+.hex-diff-pair-title {
+  color: var(--hex-muted);
+  font: 0.6875rem/1.5 var(--font-mono);
+}
+
+.hex-diff .hex-diff-title {
+  margin-top: 0.35rem;
+  font: 1.2rem/1.35 var(--font-serif);
+}
+
+.hex-diff-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.hex-diff-comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+}
+
+.hex-diff-pair {
+  display: grid;
+  grid-template-rows: auto 1fr 1fr;
+  min-width: 0;
+  padding: 0.85rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.hex-diff-pair + .hex-diff-pair {
+  border-left: 1px solid var(--hairline);
+}
+
+.hex-diff-encoding {
+  min-width: 0;
+  padding-top: 0.85rem;
+}
+
+.hex-diff-bytes {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  padding: 0.3rem 0.2rem;
+  margin: 0 -0.2rem;
+}
+
+.hex-diff [data-role="opcode"] {
+  --hex-role: var(--hex-opcode);
+}
+
+.hex-diff [data-role="prefix"],
+.hex-diff [data-role="modrm"],
+.hex-diff [data-role="sib"] {
+  --hex-role: var(--hex-addressing);
+}
+
+.hex-diff [data-role="displacement"] {
+  --hex-role: var(--hex-displacement);
+}
+
+.hex-diff [data-role="immediate"] {
+  --hex-role: var(--hex-immediate);
+}
+
+.hex-diff [data-role="unknown"] {
+  --hex-role: var(--hex-muted);
+}
+
+.hex-diff .hex-diff-field {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.4rem;
+  border-color: transparent;
+  border-bottom-color: var(--hex-role);
+  color: var(--hex-role);
+  font: 0.9375rem/1.6 var(--font-mono);
+  white-space: pre;
+  user-select: text;
+}
+
+.hex-diff-field[data-active="true"] {
+  background: color-mix(in srgb, var(--hex-role) 10%, transparent);
+}
+
+.hex-diff .hex-diff-field[aria-pressed="true"] {
+  border-style: dashed;
+  border-color: var(--hex-role);
+}
+
+.hex-diff-byte[data-changed="true"],
+.hex-diff-change-key {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.hex-diff .hex-diff-assembly {
+  display: block;
+  min-height: 3em;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+}
+
+.hex-diff-assembly [data-active="true"] {
+  background: color-mix(in srgb, var(--hex-displacement) 14%, transparent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hex-diff-context {
+  min-height: 3em;
+  padding-top: 0.5rem;
+  color: var(--hex-muted);
+  font-size: 0.75rem;
+}
+
+.hex-diff .hex-diff-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.85rem 1rem;
+  list-style: none;
+  font-size: 0.6875rem;
+}
+
+.hex-diff-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+}
+
+.hex-diff-swatch {
+  width: 0.7rem;
+  border-bottom: 3px solid var(--hex-role);
+}
+
+.hex-diff-change-key {
+  margin-inline: 0.15rem;
+  font: 0.625rem var(--font-mono);
+}
+
+.hex-diff-caption {
+  padding: 0.35rem 1rem 1.1rem;
+  color: inherit;
+  font: 0.9375rem/1.65 var(--font-serif);
+  text-align: left;
+  background: transparent;
+}
+
+.hex-diff-inspection {
+  order: 1;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--hairline);
+}
+
+.hex-diff-inspection-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--hex-muted);
+}
+
+.hex-diff-inspection-tools button:disabled {
+  visibility: hidden;
+}
+
+.hex-diff-detail {
+  min-height: 9.5em;
+}
+
+.hex-diff .hex-diff-detail-title {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.hex-diff .hex-diff-copy-status:not(:empty) {
+  padding: 0.25rem 1rem 0.85rem;
+}
+
+.hex-diff-copy-status {
+  order: 2;
+}
+
+.hex-diff-breakdown {
+  order: 3;
+  border-top: 1px solid var(--hairline);
+}
+
+.hex-diff-breakdown summary {
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.hex-diff-breakdown-content {
+  padding: 0 1rem 1rem;
+}
+
+.hex-diff-breakdown-content > * + *,
+.hex-diff-breakdown-pair > * + *,
+.hex-diff-breakdown-pair dl > * + * {
+  margin-top: 0.85rem;
+}
+
+.hex-diff-copy-text code {
+  display: block;
+  user-select: all;
+}
+
+.hex-diff-breakdown-version {
+  margin-bottom: 0.5rem;
+}
+
+.hex-diff-breakdown dt {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.hex-diff-breakdown dd {
+  padding-top: 0.25rem;
+}
+
+.hex-diff[data-interactive="false"] .hex-diff-tools,
+.hex-diff[data-interactive="false"] .hex-diff-inspection-tools {
+  /* Reserve the controls' space before hydration so a fragment target below
+     the figure keeps the position the browser calculated from the HTML. */
+  visibility: hidden;
+}
+
+/* The root script marks scripting before the article is laid out. Without
+   scripting, these controls never become usable and need no reserved space. */
+html:not(.js) .hex-diff[data-interactive="false"] .hex-diff-tools,
+html:not(.js) .hex-diff[data-interactive="false"] .hex-diff-inspection-tools {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .hex-diff button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 600px) {
+  .hex-diff-comparison {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hex-diff-pair + .hex-diff-pair {
+    border-left: 0;
+  }
+}
+
+@media print {
+  .hex-diff,
+  html[data-theme="light"] .hex-diff {
+    --hex-opcode: #000000;
+    --hex-addressing: #000000;
+    --hex-displacement: #000000;
+    --hex-immediate: #000000;
+    --hex-muted: #000000;
+
+    background: none;
+    color: #000000;
+    border-color: #000000;
+  }
+
+  .hex-diff-tools,
+  .hex-diff-inspection,
+  .hex-diff-copy-status {
+    display: none;
+  }
+
+  .hex-diff .hex-diff-field {
+    color: #000000;
+    border: 0;
+    background: none;
+  }
+
+  .hex-diff-byte[data-changed="true"] {
+    outline: 1px solid #000000;
+    text-decoration: underline;
+  }
+
+  .hex-diff-breakdown::details-content {
+    content-visibility: visible;
+  }
+
+  .hex-diff-breakdown > .hex-diff-breakdown-content {
+    display: block;
+  }
+
+  .hex-diff-pair,
+  .hex-diff-breakdown-pair dl > div {
+    break-inside: avoid;
+  }
+
+  .hex-diff-bytes {
+    overflow: visible;
+    flex-wrap: wrap;
+  }
+}
