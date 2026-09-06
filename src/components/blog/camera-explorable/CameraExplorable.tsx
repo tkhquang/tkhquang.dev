@@ -1,15 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import "./CameraExplorable.css";
+import CameraRig from "./CameraRig";
 import { useId, useState } from "react";
-
-const CameraRig = dynamic(() => import("./CameraRig"), {
-  loading: () => <p role="status">Preparing the camera...</p>,
-});
 
 export type CameraLesson = "rig" | "motion" | "collision" | "lens";
 
-/** A small entry point keeps the simulation out of an unopened article plate. */
 export default function CameraExplorable({
   lesson = "rig",
 }: {
