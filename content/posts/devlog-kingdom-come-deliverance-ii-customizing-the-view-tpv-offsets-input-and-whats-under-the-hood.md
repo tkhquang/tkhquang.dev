@@ -176,12 +176,21 @@ To truly grasp how the offset works, let's touch on the 3D math components invol
     *   A `Matrix34f` typically stores:
         *   The first 3x3 part is the rotation matrix, holding the object's X, Y, and Z axes in world space *in its columns* (Right = col0, Forward = col1, Up = col2).
         *   The last column (or often, specific elements like `m[0][3], m[1][3], m[2][3]`) is the translation (position) vector.
-    *   Our `cameraWorldRotation` (Quaternion) is essentially the rotational component of the camera's full view matrix. The game would use this quaternion (or convert it to a 3x3 rotation matrix) along with `gameCalculatedPosition` to build the final view matrix for the renderer.
+    *   Our `cameraWorldRotation` (Quaternion) is the rotational component of the camera's world transform. Together with `gameCalculatedPosition`, it places the camera in the world. The view matrix does the reverse: it transforms world points into camera space by applying the inverse camera transform. For a pure rotation matrix, that inverse is its transpose.
     *   My `Quaternion::LookRotation` is an example of building a quaternion from direction vectors, similar to how a view matrix is constructed. It uses `DirectX::XMMatrixLookToRH` (creates a view matrix) then inverts it to get a world orientation matrix, and finally extracts the quaternion from that. This shows the close relationship.
 
 ![Matrix34f Structure (CryEngine: row-major storage, with the axis basis in the columns)](/uploads/images/blog/tpv-camera-matrix34f.svg)
 
 By letting the game compute `gameCalculatedPosition` and `cameraWorldRotation` first, we respect its core TPV logic (like its default distance from Henry or any rudimentary collision handling it might do). We then just nudge that final position by applying our `localOffset` transformed into the correct `worldOffset` using the camera's own orientation.
+
+### FOV and distance
+
+Moving the camera farther back changes its position in the world, and with it the perspective between the character and the background. Increasing the field of view widens the image from the same position. Both can make the character smaller on screen, but only moving the camera changes that perspective. Try changing one at a time below.
+
+The rig below separates those two controls. In **The lens**, leave the subject still and change field of view without touching boom length. Then reset and change the boom length instead. Watch the character against the distant columns: widening the frame and moving the viewpoint produce different pictures.
+
+<camera-explorable lesson="lens">
+</camera-explorable>
 
 ## Refining TPV Input: Sensitivity and Pitch Limits
 

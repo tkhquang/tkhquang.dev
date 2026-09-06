@@ -1,5 +1,6 @@
 import lamplightDark from "@/assets/shiki/lamplight-dark.json";
 import lamplightLight from "@/assets/shiki/lamplight-light.json";
+import CameraExplorable from "@/components/blog/camera-explorable/CameraExplorable";
 import MermaidPlate from "@/components/common/MermaidPlate";
 import PreWithCopy from "@/components/common/PreWithCopy";
 import ZoomableImage from "@/components/common/ZoomableImage";
@@ -121,6 +122,7 @@ function getProcessor(): Processor {
       })
       .use(rehypeReact, {
         components: {
+          "camera-explorable": CameraExplorable,
           "rehype-pretty-copy-button-pre": PreWithCopy,
           "next-image": ZoomableImage,
           "mermaid-plate": MermaidPlate,
@@ -146,9 +148,11 @@ function getImageProcessor(): Processor {
 export async function getMarkdownParser(): Promise<MarkdownParser> {
   if (
     process.env.NODE_ENV === "development" &&
-    global.__MARKDOWN_PARSER_INITIALIZED__
+    global.__MARKDOWN_PARSER_INITIALIZED__ &&
+    // A reloaded module must rebuild its component registry, not reuse the old one.
+    global.markdownParser instanceof MarkdownParser
   ) {
-    return global.markdownParser!;
+    return global.markdownParser;
   }
 
   global.markdownParser = new MarkdownParser();

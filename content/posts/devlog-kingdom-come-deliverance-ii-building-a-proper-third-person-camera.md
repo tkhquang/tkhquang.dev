@@ -219,7 +219,7 @@ Verdicts are cached per object, deliberately asymmetric. "Collide" gets reused f
 
 **Layer four, what physics can't see at all.** Some KCD2 roofs, the tents and awnings and market-stall canopies, are render meshes with no ray-collidable physics behind them. Every physics probe sails through, and a look-down buries you in cloth. The renderer can see them though, so this layer asks the renderer: `I3DEngine::GetObjectsInBox` returns the render nodes along the arm, and each visible brush gets its vertices marched against the sightline. A brush only counts when enough of them land inside the sightline tube, so a rope or a beam doesn't jolt the camera while a canopy still clamps it.
 
-Then easing. Pull-in is near instant, because the camera must never sit inside a wall for even one frame, and the return is slow and configurable so it doesn't pop the moment the obstruction clears.
+Then easing. Pull-in is fast, so an obstruction brings the camera in quickly, and the return is slower and configurable so it doesn't pop the moment the obstruction clears. It still eases inward rather than snapping to the hit distance, so a sudden obstruction can briefly catch the camera before it pulls clear.
 
 One performance note, since this adds up. Collision only queries static geometry and terrain, and static geometry doesn't move, so the whole ladder recomputes only once the pivot or the desired camera position has moved 6 cm. In between, only the easing runs. Standing still costs nothing, walking skips most frames.
 
@@ -253,6 +253,17 @@ Proper third-person cameras do better. They collide against the real shape of th
 I built that last one, and it's worth saying why it isn't shipping. Fading works here: set opacity on a render node and a tent canopy or a wall dissolves out of the way, and grass fades beautifully. But I wanted it for trees, and KCD2's leaf shader ignores the dissolve flag entirely. The one occluder that most deserved fading was the one that wouldn't, so the whole feature went in the bin. I kept an unrelated raycast fix for fabric roofs that fell out of the same investigation.
 
 So there's a rewrite on a branch, and the idea is to stop stacking layers that can disagree. Instead of a fan, a sphere and a coverage walk all voting and then taking the smallest answer, one swept capsule sized to the near plane gives a single continuous distance. A volume can't squeeze through a gap narrower than itself, so it catches the window frames and timber-frame walls thin rays slip through, and a continuous output leaves no verdict to flip. Very much an experiment, not in a release, but that's the direction.
+
+### A simpler rig
+
+I put a smaller version of the problem below: one subject, one wall, and a camera that wants to be on the other side of it. Play the path, then turn collision off to compare moving the camera with fading the obstruction. Here the camera slides along the wall's front face; the mod above shortens the arm along its probe direction. The wall fade illustrates the option I left out of the release.
+
+For the motion experiment, I added a spring. It pulls the camera toward a desired position, with stiffness controlling the pull and damping removing motion. For a fixed target, starting from rest, a damping ratio below 1 produces oscillation; 1 is critical damping, and a higher value gives a slower return. The mod follows the pivot directly and eases the collision distance, with a fast pull-in and a slower return.
+
+Open **The spring** and play the path before adjusting stiffness, damping or boom length. Edits while paused place the camera immediately, so use playback to see how it gets there.
+
+<camera-explorable lesson="collision">
+</camera-explorable>
 
 ## Knowing what the game is doing
 

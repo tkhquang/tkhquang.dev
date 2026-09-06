@@ -46,7 +46,7 @@ Finding the `wh::game::C_CameraManager` (and from there, the TPV object and its 
 
 For KCD2, the function `FUN_180a0a080` in `WHGame.DLL` returns a pointer that appears to be the base of this global context. The key instruction loading this is:
 
-```assembly title="Key instructions"
+```asm title="Key instructions"
 WHGame.DLL+A0A0A9 - 48 8B 05 0083AA04     - mov rax,[WHGame.DLL+54B23B0]
 ; This MOV loads the address stored at WHGame.DLL+54B23B0 into RAX.
 ; This address, WHGame.DLL+54B23B0, is where the actual Global Context instance pointer is kept.
@@ -179,6 +179,11 @@ While toggling this built-in TPV flag is a great achievement, a more robust, pla
 *   Extensive use of raycasting for ideal camera positioning, targeting, and line-of-sight checks.
 
 This would essentially mean creating a new camera controller. It might involve intercepting the FPV camera's final matrix data and then calculating custom offsets and rotations based on player input and world geometry, or perhaps even attempting to inject a new custom camera controller into the game's existing polymorphic camera management system if a suitable hook point can be found. For now, unlocking the game's own (though quirky) TPV offers a very welcome alternative perspective.
+
+The geometry is easier to understand when you can move it. This little camera rig lets you explore the pivot, the arm behind it, and the shoulder offset. Move the camera to one shoulder, then switch **Look at the pivot** off. With it on, the camera turns to keep the pivot centred; with it off, the camera keeps the rig's heading, so the subject shifts across the frame. The reading links lead into the motion and collision problems in the rest of this series.
+
+<camera-explorable lesson="rig">
+</camera-explorable>
 
 This whole process, from identifying target functions via disassembly, crafting AOBs, meticulously tracing pointers through multiple object instances, and confirming object types using vftables, is pretty standard fare for this kind of in-depth game modding. Each game update from Warhorse might necessitate re-validating these AOBs and memory offsets, but the underlying architecture (like how `ISystem` connects to `C_CameraManager` which then holds different camera types) often remains a stable pattern derived from CryEngine.
 

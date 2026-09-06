@@ -1,0 +1,449 @@
+/*
+ * The camera plate: a dark instrument band (cover, two canvases, legend)
+ * set into a themed sheet that carries the prose and the controls.
+ *
+ * The band keeps its own literal inks in both themes on purpose. The
+ * canvases paint one ink (render.ts INK #101a25) and nothing in a 2D
+ * context inherits a custom property, so a themed band would drift away
+ * from the pixels sitting inside it. The sheet around it stays on the
+ * theme tokens and the two meet at a hairline.
+ *
+ * Rules here are unlayered, so they outrank every article style in the
+ * components layer no matter the specificity. That is what lets the
+ * short resets below (.camera-plate p, button) hold the plate's own
+ * typography against the surrounding .typography recipe.
+ */
+
+.camera-plate {
+  /* Deepen small gilt labels enough to stay readable on the light sheet. */
+  --camera-accent: color-mix(in srgb, var(--gilt-ink) 60%, var(--on-surface));
+
+  margin: 2.5rem 0;
+  border: 1px solid var(--hairline);
+  border-top: 3px solid var(--gilt-ink, #d8bd81);
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  overflow: clip;
+}
+
+.camera-plate p {
+  margin: 0;
+}
+
+.camera-plate button,
+.camera-plate input {
+  font: inherit;
+}
+
+.camera-plate button {
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.camera-plate button:hover {
+  background: color-mix(in srgb, var(--on-surface) 7%, transparent);
+}
+
+.camera-plate button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.camera-plate :is(button, input, a) {
+  scroll-margin-top: calc(var(--header-height) + 38svh);
+  scroll-margin-bottom: 8rem;
+}
+
+.camera-plate :is(button, input, a):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.camera-header {
+  padding: 1.5rem 1.5rem 1.25rem;
+}
+
+.camera-plate .camera-eyebrow {
+  color: var(--camera-accent);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.camera-plate .camera-header h3 {
+  margin: 0.55rem 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 3vw, 1.7rem);
+  line-height: 1.4;
+}
+
+.camera-header > p:last-child {
+  max-width: 56ch;
+  opacity: 0.85;
+}
+
+.camera-cover {
+  background: #101a25;
+  color: #dce4e8;
+  text-align: center;
+  padding-bottom: 1.3rem;
+}
+
+.camera-cover svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 230px;
+}
+
+.camera-plate .camera-launch {
+  border-color: #8bcbd5;
+  background: color-mix(in srgb, #8bcbd5 12%, transparent);
+  color: #8bcbd5;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.25rem;
+}
+
+.camera-plate .camera-launch:hover {
+  background: color-mix(in srgb, #8bcbd5 22%, transparent);
+}
+
+.camera-plate .camera-launch:focus-visible {
+  outline-color: #8bcbd5;
+}
+
+.camera-plate .camera-cover p {
+  margin: 0.8rem 1rem 0;
+  color: #b4c0cb;
+  font-size: 0.75rem;
+}
+
+.camera-lessons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-bottom: 1px solid var(--hairline);
+}
+
+.camera-plate .camera-lessons button {
+  padding: 0.85rem 0.25rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.camera-plate .camera-lessons button[aria-pressed="true"] {
+  border-bottom-color: var(--gilt-ink);
+  background: color-mix(in srgb, var(--gilt-ink) 9%, transparent);
+  color: var(--camera-accent);
+}
+
+.camera-stage {
+  /* Keep both views visible while the reader scrolls through the controls.
+     Clip the outer plate without creating a scroll container, so this pins
+     to the page below the blog header. */
+  position: sticky;
+  top: var(--header-height);
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: #314252;
+}
+
+.camera-viewport {
+  background: #101a25;
+  min-width: 0;
+}
+
+.camera-view-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  color: #c8d6df;
+  font: 0.63rem var(--font-mono);
+  border-bottom: 1px solid #263646;
+}
+
+.camera-view-label span:last-child {
+  color: #8bcbd5;
+}
+
+.camera-viewport canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.35;
+  max-height: 32svh;
+}
+
+.camera-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  padding: 0.65rem 1rem;
+  background: #101a25;
+  color: #c8d6df;
+  font-size: 0.65rem;
+}
+
+.camera-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.camera-legend i {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.camera-swatch-subject {
+  background: #e8cc8c;
+}
+
+.camera-swatch-camera {
+  background: #8bcbd5;
+}
+
+/* The wall is the one square key: it reads as a slab, not a point. */
+.camera-legend i.camera-swatch-wall {
+  background: #d69ba4;
+  border-radius: 0;
+}
+
+.camera-swatch-ghost {
+  border: 1px dashed #b4c0cb;
+}
+
+.camera-transport {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.camera-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.camera-plate .camera-actions button {
+  font-size: 0.72rem;
+}
+
+.camera-plate .camera-play {
+  border-color: var(--primary);
+  color: var(--primary);
+  min-width: 7.6rem;
+}
+
+.camera-clock {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.camera-readings {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.8rem 1rem;
+  font-size: 0.65rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.camera-readings span {
+  display: flex;
+  flex-direction: column;
+}
+
+.camera-readings strong {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--camera-accent);
+}
+
+.camera-lesson {
+  padding: 1.25rem 1.5rem;
+}
+
+.camera-lesson-intro {
+  margin-bottom: 1.5rem;
+}
+
+.camera-plate .camera-lesson-intro h4 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.camera-lesson-intro p {
+  max-width: 68ch;
+  opacity: 0.85;
+}
+
+.camera-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.3rem 1.75rem;
+}
+
+.camera-control {
+  min-width: 0;
+}
+
+.camera-control label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.camera-control output {
+  font-family: var(--font-mono);
+  color: var(--primary);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.camera-control input[type="range"] {
+  display: block;
+  width: 100%;
+  height: 30px;
+  margin: 0.1rem 0 0.2rem;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
+.camera-plate .camera-control p {
+  font-size: 0.69rem;
+  line-height: 1.65;
+  opacity: 0.85;
+}
+
+.camera-control a {
+  white-space: nowrap;
+}
+
+.camera-control .camera-toggle {
+  justify-content: flex-start;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.camera-toggle input {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.camera-plate .camera-note {
+  border-top: 1px solid var(--hairline);
+  margin-top: 1.5rem;
+  padding-top: 0.85rem;
+  font-size: 0.67rem;
+  opacity: 0.75;
+}
+
+.camera-footer {
+  display: grid;
+  gap: 0.35rem;
+  border-top: 1px solid var(--hairline);
+  padding: 1rem 1.5rem;
+  font-size: 0.68rem;
+  line-height: 1.7;
+}
+
+.camera-footer > span:first-child {
+  font-family: var(--font-mono);
+  color: var(--camera-accent);
+  font-size: 0.64rem;
+}
+
+@media (width < 540px) {
+  .camera-header,
+  .camera-lesson {
+    padding: 1.1rem;
+  }
+
+  .camera-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-viewport canvas {
+    aspect-ratio: 1.7;
+    max-height: 20svh;
+  }
+
+  .camera-plate :is(button, input, a) {
+    scroll-margin-top: calc(var(--header-height) + 48svh);
+  }
+
+  .camera-controls {
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
+  }
+
+  .camera-plate .camera-lessons button {
+    font-size: 0.62rem;
+  }
+
+  .camera-transport {
+    padding: 0.7rem;
+  }
+
+  .camera-plate .camera-actions button {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .camera-plate .camera-play {
+    min-width: 6.5rem;
+  }
+
+  .camera-footer {
+    padding: 1rem 1.1rem;
+  }
+}
+
+@media print {
+  .camera-plate {
+    break-inside: avoid;
+  }
+
+  .camera-stage {
+    position: static;
+  }
+
+  .camera-launch,
+  .camera-lessons,
+  .camera-transport,
+  .camera-controls {
+    display: none;
+  }
+}

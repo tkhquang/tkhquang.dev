@@ -1,4 +1,8 @@
 import "@/assets/styles/(blog)/index.css";
+/* Keep the plate's stylesheet within blog routes. The landing page imports
+   MarkdownParser for post metadata, so importing CSS through its component
+   registry would also load these styles outside the blog. */
+import "@/components/blog/camera-explorable/CameraExplorable.css";
 import ClientSideScrollRestorer from "@/components/container/ClientSideScrollRestorer";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Main } from "@/components/layout";
@@ -74,7 +78,11 @@ export default async function BlogLayout({
             which under a classic scrollbar is half a scrollbar wider than
             the page; clip removes that without making main a scroll
             container, so the sticky bio card keeps pinning */}
-        <Main id="main-content" tabIndex={-1} className="flex-1 overflow-x-clip">
+        <Main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 overflow-x-clip"
+        >
           {children}
         </Main>
         <BlogFooter />
