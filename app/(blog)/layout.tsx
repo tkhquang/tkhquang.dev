@@ -74,7 +74,11 @@ export default async function BlogLayout({
             which under a classic scrollbar is half a scrollbar wider than
             the page; clip removes that without making main a scroll
             container, so the sticky bio card keeps pinning */}
-        <Main id="main-content" tabIndex={-1} className="flex-1 overflow-x-clip">
+        <Main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 overflow-x-clip"
+        >
           {children}
         </Main>
         <BlogFooter />
