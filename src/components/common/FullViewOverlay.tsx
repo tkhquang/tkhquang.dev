@@ -219,6 +219,7 @@ function Stage({ open, caption, children }: StageProps) {
           hint. */}
       <div
         ref={viewportRef}
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
         role="group"
         aria-label="Pan with the arrow keys"
