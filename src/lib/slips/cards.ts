@@ -3,6 +3,7 @@ import { getAnnotationRecord } from "@/lib/annotations";
 import type { AnnotationRecord } from "@/lib/annotations/types";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { getPostPreview, parseCrossReference } from "@/lib/post-previews";
+import { countSections } from "@/lib/post-previews/sections";
 import { getTransclusionHtml } from "@/lib/post-previews/transclude";
 import { format } from "date-fns";
 import "server-only";
@@ -56,6 +57,7 @@ export async function getSlipCard(href: string): Promise<SlipCard | null> {
       preview,
       html,
       scope: target.sectionId ? "section" : "opening",
+      rest: target.sectionId ? 0 : countSections(post.content),
     };
   }
 

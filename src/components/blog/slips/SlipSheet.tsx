@@ -1,8 +1,12 @@
 "use client";
 
 import "./SlipSheet.css";
-import Drawer, { DrawerTrigger } from "@/components/common/Drawer";
+import Drawer, {
+  DrawerTrigger,
+  useDrawerContext,
+} from "@/components/common/Drawer";
 import clsx from "clsx";
+import { useEffect, useRef } from "react";
 
 /* The slide the drawer plays, at least as tall as the sheet ever is
    (the stylesheet caps it at 704px), or the closed pose would leave the
@@ -78,6 +82,64 @@ export function SlipSheetMark({
 }: React.ComponentProps<"button">) {
   return (
     <DrawerTrigger className={className} {...props}>
+      {children}
+    </DrawerTrigger>
+  );
+}
+
+interface SlipSheetFetchMarkProps extends React.ComponentProps<"button"> {
+  /* The reader has asked for the sheet */
+  wanted: boolean;
+  /* The card is there to be shown, or has been found missing */
+  arrived: boolean;
+  onWant: () => void;
+  onOpened: () => void;
+}
+
+/**
+ * The opener for a card that has to be fetched: the sheet rises only
+ * once the card has arrived, as the hovercard opens only then, so it
+ * never rises empty and refills under a thumb. A tap before then is the
+ * reader asking: the mark keeps the drawer's toggle back, breathes with
+ * the link until the card is there, and then raises the sheet itself.
+ * The drawer's store is reached through its context, since the mark is
+ * rendered inside the drawer's provider.
+ */
+export function SlipSheetFetchMark({
+  arrived,
+  children,
+  className = "slip-mark",
+  onClick,
+  onOpened,
+  onWant,
+  wanted,
+  ...props
+}: SlipSheetFetchMarkProps) {
+  const drawer = useDrawerContext();
+  const mark = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!wanted || !arrived || !drawer) return;
+    /* Named as the opener, so closing hands focus back to the mark */
+    drawer.setDisclosureElement(mark.current);
+    drawer.show();
+    onOpened();
+  }, [wanted, arrived, drawer, onOpened]);
+
+  return (
+    <DrawerTrigger
+      ref={mark}
+      className={className}
+      data-waiting={(wanted && !arrived) || undefined}
+      onClick={(event) => {
+        onClick?.(event);
+        if (arrived) return;
+        /* Ariakit leaves a prevented click alone, so the toggle waits */
+        event.preventDefault();
+        onWant();
+      }}
+      {...props}
+    >
       {children}
     </DrawerTrigger>
   );

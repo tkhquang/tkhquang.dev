@@ -24,5 +24,8 @@ export type SlipCard =
       preview: PostPreview;
       html: string;
       scope: "section" | "opening";
+      /* The sections the card leaves out: those after the opening, and
+         none for a section, which the card carries whole */
+      rest: number;
     }
   | { kind: "annotation"; annotation: AnnotationCard };

@@ -1686,12 +1686,21 @@
     margin: 0;
   }
 
-  /* A plate the card cannot carry says so, in the kicker's face */
-  .slip .slip__omitted {
+  /* A plate the card cannot carry says so, in the kicker's face, and
+     so does the rest of an entry the card stops short of */
+  .slip .slip__omitted,
+  .slip .slip__more {
     margin: 0.75rem 0;
     padding: 0.5rem 0.75rem;
     border: 1px dashed var(--hairline-soft);
     border-radius: 2px;
+  }
+
+  /* Under the prose and above the foot: on the hovercard the prose
+     scrolls in its own box and the line stays in view, on the sheet the
+     whole card scrolls and the line closes the opening */
+  .slip .slip__more {
+    margin-bottom: 0;
   }
 
   /* The sheet's card fills the drawer instead of floating in it, and

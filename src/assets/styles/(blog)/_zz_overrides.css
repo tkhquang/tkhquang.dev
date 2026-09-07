@@ -573,6 +573,7 @@
      layer whatever the selector */
   .slip__kicker,
   .slip__head,
+  .slip__more,
   .slip__foot {
     opacity: 1;
   }

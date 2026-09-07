@@ -7,7 +7,10 @@ import {
   slipWidthFor,
 } from "@/components/blog/slips/SlipCardView";
 import { SlipControls } from "@/components/blog/slips/SlipControls";
-import { SlipSheet, SlipSheetMark } from "@/components/blog/slips/SlipSheet";
+import {
+  SlipSheet,
+  SlipSheetFetchMark,
+} from "@/components/blog/slips/SlipSheet";
 import { usePointerCoarse } from "@/components/blog/slips/usePointerCoarse";
 import {
   prefetchSlipCard,
@@ -51,7 +54,8 @@ interface CrossReferenceSlipProps {
  * arrived, so it lands at its final size where there is room for it and
  * never has to be moved; the link and the mark breathe together while
  * the content is on its way. On a finger the mark
- * opens the card as a sheet and the link stays a link. A reader who has
+ * opens the card as a sheet, again only once the content has arrived,
+ * and the link stays a link. A reader who has
  * turned hover previews off keeps the mark: hovering does nothing, and
  * the click still opens the card.
  */
@@ -117,15 +121,29 @@ export default function CrossReferenceSlip({
   if (coarse) {
     return (
       <>
-        <a {...anchor}>{children}</a>
+        <a
+          {...anchor}
+          className={clsx("cross-reference", anchor.className)}
+          data-waiting={waiting || undefined}
+        >
+          {children}
+        </a>
         <SlipSheet
           title="Cross-reference"
           className="slip--cross"
           style={{ "--shelf": shelf } as React.CSSProperties}
           trigger={
-            <SlipSheetMark aria-label={`Preview ${label}`}>
+            <SlipSheetFetchMark
+              aria-label={`Preview ${label}`}
+              wanted={wanted}
+              arrived={arrived}
+              onWant={() => setWanted(true)}
+              onOpened={() => setWanted(false)}
+              /* The fetch starts on the touch, ahead of the tap's click */
+              onPointerDown={() => prefetchSlipCard(slip)}
+            >
               <SlipStar />
-            </SlipSheetMark>
+            </SlipSheetFetchMark>
           }
         >
           {body}

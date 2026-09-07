@@ -137,7 +137,7 @@ const PostCard = ({
   anchor: React.ComponentProps<"a">;
   card: Extract<SlipCard, { kind: "post" }>;
 }) => {
-  const { html, preview, scope } = card;
+  const { html, preview, rest, scope } = card;
   const section = scope === "section" ? preview.section : undefined;
   return (
     <>
@@ -167,6 +167,20 @@ const PostCard = ({
       <p className="slip__title">{section ? section.title : preview.title}</p>
       {!section && preview.lede && <p className="slip__lede">{preview.lede}</p>}
       <Prose html={html} />
+      {/* An opening is not the entry, and a card that stopped without
+          saying so would read as the whole of it. Under the prose rather
+          than inside it: on the hovercard the prose scrolls in its own
+          box, so the line is in view from the start; on the sheet the
+          whole card scrolls and the line closes the opening. The foot
+          carries the one link to the entry, so the line names the way
+          on without adding a second stop to the same place. */}
+      {rest > 0 && (
+        <p className="kicker slip__more">
+          The opening only, {rest}{" "}
+          {rest === 1 ? "section follows" : "sections follow"}: open the entry
+          to read on
+        </p>
+      )}
       <Foot
         anchor={anchor}
         href={preview.href}

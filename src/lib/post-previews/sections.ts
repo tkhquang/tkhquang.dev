@@ -36,6 +36,21 @@ export function listSections(markdown: string): Section[] {
   return sections;
 }
 
+/**
+ * The sections of a post as a reader counts them: the headings at the
+ * shallowest depth the post uses, each subsection folded into its
+ * section, so a card can say how much of the entry it leaves out. A
+ * post without headings has none, and its opening is the whole of it.
+ */
+export function countSections(markdown: string): number {
+  const depths: number[] = [];
+  visit(parser.parse(markdown), "heading", (node: Heading) => {
+    depths.push(node.depth);
+  });
+  const top = Math.min(...depths);
+  return depths.filter((depth) => depth === top).length;
+}
+
 /* The heading a section link points at, or null when the post has no
    such heading, in which case the link is left to navigate on its own */
 export function findSection(markdown: string, id: string): Section | null {

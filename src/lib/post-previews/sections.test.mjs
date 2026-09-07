@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { findSection, listSections } from "./sections.ts";
+import { countSections, findSection, listSections } from "./sections.ts";
 
 const post = `
 Opening words.
@@ -31,6 +31,12 @@ test("headings slug the way rehype-slug slugs them, duplicates numbered", () => 
       title: "Knowing what the game is doing",
     },
   ]);
+});
+
+test("sections are counted at the shallowest depth, none without headings", () => {
+  assert.equal(countSections(post), 3);
+  assert.equal(countSections("Only an opening.\n\nAnd a second paragraph."), 0);
+  assert.equal(countSections("### Deep\n\n#### Deeper\n\n### Deep again"), 2);
 });
 
 test("a section link finds its heading, or nothing", () => {
