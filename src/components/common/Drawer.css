@@ -92,13 +92,7 @@
     position: fixed;
     inset: 0;
     background-color: rgb(0 0 0 / 20%);
-
-    /* No backdrop-filter here. A blur behind a full-viewport overlay
-       makes Firefox for Android read the whole page back to the GPU
-       every frame while the overlay fades in and out, and on Mali and
-       Adreno phones that is the difference between a slide and a
-       stutter (Bugzilla 1809738, 1731965, 1732817, still open). The
-       1px blur was not visible enough to be worth that. */
+    backdrop-filter: blur(1px);
     cursor: pointer;
     opacity: 0;
 

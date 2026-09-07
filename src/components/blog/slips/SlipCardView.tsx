@@ -3,7 +3,6 @@
 import { setPreviewsEnabled, usePreviewsEnabled } from "./previews";
 import { prefetchSlipCard, useSlipCard } from "./useSlipCard";
 import { SerialInstalment, SerialStar } from "@/components/blog/SeriesPlate";
-import { useDrawerSettled } from "@/components/common/Drawer";
 import type { AnnotationCard, SlipCard } from "@/lib/slips/card";
 import { useEffect, useState } from "react";
 
@@ -195,17 +194,13 @@ const PostCard = ({
 
 /* The page live, over its own snapshot: the still shows the moment the
    card opens and the frame fades in over it once the page has loaded,
-   so a slow destination never leaves the card blank. In a sheet the
-   frame waits until the sheet has settled and leaves as soon as it
-   starts down, so a loading page never rides the slide; the still is
-   what moves. */
+   so a slow destination never leaves the card blank */
 const LiveFrame = ({
   annotation,
 }: {
   annotation: Extract<AnnotationCard, { kind: "page" }>;
 }) => {
   const [loaded, setLoaded] = useState(false);
-  const settled = useDrawerSettled() ?? true;
   const { snapshot } = annotation;
   return (
     <div className="slip__live" data-loaded={loaded || undefined}>
@@ -221,19 +216,17 @@ const LiveFrame = ({
           decoding="async"
         />
       )}
-      {settled && (
-        <iframe
-          className="slip__frame"
-          src={annotation.url}
-          title={annotation.title}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          /* The page keeps its scripts and its own origin; it may not
-             steer this one */
-          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
-          onLoad={() => setLoaded(true)}
-        />
-      )}
+      <iframe
+        className="slip__frame"
+        src={annotation.url}
+        title={annotation.title}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+        /* The page keeps its scripts and its own origin; it may not
+           steer this one */
+        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
+        onLoad={() => setLoaded(true)}
+      />
     </div>
   );
 };

@@ -15,15 +15,8 @@ import { Portal } from "@ariakit/react/portal";
 import { useStoreState } from "@ariakit/react/store";
 import { useDrag } from "@use-gesture/react";
 import clsx from "clsx";
-import {
-  createContext,
-  useContext,
-  useRef,
-  useEffect,
-  useCallback,
-  useState,
-  forwardRef,
-} from "react";
+import { gsap } from "gsap";
+import { useRef, useEffect, useCallback, useState, forwardRef } from "react";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
 /**
@@ -73,56 +66,6 @@ const DrawerBackdrop = forwardRef<
 });
 
 export type DrawerPosition = "top" | "right" | "bottom" | "left";
-
-/**
- * Whether the drawer has finished sliding in: false while it moves and
- * from the moment it starts out, undefined outside a drawer. Content
- * that is heavy to move, a live page in a frame, waits for it: sliding
- * a box with a loading iframe inside stutters, and on Firefox for
- * Android badly enough to look blocked.
- */
-const DrawerSettledContext = createContext<boolean | undefined>(undefined);
-export const useDrawerSettled = () => useContext(DrawerSettledContext);
-
-/* The two power2 curves the drawer used to tween with, as the
-   cubic-beziers the platform takes */
-const EASE_OUT = "cubic-bezier(0.33, 1, 0.68, 1)";
-const EASE_IN = "cubic-bezier(0.32, 0, 0.67, 0)";
-
-/**
- * One leg of the slide, as a Web Animation. Gecko samples transform and
- * opacity off the main thread only when the animation is declarative,
- * so a tween that writes an inline style every frame runs at the mercy
- * of whatever else the page is doing, and on Firefox for Android that
- * reads as a stutter or a stall rather than a slide. The single
- * keyframe is the destination alone, so the animation starts from
- * wherever the element already is: that is what lets a close asked for
- * mid-slide carry on from the position on screen.
- */
-const play = (
-  element: HTMLElement,
-  keyframes: Keyframe[],
-  duration: number,
-  easing: string,
-  delay = 0
-) => element.animate(keyframes, { duration, easing, delay, fill: "both" });
-
-/**
- * Ends the animations in flight where they stand: each one's current
- * value becomes the element's own, so the next animation starts from it
- * and the drag can write the transform itself. Cancelling without
- * committing would snap the drawer back to where the slide began.
- */
-const settle = (animations: Animation[]) => {
-  for (const animation of animations) {
-    try {
-      animation.commitStyles();
-    } catch {
-      /* An element already out of the document has nothing to commit */
-    }
-    animation.cancel();
-  }
-};
 
 /**
  * The disclosure button for a Drawer, passed through its `trigger` prop so
@@ -198,10 +141,9 @@ export default function Drawer({
   const drawerRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const isAnimatingRef = useRef(false);
-  /* The slide in flight, so the next one takes over from wherever it is
-     instead of waiting for it or being dropped */
-  const runningRef = useRef<Animation[]>([]);
-  const [settled, setSettled] = useState(false);
+  /* The slide in flight, so whichever slide starts next takes over from
+     wherever it had got to instead of being dropped */
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   /**
    * Local state to control DOM presence during animations.
@@ -268,52 +210,63 @@ export default function Drawer({
    * Sets initial closed state, then animates to open state with smooth easing.
    */
   const animateIn = useCallback(() => {
-    const content = drawerRef.current;
-    if (!content) return;
+    if (!drawerRef.current) return;
 
-    settle(runningRef.current);
-    runningRef.current = [];
+    timelineRef.current?.kill();
     isAnimatingRef.current = true;
-    setSettled(false);
     const transforms = getTransformValues(position, size);
-    const backdrop = backdropRef.current;
-    content.style.visibility = "visible";
 
     /* Reduced motion: appear in place, no slide */
     if (prefersReducedMotion()) {
-      content.style.transform = transforms.open;
-      if (backdrop) backdrop.style.opacity = "1";
+      gsap.set(drawerRef.current, {
+        transform: transforms.open,
+        visibility: "visible",
+      });
+      if (backdropRef.current) {
+        gsap.set(backdropRef.current, { opacity: 1 });
+      }
       isAnimatingRef.current = false;
-      setSettled(true);
       return;
     }
 
     // Set initial closed state
-    content.style.transform = transforms.closed;
-    if (backdrop) backdrop.style.opacity = "0";
+    gsap.set(drawerRef.current, {
+      transform: transforms.closed,
+      visibility: "visible",
+    });
 
-    // Fade in the backdrop first, the content sliding in over its tail
-    const animations = [
-      ...(backdrop ? [play(backdrop, [{ opacity: 1 }], 200, EASE_OUT)] : []),
-      play(
-        content,
-        [{ transform: transforms.open }],
-        300,
-        EASE_OUT,
-        backdrop ? 100 : 0
-      ),
-    ];
-    runningRef.current = animations;
-    Promise.all(animations.map((animation) => animation.finished))
-      .then(() => {
-        settle(animations);
-        runningRef.current = [];
+    if (backdropRef.current) {
+      gsap.set(backdropRef.current, { opacity: 0 });
+    }
+
+    // Create staggered entrance animation
+    const timeline = gsap.timeline({
+      onComplete: () => {
         isAnimatingRef.current = false;
-        setSettled(true);
-      })
-      /* A slide cut short by the next one rejects here and leaves the
-         state to whichever animation took over */
-      .catch(() => {});
+        timelineRef.current = null;
+      },
+    });
+    timelineRef.current = timeline;
+
+    // Fade in backdrop first
+    if (backdropRef.current) {
+      timeline.to(backdropRef.current, {
+        opacity: 1,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+    }
+
+    // Slide in drawer content with slight overlap
+    timeline.to(
+      drawerRef.current,
+      {
+        transform: transforms.open,
+        duration: 0.3,
+        ease: "power2.out",
+      },
+      backdropRef.current ? "-=0.1" : 0
+    );
   }, [position, size, getTransformValues]);
 
   /**
@@ -321,47 +274,56 @@ export default function Drawer({
    * On completion, triggers component unmounting via setShouldRender(false).
    */
   const animateOut = useCallback(() => {
-    const content = drawerRef.current;
-    if (!content) return;
+    if (!drawerRef.current) return;
 
-    /* A close asked for mid-slide takes over from wherever the slide
-       is. Waiting for the slide to finish first is what left the sheet
-       standing open with nothing left to close it: the open state had
-       already flipped, so no later tap on the backdrop, the dismiss or
-       Escape had anything to change. */
-    settle(runningRef.current);
-    runningRef.current = [];
+    /* A close asked for mid-slide takes over from wherever the slide is.
+       Returning here while the slide in was still running, with nothing
+       to retry the close, is what left a drawer standing open: the open
+       state had already flipped, so no later press on the backdrop, the
+       dismiss or Escape had anything left to change. */
+    timelineRef.current?.kill();
     isAnimatingRef.current = true;
-    setSettled(false);
     const transforms = getTransformValues(position, size);
-    const backdrop = backdropRef.current;
 
     /* Reduced motion: leave in place, no slide */
     if (prefersReducedMotion()) {
-      content.style.transform = transforms.closed;
-      if (backdrop) backdrop.style.opacity = "0";
+      gsap.set(drawerRef.current, { transform: transforms.closed });
+      if (backdropRef.current) {
+        gsap.set(backdropRef.current, { opacity: 0 });
+      }
       isAnimatingRef.current = false;
       setShouldRender(false);
       return;
     }
 
-    // Slide the content out, the backdrop fading over its tail
-    const animations = [
-      play(content, [{ transform: transforms.closed }], 250, EASE_IN),
-      ...(backdrop
-        ? [play(backdrop, [{ opacity: 0 }], 150, EASE_IN, 150)]
-        : []),
-    ];
-    runningRef.current = animations;
-    Promise.all(animations.map((animation) => animation.finished))
-      .then(() => {
-        runningRef.current = [];
+    const timeline = gsap.timeline({
+      onComplete: () => {
         isAnimatingRef.current = false;
+        timelineRef.current = null;
         setShouldRender(false); // Unmount after animation completes
-      })
-      /* A close cut short by a reopen rejects here and leaves the
-         drawer mounted, which is what the reopen needs */
-      .catch(() => {});
+      },
+    });
+    timelineRef.current = timeline;
+
+    // Slide out drawer content
+    timeline.to(drawerRef.current, {
+      transform: transforms.closed,
+      duration: 0.25,
+      ease: "power2.in",
+    });
+
+    // Fade out backdrop with slight overlap
+    if (backdropRef.current) {
+      timeline.to(
+        backdropRef.current,
+        {
+          opacity: 0,
+          duration: 0.15,
+          ease: "power2.in",
+        },
+        "-=0.1"
+      );
+    }
   }, [position, size, getTransformValues]);
 
   /**
@@ -387,7 +349,7 @@ export default function Drawer({
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           /* A close asked for inside these two frames has already played
-             out below; a slide in now would stand the drawer back up */
+             out below; sliding in now would stand the drawer back up */
           if (dialog.getState().open) animateIn();
         });
       });
@@ -428,18 +390,18 @@ export default function Drawer({
             1
           );
 
-          /* Written straight to the element, in the same units the
-             slides use: a tweening library keeps its own idea of the
-             transform, which the committed end of a slide would leave
-             stale, and the drag would start with a jump */
-          drawerRef.current.style.transform =
-            dragConfig.axis === "x"
-              ? `translateX(${currentMovement}px)`
-              : `translateY(${currentMovement}px)`;
+          // Update drawer position in real-time
+          if (dragConfig.axis === "x") {
+            gsap.set(drawerRef.current, { x: currentMovement });
+          } else {
+            gsap.set(drawerRef.current, { y: currentMovement });
+          }
 
           // Fade backdrop based on drag progress for visual feedback
           if (backdropRef.current) {
-            backdropRef.current.style.opacity = String(1 - progress * 0.5);
+            gsap.set(backdropRef.current, {
+              opacity: 1 - progress * 0.5,
+            });
           }
         }
       } else {
@@ -454,24 +416,18 @@ export default function Drawer({
         } else {
           // Snap back to open position with smooth animation
           const transforms = getTransformValues(position, size);
-          const animations = [
-            play(
-              drawerRef.current,
-              [{ transform: transforms.open }],
-              200,
-              EASE_OUT
-            ),
-            ...(backdropRef.current
-              ? [play(backdropRef.current, [{ opacity: 1 }], 200, EASE_OUT)]
-              : []),
-          ];
-          runningRef.current = animations;
-          Promise.all(animations.map((animation) => animation.finished))
-            .then(() => {
-              settle(animations);
-              runningRef.current = [];
-            })
-            .catch(() => {});
+          gsap.to(drawerRef.current, {
+            transform: transforms.open,
+            duration: 0.2,
+            ease: "power2.out",
+          });
+          if (backdropRef.current) {
+            gsap.to(backdropRef.current, {
+              opacity: 1,
+              duration: 0.2,
+              ease: "power2.out",
+            });
+          }
         }
       }
     },
@@ -487,53 +443,51 @@ export default function Drawer({
       {trigger}
 
       {shouldRender && (
-        <DrawerSettledContext.Provider value={settled}>
-          <Dialog
-            store={dialog}
-            alwaysVisible // Keep in DOM during animations
-            className={clsx(`drawer drawer--${position}`, className)}
-            backdrop={
-              <DrawerBackdrop
-                ref={backdropRef}
-                onBackdropClick={handleBackdropClick}
-              />
-            }
+        <Dialog
+          store={dialog}
+          alwaysVisible // Keep in DOM during animations
+          className={clsx(`drawer drawer--${position}`, className)}
+          backdrop={
+            <DrawerBackdrop
+              ref={backdropRef}
+              onBackdropClick={handleBackdropClick}
+            />
+          }
+          style={{
+            ["--drawer-size" as string]: `${size}px`,
+            ...style,
+          }}
+          {...rest}
+        >
+          <div
+            ref={drawerRef}
+            className="drawer__content"
+            {...bind()} // Attach gesture handlers
             style={{
-              ["--drawer-size" as string]: `${size}px`,
-              ...style,
+              [position === "top" || position === "bottom"
+                ? "height"
+                : "width"]: size,
             }}
-            {...rest}
           >
-            <div
-              ref={drawerRef}
-              className="drawer__content"
-              {...bind()} // Attach gesture handlers
-              style={{
-                [position === "top" || position === "bottom"
-                  ? "height"
-                  : "width"]: size,
-              }}
-            >
-              <div className="drawer__header">
-                <DialogHeading className="drawer__title">{title}</DialogHeading>
-                <DialogDismiss
-                  aria-label={dismissLabel}
-                  className="size-8 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-hidden"
-                >
-                  {dismissIcon}
-                </DialogDismiss>
-              </div>
-
-              {description && (
-                <DialogDescription className="drawer__description">
-                  {description}
-                </DialogDescription>
-              )}
-
-              <div className="drawer__body">{children}</div>
+            <div className="drawer__header">
+              <DialogHeading className="drawer__title">{title}</DialogHeading>
+              <DialogDismiss
+                aria-label={dismissLabel}
+                className="size-8 cursor-pointer transition-all duration-300 hover:opacity-75 focus:outline-hidden"
+              >
+                {dismissIcon}
+              </DialogDismiss>
             </div>
-          </Dialog>
-        </DrawerSettledContext.Provider>
+
+            {description && (
+              <DialogDescription className="drawer__description">
+                {description}
+              </DialogDescription>
+            )}
+
+            <div className="drawer__body">{children}</div>
+          </div>
+        </Dialog>
       )}
     </DialogProvider>
   );
