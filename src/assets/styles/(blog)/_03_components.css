@@ -1518,7 +1518,6 @@
      window's height when there is room, shrunk to what is left when
      there is not */
   .slip .slip__prose,
-  .slip .slip__snapshot,
   .slip .slip__code,
   .slip .slip__lead {
     flex: 1 1 auto;
@@ -1561,6 +1560,25 @@
     height: auto;
   }
 
+  /* A quotation read off somebody else's page is quoted matter inside a
+     card, not an extract set as a plate. The article's own blockquote
+     is a Scotch sheet with rules and a tinted ground, which at a card's
+     width and type size fills it before the words the reader came for
+     do, so inside a card it becomes what a margin quote is: a rule and
+     an indent. */
+  .slip .slip__prose blockquote {
+    margin: 0.75rem 0;
+    padding: 0 0 0 0.9rem;
+    border-left: 2px solid var(--hairline-soft);
+    background: none;
+    font-size: inherit;
+    font-style: italic;
+  }
+
+  .slip .slip__prose blockquote p {
+    margin: 0.4rem 0;
+  }
+
   /* A bare pre, GitHub's or the encyclopaedia's, takes the card's frame;
      a fence transcluded from a post already sits in its figure's frame
      and keeps it */
@@ -1574,59 +1592,8 @@
     overflow-x: auto;
   }
 
-  /* A page shown live, or its snapshot as taken: the frame's height is
-     a reading window's, and the snapshot scrolls at its taken width
-     scaled to the card */
-  /* The live page over its own still: the still is what the card shows
-     the moment it opens, and the frame fades in over it once the page
-     has loaded, so a slow destination never leaves the card blank */
-  .slip .slip__live {
-    position: relative;
-    flex: 1 1 auto;
-    height: min(60vh, 34rem);
-    min-height: 10rem;
-    margin-top: 0.6rem;
-    border: 1px solid var(--hairline-soft);
-    border-radius: 2px;
-    background: var(--background);
-    overflow: hidden;
-  }
-
-  .slip .slip__live-still {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
-  .slip .slip__frame {
-    position: absolute;
-    inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    border: 0;
-    background: var(--background);
-    opacity: 0;
-    transition: opacity 200ms;
-  }
-
-  .slip .slip__live[data-loaded] .slip__frame {
-    opacity: 1;
-  }
-
-  .slip .slip__snapshot {
-    margin-top: 0.6rem;
-    border: 1px solid var(--hairline-soft);
-    border-radius: 2px;
-    background: var(--background);
-  }
-
-  .slip .slip__snapshot img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-
+  /* The one frame a card still carries: a video the reader asked for by
+     following a link to it, at the ratio it is shot in */
   .slip .slip__video {
     display: block;
     width: 100%;
@@ -1720,15 +1687,10 @@
   }
 
   .slip.slip--sheet .slip__prose,
-  .slip.slip--sheet .slip__snapshot,
   .slip.slip--sheet .slip__code,
   .slip.slip--sheet .slip__lead {
     max-height: none;
     overflow: visible;
-  }
-
-  .slip.slip--sheet .slip__live {
-    height: 50vh;
   }
 
   /*

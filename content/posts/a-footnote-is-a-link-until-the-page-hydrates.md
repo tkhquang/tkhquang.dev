@@ -84,17 +84,23 @@ The bar I set for a card is that the reader should not need to open the destinat
 
 **YouTube.** The player, on the cookieless domain, because a video's main point is the video.
 
-**Anything else.** What the page's own head says, and then the best copy of it the card can carry. If the page allows itself to be framed, the card frames it live. Of the destinations this blog links, few do: GitHub, Steam, Nexus and the Next.js docs all send `X-Frame-Options: deny` or a `frame-ancestors` that names only themselves. Wikipedia, react.dev, the Unity manual and YouTube's embed domain do not mind. For the rest, the card shows the snapshot.
+**Anything else.** What the page's own head says, and then the page's own words: the build reads the document, finds the part of it that is prose rather than furniture, and keeps as much as a card can hold. On the reference pages this blog mostly links, that is roughly what you would have read first: the lead of the encyclopaedia entry, the sentence under the API's name, the epigraph the essay opens on. A page that yields nothing worth printing falls back to what it says about itself in its head.
 
 ## Frozen at publish
 
-The snapshot is the part I did not plan and now would not remove.
+The copy is the part I did not plan and now would not remove.
 
-The press that renders the diagrams on this site already runs a headless Chromium at build time. So at build, every destination that is only a page, with no GitHub or Wikipedia reader to speak for it, is opened in that browser at 1280 by 800, scrolled to load its lazy pictures, and photographed down to 2000 pixels as a webp under `public/uploads/archive/`. The card shows that picture when the page cannot be framed, and the picture is served by this site for as long as this site stands. When the destination changes its layout, or its mind, or goes away, the card still shows what I was pointing at when I wrote the sentence.
+It started as a photograph. The press that renders the diagrams here already runs a headless Chromium, so every destination that was only a page got opened at 1280 by 800 and shot down to 2000 pixels as a webp. It was the wrong artifact, and gwern had already written down why: what a headless browser is shown in 2026 is a consent notice, and what it photographs is that notice. The one I had was 232 kilobytes of a picture nobody could search, select, or hear read aloud.
 
-The Wayback Machine gets a copy too, or is asked for one, for every destination off the site. Save Page Now answers a plain `GET` without an account, slowly and with a rate limit that answers `429` the moment it is leaned on, so the save is a request rather than a promise: when it is refused, the build looks up whatever copy already exists, and a card whose page is archived prints "Archived copy" in its foot. A page without one is asked about again a week later.
+So the copy is the words now. The build reads the destination's markup, scores each block by how much of it is prose against how much is links, keeps the winner, throws away the scripts and the navigation and the cookie bar, and stores a few kilobytes of sanitized HTML. That copy reflows on a phone, answers a find-in-page, and is the thing that still says something when the destination is gone, for as long as this site keeps it.
 
-Nothing about this happens when you read. Every card is a JSON file written at build under `/blog/slips/`, one per link, named by twelve hex characters of the link's hash. The page carries only the markers; the card is fetched when the pointer starts moving toward the link, so it is usually there before the show timeout is. The annotations live in `content/annotations/`, one file per link, committed with the post, so the next build reads the file and asks the network only for a copy it does not have yet.
+That last clause is doing work, and I would rather write it down than let the word "frozen" carry more than it can. The copy lives in the build's cache, not in the repository: a copy of somebody else's page has no business in the history of mine. A cache is a cache. Lose it and the next build reads the destinations again, which is fine while they answer and is exactly no help on the day one of them does not. Making the copy outlive the destination properly means putting it somewhere that is neither this repository nor a build's scratch space, and I have not done that yet.
+
+It replaced a live frame too. A page that allowed framing used to be framed, which sounds like the best possible preview and is not a copy at all: it is the destination itself, running its own scripts in your browser because you hovered a link in mine, and gone the day it goes.
+
+The Wayback Machine is asked for a copy as well, for every destination off the site, through the documented endpoint with this site's own archive keys and a note saying not to bother if it already has one from the past month. Without keys the limit is a few captures a minute counted against a whole network rather than against you, which on a home connection means it usually refuses. It had been refusing here, silently, for as long as the feature existed: the one card that shows an archived copy found a capture somebody else had made. A card whose page is archived prints "Archived copy" in its foot. A copy that has aged past six months is asked about again.
+
+Nothing about this happens when you read. Every card is a JSON file written at build under `/blog/slips/`, one per link, named by twelve hex characters of the link's hash. The page carries only the markers; the card is fetched when the pointer starts moving toward the link, so it is usually there before the show timeout is.
 
 ## Off
 
@@ -104,7 +110,7 @@ Some readers hate things that open under a resting pointer, and they are not wro
 
 A nested slip stops at one level of the same note: a note that cites itself keeps remark's plain link rather than opening forever.
 
-A page that refuses a headless browser gets no snapshot. Nexus Mods sits behind a bot check that answers `403` to anything without a pulse, headless Chromium included, so a link there gets no snapshot and no card: it stays the link it was.
+A page that refuses to be read gets no card. Nexus Mods sits behind a bot check that answers `403` to anything without a pulse, so a link there stays the link it was. The build says so in its log rather than passing over it, because a marked link that quietly loses its mark reads as though it never asked for one.
 
 The section card transcludes the section as it is, with two exceptions it names: the camera plate and the hex diff are interactive islands that do not survive a copy, so the card prints a line saying what was left out and where to find it.
 

@@ -4,15 +4,17 @@ import fs from "fs";
 import path from "path";
 import sanitize from "sanitize-filename";
 
-/* Beside the posts, so a link's annotation ships with the post that
-   made it and a build reads it back without a request; one file per
-   link, so build workers filling the cache side by side never write
-   over each other */
-export const annotationsDirectory = path.join(
-  process.cwd(),
-  "content",
-  "annotations"
-);
+/* In the build's own cache rather than in the repository. What is kept
+   here is a copy of somebody else's page, which does not belong in the
+   history of this one, and it is a cache in the plain sense: losing it
+   costs a slower build, never a wrong one. The build tool preserves
+   this directory between builds and the host restores it between
+   deploys, so in practice it is filled once and read thereafter. One
+   file per link, so build workers filling it side by side never write
+   over each other. */
+export const annotationsDirectory =
+  process.env.ANNOTATIONS_CACHE_DIR ??
+  path.join(process.cwd(), ".next", "cache", "annotations");
 
 /* A destination that gave nothing is asked again after a week: long
    enough that a dead link does not slow every build by its timeout,

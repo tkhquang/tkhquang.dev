@@ -1,8 +1,4 @@
-import type {
-  Annotation,
-  PageSnapshot,
-  WaybackArchive,
-} from "@/lib/annotations/types";
+import type { Annotation, WaybackArchive } from "@/lib/annotations/types";
 import type { PostPreview } from "@/lib/post-previews/types";
 
 /* An annotation as a card prints it: its date already set on the
@@ -10,7 +6,6 @@ import type { PostPreview } from "@/lib/post-previews/types";
    the copies kept of the destination */
 export type AnnotationCard = Annotation & {
   when?: string;
-  snapshot?: PageSnapshot;
   archive?: WaybackArchive;
 };
 

@@ -48,7 +48,20 @@ const resolveAgainst = (value: string, base: string): string | undefined => {
  * lazily, then serialized again. Nothing that scripts, styles, frames
  * or forms survives.
  */
-export function sanitizeHtml(html: string, base: string): string {
+export interface SanitizeOptions {
+  /* Attributes to drop outright. A body rendered by GitHub or Wikipedia
+     carries ids its own text links back into and classes its own chips
+     are dressed by, and both are wanted. Markup read off an arbitrary
+     page carries neither, and its ids would sit in this document beside
+     the ids this document gave itself. */
+  strip?: ("id" | "className")[];
+}
+
+export function sanitizeHtml(
+  html: string,
+  base: string,
+  options: SanitizeOptions = {}
+): string {
   /* The parser and the sanitizer each ship their own copy of the hast
      typings; the trees are the same shape */
   const parsed = fromHtml(html, { fragment: true }) as unknown as Root;
@@ -70,6 +83,7 @@ export function sanitizeHtml(html: string, base: string): string {
     schema
   ) as unknown as Root;
   visit(tree, "element", (node) => {
+    for (const name of options.strip ?? []) delete node.properties[name];
     if (node.tagName === "a" && typeof node.properties.href === "string") {
       node.properties.target = "_blank";
       node.properties.rel = ["nofollow", "noopener", "noreferrer"];

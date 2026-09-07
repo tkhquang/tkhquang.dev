@@ -1,3 +1,4 @@
+import { extractReadable } from "./extract";
 import { parseHtmlMeta } from "./html";
 import { isLocalHost, type LinkTarget } from "./parse";
 import { sanitizeHtml } from "./sanitize";
@@ -72,14 +73,6 @@ const readGithubHtml = async (route: string) => {
   return response.text();
 };
 
-/* A page may be framed when it says nothing against it: no
-   X-Frame-Options, and no frame-ancestors that names other origins */
-function readFramable(headers: Headers): boolean {
-  if (headers.get("x-frame-options")) return false;
-  const policy = headers.get("content-security-policy") ?? "";
-  return !/frame-ancestors/i.test(policy);
-}
-
 async function fetchPage(url: string): Promise<PageAnnotation> {
   const response = await request(url, { Accept: "text/html" });
   /* A public address may redirect to a private one; what answered is
@@ -91,7 +84,10 @@ async function fetchPage(url: string): Promise<PageAnnotation> {
   if (!type.includes("text/html")) {
     throw new Error(`not a page: ${type || "no content type"}`);
   }
-  const meta = parseHtmlMeta(await response.text());
+  /* Read once and used twice: the head for what the page calls itself,
+     the body for what it actually says */
+  const html = await response.text();
+  const meta = parseHtmlMeta(html);
   if (!meta.title) throw new Error("the page names no title");
   const { hostname } = new URL(url);
   return {
@@ -101,7 +97,9 @@ async function fetchPage(url: string): Promise<PageAnnotation> {
     title: meta.title,
     description: meta.description,
     image: meta.image,
-    framable: readFramable(response.headers),
+    /* Resolved against where the page actually answered, not where it
+       was asked, so a link in the extract survives a redirect */
+    extractHtml: extractReadable(html, response.url) ?? undefined,
   };
 }
 

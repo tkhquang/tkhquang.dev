@@ -4,7 +4,7 @@ import { setPreviewsEnabled, usePreviewsEnabled } from "./previews";
 import { prefetchSlipCard, useSlipCard } from "./useSlipCard";
 import { SerialInstalment, SerialStar } from "@/components/blog/SeriesPlate";
 import type { AnnotationCard, SlipCard } from "@/lib/slips/card";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 /* The asterism's dot-and-ring star at glyph size: the mark every link
    with a slip wears */
@@ -59,7 +59,7 @@ export const slipWidthFor = (card: SlipCard | null): string => {
   const { annotation } = card;
   switch (annotation.kind) {
     case "page":
-      return annotation.framable || annotation.snapshot ? "slip--wide" : "";
+      return annotation.extractHtml ? "slip--wide" : "";
     case "youtube":
     case "github-blob":
     case "github-repo":
@@ -192,70 +192,17 @@ const PostCard = ({
   );
 };
 
-/* The page live, over its own snapshot: the still shows the moment the
-   card opens and the frame fades in over it once the page has loaded,
-   so a slow destination never leaves the card blank */
-const LiveFrame = ({
-  annotation,
-}: {
-  annotation: Extract<AnnotationCard, { kind: "page" }>;
-}) => {
-  const [loaded, setLoaded] = useState(false);
-  const { snapshot } = annotation;
-  return (
-    <div className="slip__live" data-loaded={loaded || undefined}>
-      {snapshot && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
-          className="slip__live-still"
-          src={snapshot.src}
-          width={snapshot.width}
-          height={snapshot.height}
-          alt=""
-          loading="lazy"
-          decoding="async"
-        />
-      )}
-      <iframe
-        className="slip__frame"
-        src={annotation.url}
-        title={annotation.title}
-        loading="lazy"
-        referrerPolicy="no-referrer"
-        /* The page keeps its scripts and its own origin; it may not
-           steer this one */
-        sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
-        onLoad={() => setLoaded(true)}
-      />
-    </div>
-  );
-};
-
+/* The page's own words, the copy the site keeps. Not a frame of the
+   live page, which is the destination itself running its scripts in the
+   reader's browser and gone the day the page is, and not a photograph
+   of it, which in practice photographs a consent notice. */
 const PageBody = ({
   annotation,
 }: {
   annotation: Extract<AnnotationCard, { kind: "page" }>;
 }) => {
-  if (annotation.framable) {
-    return <LiveFrame annotation={annotation} />;
-  }
-  if (annotation.snapshot) {
-    const { snapshot } = annotation;
-    return (
-      <div className="slip__snapshot">
-        {/* A plain img: the copy is the site's own file, sized as taken,
-            and next/image would only add a second pipeline for it */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={snapshot.src}
-          width={snapshot.width}
-          height={snapshot.height}
-          alt={`${annotation.title}, as it stood on ${snapshot.taken.slice(0, 10)}`}
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-    );
+  if (annotation.extractHtml) {
+    return <Prose html={annotation.extractHtml} />;
   }
   if (annotation.image) {
     return (
@@ -288,12 +235,10 @@ const AnnotationBody = ({
         <>
           <div className="slip__head kicker">
             <span className="slip__context">{annotation.site}</span>
-            {annotation.snapshot && !annotation.framable && (
+            {annotation.when && (
               <>
                 <Dot />
-                <span>
-                  Snapshot of {annotation.snapshot.taken.slice(0, 10)}
-                </span>
+                <span>Read on {annotation.when}</span>
               </>
             )}
           </div>
@@ -308,7 +253,7 @@ const AnnotationBody = ({
             open="Open the page"
             archive={archive}
           >
-            {annotation.framable ? "Live" : annotation.site}
+            {annotation.site}
           </Foot>
         </>
       );

@@ -4,6 +4,9 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       GITHUB_TOKEN: string;
+      ARCHIVE_S3_ACCESS_KEY: string;
+      ARCHIVE_S3_SECRET_KEY: string;
+      ANNOTATIONS_CACHE_DIR: string;
       SPOTIFY_REFRESH_TOKEN: string;
       SPOTIFY_CLIENT_ID: string;
       SPOTIFY_CLIENT_SECRET: string;

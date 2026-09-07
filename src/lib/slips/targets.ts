@@ -5,9 +5,9 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
+import "server-only";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
-import "server-only";
 
 export interface SlipTarget {
   href: string;

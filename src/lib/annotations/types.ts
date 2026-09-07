@@ -7,31 +7,21 @@ interface AnnotationBase {
   url: string;
 }
 
-/* The site's own frozen copy of a page: a screenshot taken at build,
-   served from the site, so the reader sees the page as it was even
-   after the destination has changed or gone */
-export interface PageSnapshot {
-  src: string;
-  width: number;
-  height: number;
-  taken: string;
-}
-
 /* The copy archive.org holds, when one could be had */
 export interface WaybackArchive {
   url: string;
   timestamp: string;
 }
 
-/* Any page: what its own head says about it, whether it lets itself be
-   framed, and the copies kept of it */
+/* Any page: what its own head says about it, and the page's own words
+   kept so the card can stand in for the page rather than point at it */
 export interface PageAnnotation extends AnnotationBase {
   kind: "page";
   site: string;
   title: string;
   description?: string;
   image?: string;
-  framable: boolean;
+  extractHtml?: string;
 }
 
 export interface WikipediaAnnotation extends AnnotationBase {
@@ -142,9 +132,14 @@ export type Annotation =
 export interface AnnotationRecord {
   url: string;
   fetchedAt: string;
+  /* Which reading of a destination this record holds. The cache lives
+     outside the repository and outlives any one build, so a record
+     read back by a later build may have been written by an older way
+     of reading; a record whose number is not the current one is read
+     again rather than trusted. */
+  readingVersion?: number;
   annotation?: Annotation;
   failure?: string;
-  snapshot?: PageSnapshot;
   archive?: WaybackArchive;
   copiesTriedAt?: string;
 }

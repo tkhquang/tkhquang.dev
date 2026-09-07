@@ -19,7 +19,12 @@ function toAnnotationCard(record: AnnotationRecord): AnnotationCard | null {
       ? annotation.createdAt
       : annotation.kind === "github-commit"
         ? annotation.date
-        : undefined;
+        : /* A page card prints the site own words, so the date that
+             matters is the day they were read off the page, which is
+             the day the copy in the card was taken */
+          annotation.kind === "page"
+          ? record.fetchedAt
+          : undefined;
   const date = iso ? new Date(iso) : undefined;
   return {
     ...annotation,
@@ -27,7 +32,6 @@ function toAnnotationCard(record: AnnotationRecord): AnnotationCard | null {
       date && !Number.isNaN(date.getTime())
         ? format(date, "MMM dd, yyyy")
         : undefined,
-    snapshot: record.snapshot,
     archive: record.archive,
   };
 }

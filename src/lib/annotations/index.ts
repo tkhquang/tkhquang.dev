@@ -6,9 +6,7 @@ import {
 } from "./cache";
 import { fetchAnnotation } from "./fetch";
 import { classifyLink, type LinkTarget } from "./parse";
-import { takeSnapshot } from "./snapshot";
 import type { Annotation, AnnotationRecord } from "./types";
-import { getSlipKey } from "@/lib/slips/key";
 import "server-only";
 
 export { classifyLink } from "./parse";
@@ -37,53 +35,74 @@ function isDefinitiveFailure(error: unknown): boolean {
   return status !== "429" && status !== "408" && !status.startsWith("5");
 }
 
-/* Only a destination that is nothing but a page is photographed: the
-   other kinds carry their own text in the card */
-const wantsSnapshot = (record: AnnotationRecord) =>
-  record.annotation?.kind === "page";
+/* Raise this whenever a destination is read differently: a new field,
+   a better extract, a fixed parser. Every cached record is then read
+   again on the next build. */
+const READING_VERSION = 1;
+
+/* A copy of a page ages: the one archive.org held when the link was
+   first cited may be years older than the words the card prints beside
+   it, so a copy this old is asked about again even though one exists */
+const ARCHIVE_STALE_AFTER_MS = 180 * 24 * 60 * 60 * 1000;
+
+const archiveStale = (record: AnnotationRecord) => {
+  if (!record.archive) return true;
+  const taken = record.archive.timestamp.slice(0, 8);
+  const when = Date.parse(
+    `${taken.slice(0, 4)}-${taken.slice(4, 6)}-${taken.slice(6, 8)}`
+  );
+  if (!Number.isFinite(when)) return false;
+  return Date.now() - when >= ARCHIVE_STALE_AFTER_MS;
+};
 
 const copiesDue = (record: AnnotationRecord) => {
   if (!record.annotation) return false;
-  if (record.archive && (record.snapshot || !wantsSnapshot(record))) {
-    return false;
-  }
+  if (!archiveStale(record)) return false;
   if (!record.copiesTriedAt) return true;
   const age = Date.now() - new Date(record.copiesTriedAt).getTime();
   return !Number.isFinite(age) || age >= RETRY_COPIES_AFTER_MS;
 };
 
-/* The frozen copies of a destination: the site's own screenshot for a
-   page, and the archive.org copy for anything, each kept once it exists
-   and each retried on its own until it does */
+/* The copy archive.org holds of a destination, asked for once and then
+   asked about again when the one on record has aged. The site keeps no
+   copy of its own picture any more: the page's own words travel in the
+   annotation, which is the copy that survives and the copy a reader can
+   actually read. */
 async function takeCopies(record: AnnotationRecord): Promise<void> {
-  const key = getSlipKey(record.url);
-  const [snapshot, archive] = await Promise.all([
-    record.snapshot ??
-      (wantsSnapshot(record)
-        ? takeSnapshot(record.url, key).catch((error) => {
-            console.warn(
-              `No snapshot for ${record.url}: ${error instanceof Error ? error.message : error}`
-            );
-            return undefined;
-          })
-        : undefined),
-    record.archive ?? archivePage(record.url).catch(() => null),
-  ]);
-  record.snapshot = snapshot;
-  record.archive = archive ?? undefined;
+  const archive = await archivePage(record.url).catch(() => null);
+  /* A fresh answer replaces the old one, and no answer leaves whatever
+     was already known rather than forgetting it */
+  record.archive = archive ?? record.archive;
   record.copiesTriedAt = new Date().toISOString();
 }
 
 async function resolve(target: LinkTarget): Promise<AnnotationRecord | null> {
-  let record = await readAnnotationRecord(target.url);
+  let record: AnnotationRecord | null | undefined = await readAnnotationRecord(
+    target.url
+  );
   let changed = false;
+
+  /* A record written by an older reading of the destinations is read
+     again, so improving how a page is read reaches the pages already
+     cached instead of only the ones cited next. Only the reading is
+     dropped: the archive copy found for this link was not read from the
+     destination and does not go stale because the reader did. */
+  const kept = record?.readingVersion === READING_VERSION ? undefined : record;
+  if (kept) record = undefined;
 
   if (!record?.annotation) {
     if (record && isFailureFresh(record)) return null;
     const fetchedAt = new Date().toISOString();
     try {
       const annotation = await fetchAnnotation(target);
-      record = { url: target.url, fetchedAt, annotation };
+      record = {
+        url: target.url,
+        fetchedAt,
+        readingVersion: READING_VERSION,
+        annotation,
+        archive: kept?.archive,
+        copiesTriedAt: kept?.copiesTriedAt,
+      };
       changed = true;
     } catch (error) {
       const failure = error instanceof Error ? error.message : String(error);
@@ -109,8 +128,8 @@ async function resolve(target: LinkTarget): Promise<AnnotationRecord | null> {
 
 /**
  * The annotation record for a link that leaves the site, with its
- * copies, from the cache beside the posts or, the first time a link is
- * met, from the destination. Null for a link the slip leaves alone and
+ * copies, from the build's own cache or, the first time a link is met
+ * or the first build after the reading changed, from the destination. Null for a link the slip leaves alone and
  * for a destination that gave nothing, so the link stays an ordinary
  * link either way.
  */
