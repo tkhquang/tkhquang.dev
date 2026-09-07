@@ -12,6 +12,9 @@ const IMAGE_PATTERN = /!\[[^\]]*\]\([^)]*\)/g;
 const LINK_PATTERN = /\[([^\]]*)\]\([^)]*\)/g;
 const HEADING_MARK_PATTERN = /^#{1,6}\s+/gm;
 const EMPHASIS_PATTERN = /[*_`~]/g;
+/* A note mark is not a word, and a note's definition prefix is not one
+   either; the note's own text still counts */
+const NOTE_MARK_PATTERN = /\[\^[^\]]+\](?::)?/g;
 
 /* Blocks have to be matched against the whole document: the closing
    delimiter is the only thing that says where one ends, so nothing that
@@ -25,6 +28,7 @@ const stripBlocks = (content: string) =>
 /* What is left once the blocks are gone, all of it line-local */
 const stripInline = (content: string) =>
   content
+    .replace(NOTE_MARK_PATTERN, "")
     .replace(LINK_PATTERN, "$1")
     .replace(HTML_TAG_PATTERN, " ")
     .replace(HEADING_MARK_PATTERN, "")
@@ -58,8 +62,9 @@ export function getOpeningWords(content: string, count: number): string {
     const trimmed = line.trim();
     if (!trimmed) continue;
     /* Anything that is not running prose: headings, quotes, lists, tables,
-       and any raw tag left standing outside a stripped block */
-    if (/^(#|<|>|[-*+]\s|\d+\.\s|\|)/.test(trimmed)) continue;
+       note definitions, and any raw tag left standing outside a stripped
+       block */
+    if (/^(#|<|>|[-*+]\s|\d+\.\s|\||\[\^)/.test(trimmed)) continue;
 
     const words = stripInline(trimmed)
       .replace(/\s+/g, " ")

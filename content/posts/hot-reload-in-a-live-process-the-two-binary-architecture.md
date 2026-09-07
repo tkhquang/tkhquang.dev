@@ -549,7 +549,7 @@ The boundary makes a deliberate choice about that typed verdict, and it is the t
 
 ## The same architecture in a shipped mod
 
-Related: <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-building-a-proper-third-person-camera" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Building a Proper Third Person Camera</a>
+Related: <a data-preview href="/blog/posts/devlog-kingdom-come-deliverance-ii-building-a-proper-third-person-camera" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Building a Proper Third Person Camera</a>
 
 The reference pair is a demo. TPVCamera, my third-person camera mod for Kingdom Come: Deliverance II, is the consumer that has to live with the result. [PR #32](https://github.com/tkhquang/KCD2Tools/pull/32), merged as commit [`20e6394`](https://github.com/tkhquang/KCD2Tools/commit/20e6394fb378ded7c273e4021306c6635b4996cc), migrated it to v4.2.0 and reworked [its dev loader](https://github.com/tkhquang/KCD2Tools/tree/20e6394fb378ded7c273e4021306c6635b4996cc/TPVCamera/src/dev), after a v4.0.0 migration and a v3.9.0 one before that.
 

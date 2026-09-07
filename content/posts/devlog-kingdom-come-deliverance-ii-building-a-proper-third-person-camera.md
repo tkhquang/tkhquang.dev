@@ -23,8 +23,8 @@ One more trip under the hood of **Kingdom Come: Deliverance II**, and this one c
 
 This one builds on two earlier devlogs:
 
-*   <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Finding the Third-Person View Toggle Flag</a>, where I went hunting for the built-in third-person flag, found it in the camera manager, and flipped it.
-*   <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood</a>, where I bolted offsets, sensitivity and pitch limits on top of it, because the community wanted an over-the-shoulder view.
+*   <a data-preview href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Finding the Third-Person View Toggle Flag</a>, where I went hunting for the built-in third-person flag, found it in the camera manager, and flipped it.
+*   <a data-preview href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood" target="_blank" rel="noopener noreferrer">[Devlog] Kingdom Come: Deliverance II - Customizing the View: TPV Offsets, Input, and What's Under the Hood</a>, where I bolted offsets, sensitivity and pitch limits on top of it, because the community wanted an over-the-shoulder view.
 
 Both mods run on the same idea: borrow the game's own debug third-person camera, switch it on, and patch around whatever it breaks.
 
@@ -159,7 +159,7 @@ graph TD
 
 ## Building the rig, and two kinds of shake
 
-Related: <a href="/blog/posts/cryengine-eye-of-the-engine-the-camera" target="_blank" rel="noopener noreferrer">[CryEngine] Eye of the Engine: The Camera</a>
+Related: <a data-preview href="/blog/posts/cryengine-eye-of-the-engine-the-camera" target="_blank" rel="noopener noreferrer">[CryEngine] Eye of the Engine: The Camera</a>
 
 The rig looks trivial on paper. Pick a pivot near the player, pick a direction, put the camera at `pivot - forward * distance`. Ten lines. Except both inputs turned out to be quietly poisoned.
 
@@ -171,7 +171,7 @@ The fix is to anchor to something that doesn't. The player entity keeps its worl
 
 So the rig stopped reading the eye. It reads the player's look controller at `*(C_Player + 0x238) + 0x24`, the clean aim quaternion, which matches the eye at rest and carries none of the shake. We sanity-check it for finite, near-unit length, fall back to the eye quaternion if it looks wrong, and low-pass it with [SLERP](https://en.wikipedia.org/wiki/Spherical_linear_interpolation).
 
-SLERP is blending for rotations. You can't average two quaternions like two numbers and get a sensible result, so you walk the short way around the sphere between them and stop part way. A little toward the target every frame gives you a smoothing filter for orientation. (The longer version of why quaternions rather than angles is in the <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood" target="_blank" rel="noopener noreferrer">offsets devlog</a>.)
+SLERP is blending for rotations. You can't average two quaternions like two numbers and get a sensible result, so you walk the short way around the sphere between them and stop part way. A little toward the target every frame gives you a smoothing filter for orientation.[^quaternions]
 
 What still isn't solved: during a climb the two sources swap roles, the look controller whipping around while the eye stays smooth, the exact mirror of the door case. Inside a single frame they look identical. I tried about eleven ways to separate them, and every one either failed or traded a small problem for a bigger one. Follow the look controller and you get a small shift on climbs; follow the eye and you get shake everywhere. I picked the climb shift on purpose.
 
@@ -310,3 +310,5 @@ The lesson I keep taking away from this one is about direction. The old mod aske
 The mod is on [NexusMods](https://www.nexusmods.com/kingdomcomedeliverance2/mods/3263) if you want to try it, and all my Kingdom Come: Deliverance II mods and tools live in this [GitHub repository](https://github.com/tkhquang/KCD2Tools). The hooking, scanning, input and config plumbing underneath all of it comes from [DetourModKit](https://github.com/tkhquang/DetourModKit), which has grown into its own thing and deserves a post of its own. Feel free to contribute or suggest improvements!
 
 KCD2 Modding: Because the fastest way to win an argument with an engine is to stop having one. CryEngine, ***CryMore***!
+
+[^quaternions]: The longer version of why quaternions rather than angles is in the <a data-preview href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood" target="_blank" rel="noopener noreferrer">offsets devlog</a>.

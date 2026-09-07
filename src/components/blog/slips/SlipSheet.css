@@ -1,0 +1,79 @@
+/*
+ * The slip sheet's dress. Unlayered on purpose, because Drawer.css is
+ * unlayered too, and compounded onto .drawer rather than merely
+ * descending from .slip-drawer: Drawer.css writes its chrome as nested
+ * .drawer .drawer__* rules, which tie this file on specificity and then
+ * win on source order, since this stylesheet is imported before the
+ * module that pulls in Drawer.css. Scoped throughout, so the TOC and
+ * Index drawers keep their shipped look.
+ */
+
+/* The scrim, addressed through the dialog it precedes as the Index
+   drawer does, since Ariakit renders the backdrop as the dialog's
+   previous sibling */
+.drawer__backdrop:has(+ .drawer.slip-drawer) {
+  background-color: rgb(0 0 0 / 45%);
+}
+
+/* The sheet's height has to outrank Drawer.css's own phone rule, which
+   is (0,3,0) and important and would otherwise cap the sheet at 400px;
+   a card holding a page or a section needs most of the screen */
+.drawer.drawer--bottom.slip-drawer .drawer__content {
+  /* Capped in pixels to match the slide the drawer plays, which is set
+     in pixels too; a sheet taller than its slide would stand partly on
+     screen in the closed pose */
+  height: min(78vh, 704px) !important;
+  max-height: none;
+  border-top: 1px solid var(--hairline-soft);
+  border-radius: 0.5rem 0.5rem 0 0;
+  /* The sheet is read, not dragged through, so its text selects and
+     the card inside owns the scrolling */
+  user-select: text;
+}
+
+/* The drag handle keeps its place above the head; the head itself is
+   the kicker line the slips print elsewhere */
+.drawer.slip-drawer .drawer__header {
+  padding: 1.1rem 1rem 0.6rem;
+  border-bottom: 0;
+}
+
+.drawer.slip-drawer .drawer__title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* The plain two-line X in a 32px box, dimmed on hover; nothing moves.
+   Unlayered, so it beats the dismiss button's utility classes */
+.drawer.slip-drawer .drawer__header > button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: opacity 150ms;
+}
+
+.drawer.slip-drawer .drawer__header > button:hover {
+  opacity: 0.65;
+}
+
+/* The body scrolls the card; the card's own padding sets the inset. The
+   drawer's content box keeps its touch-action none for the drag on the
+   head, and the body alone restores vertical panning so the card
+   scrolls under a finger */
+.drawer.slip-drawer .drawer__body {
+  padding: 0;
+  overflow-y: auto;
+  touch-action: pan-y;
+}

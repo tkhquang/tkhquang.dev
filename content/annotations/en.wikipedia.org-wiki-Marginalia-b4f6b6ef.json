@@ -1,0 +1,21 @@
+{
+  "url": "https://en.wikipedia.org/wiki/Marginalia",
+  "fetchedAt": "2026-09-07T10:39:43.623Z",
+  "annotation": {
+    "kind": "wikipedia",
+    "url": "https://en.wikipedia.org/wiki/Marginalia",
+    "title": "Marginalia",
+    "description": "Marks made in margins of book pages",
+    "extractHtml": "<p><b>Marginalia</b> are marks made in the margins of a book or other document. They may be scribbles, comments, glosses (annotations), critiques, doodles, drolleries, or illuminations.</p>",
+    "thumbnail": {
+      "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Kirchhofer_Wahrheit_und_Dichtung_019.jpg/330px-Kirchhofer_Wahrheit_und_Dichtung_019.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+      "width": 330,
+      "height": 251
+    }
+  },
+  "archive": {
+    "url": "https://web.archive.org/web/20260823004147/https://en.wikipedia.org/wiki/Marginalia",
+    "timestamp": "20260823004147"
+  },
+  "copiesTriedAt": "2026-09-07T10:55:04.268Z"
+}

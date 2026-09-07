@@ -1,0 +1,20 @@
+{
+  "url": "https://gwern.net/design",
+  "fetchedAt": "2026-09-07T10:39:43.616Z",
+  "annotation": {
+    "kind": "page",
+    "url": "https://gwern.net/design",
+    "site": "gwern.net",
+    "title": "Design Of This Website",
+    "description": "Meta page describing Gwern.net, the self-documenting website’s implementation and experiments for better ‘semantic zoom’ of hypertext; technical decisions using Markdown and static hosting.",
+    "image": "https://gwern.net/doc/design/2020-12-25-gwern-gwernnet-recursivepopups.png",
+    "framable": true
+  },
+  "snapshot": {
+    "src": "/uploads/archive/7f412e92e5f3.webp",
+    "width": 1280,
+    "height": 2000,
+    "taken": "2026-09-07T10:39:54.293Z"
+  },
+  "copiesTriedAt": "2026-09-07T10:39:54.303Z"
+}

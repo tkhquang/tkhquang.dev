@@ -1,0 +1,150 @@
+/* What a slip prints for a link that leaves the site: an annotation read
+   from the destination once, at build, and kept in the repository so the
+   next build reads the file instead of the network. Markup fields carry
+   sanitized HTML and nothing else; every other field is plain text. */
+
+interface AnnotationBase {
+  url: string;
+}
+
+/* The site's own frozen copy of a page: a screenshot taken at build,
+   served from the site, so the reader sees the page as it was even
+   after the destination has changed or gone */
+export interface PageSnapshot {
+  src: string;
+  width: number;
+  height: number;
+  taken: string;
+}
+
+/* The copy archive.org holds, when one could be had */
+export interface WaybackArchive {
+  url: string;
+  timestamp: string;
+}
+
+/* Any page: what its own head says about it, whether it lets itself be
+   framed, and the copies kept of it */
+export interface PageAnnotation extends AnnotationBase {
+  kind: "page";
+  site: string;
+  title: string;
+  description?: string;
+  image?: string;
+  framable: boolean;
+}
+
+export interface WikipediaAnnotation extends AnnotationBase {
+  kind: "wikipedia";
+  title: string;
+  description?: string;
+  /* The lead, as Wikipedia's own previews print it */
+  extractHtml: string;
+  thumbnail?: { src: string; width: number; height: number };
+}
+
+export interface YoutubeAnnotation extends AnnotationBase {
+  kind: "youtube";
+  id: string;
+  title: string;
+  author: string;
+}
+
+export interface GithubRepoAnnotation extends AnnotationBase {
+  kind: "github-repo";
+  owner: string;
+  repo: string;
+  description?: string;
+  language?: string;
+  stars: number;
+  readmeHtml?: string;
+}
+
+export interface GithubIssueAnnotation extends AnnotationBase {
+  kind: "github-issue";
+  owner: string;
+  repo: string;
+  number: number;
+  title: string;
+  state: "open" | "closed" | "merged";
+  isPull: boolean;
+  author: string;
+  createdAt: string;
+  comments: number;
+  bodyHtml?: string;
+}
+
+export interface GithubCommentAnnotation extends AnnotationBase {
+  kind: "github-comment";
+  owner: string;
+  repo: string;
+  number: number;
+  title: string;
+  author: string;
+  createdAt: string;
+  bodyHtml: string;
+}
+
+export interface GithubCommitAnnotation extends AnnotationBase {
+  kind: "github-commit";
+  owner: string;
+  repo: string;
+  sha: string;
+  title: string;
+  message: string;
+  author: string;
+  date: string;
+  additions: number;
+  deletions: number;
+  files: string[];
+}
+
+/* A file at a commit: the lines the link points at, printed, or the
+   whole rendered document when the file is markdown */
+export interface GithubBlobAnnotation extends AnnotationBase {
+  kind: "github-blob";
+  owner: string;
+  repo: string;
+  ref: string;
+  path: string;
+  startLine: number;
+  endLine: number;
+  totalLines: number;
+  codeHtml?: string;
+  bodyHtml?: string;
+}
+
+export interface GithubTreeAnnotation extends AnnotationBase {
+  kind: "github-tree";
+  owner: string;
+  repo: string;
+  ref: string;
+  path: string;
+  description?: string;
+  entries: { name: string; type: "dir" | "file" | "other" }[];
+}
+
+export type Annotation =
+  | PageAnnotation
+  | WikipediaAnnotation
+  | YoutubeAnnotation
+  | GithubRepoAnnotation
+  | GithubIssueAnnotation
+  | GithubCommentAnnotation
+  | GithubCommitAnnotation
+  | GithubBlobAnnotation
+  | GithubTreeAnnotation;
+
+/* One file per link in the cache directory: the annotation, or the
+   reason the destination gave none, with the time either was learned,
+   and the copies kept of the destination with the time they were last
+   attempted */
+export interface AnnotationRecord {
+  url: string;
+  fetchedAt: string;
+  annotation?: Annotation;
+  failure?: string;
+  snapshot?: PageSnapshot;
+  archive?: WaybackArchive;
+  copiesTriedAt?: string;
+}

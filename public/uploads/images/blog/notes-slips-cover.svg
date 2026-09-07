@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .sans { font-family: "Segoe UI", Arial, Helvetica, sans-serif; }
+      .mono { font-family: Consolas, "Courier New", monospace; }
+      .kicker { font-size: 26px; font-weight: 600; letter-spacing: 6px; fill: #ffb86c; }
+      .lapis { fill: #8ab8ff; }
+      .sup { font-size: 30px; font-weight: 700; fill: #ffb86c; }
+      .title { font-size: 32px; font-weight: 700; fill: #f6f5ee; }
+      .headline { font-size: 52px; font-weight: 700; fill: #f6f5ee; }
+      .subline { font-size: 30px; fill: #6d7599; }
+    </style>
+
+    <marker id="dotGilt" viewBox="0 0 12 12" refX="6" refY="6"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <circle cx="6" cy="6" r="5" fill="#ffb86c"/>
+    </marker>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#282a37"/>
+
+  <!-- eyebrow -->
+  <text class="sans kicker" x="128" y="152">NOTES AND CROSS-REFERENCES</text>
+  <rect x="128" y="172" width="88" height="5" fill="#ffb86c"/>
+
+  <!-- the printed page -->
+  <rect x="128" y="250" width="680" height="510" rx="12" fill="#2f3142" stroke="#454965" stroke-width="2"/>
+  <rect x="176" y="319" width="584" height="14" rx="7" fill="#6d7599"/>
+  <rect x="176" y="387" width="512" height="14" rx="7" fill="#6d7599"/>
+  <rect x="176" y="455" width="300" height="14" rx="7" fill="#6d7599"/>
+  <text class="mono sup" x="490" y="458">3</text>
+  <rect x="524" y="455" width="224" height="14" rx="7" fill="#6d7599"/>
+  <rect x="176" y="523" width="584" height="14" rx="7" fill="#6d7599"/>
+  <rect x="176" y="591" width="536" height="14" rx="7" fill="#6d7599"/>
+  <rect x="176" y="659" width="380" height="14" rx="7" fill="#6d7599"/>
+
+  <!-- the note slip -->
+  <rect x="1000" y="290" width="560" height="200" rx="12" fill="#363950" stroke="#454965" stroke-width="2"/>
+  <line x1="1012" y1="291.5" x2="1548" y2="291.5" stroke="#ffb86c" stroke-width="3" stroke-linecap="round"/>
+  <text class="mono kicker" x="1048" y="354">NOTE 3</text>
+  <rect x="1048" y="392" width="380" height="14" rx="7" fill="#6d7599"/>
+  <rect x="1048" y="430" width="250" height="14" rx="7" fill="#6d7599"/>
+
+  <!-- leader from the numeral to the slip -->
+  <path d="M 520 440 C 800 440, 860 345, 1000 345" fill="none" stroke="#ffb86c"
+        stroke-width="2" marker-start="url(#dotGilt)"/>
+
+  <!-- the cross-reference slip -->
+  <rect x="1180" y="560" width="612" height="230" rx="12" fill="#363950" stroke="#454965" stroke-width="2"/>
+  <line x1="1192" y1="561.5" x2="1780" y2="561.5" stroke="#8ab8ff" stroke-width="3" stroke-linecap="round"/>
+  <text class="mono kicker lapis" x="1228" y="624">CROSS-REFERENCE</text>
+  <text class="sans title" x="1228" y="686">Stop Fighting z-index</text>
+  <rect x="1228" y="718" width="360" height="14" rx="7" fill="#6d7599"/>
+
+  <!-- the finding -->
+  <text class="sans headline" x="128" y="940">The footnote goes to the reader</text>
+  <text class="sans subline" x="128" y="996">A slip at the marker, not a note in a margin the rails already own</text>
+</svg>

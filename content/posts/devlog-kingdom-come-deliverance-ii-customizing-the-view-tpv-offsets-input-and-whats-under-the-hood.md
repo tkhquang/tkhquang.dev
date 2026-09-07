@@ -19,7 +19,7 @@ series_part: 2
 description: "Following up on the TPV toggle: a technical deep dive into implementing custom camera offsets in Kingdom Come: Deliverance II."
 ---
 
-Alright folks, our exploration of modding **Kingdom Come: Deliverance II** (KCD2) continues. In a <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">previous devlog</a>, we navigated the memory landscape of `WHGame.DLL` to unearth and activate the game's built-in third-person view (TPV). While functional, that TPV was fairly basic and, as many noted, likely a debug feature with its share of quirks.
+Alright folks, our exploration of modding **Kingdom Come: Deliverance II** (KCD2) continues. In a <a data-preview href="/blog/posts/devlog-kingdom-come-deliverance-ii-finding-the-third-person-view-toggle-flag" target="_blank" rel="noopener noreferrer">previous devlog</a>, we navigated the memory landscape of `WHGame.DLL` to unearth and activate the game's built-in third-person view (TPV). While functional, that TPV was fairly basic and, as many noted, likely a debug feature with its share of quirks.
 
 The community feedback was clear: greater control over the TPV was desired. Common requests included adjustable camera sensitivity, vertical pitch limits, and, crucially, the ability to offset the camera for a true over-the-shoulder feel. This post delves into how I tackled these enhancements, with a particular focus on the 3D mathematics, Vectors, Quaternions, and Matrices, that underpin the custom camera offset feature.
 
@@ -149,7 +149,7 @@ graph TD
 
 ## Deconstructing the 3D Math: Vectors, Quaternions, and Transforms
 
-Related: <a href="/blog/posts/cryengine-eye-of-the-engine-the-camera" target="_blank" rel="noopener noreferrer">[CryEngine] Eye of the Engine: The Camera</a>
+Related: <a data-preview href="/blog/posts/cryengine-eye-of-the-engine-the-camera" target="_blank" rel="noopener noreferrer">[CryEngine] Eye of the Engine: The Camera</a>
 
 To truly grasp how the offset works, let's touch on the 3D math components involved:
 

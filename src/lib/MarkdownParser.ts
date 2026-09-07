@@ -1,11 +1,14 @@
 import lamplightDark from "@/assets/shiki/lamplight-dark.json";
 import lamplightLight from "@/assets/shiki/lamplight-light.json";
 import CameraExplorable from "@/components/blog/camera-explorable/CameraExplorable";
+import CrossReference from "@/components/blog/cross-references/CrossReference";
 import HexDiff from "@/components/blog/hex-diff/HexDiff";
+import NoteMark from "@/components/blog/notes/NoteMark";
 import MermaidPlate from "@/components/common/MermaidPlate";
 import PreWithCopy from "@/components/common/PreWithCopy";
 import ZoomableImage from "@/components/common/ZoomableImage";
 import rehypeCopyCodeButton from "@/lib/rehype-copy-code-button";
+import rehypeCrossReferences from "@/lib/rehype-cross-references";
 import rehypeCustomNextImage from "@/lib/rehype-custom-next-image";
 import rehypeHexDiff from "@/lib/rehype-hex-diff";
 import {
@@ -14,6 +17,7 @@ import {
   rehypeMermaidRender,
   rehypeMermaidRestore,
 } from "@/lib/rehype-mermaid-plates";
+import rehypeNotes from "@/lib/rehype-notes";
 import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
@@ -29,6 +33,7 @@ import {
 import rehypeExtractToc from "@stefanprobst/rehype-extract-toc";
 import fs from "fs";
 import matter from "gray-matter";
+import type { Root } from "hast";
 import path from "path";
 import * as prod from "react/jsx-runtime";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -59,7 +64,11 @@ function getCategoryFiles() {
     .filter((files) => files.endsWith(".md"));
 }
 
-function getProcessor(): Processor {
+/* The article pipeline up to the finished hast: everything the page
+   prints goes through here, and the slips' transclusions read the same
+   tree before the React step, so a section previewed in a card is the
+   section the target page prints */
+function getArticleProcessor(): Processor {
   return (
     unified()
       .use(remarkParse, { fragment: true })
@@ -103,6 +112,14 @@ function getProcessor(): Processor {
         targetPath: "./public/uploads/remote",
       })
       .use(rehypeRaw)
+      /* Cross-references: the posts write their links to one another as
+         raw HTML anchors, which only exist as elements from here on */
+      .use(rehypeCrossReferences)
+      /* Notes: after the code printing, so the note bodies already carry
+         their inline chips when they are copied into the marks, and
+         before the heading machinery below, so the plate's head is
+         never slugged, autolinked or listed in the table of contents */
+      .use(rehypeNotes)
       /* Chart Plates: diagrams typeset at press time. The raw pre.mermaid
        blocks only exist as elements after rehypeRaw; prepare re-inks the
        Dracula classDefs into theme tokens, the in-repo renderer draws
@@ -123,19 +140,24 @@ function getProcessor(): Processor {
         feedbackDuration: 3_000,
         visibility: "hover",
       })
-      .use(rehypeReact, {
-        components: {
-          "camera-explorable": CameraExplorable,
-          "hex-diff": HexDiff,
-          "rehype-pretty-copy-button-pre": PreWithCopy,
-          "next-image": ZoomableImage,
-          "mermaid-plate": MermaidPlate,
-        },
-        Fragment: prod.Fragment,
-        jsx: prod.jsx,
-        jsxs: prod.jsxs,
-      } as Options)
   );
+}
+
+function getProcessor(): Processor {
+  return getArticleProcessor().use(rehypeReact, {
+    components: {
+      "camera-explorable": CameraExplorable,
+      "cross-reference": CrossReference,
+      "hex-diff": HexDiff,
+      "note-mark": NoteMark,
+      "rehype-pretty-copy-button-pre": PreWithCopy,
+      "next-image": ZoomableImage,
+      "mermaid-plate": MermaidPlate,
+    },
+    Fragment: prod.Fragment,
+    jsx: prod.jsx,
+    jsxs: prod.jsxs,
+  } as Options);
 }
 
 function getImageProcessor(): Processor {
@@ -178,11 +200,13 @@ interface ProcessedVfile extends VFile {
 
 class MarkdownParser {
   private parser: ReturnType<typeof getProcessor>;
+  private hastParser: ReturnType<typeof getArticleProcessor>;
   private imageParser: ReturnType<typeof getImageProcessor>;
   private categoryTitles = new Map<string, string | undefined>();
 
   constructor() {
     this.parser = getProcessor();
+    this.hastParser = getArticleProcessor();
     this.imageParser = getImageProcessor();
     // console.info("MarkdownParser instance created");
   }
@@ -205,6 +229,14 @@ class MarkdownParser {
   async parseMarkdown(content: string): Promise<ProcessedVfile> {
     const vfile = await this.parser.process(content);
     return vfile as ProcessedVfile;
+  }
+
+  /* The finished article tree before the React step, for the slips'
+     transclusions: the plates, chips and images a section carries are
+     the ones the target page prints */
+  async parseToHast(content: string): Promise<Root> {
+    const tree = this.hastParser.parse(content);
+    return (await this.hastParser.run(tree)) as Root;
   }
 
   async getPostBySlug(fileName: string): Promise<MarkdownPost> {

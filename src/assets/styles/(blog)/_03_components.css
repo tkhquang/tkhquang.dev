@@ -146,6 +146,12 @@
        deepens it or it dies on paper. For serial marks and tailpieces. */
     --gilt-ink: hsl(42deg 60% 70%);
 
+    /* Gilt as SMALL TEXT: a numeral or a kicker in gilt has to clear the
+       4.5 floor on paper and on the raised card, which the marks' gilt
+       ink does by night and misses by day; the day step is the deeper
+       gilt the chart plates already print their node text in */
+    --gilt-text: var(--gilt-ink);
+
     /* The day masthead's two hues, named so the extract's light field and
        its far-corner wash can reach them by token instead of by literal */
     --dawn-cream: hsl(44deg 55% 93%);
@@ -226,6 +232,7 @@
       --aurora-b: hsl(266deg 45% 48%);
       --aurora-c: hsl(210deg 75% 42%);
       --gilt-ink: hsl(40deg 65% 38%);
+      --gilt-text: hsl(40deg 72% 31%);
       --chart-star: var(--primary);
       --diagram-vermilion: hsl(11deg 75% 38%);
 
@@ -1208,6 +1215,621 @@
     position: relative;
     z-index: 1;
   }
+
+  /*
+   * The Slip: the small catalogue card that floats beside the thing being
+   * read. A note opens in one at its mark, a cross-reference opens one at
+   * its link. Raised paper under a head rule: gilt for a note, since the
+   * notes are the author's own furniture, and the destination's shelf hue
+   * for a cross-reference. Ariakit places the card through a Portal and
+   * owns its position; these rules dress the card only. Nothing moves on
+   * hover or open: the card fades in place.
+   */
+  html {
+    /* Elevation per theme as the raised surfaces take it: shadow carries
+       the card by day, and by night a deep, tight shadow separates a
+       floating card from the page the hairline alone cannot lift it off */
+    --slip-shadow: 0 14px 32px -14px rgb(0 0 0 / 60%);
+
+    &[data-theme="light"] {
+      --slip-shadow:
+        0 10px 28px -14px rgb(0 0 0 / 28%), 0 2px 6px -4px rgb(0 0 0 / 14%);
+    }
+  }
+
+  .slip {
+    /* A column, bounded by the height Ariakit hands the card for the
+       side it lands on (fitViewport sets it on the wrapper, and inherit
+       reads it through), so a tall card scrolls in its body rather than
+       running off the viewport; the head, title and foot never shrink */
+    display: flex;
+    flex-direction: column;
+    max-height: inherit;
+    width: min(21rem, calc(100vw - 2rem));
+    padding: 0.85rem 1rem 0.9rem;
+    background: var(--surface-raised);
+    color: var(--on-surface);
+    border: 1px solid var(--hairline-soft);
+    border-top: 2px solid var(--gilt-ink);
+    /* Near-square corners, as an engraved plate takes */
+    border-radius: 2px;
+    box-shadow: var(--slip-shadow);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+
+  /* Ariakit marks the card entered a frame after it mounts, which is
+     what lets the opacity run as a transition instead of appearing */
+  .slip[data-enter] {
+    opacity: 1;
+  }
+
+  .slip--cross {
+    border-top-color: var(--shelf, var(--primary));
+  }
+
+  .slip__kicker {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--gilt-text);
+  }
+
+  .slip__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.375rem;
+    row-gap: 0.2rem;
+  }
+
+  .slip__shelf {
+    color: var(--shelf, var(--primary));
+  }
+
+  /* The serial phrase stays whole when the head wraps; the 10px star
+     rides in gilt as it does on the feed card's eyebrow */
+  .slip__instalment {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--gilt-text);
+    white-space: nowrap;
+  }
+
+  .slip__instalment svg {
+    width: 10px;
+    height: 10px;
+    fill: var(--gilt-text);
+    display: block;
+  }
+
+  /* The post a section belongs to: one line, so a long title never
+     pushes the heading it introduces out of the card */
+  .slip__context {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* Three quarters is the first step that clears the 4.5 floor by day
+       on the raised card */
+    opacity: 0.75;
+  }
+
+  /* The card carries the article's scope classes for their link and chip
+     dress, so its own paragraphs are named under .slip to outrank the
+     article's paragraph margins */
+  .slip .slip__title {
+    margin: 0.35rem 0 0.4rem;
+    font-size: 1rem;
+    font-weight: 620;
+    line-height: 1.3;
+    color: var(--primary);
+    text-wrap: pretty;
+  }
+
+  /* The lede and the excerpt read in the article lede's italic serif,
+     levelled to the sans x-height like every serif accent on the site */
+  .slip .slip__lede,
+  .slip .slip__excerpt {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size-adjust: 0.525;
+    font-style: italic;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    text-wrap: pretty;
+  }
+
+  .slip .slip__lede + .slip__excerpt {
+    margin-top: 0.5rem;
+  }
+
+  /* Emphasis and chips sit upright inside the italic voice, the print
+     convention the extract follows too */
+  .slip .slip__excerpt em,
+  .slip .slip__excerpt code {
+    font-style: normal;
+  }
+
+  /* The note's own text, set as the article sets it, without the
+     article's paragraph margins around a block that is the whole card */
+  .slip .slip__body > p {
+    margin: 0;
+  }
+
+  .slip .slip__body > p + p {
+    margin-top: 0.6em;
+  }
+
+  .slip__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.35rem 1rem;
+    margin-top: 0.6rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .slip__actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem;
+    margin-left: auto;
+  }
+
+  /* The reader's switch, set in the kicker's own face as a button that
+     reads like the words beside it */
+  .slip__pref {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: var(--primary);
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in srgb, var(--primary) 35%, transparent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .slip__pref:hover {
+    text-decoration-color: var(--primary);
+  }
+
+  /* A file's lines, in the code face at the card's own size: the head
+     of the file, or the range the link named, numbered from the
+     line it started at */
+  .slip .slip__title--path {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  /* The printed range, set by the press with both inks like every
+     fence in the article, framed as the article frames a fence */
+  .slip .slip__code > pre {
+    margin: 0.5rem 0 0;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 2px;
+    background-color: var(--code);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+
+  /* Wide cards hold a page, a document or a section, and scroll past
+     the reading window's height rather than cover it */
+  .slip.slip--wide {
+    width: min(40rem, calc(100vw - 2rem));
+  }
+
+  .slip > * {
+    flex-shrink: 0;
+  }
+
+  /* The bodies are the column's one flexible part: capped at a reading
+     window's height when there is room, shrunk to what is left when
+     there is not */
+  .slip .slip__prose,
+  .slip .slip__snapshot,
+  .slip .slip__code,
+  .slip .slip__lead {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: min(60vh, 34rem);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* The encyclopaedia's picture floats inside the lead, so the lead is
+     one scrolling block holding both */
+  .slip .slip__lead {
+    margin-top: 0.5rem;
+  }
+
+  .slip .slip__lead .slip__prose {
+    margin-top: 0;
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Third-party and transcluded markup, on the article's own measure of
+     type but a step smaller, with its first and last margins trimmed
+     so the card's own rules hold the edges */
+  .slip .slip__prose {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .slip .slip__prose > :first-child {
+    margin-top: 0;
+  }
+
+  .slip .slip__prose > :last-child {
+    margin-bottom: 0;
+  }
+
+  .slip .slip__prose img {
+    height: auto;
+  }
+
+  /* A bare pre, GitHub's or the encyclopaedia's, takes the card's frame;
+     a fence transcluded from a post already sits in its figure's frame
+     and keeps it */
+  .slip .slip__prose :not(figure) > pre {
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 2px;
+    background-color: var(--code);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+
+  /* A page shown live, or its snapshot as taken: the frame's height is
+     a reading window's, and the snapshot scrolls at its taken width
+     scaled to the card */
+  /* The live page over its own still: the still is what the card shows
+     the moment it opens, and the frame fades in over it once the page
+     has loaded, so a slow destination never leaves the card blank */
+  .slip .slip__live {
+    position: relative;
+    flex: 1 1 auto;
+    height: min(60vh, 34rem);
+    min-height: 10rem;
+    margin-top: 0.6rem;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 2px;
+    background: var(--background);
+    overflow: hidden;
+  }
+
+  .slip .slip__live-still {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .slip .slip__frame {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: var(--background);
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+
+  .slip .slip__live[data-loaded] .slip__frame {
+    opacity: 1;
+  }
+
+  .slip .slip__snapshot {
+    margin-top: 0.6rem;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 2px;
+    background: var(--background);
+  }
+
+  .slip .slip__snapshot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .slip .slip__video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    margin-top: 0.6rem;
+    border: 0;
+    border-radius: 2px;
+    background: var(--background);
+  }
+
+  /* The lead's picture sits beside the lead, as the encyclopaedia sets
+     it; a page's card picture runs the card's width */
+  .slip .slip__thumbnail {
+    float: right;
+    max-width: 38%;
+    margin: 0.2rem 0 0.4rem 0.9rem;
+  }
+
+  .slip .slip__thumbnail img,
+  .slip .slip__picture img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 2px;
+  }
+
+  .slip .slip__picture {
+    margin-top: 0.6rem;
+  }
+
+  /* A commit's body and a directory's entries, in the code face */
+  .slip .slip__message {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .slip .slip__files {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    max-height: 12rem;
+    overflow: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .slip .slip__files li {
+    margin: 0;
+  }
+
+  /* A plate the card cannot carry says so, in the kicker's face */
+  .slip .slip__omitted {
+    margin: 0.75rem 0;
+    padding: 0.5rem 0.75rem;
+    border: 1px dashed var(--hairline-soft);
+    border-radius: 2px;
+  }
+
+  /* The sheet's card fills the drawer instead of floating in it, and
+     the drawer's body does the scrolling */
+  .slip.slip--sheet {
+    display: block;
+    width: auto;
+    max-height: none;
+    border: 0;
+    border-top: 2px solid var(--gilt-ink);
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .slip.slip--sheet.slip--cross {
+    border-top-color: var(--shelf, var(--primary));
+  }
+
+  .slip.slip--sheet .slip__prose,
+  .slip.slip--sheet .slip__snapshot,
+  .slip.slip--sheet .slip__code,
+  .slip.slip--sheet .slip__lead {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .slip.slip--sheet .slip__live {
+    height: 50vh;
+  }
+
+  /*
+   * The note mark: a gilt numeral in the mono face, superior to the
+   * line, in the serial plate's numeral recipe. The document serves it
+   * as a link to the plate and the client re-renders it as a button, so
+   * both forms share the rule and neither takes the article's link dress.
+   */
+  .typography .note-mark,
+  .note-mark {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.2em;
+    margin: 0 0.05em;
+    border: 0;
+    border-radius: 2px;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--gilt-text);
+    vertical-align: super;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 150ms;
+  }
+
+  /* The numeral is eleven pixels square; a finger gets a box near the
+     24px floor drawn around it, out of layout and out of paint, so the
+     line and the tint stay exactly as set. A mouse keeps the numeral's
+     own box: a halo that wide would catch the last letter of the word
+     before the mark and open the note on a click meant for the text. */
+  @media (pointer: coarse) {
+    .note-mark::before {
+      content: "";
+      position: absolute;
+      inset: -0.6em -0.5em;
+    }
+  }
+
+  /* Open or hovered, the numeral sits on a stationary gilt tint */
+  .typography .note-mark:hover,
+  .note-mark:hover,
+  .note-mark[aria-expanded="true"] {
+    background-color: color-mix(in srgb, var(--gilt-ink) 18%, transparent);
+    text-decoration: none;
+  }
+
+  /* The slip mark: the star every link with a slip wears, right after
+     its words, so a reader can tell a link with a card from one without
+     on any device. A button, because it is the way in without a hover:
+     a click on a mouse, a tap on a finger, Enter from the keyboard.
+     Positioned for the finger's halo below; nothing moves on hover. */
+  .slip-mark {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-left: 0.15rem;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    background: none;
+    color: var(--gilt-text);
+    vertical-align: middle;
+    cursor: pointer;
+    transition: background-color 150ms;
+  }
+
+  .slip-mark:hover,
+  .slip-mark[aria-expanded="true"] {
+    background-color: color-mix(in srgb, var(--gilt-ink) 18%, transparent);
+  }
+
+  /* While the card is on its way the star breathes, by opacity alone:
+     the card itself waits until it has arrived, so the mark is the only
+     thing that says something is happening */
+  .slip-mark[data-waiting] svg {
+    animation: slip-mark-waiting 900ms ease-in-out infinite;
+  }
+
+  @keyframes slip-mark-waiting {
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  /* A finger gets a box near the 24px floor drawn around the star, out
+     of layout and out of paint */
+  @media (pointer: coarse) {
+    .slip-mark::before {
+      content: "";
+      position: absolute;
+      inset: -0.4rem;
+    }
+  }
+
+  /*
+   * The Notes plate: remark's endnote section, dressed as the ruled list
+   * it is. The printed record of every note, and where the marks jump
+   * when no script runs. The article's own list rules are outranked here
+   * by the class chain, since both live in this layer.
+   */
+  .typography .notes-plate {
+    margin-top: 2.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  /* The head is a paragraph by then, and the article's paragraph
+     margins would float it off the plate's rule */
+  .typography .notes-plate__head {
+    margin: 0;
+  }
+
+  .typography .notes-plate__rows {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    counter-reset: note;
+  }
+
+  /* Two columns: the numeral in the serial plate's recipe, then the
+     note, so a long note wraps under itself and never under its number */
+  .typography .notes-plate__row {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 0.55rem;
+    margin: 0;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--hairline-soft);
+    counter-increment: note;
+    font-size: 0.95rem;
+  }
+
+  .typography .notes-plate__row::before {
+    grid-column: 1;
+    grid-row: 1;
+    content: counter(note) ".";
+    padding-top: 0.2em;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--gilt-text);
+  }
+
+  /* A note of several blocks stacks them all in the note column; left
+     to auto-placement the second block would land under the numeral */
+  .typography .notes-plate__row > * {
+    grid-column: 2;
+  }
+
+  .typography .notes-plate__row > p {
+    margin: 0;
+  }
+
+  .typography .notes-plate__row > p + p {
+    margin-top: 0.6em;
+  }
+
+  /* The row a mark jumped to, held in a gilt wash until the next jump */
+  .typography .notes-plate__row:target {
+    background-color: color-mix(in srgb, var(--gilt-ink) 10%, transparent);
+  }
+
+  /* The return arrow, quiet beside the note, and never underlined: it
+     is furniture, not a reference */
+  .typography .notes-plate__backref {
+    margin-left: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-weight: 600;
+    text-decoration: none;
+    /* Four fifths is the first step that clears the 4.5 floor by day in
+       the link's primary ink */
+    opacity: 0.8;
+    transition: opacity 150ms;
+  }
+
+  .typography .notes-plate__backref:hover {
+    opacity: 1;
+  }
 }
 
 /* The name speaks Fraunces. The two sizes need different weights to read
@@ -1294,6 +1916,13 @@
 
   pre > code:not([data-line-numbers]) {
     padding: 1em;
+  }
+
+  /* Inside a slip the card's own pre carries the inset; this unlayered
+     rule would otherwise indent every third-party code block's first
+     line by a further em, and the components layer cannot cancel it */
+  .slip__prose pre > code:not([data-line-numbers]) {
+    padding: 0;
   }
 
   [data-line] {

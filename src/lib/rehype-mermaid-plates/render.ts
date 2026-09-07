@@ -116,7 +116,16 @@ async function launchBrowser(): Promise<Browser> {
       try {
         return await puppeteer.launch({
           args: [
-            ...chromium.args,
+            /* The bundle's defaults drop the browser's web security for
+               its own single-page rendering; this browser also opens
+               the pages the slips snapshot, which are other people's,
+               so those three stay off */
+            ...chromium.args.filter(
+              (flag) =>
+                flag !== "--disable-web-security" &&
+                flag !== "--allow-running-insecure-content" &&
+                flag !== "--disable-site-isolation-trials"
+            ),
             "--no-sandbox",
             "--disable-setuid-sandbox",
             "--disable-dev-shm-usage",
@@ -168,7 +177,7 @@ function acquireAssets(): Promise<RenderAssets> {
    nothing to hand back, and leaving the count at zero across the launch
    window is safe because releaseBrowser is the only thing that arms an
    idle timer, and this function clears any pending one on the way in. */
-async function acquireBrowser(): Promise<Browser> {
+export async function acquireBrowser(): Promise<Browser> {
   if (idleTimer) {
     clearTimeout(idleTimer);
     idleTimer = undefined;
@@ -186,7 +195,7 @@ async function acquireBrowser(): Promise<Browser> {
    server, so the browser closes after a short idle window. The timer
    is unref'd: if the build's last page finishes inside the window the
    process exits anyway and puppeteer's own exit hooks reap the child. */
-function releaseBrowser() {
+export function releaseBrowser() {
   inFlight -= 1;
   if (inFlight > 0) {
     return;

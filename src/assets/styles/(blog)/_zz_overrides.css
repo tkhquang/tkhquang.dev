@@ -566,4 +566,14 @@
   .mermaid.chart-plate-full > svg {
     max-width: none;
   }
+
+  /* The slip's kickers keep full ink: at kicker size on the raised card
+     the utility's 85 percent lands the context line and the gilt under
+     the 4.5 contrast floor, and the utility outranks the components
+     layer whatever the selector */
+  .slip__kicker,
+  .slip__head,
+  .slip__foot {
+    opacity: 1;
+  }
 }
