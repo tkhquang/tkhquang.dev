@@ -1242,6 +1242,7 @@
        side it lands on (fitViewport sets it on the wrapper, and inherit
        reads it through), so a tall card scrolls in its body rather than
        running off the viewport; the head, title and foot never shrink */
+    position: relative;
     display: flex;
     flex-direction: column;
     max-height: inherit;
@@ -1264,6 +1265,70 @@
      what lets the opacity run as a transition instead of appearing */
   .slip[data-enter] {
     opacity: 1;
+  }
+
+  /* The card's corner controls, gwern's popup title bar brought down
+     to two glyphs: the pin, pressed, keeps the card through the pointer
+     leaving and the page being clicked; the cross, shown only then,
+     closes it outright. They sit in the card's own padding, and the
+     head and the note kicker keep clear of them. Nothing moves; the
+     pin leans when free and stands upright when pressed, drawn that way
+     rather than turned on hover. */
+  .slip__controls {
+    position: absolute;
+    top: 0.45rem;
+    right: 0.5rem;
+    display: inline-flex;
+    gap: 0.15rem;
+  }
+
+  .slip__grip,
+  .slip__pin,
+  .slip__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    background: none;
+    color: var(--on-surface);
+    opacity: 0.55;
+    cursor: pointer;
+    transition:
+      opacity 150ms,
+      background-color 150ms;
+  }
+
+  .slip__grip:hover,
+  .slip__pin:hover,
+  .slip__close:hover {
+    opacity: 1;
+  }
+
+  /* The grip drags the card, so the browser must not pan or select
+     under the pointer while it does */
+  .slip__grip {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .slip__grip:active {
+    cursor: grabbing;
+  }
+
+  .slip__pin[aria-pressed="true"] {
+    opacity: 1;
+    color: var(--gilt-text);
+    background-color: color-mix(in srgb, var(--gilt-ink) 18%, transparent);
+  }
+
+  .slip .slip__head,
+  .slip .slip__kicker {
+    padding-right: 4.75rem;
   }
 
   .slip--cross {

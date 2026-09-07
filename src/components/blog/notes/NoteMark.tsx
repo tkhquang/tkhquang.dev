@@ -1,7 +1,9 @@
 "use client";
 
+import { SlipControls } from "@/components/blog/slips/SlipControls";
 import { SlipSheet, SlipSheetMark } from "@/components/blog/slips/SlipSheet";
 import { usePointerCoarse } from "@/components/blog/slips/usePointerCoarse";
+import { useSlipDrag } from "@/components/blog/slips/useSlipDrag";
 import {
   Hovercard,
   HovercardAnchor,
@@ -28,8 +30,10 @@ interface NoteMarkProps {
 
 /**
  * A note mark: the gilt numeral in the running text that opens its note
- * in a slip. Hovering with intent opens the slip, a click pins it so the
- * pointer can leave, Escape or a click away closes it. The mark is a
+ * in a slip. Hovering with intent opens the slip; a click pins it so the
+ * pointer can leave, and a pinned slip keeps through clicks elsewhere
+ * until its close, a second click on the numeral, or Escape twice, once
+ * to unpin and once to close. The mark is a
  * plain jump link to the plate in the document as served, because the
  * first client render has to match the server's and a document without
  * scripts still needs somewhere to go; once hydrated it re-renders as
@@ -49,14 +53,20 @@ export default function NoteMark({
      mark, and the next pixel of movement would open it again; hover
      stays off until the pointer has left */
   const holdHover = useRef(false);
+  /* Whether the open slip has had its one placement */
+  const placed = useRef(false);
   const store = useHovercardStore({
     placement: "bottom-start",
     showTimeout: 150,
     hideTimeout: 250,
-    /* A pin lives only while the slip is open: Escape and clicks away
-       close through the store, and the next hover must start unpinned */
+    /* A pin and a placement live only while the slip is open: Escape and
+       the close control close through the store, and the next hover must
+       start unpinned and be placed afresh */
     setOpen: (open) => {
-      if (!open) setPinned(false);
+      if (!open) {
+        setPinned(false);
+        placed.current = false;
+      }
     },
   });
   const open = useStoreState(store, "open");
@@ -73,6 +83,8 @@ export default function NoteMark({
       <span className="sr-only">Note {number}</span>
     </>
   );
+  /* A note the reader drags is a note they mean to keep */
+  const drag = useSlipDrag(store, () => setPinned(true));
 
   /* Leaving the hovercard branch (the pointer turning coarse) unmounts
      the slip but not its store, and an open, pinned store would reopen
@@ -104,6 +116,19 @@ export default function NoteMark({
       </SlipSheet>
     );
   }
+
+  /* Placed once and then left where the reader saw it, as gwern's popups
+     are: Ariakit would re-anchor the slip to its numeral on every scroll,
+     which drags a pinned note off the screen with the page */
+  const updatePosition = async ({
+    updatePosition: update,
+  }: {
+    updatePosition: () => Promise<void>;
+  }) => {
+    if (placed.current) return;
+    await update();
+    placed.current = true;
+  };
 
   const toggle = () => {
     if (pinned) {
@@ -151,12 +176,27 @@ export default function NoteMark({
         fixed
         unmountOnHide
         fitViewport
+        updatePosition={updatePosition}
         gutter={8}
         overflowPadding={12}
         hideOnHoverOutside={!pinned}
+        /* A pinned note is the reader's: a click elsewhere leaves it, and
+           Escape releases the pin before it closes the note */
+        hideOnInteractOutside={!pinned}
+        hideOnEscape={() => {
+          if (!pinned) return true;
+          setPinned(false);
+          return false;
+        }}
         className="slip slip--note typography code-container"
         aria-label={`Note ${number}`}
       >
+        <SlipControls
+          pinned={pinned}
+          onTogglePin={() => setPinned(!pinned)}
+          onClose={() => store.hide()}
+          dragHandle={drag()}
+        />
         <span className="kicker slip__kicker">Note {number}</span>
         <div className="slip__body">{children}</div>
       </Hovercard>

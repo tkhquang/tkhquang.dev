@@ -48,7 +48,7 @@ if (!interactive || !enabled) {
 }
 ```
 
-The store snapshot is `false` on the server and `false` during hydration, so the first client render agrees with the HTML. Then it becomes `true`, and the mark re-renders as the button it behaves as: hover it with intent and the slip opens, click it and the slip pins so the pointer can leave, press Escape or click away and it closes.
+The store snapshot is `false` on the server and `false` during hydration, so the first client render agrees with the HTML. Then it becomes `true`, and the mark re-renders as the button it behaves as: hover it with intent and the slip opens, click it and the slip pins so the pointer can leave, and a pinned slip keeps until you close it, click the numeral again, or press Escape twice.
 
 Hover intent matters more than it sounds. A slip that opens the instant a pointer crosses a numeral is a slip that opens on every scroll past it. Ariakit's hovercard anchor waits for a pointer that is actually moving, not a page scrolling under a resting one, and then for the show timeout, which I set at 150 milliseconds for notes and 250 for links, and it ignores touch entirely, because a finger cannot hover.
 
@@ -70,7 +70,7 @@ So a link has to ask. A raw anchor asks with an attribute, a markdown link asks 
 
 The title is markup, not a tooltip, and the rehype plugin removes it on the way through. Everything else stays a plain link, and so does a marked link whose destination gives the build nothing to print: no star, no card, just the link.
 
-A link that asked wears a mark: the dot-and-ring star from the asterism, right after its last word.[^mark] The card itself does not open until its content has arrived, so it lands once, at its final size, where there is room for it; while the content is on its way the star breathes. I wanted one tell that reads the same on every device, and a glyph after the words is the only thing that does. With a mouse you hover the words and the card opens; click the star and it pins, the way gwern's popups do, so the pointer can leave and the card stays until Escape or a click away. With a finger you tap the star and the card rises as a sheet, while the words keep doing what a link does. From the keyboard, Tab reaches the link, Tab again reaches the star, Enter opens the card with focus inside it, and Escape puts focus back where it was.
+A link that asked wears a mark: the dot-and-ring star from the asterism, right after its last word.[^mark] The card itself does not open until its content has arrived, so it lands once, at its final size, where there is room for it; while the content is on its way the star breathes. I wanted one tell that reads the same on every device, and a glyph after the words is the only thing that does. With a mouse you hover the words and the card opens; click the star, or the pin in the card's corner, and it pins, the way gwern's popups do: the pointer can leave, a click elsewhere on the page leaves the card alone, the page scrolls under it while it stays where it was, the grip beside the pin drags it wherever you want it, several can stay open at once, and it goes when you close it with the cross beside the pin, or press Escape twice, once to unpin and once to close. With a finger you tap the star and the card rises as a sheet, while the words keep doing what a link does. From the keyboard, Tab reaches the link, Tab again reaches the star, Enter opens the card with focus inside it, and Escape puts focus back where it was.
 
 ## Enough to not go
 

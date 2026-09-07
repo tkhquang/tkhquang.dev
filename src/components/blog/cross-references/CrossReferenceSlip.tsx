@@ -6,8 +6,10 @@ import {
   SlipStar,
   slipWidthFor,
 } from "@/components/blog/slips/SlipCardView";
+import { SlipControls } from "@/components/blog/slips/SlipControls";
 import { SlipSheet, SlipSheetMark } from "@/components/blog/slips/SlipSheet";
 import { usePointerCoarse } from "@/components/blog/slips/usePointerCoarse";
+import { useSlipDrag } from "@/components/blog/slips/useSlipDrag";
 import {
   prefetchSlipCard,
   useSlipCard,
@@ -40,7 +42,11 @@ interface CrossReferenceSlipProps {
  * hand: a click opens the card and pins it so the pointer can leave, a
  * click on a card already open from hovering pins that one, a click on
  * a pinned card closes it, and from the keyboard Enter opens it with
- * focus inside. The link itself still navigates on every click. The
+ * focus inside. A pinned card is the reader's, as gwern's popups are:
+ * clicks elsewhere leave it, several can stay open at once, Escape
+ * releases the pin before a second Escape closes it, and the cross in
+ * its corner closes it outright. The link itself still navigates on
+ * every click. The
  * card opens only once its content has arrived, so it lands at its
  * final size where there is room for it and never has to be moved; the
  * mark pulses while the content is on its way. On a finger the mark
@@ -61,17 +67,23 @@ export default function CrossReferenceSlip({
      opens when it is also there to be opened */
   const [wanted, setWanted] = useState(false);
   const [pinned, setPinned] = useState(false);
+  /* Whether the open card has had its one placement */
+  const placed = useRef(false);
   const arrived = state.status !== "idle" && state.status !== "loading";
   const store = useHovercardStore({
     placement: "bottom-start",
     showTimeout: 250,
     hideTimeout: 250,
     open: wanted && arrived,
-    /* A pin lives only while the card is open: Escape and clicks away
-       close through the store, and the next hover must start unpinned */
+    /* A pin and a placement live only while the card is open: Escape and
+       the close control close through the store, and the next open must
+       start unpinned and be placed afresh */
     setOpen: (open) => {
       setWanted(open);
-      if (!open) setPinned(false);
+      if (!open) {
+        setPinned(false);
+        placed.current = false;
+      }
     },
   });
   /* Ariakit types the final-focus ref as never null; the mark is always
@@ -81,6 +93,8 @@ export default function CrossReferenceSlip({
   useEffect(() => {
     if (wanted) prefetchSlipCard(slip);
   }, [wanted, slip]);
+  /* A card the reader drags is a card they mean to keep */
+  const drag = useSlipDrag(store, () => setPinned(true));
 
   const href = anchor.href ?? "";
   const card = state.status === "ready" ? state.card : null;
@@ -114,21 +128,25 @@ export default function CrossReferenceSlip({
     );
   }
 
-  /* Every placement measures the card at its natural size: the clamp the
-     previous placement left on the wrapper comes off first, so a card
-     that grows after it opened, a picture arriving late, is placed for
-     the size it has */
-  const updatePosition = ({
+  /* Placed once and then left where the reader saw it, as gwern's popups
+     are: Ariakit would re-anchor the card to its link on every scroll,
+     which drags a pinned card off the screen with the page. The one
+     placement measures the card at its natural size, with the clamp a
+     previous card left on the wrapper taken off first. */
+  const updatePosition = async ({
     updatePosition: update,
   }: {
     updatePosition: () => Promise<void>;
   }) => {
-    const wrapper = store.getState().popoverElement?.parentElement;
+    if (placed.current) return;
+    /* Ariakit's popoverElement is the positioned wrapper itself */
+    const wrapper = store.getState().popoverElement;
     if (wrapper) {
       wrapper.style.maxHeight = "";
       wrapper.style.maxWidth = "";
     }
-    return update();
+    await update();
+    placed.current = true;
   };
 
   const onMarkClick = () => {
@@ -206,6 +224,15 @@ export default function CrossReferenceSlip({
         gutter={8}
         overflowPadding={12}
         hideOnHoverOutside={!pinned}
+        /* A pinned card is the reader's: the page being clicked elsewhere
+           leaves it, and Escape releases the pin before it ever closes
+           the card, as gwern's popups do */
+        hideOnInteractOutside={!pinned}
+        hideOnEscape={() => {
+          if (!pinned) return true;
+          setPinned(false);
+          return false;
+        }}
         className={clsx(
           "slip slip--cross typography code-container",
           slipWidthFor(card)
@@ -213,6 +240,15 @@ export default function CrossReferenceSlip({
         aria-label={`Cross-reference: ${label}`}
         style={{ "--shelf": shelf } as React.CSSProperties}
       >
+        {/* Unpinned from inside the card, the card follows the pointer
+            again and closes once it has left; the reader pressing the
+            pin is still inside it */}
+        <SlipControls
+          pinned={pinned}
+          onTogglePin={() => setPinned(!pinned)}
+          onClose={() => store.hide()}
+          dragHandle={drag()}
+        />
         {body}
       </Hovercard>
     </HovercardProvider>
