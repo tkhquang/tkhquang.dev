@@ -9,11 +9,11 @@ import {
 import { SlipControls } from "@/components/blog/slips/SlipControls";
 import { SlipSheet, SlipSheetMark } from "@/components/blog/slips/SlipSheet";
 import { usePointerCoarse } from "@/components/blog/slips/usePointerCoarse";
-import { useSlipDrag } from "@/components/blog/slips/useSlipDrag";
 import {
   prefetchSlipCard,
   useSlipCard,
 } from "@/components/blog/slips/useSlipCard";
+import { useSlipDrag } from "@/components/blog/slips/useSlipDrag";
 import { DialogDisclosure } from "@ariakit/react/dialog";
 import {
   Hovercard,
@@ -39,17 +39,18 @@ interface CrossReferenceSlipProps {
  * by the mark that says a card exists, and the card itself fetched when
  * first wanted. On a mouse, hovering the link with intent asks for the
  * card and the pointer leaving lets it go; the mark is the reader's own
- * hand: a click opens the card and pins it so the pointer can leave, a
- * click on a card already open from hovering pins that one, a click on
- * a pinned card closes it, and from the keyboard Enter opens it with
- * focus inside. A pinned card is the reader's, as gwern's popups are:
- * clicks elsewhere leave it, several can stay open at once, Escape
- * releases the pin before a second Escape closes it, and the cross in
- * its corner closes it outright. The link itself still navigates on
- * every click. The
- * card opens only once its content has arrived, so it lands at its
- * final size where there is room for it and never has to be moved; the
- * mark pulses while the content is on its way. On a finger the mark
+ * hand: a click opens the card and holds it, with focus inside, until a
+ * click elsewhere or Escape takes it down, a click on a card already
+ * open from hovering holds that one the same way, and a click on a held
+ * or pinned card closes it. Held is not pinned: the pin in the card's
+ * corner, or a drag by its head, makes the card the reader's, as
+ * gwern's popups are: clicks elsewhere leave it, several can stay open
+ * at once, Escape releases the pin before a second Escape closes it,
+ * and the cross in its corner closes it outright. The link itself still
+ * navigates on every click. The card opens only once its content has
+ * arrived, so it lands at its final size where there is room for it and
+ * never has to be moved; the link and the mark breathe together while
+ * the content is on its way. On a finger the mark
  * opens the card as a sheet and the link stays a link. A reader who has
  * turned hover previews off keeps the mark: hovering does nothing, and
  * the click still opens the card.
@@ -67,6 +68,10 @@ export default function CrossReferenceSlip({
      opens when it is also there to be opened */
   const [wanted, setWanted] = useState(false);
   const [pinned, setPinned] = useState(false);
+  /* Whether the mark has taken the card in hand: opened it, or caught
+     one open from hovering. A held card stops following the pointer,
+     as a pinned one does, but a click elsewhere still takes it down */
+  const [held, setHeld] = useState(false);
   /* Whether the open card has had its one placement */
   const placed = useRef(false);
   const arrived = state.status !== "idle" && state.status !== "loading";
@@ -82,6 +87,7 @@ export default function CrossReferenceSlip({
       setWanted(open);
       if (!open) {
         setPinned(false);
+        setHeld(false);
         placed.current = false;
       }
     },
@@ -149,13 +155,18 @@ export default function CrossReferenceSlip({
     placed.current = true;
   };
 
+  /* The mark opens the card and takes it down again; pinning is left to
+     the card's own controls, so a click never turns into more than the
+     reader asked for. A card open from hovering is caught rather than
+     closed on the first click, since the pointer is on the mark because
+     the reader means to keep reading it. */
   const onMarkClick = () => {
     const { open, contentElement } = store.getState();
-    if (pinned) {
+    if (open && (held || pinned)) {
       store.hide();
       return;
     }
-    setPinned(true);
+    setHeld(true);
     if (open) {
       contentElement?.focus();
       return;
@@ -170,15 +181,16 @@ export default function CrossReferenceSlip({
     <HovercardProvider store={store}>
       <HovercardAnchor
         className="cross-reference"
+        data-waiting={waiting || undefined}
         showOnHover={hoverEnabled}
         onMouseEnter={() => {
           if (hoverEnabled) prefetchSlipCard(slip);
         }}
         /* A hover that leaves before the card arrives is withdrawn, or the
-           card would open unbidden over a reader who has moved on; a pin
-           is the reader's own request and stays */
+           card would open unbidden over a reader who has moved on; a
+           click on the mark is the reader's own request and stays */
         onMouseLeave={() => {
-          if (!arrived && !pinned) setWanted(false);
+          if (!arrived && !pinned && !held) setWanted(false);
         }}
         /* Ariakit clones this element with the anchor's children, so the
            served link carries the post's own words */
@@ -223,7 +235,14 @@ export default function CrossReferenceSlip({
         finalFocus={mark}
         gutter={8}
         overflowPadding={12}
-        hideOnHoverOutside={!pinned}
+        /* Hovering away closes a card the reader has not taken in hand.
+           The mark counts as inside though it sits outside the anchor: a
+           pointer resting on it starts no hide timer, or a card open from
+           hovering would go in the pause between reaching the mark and
+           clicking it */
+        hideOnHoverOutside={(event) =>
+          !pinned && !held && !mark.current.contains(event.target as Node)
+        }
         /* A pinned card is the reader's: the page being clicked elsewhere
            leaves it, and Escape releases the pin before it ever closes
            the card, as gwern's popups do */
@@ -239,6 +258,9 @@ export default function CrossReferenceSlip({
         )}
         aria-label={`Cross-reference: ${label}`}
         style={{ "--shelf": shelf } as React.CSSProperties}
+        /* The drag reads the head row as its handle and leaves the rest
+           of the card to its own pointer work */
+        {...drag()}
       >
         {/* Unpinned from inside the card, the card follows the pointer
             again and closes once it has left; the reader pressing the
@@ -247,7 +269,6 @@ export default function CrossReferenceSlip({
           pinned={pinned}
           onTogglePin={() => setPinned(!pinned)}
           onClose={() => store.hide()}
-          dragHandle={drag()}
         />
         {body}
       </Hovercard>

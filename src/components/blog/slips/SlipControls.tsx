@@ -1,36 +1,33 @@
 "use client";
 
-import type { useSlipDrag } from "./useSlipDrag";
-
 interface SlipControlsProps {
   pinned: boolean;
   onTogglePin: () => void;
   onClose: () => void;
-  /* The grip's pointer handlers, as useSlipDrag binds them */
-  dragHandle: ReturnType<ReturnType<typeof useSlipDrag>>;
 }
 
 /**
  * The card's corner controls, gwern's popup title bar brought down to
- * three glyphs. The grip: drags the card anywhere on screen, and pins
- * it as it goes. The pin: pressed, the card stays open when the pointer
- * leaves and when the page is clicked elsewhere; pressed again, the
- * card goes back to following the pointer. The close: takes the card
- * down whatever its state, which a pinned card otherwise never does on
- * its own. The star and the note numeral pin too, but a control inside
- * the card is the one a reader can see.
+ * three glyphs. The grip: the tell that the head row drags the card
+ * anywhere on screen, pinning it as it goes. The pin: pressed, the card
+ * stays open when the pointer leaves and when the page is clicked
+ * elsewhere; pressed again, the card goes back to following the
+ * pointer. The close: takes the card down whatever its state, which a
+ * pinned card otherwise never does on its own. Neither the star nor a
+ * note's numeral pins: the pin here, and a drag by the head row, are the
+ * only ways a card gets pinned, so a click never does more than open.
  */
 export function SlipControls({
-  dragHandle,
   onClose,
   onTogglePin,
   pinned,
 }: SlipControlsProps) {
   return (
     <span className="slip__controls">
-      {/* A pointer affordance only: the keyboard has nowhere to drag to,
-          so the grip stays out of the tab order */}
-      <span className="slip__grip" title="Drag" aria-hidden {...dragHandle}>
+      {/* A pointer affordance only: the drag is bound on the card and
+          reads the whole head row as its handle, and the keyboard has
+          nowhere to drag to, so the grip stays out of the tab order */}
+      <span className="slip__grip" title="Drag" aria-hidden>
         <svg viewBox="0 0 16 16" width="12" height="12">
           <g fill="currentColor">
             <circle cx="5.5" cy="4" r="1.3" />

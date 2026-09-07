@@ -30,10 +30,12 @@ interface NoteMarkProps {
 
 /**
  * A note mark: the gilt numeral in the running text that opens its note
- * in a slip. Hovering with intent opens the slip; a click pins it so the
- * pointer can leave, and a pinned slip keeps through clicks elsewhere
- * until its close, a second click on the numeral, or Escape twice, once
- * to unpin and once to close. The mark is a
+ * in a slip. Hovering with intent opens the slip and the pointer leaving
+ * lets it go; a click holds it, so the pointer can leave, until a click
+ * elsewhere, a second click on the numeral, or Escape takes it down. The
+ * pin in the slip's corner, or a drag by its head, is what pins it, and
+ * a pinned slip keeps through clicks elsewhere until its close, the
+ * numeral, or Escape twice, once to unpin and once to close. The mark is a
  * plain jump link to the plate in the document as served, because the
  * first client render has to match the server's and a document without
  * scripts still needs somewhere to go; once hydrated it re-renders as
@@ -49,6 +51,10 @@ export default function NoteMark({
 }: NoteMarkProps) {
   const coarse = usePointerCoarse();
   const [pinned, setPinned] = useState(false);
+  /* Whether the numeral has taken the slip in hand: a held slip stops
+     following the pointer, as a pinned one does, but a click elsewhere
+     still takes it down */
+  const [held, setHeld] = useState(false);
   /* A second click closes the slip while the pointer still rests on the
      mark, and the next pixel of movement would open it again; hover
      stays off until the pointer has left */
@@ -65,6 +71,7 @@ export default function NoteMark({
     setOpen: (open) => {
       if (!open) {
         setPinned(false);
+        setHeld(false);
         placed.current = false;
       }
     },
@@ -130,15 +137,18 @@ export default function NoteMark({
     placed.current = true;
   };
 
+  /* The numeral opens the slip and takes it down again; pinning is left
+     to the slip's own controls. A slip open from hovering is caught on
+     the first click rather than closed, since the reader clicked to keep
+     reading it */
   const toggle = () => {
-    if (pinned) {
-      setPinned(false);
+    if (store.getState().open && (held || pinned)) {
       holdHover.current = true;
       store.hide();
-    } else {
-      setPinned(true);
-      store.show();
+      return;
     }
+    setHeld(true);
+    store.show();
   };
 
   return (
@@ -179,7 +189,8 @@ export default function NoteMark({
         updatePosition={updatePosition}
         gutter={8}
         overflowPadding={12}
-        hideOnHoverOutside={!pinned}
+        /* Hovering away closes a note the reader has not taken in hand */
+        hideOnHoverOutside={!pinned && !held}
         /* A pinned note is the reader's: a click elsewhere leaves it, and
            Escape releases the pin before it closes the note */
         hideOnInteractOutside={!pinned}
@@ -190,12 +201,13 @@ export default function NoteMark({
         }}
         className="slip slip--note typography code-container"
         aria-label={`Note ${number}`}
+        /* The drag reads the kicker line as its handle */
+        {...drag()}
       >
         <SlipControls
           pinned={pinned}
           onTogglePin={() => setPinned(!pinned)}
           onClose={() => store.hide()}
-          dragHandle={drag()}
         />
         <span className="kicker slip__kicker">Note {number}</span>
         <div className="slip__body">{children}</div>

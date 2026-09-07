@@ -1308,16 +1308,28 @@
     opacity: 1;
   }
 
-  /* The grip drags the card, so the browser must not pan or select
-     under the pointer while it does */
+  /* The head row is the card's title bar and drags it, so the browser
+     must not pan or select under the pointer while it does; the grip
+     is its tell */
+  .slip .slip__head,
+  .slip .slip__kicker,
+  .slip__controls,
   .slip__grip {
     cursor: grab;
     touch-action: none;
     user-select: none;
   }
 
+  .slip .slip__head:active,
+  .slip .slip__kicker:active,
   .slip__grip:active {
     cursor: grabbing;
+  }
+
+  /* The buttons in the bar keep their own cursor */
+  .slip__pin,
+  .slip__close {
+    cursor: pointer;
   }
 
   .slip__pin[aria-pressed="true"] {
@@ -1786,16 +1798,30 @@
     background-color: color-mix(in srgb, var(--gilt-ink) 18%, transparent);
   }
 
-  /* While the card is on its way the star breathes, by opacity alone:
-     the card itself waits until it has arrived, so the mark is the only
-     thing that says something is happening */
+  /* While the card is on its way the link and its star breathe, on one
+     clock: the card itself waits until it has arrived, so these are the
+     only things that say something is happening. The star by opacity
+     alone; the link by turning gilt, words, underline and the outbound
+     glyph together, since the glyph is drawn in currentColor. Painted
+     motion only, so nothing in the line shifts. */
   .slip-mark[data-waiting] svg {
     animation: slip-mark-waiting 900ms ease-in-out infinite;
+  }
+
+  .cross-reference[data-waiting] {
+    animation: slip-link-waiting 900ms ease-in-out infinite;
   }
 
   @keyframes slip-mark-waiting {
     50% {
       opacity: 0.3;
+    }
+  }
+
+  @keyframes slip-link-waiting {
+    50% {
+      color: var(--gilt-text);
+      text-decoration-color: var(--gilt-text);
     }
   }
 
