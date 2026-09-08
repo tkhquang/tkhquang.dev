@@ -1,17 +1,16 @@
+import { getAnnotationFileName } from "./name";
+import { readShared, writeShared } from "./store";
 import type { AnnotationRecord } from "./types";
-import crypto from "crypto";
 import fs from "fs";
 import path from "path";
-import sanitize from "sanitize-filename";
 
-/* In the build's own cache rather than in the repository. What is kept
-   here is a copy of somebody else's page, which does not belong in the
-   history of this one, and it is a cache in the plain sense: losing it
-   costs a slower build, never a wrong one. The build tool preserves
-   this directory between builds and the host restores it between
-   deploys, so in practice it is filled once and read thereafter. One
-   file per link, so build workers filling it side by side never write
-   over each other. */
+/* This build's own copy, in its cache rather than in the repository:
+   a copy of somebody else's page does not belong in the history of
+   this one. Losing it costs a slower build, never a wrong one, because
+   the shared store in store.ts holds the copy that has to last and
+   this is only the reading the current build works from. One file per
+   link, so build workers filling it side by side never write over each
+   other. */
 export const annotationsDirectory =
   process.env.ANNOTATIONS_CACHE_DIR ??
   path.join(process.cwd(), ".next", "cache", "annotations");
@@ -21,21 +20,7 @@ export const annotationsDirectory =
    short enough that a page that was down comes back on its own */
 const RETRY_FAILURE_AFTER_MS = 7 * 24 * 60 * 60 * 1000;
 
-/* Readable enough to find in the directory, unique by the hash: the
-   host and path are the name, cut before the file system objects */
-export function getAnnotationFileName(url: string): string {
-  const { hostname, pathname } = new URL(url);
-  const stem = sanitize(`${hostname}${pathname}`.replace(/\//g, "-"))
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 80);
-  const hash = crypto.createHash("sha1").update(url).digest("hex").slice(0, 8);
-  return `${stem}-${hash}.json`;
-}
-
-export async function readAnnotationRecord(
-  url: string
-): Promise<AnnotationRecord | null> {
+const readLocal = async (url: string): Promise<AnnotationRecord | null> => {
   const file = path.join(annotationsDirectory, getAnnotationFileName(url));
   try {
     const record = JSON.parse(
@@ -45,17 +30,39 @@ export async function readAnnotationRecord(
   } catch {
     return null;
   }
-}
+};
 
-export async function writeAnnotationRecord(
-  record: AnnotationRecord
-): Promise<void> {
+const writeLocal = async (record: AnnotationRecord): Promise<void> => {
   await fs.promises.mkdir(annotationsDirectory, { recursive: true });
   const file = path.join(
     annotationsDirectory,
     getAnnotationFileName(record.url)
   );
   await fs.promises.writeFile(file, `${JSON.stringify(record, null, 2)}\n`);
+};
+
+/**
+ * The record for a link: from this build's own cache when it has one,
+ * and from the shared store when it does not. A record taken from the
+ * store is written locally as well, so the rest of the build reads it
+ * from disk rather than asking again.
+ */
+export async function readAnnotationRecord(
+  url: string
+): Promise<AnnotationRecord | null> {
+  const local = await readLocal(url);
+  if (local) return local;
+  const shared = await readShared(url);
+  if (shared) await writeLocal(shared);
+  return shared;
+}
+
+/* Kept in both: this build reads its own copy for the rest of the run,
+   and the shared store keeps it for every run after, on any machine */
+export async function writeAnnotationRecord(
+  record: AnnotationRecord
+): Promise<void> {
+  await Promise.all([writeLocal(record), writeShared(record)]);
 }
 
 export function isFailureFresh(record: AnnotationRecord): boolean {

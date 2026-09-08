@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { getAnnotationFileName } from "./cache.ts";
+import { getAnnotationFileName } from "./name.ts";
 import { classifyLink } from "./parse.ts";
 
 test("a bare repository link is a repository", () => {
