@@ -1,0 +1,74 @@
+/*
+ * The slip sheet's dress.
+ *
+ * Unlayered, because Drawer.css is unlayered. Compounded onto .drawer,
+ * not merely descended from .slip-drawer: Drawer.css writes its chrome as
+ * .drawer .drawer__*, which ties on specificity and then wins on source
+ * order, since this file is imported first. Scoped throughout, so the
+ * other drawers keep their look.
+ */
+
+/* Ariakit renders the backdrop as the dialog's previous sibling, so the
+   scrim is addressed through the dialog, as the index drawer does. */
+.drawer__backdrop:has(+ .drawer.slip-drawer) {
+  background-color: rgb(0 0 0 / 45%);
+}
+
+/* Drawer.css caps a phone drawer at 400px with an important (0,3,0)
+   rule. A note needs most of the screen, so this must outrank it. */
+.drawer.drawer--bottom.slip-drawer .drawer__content {
+  /* Capped in pixels to match the slide, which is set in pixels too. A
+     sheet taller than its slide stands partly on screen when closed. */
+  height: min(78vh, 704px) !important;
+  max-height: none;
+  border-top: 1px solid var(--hairline-soft);
+  border-radius: 0.5rem 0.5rem 0 0;
+  /* The sheet is read, not dragged through, so its text selects. */
+  user-select: text;
+}
+
+/* The head is the kicker line the slip prints elsewhere. The drag
+   handle keeps its place above it. */
+.drawer.slip-drawer .drawer__header {
+  padding: 1.1rem 1rem 0.6rem;
+  border-bottom: 0;
+}
+
+.drawer.slip-drawer .drawer__title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* The two-line X in a 32px box, dimmed on hover. Nothing moves.
+   Unlayered, so it beats the dismiss button's utility classes. */
+.drawer.slip-drawer .drawer__header > button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: opacity 150ms;
+}
+
+.drawer.slip-drawer .drawer__header > button:hover {
+  opacity: 0.65;
+}
+
+/* The card's own padding sets the inset, so the body has none. The
+   content box keeps touch-action none for the drag on the head, and the
+   body restores vertical panning so a finger can scroll the note. */
+.drawer.slip-drawer .drawer__body {
+  padding: 0;
+  overflow-y: auto;
+  touch-action: pan-y;
+}

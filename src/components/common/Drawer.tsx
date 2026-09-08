@@ -141,6 +141,9 @@ export default function Drawer({
   const drawerRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
   const isAnimatingRef = useRef(false);
+  /* The slide in flight. Two timelines on one node fight each other, so
+     the next slide kills this one. */
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   /**
    * Local state to control DOM presence during animations.
@@ -195,7 +198,7 @@ export default function Drawer({
    */
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent | React.KeyboardEvent) => {
-      if (e.target === e.currentTarget && !isAnimatingRef.current) {
+      if (e.target === e.currentTarget) {
         dialog.hide();
       }
     },
@@ -207,8 +210,9 @@ export default function Drawer({
    * Sets initial closed state, then animates to open state with smooth easing.
    */
   const animateIn = useCallback(() => {
-    if (isAnimatingRef.current || !drawerRef.current) return;
+    if (!drawerRef.current) return;
 
+    timelineRef.current?.kill();
     isAnimatingRef.current = true;
     const transforms = getTransformValues(position, size);
 
@@ -239,8 +243,10 @@ export default function Drawer({
     const timeline = gsap.timeline({
       onComplete: () => {
         isAnimatingRef.current = false;
+        timelineRef.current = null;
       },
     });
+    timelineRef.current = timeline;
 
     // Fade in backdrop first
     if (backdropRef.current) {
@@ -268,8 +274,12 @@ export default function Drawer({
    * On completion, triggers component unmounting via setShouldRender(false).
    */
   const animateOut = useCallback(() => {
-    if (isAnimatingRef.current || !drawerRef.current) return;
+    if (!drawerRef.current) return;
 
+    /* Never refuse a close because a slide is running. Ariakit's open
+       flag has already flipped, and nothing calls back, so the drawer
+       would stand open with no press able to change it. */
+    timelineRef.current?.kill();
     isAnimatingRef.current = true;
     const transforms = getTransformValues(position, size);
 
@@ -287,9 +297,11 @@ export default function Drawer({
     const timeline = gsap.timeline({
       onComplete: () => {
         isAnimatingRef.current = false;
+        timelineRef.current = null;
         setShouldRender(false); // Unmount after animation completes
       },
     });
+    timelineRef.current = timeline;
 
     // Slide out drawer content
     timeline.to(drawerRef.current, {
@@ -329,20 +341,21 @@ export default function Drawer({
       // committed after open flips back to false so animateOut can play against
       // a live node and unmount it from its own onComplete. Deriving this
       // during render cannot express that second half.
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- see above
       setShouldRender(true);
 
       // Use RAF to ensure DOM is ready before animating
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          animateIn();
+          /* A close inside these two frames has already run. Sliding in
+             now would stand the drawer back up. */
+          if (dialog.getState().open) animateIn();
         });
       });
     } else if (!open && shouldRender) {
       // Trigger exit animation (component stays rendered until animation completes)
       animateOut();
     }
-  }, [mounted, open, shouldRender, animateIn, animateOut]);
+  }, [mounted, open, shouldRender, animateIn, animateOut, dialog]);
 
   // Configure gesture handling based on drawer position
   const dragConfig = getDragConfig(position);

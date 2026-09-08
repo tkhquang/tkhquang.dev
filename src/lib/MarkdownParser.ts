@@ -2,6 +2,7 @@ import lamplightDark from "@/assets/shiki/lamplight-dark.json";
 import lamplightLight from "@/assets/shiki/lamplight-light.json";
 import CameraExplorable from "@/components/blog/camera-explorable/CameraExplorable";
 import HexDiff from "@/components/blog/hex-diff/HexDiff";
+import NoteMark from "@/components/blog/notes/NoteMark";
 import MermaidPlate from "@/components/common/MermaidPlate";
 import PreWithCopy from "@/components/common/PreWithCopy";
 import ZoomableImage from "@/components/common/ZoomableImage";
@@ -14,6 +15,7 @@ import {
   rehypeMermaidRender,
   rehypeMermaidRestore,
 } from "@/lib/rehype-mermaid-plates";
+import rehypeNotes from "@/lib/rehype-notes";
 import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
@@ -111,6 +113,11 @@ function getProcessor(): Processor {
       .use(rehypeMermaidPrepare)
       .use(rehypeMermaidRender, MERMAID_RENDER_OPTIONS)
       .use(rehypeMermaidRestore)
+      /* After the code printing, so a copied note keeps its chips, and
+         after rehypeRaw, so raw HTML in a note is an element by the time
+         it is copied. Before the heading steps, so the plate's head stays
+         out of the table of contents. */
+      .use(rehypeNotes)
       .use(rehypeSlug)
       .use(rehypeExtractToc)
       .use(rehypeAutolinkHeadings, {
@@ -127,6 +134,7 @@ function getProcessor(): Processor {
         components: {
           "camera-explorable": CameraExplorable,
           "hex-diff": HexDiff,
+          "note-mark": NoteMark,
           "rehype-pretty-copy-button-pre": PreWithCopy,
           "next-image": ZoomableImage,
           "mermaid-plate": MermaidPlate,
