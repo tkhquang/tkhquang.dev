@@ -98,7 +98,7 @@ Three weights, one file. Parsing that file's WOFF2 table directory turns up an `
 
 The `weight` option sets the `font-weight` *descriptor* on each `@font-face` rule, and it does reach Google: `next/font/google` encodes the pinned weights into the css2 URL it requests, hardcoded in its `get-google-fonts-url.js`. But whether static instances stand behind a pinned weight is Google's per-family call, not something the option controls, and for Inter, css2 answers all three pinned weights with the same variable file. In the same pipeline, Merriweather 400 came back as a true static instance, which is exactly the decisive-pair row that embedded. The descriptor changed. For this family, the bytes did not. Of the 31 woff2 files in that build's `.next/static/media`, 26 carried `fvar`, and Merriweather's static instances were the holdouts.
 
-The giveaway had been sitting in the committed PDF the whole time, and I misread it. The mono face is named `GAAAAA+SourceCodePro-ExtraLight`. Nothing on this resume asks for ExtraLight; the CSS wants a plain 400. But the Source Code Pro variable file defaults to weight 200, and Skia names a variable face after its **default instance**, not after the instance you rendered. My probe PDFs said `Inter-Thin` for the same reason. (The committed PDF's Inter faces say `Regular`, so the slice its build pulled evidently defaulted there; the Source Code Pro face is what kept the evidence visible.) A weight you never asked for, in a font name, is the variable file waving at you.
+The giveaway had been sitting in the committed PDF the whole time, and I misread it. The mono face is named `GAAAAA+SourceCodePro-ExtraLight`. Nothing on this resume asks for ExtraLight; the CSS wants a plain 400. But the Source Code Pro variable file defaults to weight 200, and Skia names a variable face after its **default instance**, not after the instance you rendered. My probe PDFs said `Inter-Thin` for the same reason.[^regular] A weight you never asked for, in a font name, is the variable file waving at you.
 
 ## The Fix That Works
 
@@ -202,3 +202,5 @@ pdffonts document.pdf
 ```
 
 If the `type` column says `Type 3` for fonts you know are TrueType, nothing is missing and nothing failed. Skia looked at your beautiful variable font, declined to embed it, and drew.
+
+[^regular]: The committed PDF's Inter faces say `Regular`, so the slice its build pulled evidently defaulted there; the Source Code Pro face is what kept the evidence visible.

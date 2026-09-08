@@ -146,6 +146,11 @@
        deepens it or it dies on paper. For serial marks and tailpieces. */
     --gilt-ink: hsl(42deg 60% 70%);
 
+    /* Gilt for small text. --gilt-ink clears 4.5 by night but not by
+       day, so the day value steps down to the gilt the chart plates
+       already use for node text. */
+    --gilt-text: var(--gilt-ink);
+
     /* The day masthead's two hues, named so the extract's light field and
        its far-corner wash can reach them by token instead of by literal */
     --dawn-cream: hsl(44deg 55% 93%);
@@ -226,6 +231,7 @@
       --aurora-b: hsl(266deg 45% 48%);
       --aurora-c: hsl(210deg 75% 42%);
       --gilt-ink: hsl(40deg 65% 38%);
+      --gilt-text: hsl(40deg 72% 31%);
       --chart-star: var(--primary);
       --diagram-vermilion: hsl(11deg 75% 38%);
 
@@ -1207,6 +1213,300 @@
   .youtube-embed iframe {
     position: relative;
     z-index: 1;
+  }
+
+  /*
+   * The Slip: the card that opens at a note's mark.
+   *
+   * Ariakit portals the card and owns its position. These rules dress it
+   * and set how its height is divided. Nothing moves on hover or open.
+   */
+  html {
+    /* By night the hairline alone does not lift the card off the page, so
+       the shadow is deeper and tighter than the day pair. */
+    --slip-shadow: 0 14px 32px -14px rgb(0 0 0 / 60%);
+
+    &[data-theme="light"] {
+      --slip-shadow:
+        0 10px 28px -14px rgb(0 0 0 / 28%), 0 2px 6px -4px rgb(0 0 0 / 14%);
+    }
+  }
+
+  .slip {
+    /* fitViewport writes a max-height on the wrapper, and inherit reads
+       it through. The bar holds its size and the body takes the rest, so
+       a tall note scrolls instead of running off the viewport. */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-height: inherit;
+    width: min(21rem, calc(100vw - 2rem));
+    padding: 0.85rem 1rem 0.9rem;
+    background: var(--surface-raised);
+    color: var(--on-surface);
+    border: 1px solid var(--hairline-soft);
+    border-top: 2px solid var(--gilt-ink);
+    /* Near-square corners, as an engraved plate takes */
+    border-radius: 2px;
+    box-shadow: var(--slip-shadow);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+
+  /* Ariakit sets data-enter one frame after the card mounts, which is
+     what gives the opacity two values to transition between. */
+  .slip[data-enter] {
+    opacity: 1;
+  }
+
+  /* The title bar. In flow, not floated over the card, so the empty run
+     between the kicker and the controls belongs to the bar and drags
+     with it. Fixed height, so the body below is the part that gives. */
+  .slip__bar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 1.35rem;
+
+    /* Pulled out to the card edges, then given the padding back. Inset
+       by the card padding instead, the band above the kicker and the
+       margins beside it belong to the card, and a press there does
+       nothing. A bar that drags in some places only reads as broken. */
+    margin: -0.85rem -1rem 0.4rem;
+    padding: 0.85rem 1rem 0;
+  }
+
+  /* The corner controls: grip, pin, and a cross shown only while pinned.
+     One box and one resting ink for all three, so the row stays even as
+     the cross comes and goes. */
+  .slip__controls {
+    display: inline-flex;
+    flex: none;
+    gap: 0.15rem;
+  }
+
+  .slip__grip,
+  .slip__pin,
+  .slip__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    padding: 0;
+    border: 0;
+    border-radius: 2px;
+    background: none;
+    color: var(--on-surface);
+    opacity: 0.55;
+    transition:
+      opacity 150ms,
+      background-color 150ms;
+  }
+
+  .slip__grip:hover,
+  .slip__pin:hover,
+  .slip__close:hover {
+    opacity: 1;
+  }
+
+  /* The bar drags the card, so the browser must not pan or select along
+     it. The grip is only the tell. */
+  .slip__bar,
+  .slip__grip {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .slip__bar:active,
+  .slip__grip:active {
+    cursor: grabbing;
+  }
+
+  /* cursor inherits, so the bar's grab reaches the buttons inside it.
+     Only a declaration of their own holds them to a pointer. */
+  .slip__pin,
+  .slip__close {
+    cursor: pointer;
+  }
+
+  .slip__pin[aria-pressed="true"] {
+    opacity: 1;
+    color: var(--gilt-text);
+    background-color: color-mix(in srgb, var(--gilt-ink) 18%, transparent);
+  }
+
+  /* The bar's row places the kicker. Only its ink is set here. */
+  .slip__kicker {
+    color: var(--gilt-text);
+  }
+
+  /* The half of the column that gives, so a note taller than the card
+     scrolls here. min-height 0 is what lets a flex item shrink under its
+     own content, and without it the body cannot scroll at all. On the
+     sheet the card is a block and the drawer's body scrolls instead. */
+  .slip__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  /* The article's paragraph margins would pad a block that is the whole
+     card, so the body sets its own. */
+  .slip .slip__body > p {
+    margin: 0;
+  }
+
+  .slip .slip__body > p + p {
+    margin-top: 0.6em;
+  }
+
+  /* In the drawer the card fills the sheet, and the drawer's body
+     scrolls it. */
+  .slip.slip--sheet {
+    display: block;
+    width: auto;
+    max-height: none;
+    border: 0;
+    border-top: 2px solid var(--gilt-ink);
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  /*
+   * The note mark: a gilt numeral in the mono face, in the serial plate's
+   * recipe. The server sends a link and the client re-renders a button,
+   * so one rule dresses both and neither takes the article's link dress.
+   */
+  .typography .note-mark {
+    position: relative;
+    display: inline-block;
+    padding: 0 0.2em;
+    margin: 0 0.05em;
+    border: 0;
+    border-radius: 2px;
+    background: none;
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--gilt-text);
+    vertical-align: super;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 150ms;
+  }
+
+  /* The numeral is eleven pixels square. A finger needs a target near
+     24px, so draw one outside layout and paint, which leaves the line and
+     the tint as set. A mouse keeps the smaller box: a target this wide
+     would catch the last letter of the word before the mark. */
+  @media (pointer: coarse) {
+    .note-mark::before {
+      content: "";
+      position: absolute;
+      inset: -0.6em -0.5em;
+    }
+  }
+
+  /* Open or hovered, the numeral takes a gilt tint. Nothing moves. */
+  .typography .note-mark:hover,
+  .typography .note-mark[aria-expanded="true"] {
+    background-color: color-mix(in srgb, var(--gilt-ink) 18%, transparent);
+    text-decoration: none;
+  }
+
+  /*
+   * The Notes plate: remark's endnote section, dressed as a ruled list.
+   * It is where the marks jump when no script runs. Both these rules and
+   * the article's list rules live in this layer, so the class chain is
+   * what outranks them.
+   */
+  .typography .notes-plate {
+    margin-top: 2.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  /* The head is a paragraph by now, and paragraph margins would float
+     it off the plate's rule. */
+  .typography .notes-plate__head {
+    margin: 0;
+  }
+
+  .typography .notes-plate__rows {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    counter-reset: note;
+  }
+
+  /* Two columns, so a long note wraps under itself and never under its
+     numeral. */
+  .typography .notes-plate__row {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    column-gap: 0.55rem;
+    margin: 0;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--hairline-soft);
+    counter-increment: note;
+    font-size: 0.95rem;
+  }
+
+  .typography .notes-plate__row::before {
+    grid-column: 1;
+    grid-row: 1;
+    content: counter(note) ".";
+    padding-top: 0.2em;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--gilt-text);
+  }
+
+  /* Auto-placement would drop the second block of a note under the
+     numeral, so name the column for every child. */
+  .typography .notes-plate__row > * {
+    grid-column: 2;
+  }
+
+  .typography .notes-plate__row > p {
+    margin: 0;
+  }
+
+  .typography .notes-plate__row > p + p {
+    margin-top: 0.6em;
+  }
+
+  /* The row a mark jumped to, washed gilt until the next jump. */
+  .typography .notes-plate__row:target {
+    background-color: color-mix(in srgb, var(--gilt-ink) 10%, transparent);
+  }
+
+  /* The return arrow is a control, not a reference, so it is quiet and
+     never underlined. */
+  .typography .notes-plate__backref {
+    margin-left: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    font-weight: 600;
+    text-decoration: none;
+    /* Four fifths is the first step that clears 4.5 by day in the link's
+       primary ink. */
+    opacity: 0.8;
+    transition: opacity 150ms;
+  }
+
+  .typography .notes-plate__backref:hover {
+    opacity: 1;
   }
 }
 

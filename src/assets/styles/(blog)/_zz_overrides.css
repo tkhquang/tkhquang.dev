@@ -566,4 +566,11 @@
   .mermaid.chart-plate-full > svg {
     max-width: none;
   }
+
+  /* Gilt at kicker size reads 5.1 on the raised card by day. The kicker
+     utility's 85 percent takes it to 3.8, under the 4.5 floor. Settle it
+     here, because a utility outranks the components layer. */
+  .slip__kicker {
+    opacity: 1;
+  }
 }

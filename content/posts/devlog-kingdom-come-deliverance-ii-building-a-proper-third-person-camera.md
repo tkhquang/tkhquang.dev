@@ -171,7 +171,7 @@ The fix is to anchor to something that doesn't. The player entity keeps its worl
 
 So the rig stopped reading the eye. It reads the player's look controller at `*(C_Player + 0x238) + 0x24`, the clean aim quaternion, which matches the eye at rest and carries none of the shake. We sanity-check it for finite, near-unit length, fall back to the eye quaternion if it looks wrong, and low-pass it with [SLERP](https://en.wikipedia.org/wiki/Spherical_linear_interpolation).
 
-SLERP is blending for rotations. You can't average two quaternions like two numbers and get a sensible result, so you walk the short way around the sphere between them and stop part way. A little toward the target every frame gives you a smoothing filter for orientation. (The longer version of why quaternions rather than angles is in the <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood" target="_blank" rel="noopener noreferrer">offsets devlog</a>.)
+SLERP is blending for rotations. You can't average two quaternions like two numbers and get a sensible result, so you walk the short way around the sphere between them and stop part way. A little toward the target every frame gives you a smoothing filter for orientation.[^quaternions]
 
 What still isn't solved: during a climb the two sources swap roles, the look controller whipping around while the eye stays smooth, the exact mirror of the door case. Inside a single frame they look identical. I tried about eleven ways to separate them, and every one either failed or traded a small problem for a bigger one. Follow the look controller and you get a small shift on climbs; follow the eye and you get shake everywhere. I picked the climb shift on purpose.
 
@@ -310,3 +310,5 @@ The lesson I keep taking away from this one is about direction. The old mod aske
 The mod is on [NexusMods](https://www.nexusmods.com/kingdomcomedeliverance2/mods/3263) if you want to try it, and all my Kingdom Come: Deliverance II mods and tools live in this [GitHub repository](https://github.com/tkhquang/KCD2Tools). The hooking, scanning, input and config plumbing underneath all of it comes from [DetourModKit](https://github.com/tkhquang/DetourModKit), which has grown into its own thing and deserves a post of its own. Feel free to contribute or suggest improvements!
 
 KCD2 Modding: Because the fastest way to win an argument with an engine is to stop having one. CryEngine, ***CryMore***!
+
+[^quaternions]: The longer version of why quaternions rather than angles is in the <a href="/blog/posts/devlog-kingdom-come-deliverance-ii-customizing-the-view-tpv-offsets-input-and-whats-under-the-hood#deconstructing-the-3d-math-vectors-quaternions-and-transforms" target="_blank" rel="noopener noreferrer">3D math section</a> of the offsets devlog.
