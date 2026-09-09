@@ -106,6 +106,20 @@ function readingText(markdown: string): string {
       return "skip";
     }
 
+    /* An image's alt text is printed under the figure as its caption, by
+       `@ljoss/rehype-figure-caption` in the parser, so it is prose a reader has
+       read and can come back for. It carries the description in the mdast node
+       rather than in a child, which is why collecting text-bearing leaves alone
+       missed it. The caption stands on its own line, because that is where the
+       page puts it, so a phrase can never be found across the seam between a
+       caption and the paragraph beside it. */
+    if (node.type === "image" || node.type === "imageReference") {
+      breakLine();
+      line = (node.alt ?? "").replace(/\s+/g, " ");
+      breakLine();
+      return "skip";
+    }
+
     if (BLOCK_NODES.has(node.type)) {
       breakLine();
     }

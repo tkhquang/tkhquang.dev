@@ -337,6 +337,37 @@ test("code lines retain the boundaries that the reader sees", async () => {
   assert.ok(!body.includes("Alpha beta."));
 });
 
+test("a figure caption is reading matter and stands on its own line", async () => {
+  /* The caption is printed under the image, so a reader can come back for it,
+     but it reaches the indexer as a property of the image node rather than as a
+     child of it. */
+  const body = await bodyOf(
+    [
+      "Before the plate.",
+      "",
+      "![The black cat knows where I have been.](/uploads/cat.jpg)",
+      "",
+      "After the plate.",
+    ].join(String.fromCharCode(10))
+  );
+
+  assert.ok(body.includes("The black cat knows where I have been."));
+  assert.ok(!body.includes("uploads"), "the address is not reading matter");
+  assert.ok(!body.includes("plate. The black"), "a caption is its own line");
+  assert.ok(!body.includes("been. After"), "and the prose after it is another");
+});
+
+test("a caption answers a query that no other line can", async () => {
+  const entries = toLedgerEntries([
+    post("Only prose here.![A lynx in the undergrowth.](/uploads/lynx.jpg)"),
+  ]);
+  const built = await engine();
+
+  assert.equal(built.load(built.build(entries)), true);
+  assert.deepEqual(slugs(built.search("lynx undergrowth ", 10)), ["a-post"]);
+  assert.equal(built.search("uploads ", 10).total, 0);
+});
+
 test("link text is kept and its target is not", async () => {
   const body = await bodyOf("See [the RTTI post](/blog/posts/the-object).");
 
