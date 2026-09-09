@@ -17,7 +17,12 @@ export async function GET() {
   const index = await buildLedgerIndex(posts);
 
   /* Next excludes octet-stream from automatic compression. Compress once at
-     build time. Browser Fetch decodes gzip before the engine reads the bytes. */
+     build time. Browser Fetch decodes gzip before the engine reads the bytes.
+
+     A prerendered response cannot vary on Accept-Encoding, so this encoding is
+     fixed for every client and gzip is the one every client advertises. That
+     also means a client asking for identity receives gzip anyway, which no
+     browser does and every other consumer has to expect. */
   const compressed = gzipSync(index, { level: 9 });
 
   return new Response(compressed, {

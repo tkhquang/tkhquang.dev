@@ -27,16 +27,46 @@ const BLOCK_NODES = new Set([
   "thematicBreak",
 ]);
 
-const INLINE_CONTAINERS = new Set([
-  "delete",
-  "emphasis",
-  "heading",
-  "link",
-  "linkReference",
-  "paragraph",
+/* Raw tags that stand inside a sentence, so the text either side of one belongs
+   to the same line. Everything else parts the line, a custom element and a
+   diagram block included, because the reader sees a break there whether or not
+   Markdown filed the tag inside a paragraph. `br` is absent on purpose: it is a
+   line break. Reading the tag rather than the parent node is what makes the rule
+   independent of the blank lines an author happened to leave around it. */
+const INLINE_TAGS = new Set([
+  "a",
+  "abbr",
+  "b",
+  "bdi",
+  "bdo",
+  "cite",
+  "code",
+  "data",
+  "del",
+  "dfn",
+  "em",
+  "i",
+  "ins",
+  "kbd",
+  "mark",
+  "q",
+  "s",
+  "samp",
+  "small",
+  "span",
   "strong",
-  "tableCell",
+  "sub",
+  "sup",
+  "time",
+  "u",
+  "var",
+  "wbr",
 ]);
+
+/** Reads the tag name from a raw node, opening or closing. */
+function tagName(value: string): string {
+  return /^<\/?\s*([a-z][a-z0-9-]*)/i.exec(value)?.[1].toLowerCase() ?? "";
+}
 
 /* Bare addresses include media embeds. Exclude them from snippets but keep
    descriptive link text. */
@@ -62,15 +92,11 @@ function readingText(markdown: string): string {
     line = "";
   };
 
-  visit(sourceParser.parse(markdown) as Root, (node, _index, parent) => {
+  visit(sourceParser.parse(markdown) as Root, (node) => {
     if (node.type === "html") {
-      /* Inline tags preserve adjacent text. Raw blocks contain diagram
-         syntax or custom elements and do not contribute searchable text. */
-      if (
-        !parent ||
-        !INLINE_CONTAINERS.has(parent.type) ||
-        /^<br(?:\s|\/?>)/i.test(node.value)
-      ) {
+      /* The children are skipped either way: a raw block carries diagram syntax
+         or a custom element, and neither contributes text a reader searches for. */
+      if (!INLINE_TAGS.has(tagName(node.value))) {
         breakLine();
       }
       return "skip";

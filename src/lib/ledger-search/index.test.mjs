@@ -252,6 +252,46 @@ test("a heading and its paragraph do not run into one word", async () => {
   assert.ok(body.includes("The fix\nIt was the font."));
 });
 
+test("a raw element parts the line whatever Markdown files it under", async () => {
+  /* A tag that cannot start an HTML block in that position, which is every
+     custom element, parses as inline HTML inside the paragraph when no blank
+     line surrounds it. A rule that read the parent node therefore joined the
+     sentences and awarded a phrase bonus across a break the reader can see. */
+  for (const element of [
+    '<camera-explorable lesson="collision"></camera-explorable>',
+    "<camera-explorable />",
+    '<pre class="mermaid">flowchart TD</pre>',
+  ]) {
+    const spaced = await bodyOf(
+      `Sentence one ends here.\n\n${element}\n\nSentence two starts here.`
+    );
+    const tight = await bodyOf(
+      `Sentence one ends here.\n${element}\nSentence two starts here.`
+    );
+
+    assert.equal(tight, spaced, element);
+    assert.ok(!tight.includes("here. Sentence"), element);
+    assert.ok(
+      tight.includes("Sentence one ends here.\nSentence two starts here.")
+    );
+  }
+});
+
+test("every tag on the inline list keeps its sentence in one line", async () => {
+  for (const [marked, plain] of [
+    ["Reaching <span>tinted</span> prose.", "Reaching tinted prose."],
+    [
+      'Reaching <a href="/blog">the archive</a> prose.',
+      "Reaching the archive prose.",
+    ],
+    ["Reaching <cite>a source</cite> prose.", "Reaching a source prose."],
+    ["Reaching <sup>1</sup> prose.", "Reaching 1 prose."],
+    ["Reaching <kbd>Escape</kbd> prose.", "Reaching Escape prose."],
+  ]) {
+    assert.equal(await bodyOf(marked), await bodyOf(plain), marked);
+  }
+});
+
 test("hard line breaks keep the words on both sides searchable", async () => {
   for (const content of [
     "Alpha  \nbeta.",
