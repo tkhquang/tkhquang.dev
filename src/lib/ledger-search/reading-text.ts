@@ -1,4 +1,3 @@
-import type { MarkdownPost } from "@/models/markdown.types";
 import { format } from "date-fns";
 import type { Root } from "mdast";
 import remarkGfm from "remark-gfm";
@@ -140,6 +139,21 @@ function readingText(markdown: string): string {
   return lines.join("\n");
 }
 
+/**
+ * The fields an entry is indexed from. Both `MarkdownPost` and the `PostRecord`
+ * the prebuild script reads satisfy it, so the index can be written without the
+ * cover pipeline that only the rendered page needs.
+ */
+export interface LedgerPost {
+  slug: string;
+  title: string;
+  description: string;
+  content: string;
+  tags: string[];
+  category_title?: string;
+  created_at: Date;
+}
+
 export interface LedgerEntry {
   slug: string;
   title: string;
@@ -152,7 +166,7 @@ export interface LedgerEntry {
 }
 
 /** The caller supplies the published roster in display order. */
-export function toLedgerEntries(posts: MarkdownPost[]): LedgerEntry[] {
+export function toLedgerEntries(posts: LedgerPost[]): LedgerEntry[] {
   return posts.map((post) => ({
     /* The middle dot separates metadata when snippets fold lines into spaces.
        Subjects follow the body so that they do not interrupt its prose. */

@@ -1,14 +1,10 @@
 import path from "path";
-import { getLedgerSearchVersion } from "./src/lib/ledger-search/version.mjs";
 
 const __dirname = path.resolve();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
-  env: {
-    NEXT_PUBLIC_LEDGER_SEARCH_VERSION: getLedgerSearchVersion(__dirname),
-  },
   experimental: {
     swcPlugins: [
       // ["@swc-jotai/debug-label", {}],
@@ -41,6 +37,32 @@ const nextConfig = {
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
         source: "/assets/resources/pdf/:path*",
       },
+      /* The search index is written gzipped and addressed by a digest of the
+         bytes inside it, so the encoding is stated rather than negotiated and
+         the URL can be cached for as long as the browser likes. */
+      {
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+          { key: "Content-Encoding", value: "gzip" },
+          { key: "Content-Type", value: "application/octet-stream" },
+        ],
+        source: "/search/:digest.bin",
+      },
+      /* The postings and the reading text are read by byte range, so they carry
+         no encoding at all: a range into a compressed stream names nothing. */
+      ...[".pst", ".pool"].map((suffix) => ({
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+          { key: "Content-Type", value: "application/octet-stream" },
+        ],
+        source: `/search/:digest${suffix}`,
+      })),
     ];
   },
   images: {
@@ -72,8 +94,6 @@ const nextConfig = {
     "/blog{,/**/*}": [
       "./content/**",
       "./src/lib/remark-embed/templates/**",
-      /* The index route reads the module from disk. */
-      "./public/search/*.wasm",
     ],
     "/api/pageviews{,/**/*}": ["./content/posts/**"],
     "/api/pdf{,/**/*}": [

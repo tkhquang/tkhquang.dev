@@ -8,8 +8,9 @@ import {
 } from "@/lib/ledger-search/client";
 import type { LedgerAnswer } from "@/lib/ledger-search/engine";
 import { MARK_CLOSE, MARK_OPEN } from "@/lib/ledger-search/protocol";
+import classNames from "classnames";
 import Link from "next/link";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 
 /**
  * `searching` carries the answer already on show, because the answer to the
@@ -121,9 +122,25 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
       : "No entries match";
   })();
 
+  /* A word the ledger does not hold is answered by the nearest one it does.
+     Naming both is the point: a reader who typed a name deliberately has to be
+     told it was not the name that was searched for. */
+  const repairs =
+    lookup.status === "ready" && lookup.answer.results.length > 0
+      ? lookup.answer.repairs
+      : [];
+
   return (
     <>
-      <search className="ledger-search">
+      {/* The furniture keeps its height for as long as a query exists, so a
+          count arriving, a repair appearing, or either one going away never
+          moves the results underneath them. Reserving it only while searching
+          keeps the archive's own layout as it was. */}
+      <search
+        className={classNames("ledger-search", {
+          "ledger-search--searching": searching,
+        })}
+      >
         <label className="kicker ledger-search__label" htmlFor={fieldId}>
           Search the ledger
         </label>
@@ -202,6 +219,15 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
         </div>
         <p className="kicker ledger-search__count" role="status">
           {count}
+        </p>
+        <p className="ledger-search__repair">
+          {repairs.map((repair, index) => (
+            <React.Fragment key={repair.typed}>
+              {index > 0 && " "}
+              Nothing holds <q>{repair.typed}</q>. These answer to{" "}
+              <q>{repair.chosen}</q>.
+            </React.Fragment>
+          ))}
         </p>
       </search>
 

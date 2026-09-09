@@ -33,7 +33,7 @@ const BlogFooter = ({
           />
         </Suspense>
         <div className="flex shrink-0 items-center gap-3">
-          <Link href="/blog/colophon" className="kicker group/colophon py-2">
+          <Link href="/blog/colophon" className="kicker group/colophon">
             <GrowingUnderline className="group-hover/colophon:bg-size-[100%_50%] group-focus-visible/colophon:bg-size-[100%_50%]">
               Colophon
             </GrowingUnderline>

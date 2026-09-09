@@ -60,3 +60,9 @@ src/lambda/node_modules/
 lib/*/node_modules/
 
 00_idea
+
+# Search artifacts, written by `pnpm build:search-index` before every build
+public/search/*.bin
+public/search/*.pst
+public/search/*.pool
+src/generated/ledger-search.mjs

@@ -51,12 +51,32 @@ const ENTRIES = [
 
 async function loaded() {
   const built = await engine();
-  const index = built.build(ENTRIES);
+  const { body, index, postings } = built.build(ENTRIES);
   assert.equal(built.load(index), true);
-  return { engine: built, index };
+  built.supply("postings", 0, postings);
+  built.supply("body", 0, body);
+  return { body, engine: built, index, postings };
 }
 
+/* A build writes the postings and the reading text apart from the index, and
+   the engine reaches both by byte range. Every test below holds the whole of
+   each, so a lookup always answers; the tests that exercise the range path say
+   so. */
+const answer = (built, query, limit) => {
+  const lookup = built.search(query, limit);
+  assert.equal(lookup.status, "answer", `${query} asked for body ranges`);
+  return lookup.answer;
+};
+
 const slugs = (answer) => answer.results.map((result) => result.slug);
+
+/* Loads a one-off corpus with both range-read artifacts already supplied. */
+const loadWith = (built, entries) => {
+  const { body, index, postings } = built.build(entries);
+  assert.equal(built.load(index), true);
+  built.supply("postings", 0, postings);
+  built.supply("body", 0, body);
+};
 
 test("the committed module speaks the format this build expects", async () => {
   const built = await engine();
@@ -64,41 +84,81 @@ test("the committed module speaks the format this build expects", async () => {
 });
 
 test("an index written here is read back here", async () => {
-  const { engine: built, index } = await loaded();
+  const { body, engine: built, index, postings } = await loaded();
 
   assert.ok(index.byteLength > 0);
   assert.equal(new TextDecoder().decode(index.subarray(0, 4)), "LJIX");
   assert.equal(built.load(index), true);
+
+  /* The prose is another artifact, and the index does not repeat it. */
+  const read = (bytes) => new TextDecoder().decode(bytes);
+  assert.ok(read(body).includes("RTTI descriptor"));
+  assert.ok(!read(index).includes("RTTI descriptor"));
+
+  /* The postings are the third, and they are the larger half of what a query
+     used to have to download before it could rank anything. */
+  assert.ok(postings.byteLength > 0);
 });
 
-test("a replacement index discards cached offsets for reused document IDs", async () => {
+test("a replacement index discards the ranges held for the previous one", async () => {
   const { engine: built } = await loaded();
 
-  assert.deepEqual(slugs(built.search("skia ", 10)), ["pdf"]);
+  assert.deepEqual(slugs(answer(built, "skia ", 10)), ["pdf"]);
 
   const writer = await engine();
-  const body = "An überlong preface. The vtable reaches a different location.";
-  const replacement = writer.build([entry({ body, slug: "replacement" })]);
+  const text = "An überlong preface. The vtable reaches a different location.";
+  const replacement = writer.build([
+    entry({ body: text, slug: "replacement" }),
+  ]);
 
-  assert.equal(built.load(replacement), true);
+  assert.equal(built.load(replacement.index), true);
 
-  const answer = built.search("vtable ", 10);
+  /* The ranges in hand answer to offsets in a file this index does not
+     describe, so they go and the first query fetches again. */
+  assert.equal(built.held("postings"), 0);
+  assert.equal(built.held("body"), 0);
 
-  assert.deepEqual(slugs(answer), ["replacement"]);
+  /* Nothing ranks without the posting lists, so they are asked for first. */
+  const wantsPostings = built.search("vtable ", 10);
+  assert.equal(wantsPostings.status, "request");
+  assert.equal(wantsPostings.section, "postings");
+  for (const range of wantsPostings.ranges) {
+    built.supply(
+      "postings",
+      range.start,
+      replacement.postings.subarray(range.start, range.start + range.length)
+    );
+  }
+
+  const wantsBody = built.search("vtable ", 10);
+  assert.equal(wantsBody.status, "request");
+  assert.equal(wantsBody.section, "body");
+  assert.equal(wantsBody.ranges.length, 1);
+  for (const range of wantsBody.ranges) {
+    built.supply(
+      "body",
+      range.start,
+      replacement.body.subarray(range.start, range.start + range.length)
+    );
+  }
+
+  const served = answer(built, "vtable ", 10);
+
+  assert.deepEqual(slugs(served), ["replacement"]);
   assert.ok(
-    answer.results[0].snippet.includes(`${MARK_OPEN}vtable${MARK_CLOSE}`)
+    served.results[0].snippet.includes(`${MARK_OPEN}vtable${MARK_CLOSE}`)
   );
   assert.equal(
-    answer.results[0].snippet
+    served.results[0].snippet
       .replaceAll(MARK_OPEN, "")
       .replaceAll(MARK_CLOSE, ""),
-    body
+    text
   );
 });
 
 test("a file the module cannot read is refused rather than trusted", async () => {
   const built = await engine();
-  const index = built.build(ENTRIES);
+  const { index } = built.build(ENTRIES);
 
   const wrongMagic = Uint8Array.from(index);
   wrongMagic[0] = 0x58;
@@ -111,42 +171,42 @@ test("a file the module cannot read is refused rather than trusted", async () =>
 test("a word only the prose holds is reachable", async () => {
   const { engine: built } = await loaded();
 
-  assert.deepEqual(slugs(built.search("vtable ", 10)), ["rtti"]);
-  assert.deepEqual(slugs(built.search("skia ", 10)), ["pdf"]);
+  assert.deepEqual(slugs(answer(built, "vtable ", 10)), ["rtti"]);
+  assert.deepEqual(slugs(answer(built, "skia ", 10)), ["pdf"]);
 });
 
 test("every word of a query has to land", async () => {
   const { engine: built } = await loaded();
 
-  assert.deepEqual(slugs(built.search("font chromium ", 10)), ["pdf"]);
-  assert.deepEqual(slugs(built.search("vtable chromium ", 10)), []);
+  assert.deepEqual(slugs(answer(built, "font chromium ", 10)), ["pdf"]);
+  assert.deepEqual(slugs(answer(built, "vtable chromium ", 10)), []);
 });
 
 test("multiline queries preserve the final word's prefix behavior", async () => {
   const { engine: built } = await loaded();
-  const expected = built.search("font chrom", 10);
+  const expected = answer(built, "font chrom", 10);
 
   assert.deepEqual(slugs(expected), ["pdf"]);
-  assert.deepEqual(built.search("font\nchrom", 10), expected);
-  assert.deepEqual(built.search("\r\nfont\r\nchrom", 10), expected);
-  assert.deepEqual(slugs(built.search("font\nchrom\n", 10)), []);
+  assert.deepEqual(answer(built, "font\nchrom", 10), expected);
+  assert.deepEqual(answer(built, "\r\nfont\r\nchrom", 10), expected);
+  assert.deepEqual(slugs(answer(built, "font\nchrom\n", 10)), []);
 });
 
 test("an accented title answers to the letters a reader can type", async () => {
   const { engine: built } = await loaded();
-  assert.deepEqual(slugs(built.search("ljoss ", 10)), ["foundation"]);
+  assert.deepEqual(slugs(answer(built, "ljoss ", 10)), ["foundation"]);
 });
 
 test("a punctuated name survives the round trip", async () => {
   const { engine: built } = await loaded();
 
-  assert.deepEqual(slugs(built.search("c++ ", 10)), ["rtti"]);
-  assert.deepEqual(slugs(built.search("sw.js ", 10)), ["rtti"]);
+  assert.deepEqual(slugs(answer(built, "c++ ", 10)), ["rtti"]);
+  assert.deepEqual(slugs(answer(built, "sw.js ", 10)), ["rtti"]);
 });
 
 test("a result carries what a row needs and nothing else", async () => {
   const { engine: built } = await loaded();
-  const [result] = built.search("skia ", 10).results;
+  const [result] = answer(built, "skia ", 10).results;
 
   assert.deepEqual(Object.keys(result).sort(), [
     "date",
@@ -162,7 +222,7 @@ test("a result carries what a row needs and nothing else", async () => {
 
 test("a snippet is prose from the entry with the match wrapped", async () => {
   const { engine: built } = await loaded();
-  const [result] = built.search("vtable ", 10).results;
+  const [result] = answer(built, "vtable ", 10).results;
 
   assert.ok(result.snippet.includes(`${MARK_OPEN}vtable${MARK_CLOSE}`));
   assert.ok(result.snippet.includes("RTTI descriptor"));
@@ -177,7 +237,7 @@ test("a snippet is prose from the entry with the match wrapped", async () => {
 test("a capped answer still reports how many entries matched", async () => {
   const { engine: built } = await loaded();
 
-  const capped = built.search("the ", 1);
+  const capped = answer(built, "the ", 1);
   assert.equal(capped.total, 3);
   assert.equal(capped.results.length, 1);
 });
@@ -185,9 +245,11 @@ test("a capped answer still reports how many entries matched", async () => {
 test("a query the corpus cannot answer returns nothing at all", async () => {
   const { engine: built } = await loaded();
 
-  assert.deepEqual(built.search("webgpu ", 10), { results: [], total: 0 });
-  assert.deepEqual(built.search("", 10), { results: [], total: 0 });
-  assert.deepEqual(built.search("   ", 10), { results: [], total: 0 });
+  const nothing = { repairs: [], results: [], total: 0 };
+
+  assert.deepEqual(answer(built, "webgpu ", 10), nothing);
+  assert.deepEqual(answer(built, "", 10), nothing);
+  assert.deepEqual(answer(built, "   ", 10), nothing);
 });
 
 test("a query longer than one page of memory is still answered", async () => {
@@ -195,8 +257,8 @@ test("a query longer than one page of memory is still answered", async () => {
 
   /* The query allocation exceeds one memory page and detaches existing views. */
   const long = `${"padding ".repeat(20_000)}vtable `;
-  assert.deepEqual(slugs(built.search(long, 10)), []);
-  assert.deepEqual(slugs(built.search("vtable ", 10)), ["rtti"]);
+  assert.deepEqual(slugs(answer(built, long, 10)), []);
+  assert.deepEqual(slugs(answer(built, "vtable ", 10)), ["rtti"]);
 });
 
 const post = (content) => ({
@@ -303,8 +365,8 @@ test("hard line breaks keep the words on both sides searchable", async () => {
     const entries = toLedgerEntries([post(content)]);
     const built = await engine();
 
-    assert.equal(built.load(built.build(entries)), true);
-    assert.deepEqual(slugs(built.search("alpha beta ", 10)), ["a-post"]);
+    loadWith(built, entries);
+    assert.deepEqual(slugs(answer(built, "alpha beta ", 10)), ["a-post"]);
     assert.ok(entries[0].body.includes("Alpha\nbeta."));
   }
 });
@@ -325,8 +387,8 @@ test("inline HTML preserves phrase and identifier continuity", async () => {
   const built = await engine();
 
   assert.equal(entries[0].body, await bodyOf(plain));
-  assert.equal(built.load(built.build(entries)), true);
-  assert.deepEqual(slugs(built.search("important point c++ ", 10)), ["a-post"]);
+  loadWith(built, entries);
+  assert.deepEqual(slugs(answer(built, "important point c++ ", 10)), ["a-post"]);
   assert.ok(!entries[0].body.includes("class"));
 });
 
@@ -363,9 +425,9 @@ test("a caption answers a query that no other line can", async () => {
   ]);
   const built = await engine();
 
-  assert.equal(built.load(built.build(entries)), true);
-  assert.deepEqual(slugs(built.search("lynx undergrowth ", 10)), ["a-post"]);
-  assert.equal(built.search("uploads ", 10).total, 0);
+  loadWith(built, entries);
+  assert.deepEqual(slugs(answer(built, "lynx undergrowth ", 10)), ["a-post"]);
+  assert.equal(answer(built, "uploads ", 10).total, 0);
 });
 
 test("link text is kept and its target is not", async () => {
@@ -406,4 +468,138 @@ test("an ordinary link keeps its text, which the page does print", async () => {
 
   assert.ok(body.includes("the RTTI post"));
   assert.ok(!body.includes("example.test"));
+});
+
+test("a row prints without its quoted line when the text cannot be reached", async () => {
+  const built = await engine();
+  const { index, postings } = built.build(ENTRIES);
+  assert.equal(built.load(index), true);
+  built.supply("postings", 0, postings);
+
+  /* Told the page has stopped fetching, the engine prints from what it holds,
+     which here is no reading text at all: the row keeps its title and its date
+     and loses only the quote. */
+  const lookup = built.search("vtable ", 10, false);
+
+  assert.equal(lookup.status, "answer");
+  assert.deepEqual(slugs(lookup.answer), ["rtti"]);
+  assert.equal(lookup.answer.results[0].snippet, "");
+  assert.equal(lookup.answer.results[0].title, ENTRIES[2].title);
+});
+
+test("the postings are asked for even when the page has stopped fetching", async () => {
+  const built = await engine();
+  const { body, index } = built.build(ENTRIES);
+  assert.equal(built.load(index), true);
+  built.supply("body", 0, body);
+
+  /* A ranking without them is not a thinner answer but a wrong one, so the
+     request goes out again rather than an empty result coming back. */
+  const lookup = built.search("vtable ", 10, false);
+
+  assert.equal(lookup.status, "request");
+  assert.equal(lookup.section, "postings");
+});
+
+test("a query reaches each artifact in turn and matches the resident answer", async () => {
+  const resident = await loaded();
+  const built = await engine();
+  const { body, index, postings } = built.build(ENTRIES);
+  assert.equal(built.load(index), true);
+
+  const artifacts = { body, postings };
+
+  for (const query of ["vtable ", "skia ", "ljoss ", "the "]) {
+    for (let pass = 0; pass < 3; pass += 1) {
+      const lookup = built.search(query, 10);
+      if (lookup.status === "answer") break;
+
+      for (const range of lookup.ranges) {
+        const window = artifacts[lookup.section].subarray(
+          range.start,
+          range.start + range.length
+        );
+        if (lookup.section === "body") {
+          assert.ok(window.length < 2048, `${query} asked for ${window.length}`);
+        }
+        built.supply(lookup.section, range.start, window);
+      }
+    }
+
+    assert.deepEqual(
+      answer(built, query, 10),
+      answer(resident.engine, query, 10),
+      query
+    );
+  }
+
+  /* Ranges already in hand are not asked for twice, which is what makes a word
+     grown one letter at a time cost one round trip rather than six. */
+  assert.equal(built.search("vtable ", 10).status, "answer");
+  assert.ok(built.held("postings") < postings.byteLength || postings.byteLength === 0);
+});
+
+test("a prefix is one range that answers every extension of itself", async () => {
+  const built = await engine();
+  const { index, postings } = built.build(ENTRIES);
+  assert.equal(built.load(index), true);
+
+  const wanted = built.search("vt", 10);
+  assert.equal(wanted.status, "request");
+  assert.equal(wanted.section, "postings");
+  assert.equal(wanted.ranges.length, 1);
+
+  for (const range of wanted.ranges) {
+    built.supply(
+      "postings",
+      range.start,
+      postings.subarray(range.start, range.start + range.length)
+    );
+  }
+
+  /* Every longer prefix lies inside the range already fetched. */
+  for (const query of ["vt", "vta", "vtab", "vtable"]) {
+    const lookup = built.search(query, 10);
+    assert.notEqual(lookup.section, "postings", `${query} asked again`);
+  }
+});
+
+test("a slip in a finished word is repaired and reported", async () => {
+  const { engine: built } = await loaded();
+  const found = answer(built, "chromiun ", 10);
+
+  assert.deepEqual(slugs(found), ["pdf"]);
+  assert.deepEqual(found.repairs, [{ typed: "chromiun", chosen: "chromium" }]);
+
+  /* Typed correctly, nothing is repaired and nothing is reported. */
+  assert.deepEqual(answer(built, "chromium ", 10).repairs, []);
+});
+
+test("a growing word is repaired only when its prefix reaches nothing", async () => {
+  const { engine: built } = await loaded();
+
+  /* Still growing and still a prefix of something: it reaches every ending of
+     itself, so the expansion answers and no edits are spent. */
+  const growing = answer(built, "chromiu", 10);
+  assert.deepEqual(slugs(growing), ["pdf"]);
+  assert.deepEqual(growing.repairs, []);
+
+  /* Still growing and a prefix of nothing: there is no expansion to fight and
+     nothing else to show, so the slip is repaired as the reader types. */
+  const slipped = answer(built, "chromiun", 10);
+  assert.deepEqual(slugs(slipped), ["pdf"]);
+  assert.deepEqual(slipped.repairs, [
+    { typed: "chromiun", chosen: "chromium" },
+  ]);
+});
+
+test("two characters the wrong way round are one edit", async () => {
+  const { engine: built } = await loaded();
+
+  /* At six characters the budget is one, so a swap is only reachable because
+     it costs one edit rather than two. */
+  const swapped = answer(built, "vtabel ", 10);
+
+  assert.deepEqual(slugs(swapped), ["rtti"]);
+  assert.deepEqual(swapped.repairs, [{ typed: "vtabel", chosen: "vtable" }]);
 });

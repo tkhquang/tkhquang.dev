@@ -1,10 +1,17 @@
 /** Compatibility includes the binary layout, tokenizer, and position semantics. */
-export const FORMAT_VERSION = 1;
+export const FORMAT_VERSION = 3;
 
 export interface LedgerAnswer {
   /** Count before the result limit. */
   total: number;
   results: LedgerResult[];
+  /** Words the dictionary did not hold, with what answered for them. */
+  repairs: LedgerRepair[];
+}
+
+export interface LedgerRepair {
+  typed: string;
+  chosen: string;
 }
 
 export interface LedgerResult {
@@ -16,6 +23,31 @@ export interface LedgerResult {
   /** The matched sentence, with each hit wrapped in the marks from `protocol` */
   snippet: string;
 }
+
+/** Which range-read artifact a request names. */
+export type LedgerSection = "postings" | "body";
+
+/** A byte range of one artifact, as the engine asks for it. */
+export interface LedgerRange {
+  start: number;
+  length: number;
+}
+
+/**
+ * One pass of a query.
+ *
+ * Two of the three artifacts are never fetched whole, so a pass that cannot
+ * reach what it needs reports the ranges instead. The caller fetches them,
+ * supplies them, and runs the same query again: ranking is deterministic, so
+ * the second pass asks for what it now holds and moves on.
+ *
+ * The order is fixed by what depends on what. The posting lists come first,
+ * because nothing can be ranked without them. The windows of reading text come
+ * second, because which windows to quote is not known until the ranking is.
+ */
+export type LedgerLookup =
+  | { status: "answer"; answer: LedgerAnswer }
+  | { status: "request"; section: LedgerSection; ranges: LedgerRange[] };
 
 interface Exports {
   memory: WebAssembly.Memory;
@@ -37,11 +69,23 @@ interface Exports {
   ) => void;
   build_finish: () => number;
   index_load: (pointer: number, len: number) => number;
-  search_query: (pointer: number, len: number, limit: number) => number;
+  section_supply: (
+    section: number,
+    start: number,
+    pointer: number,
+    len: number
+  ) => void;
+  section_held: (section: number) => number;
+  search_query: (
+    pointer: number,
+    len: number,
+    limit: number,
+    mayQuoteBlind: number
+  ) => number;
 }
 
 export interface LedgerEngine {
-  /** Writes an index from entries given newest first. */
+  /** Writes all three artifacts from entries given newest first. */
   build: (
     entries: {
       slug: string;
@@ -50,11 +94,28 @@ export interface LedgerEngine {
       dateLabel: string;
       body: string;
     }[]
-  ) => Uint8Array;
+  ) => { index: Uint8Array; postings: Uint8Array; body: Uint8Array };
   /** Copies the index into WASM. Returns false if the header is incompatible. */
   load: (index: Uint8Array) => boolean;
-  search: (query: string, limit: number) => LedgerAnswer;
+  /** Hands over one fetched range of an artifact, at its offset there. */
+  supply: (section: LedgerSection, start: number, bytes: Uint8Array) => void;
+  /** Bytes of one artifact the engine is holding. */
+  held: (section: LedgerSection) => number;
+  /**
+   * Runs one query. `mayQuoteBlind` false stops the reading text being asked
+   * for again, leaving a row without its quoted line rather than without a row.
+   * It does not apply to the posting lists, which are asked for until they
+   * arrive because an answer without them would be wrong rather than thinner.
+   */
+  search: (
+    query: string,
+    limit: number,
+    mayQuoteBlind?: boolean
+  ) => LedgerLookup;
 }
+
+/* The order the ABI codes them in. */
+const SECTIONS: LedgerSection[] = ["postings", "body"];
 
 export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
   const engine = instance.exports as unknown as Exports;
@@ -96,11 +157,22 @@ export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
       }
     }
 
+    /* Each artifact is written length first. Copied out, because the next call
+       into the module can move all of them. */
     const at = engine.build_finish();
-    const length = numbers().getUint32(at, true);
+    const view = numbers();
+    const memory = bytes();
+    const written: Uint8Array[] = [];
+    let cursor = at;
 
-    /* Copied out, because the next call into the module can move it. */
-    return bytes().slice(at + 4, at + 4 + length);
+    for (let artifact = 0; artifact < 3; artifact += 1) {
+      const length = view.getUint32(cursor, true);
+      written.push(memory.slice(cursor + 4, cursor + 4 + length));
+      cursor += 4 + length;
+    }
+
+    const [index, postings, body] = written;
+    return { body, index, postings };
   };
 
   const load: LedgerEngine["load"] = (index) => {
@@ -111,19 +183,60 @@ export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
     return ok;
   };
 
-  const search: LedgerEngine["search"] = (query, limit) => {
+  const supply: LedgerEngine["supply"] = (section, start, supplied) => {
+    if (supplied.length === 0) return;
+
+    const pointer = engine.alloc(supplied.length);
+    bytes().set(supplied, pointer);
+    engine.section_supply(
+      SECTIONS.indexOf(section),
+      start,
+      pointer,
+      supplied.length
+    );
+    engine.dealloc(pointer, supplied.length);
+  };
+
+  const search: LedgerEngine["search"] = (
+    query,
+    limit,
+    mayQuoteBlind = true
+  ) => {
     const [pointer, length] = write(query);
-    const at = engine.search_query(pointer, length, limit);
+    const at = engine.search_query(
+      pointer,
+      length,
+      limit,
+      mayQuoteBlind ? 1 : 0
+    );
     engine.dealloc(pointer, length);
 
-    /* No WASM calls occur during result decoding, so these views stay valid. */
+    /* No WASM calls occur during decoding, so these views stay valid. */
     const view = numbers();
     const memory = bytes();
-    const total = view.getUint32(at, true);
-    const count = view.getUint32(at + 4, true);
+    let cursor = at + 4;
 
-    const results: LedgerResult[] = [];
-    let cursor = at + 8;
+    if (view.getUint32(at, true) === 1) {
+      const section = SECTIONS[view.getUint32(cursor, true)];
+      const count = view.getUint32(cursor + 4, true);
+      const ranges: LedgerRange[] = [];
+      cursor += 8;
+
+      for (let index = 0; index < count; index += 1) {
+        ranges.push({
+          start: view.getUint32(cursor, true),
+          length: view.getUint32(cursor + 4, true),
+        });
+        cursor += 8;
+      }
+
+      return { ranges, section, status: "request" };
+    }
+
+    /* The answer opens with the total before the limit, then the shown count. */
+    const total = view.getUint32(cursor, true);
+    const shown = view.getUint32(cursor + 4, true);
+    cursor += 8;
 
     const field = () => {
       const size = view.getUint32(cursor, true);
@@ -133,8 +246,10 @@ export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
       return text;
     };
 
+    const results: LedgerResult[] = [];
+
     /* Property order matches the packed result fields from search_query. */
-    for (let index = 0; index < count; index += 1) {
+    for (let index = 0; index < shown; index += 1) {
       results.push({
         slug: field(),
         title: field(),
@@ -144,8 +259,22 @@ export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
       });
     }
 
-    return { results, total };
+    const repairs: LedgerRepair[] = [];
+    const repaired = view.getUint32(cursor, true);
+    cursor += 4;
+
+    for (let index = 0; index < repaired; index += 1) {
+      repairs.push({ typed: field(), chosen: field() });
+    }
+
+    return { answer: { repairs, results, total }, status: "answer" };
   };
 
-  return { build, load, search };
+  return {
+    build,
+    held: (section) => engine.section_held(SECTIONS.indexOf(section)),
+    load,
+    search,
+    supply,
+  };
 }

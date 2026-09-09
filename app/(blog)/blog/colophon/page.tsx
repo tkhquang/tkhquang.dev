@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Metadata, ResolvingMetadata } from "next/types";
 
 const DESCRIPTION =
-  "The typefaces, the article pipeline, and the services behind this site.";
+  "The typefaces, the article pipeline, the lookup, and the services behind this site.";
 const SOURCE_URL = `${Site.REPOSITORY.url}/blob/${Site.REPOSITORY.branch}`;
 
 /**
@@ -261,6 +261,61 @@ export default function ColophonPage() {
                   buttons, and marginal notes run in the browser.
                 </li>
               </ul>
+            </div>
+          </section>
+
+          <section aria-labelledby="the-lookup">
+            <div className="typography">
+              <h2 id="the-lookup">The Lookup</h2>
+              <p>
+                The archive carries a field that reads every published entry. There is no search server behind it: the matching happens
+                in the browser, and the words typed are never sent anywhere. The{" "}
+                <ExternalLink href={sourceUrl("/search-engine/src/query.rs")}>
+                  engine
+                </ExternalLink>{" "}
+                is Rust compiled to WebAssembly, and the same module writes the
+                files at build time and reads them back in the tab, so one
+                tokenizer decides what a word is on both sides.
+              </p>
+              <p>
+                A build writes three files, and only one of them is fetched
+                whole. It holds the dictionary, the entry rows and the offsets,
+                and it starts downloading when the field takes focus rather than
+                when the first key lands, so the wait sits in front of the first
+                keystroke instead of after it. The other two are read a range at
+                a time: the posting lists of the words actually typed, and one
+                window of reading text for each result printed. Growing a word
+                one letter at a time reads nothing it already holds.
+              </p>
+              <ul>
+                <li>
+                  <strong>Every word has to land.</strong> The last one is still
+                  being typed, so it reaches every ending of itself; the rest
+                  are taken as written.
+                </li>
+                <li>
+                  <strong>Order comes from BM25,</strong> with a bonus for words
+                  that stand next to each other in the entry. A line break parts
+                  two words the reader never saw together, so a phrase is not
+                  found across the seam between a caption and the paragraph
+                  beside it.
+                </li>
+                <li>
+                  <strong>A word the ledger does not hold</strong> is answered
+                  by the nearest one it does, counting two characters the wrong
+                  way round as a single slip. Both words are named under the
+                  count, because a name typed deliberately should not be
+                  quietly overruled.
+                </li>
+              </ul>
+              <p>
+                Two failures are worth stating. Without JavaScript the field is
+                hidden and the archive list stands on its own. And the addresses
+                of all three files carry a digest of the index, so a page left
+                open across a deploy finds its next range missing and says the
+                ledger has been reprinted, rather than quoting text whose
+                offsets belong to another build.
+              </p>
             </div>
           </section>
 
