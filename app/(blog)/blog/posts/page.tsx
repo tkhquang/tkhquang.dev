@@ -38,6 +38,7 @@ export default async function ArchivePage() {
       list={years.map((year) => ({ slug: year, title: year }))}
       groupedPostsBySlug={groupedPostsByYear}
       defaultOpen={years.slice(0, 1)}
+      searchable
     />
   );
 }

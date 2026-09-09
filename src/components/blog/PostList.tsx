@@ -1,5 +1,6 @@
 import BlogInfo from "@/components/blog/BlogInfo";
 import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
+import LedgerSearch from "@/components/blog/LedgerSearch";
 import {
   Accordion,
   AccordionContent,
@@ -25,6 +26,7 @@ const PostList = <
   stat,
   getItemHue,
   defaultOpen,
+  searchable,
 }: {
   title: string;
   /* Catalogue headpiece copy: the library room and its stat line */
@@ -37,8 +39,78 @@ const PostList = <
      years stay in plain ink */
   getItemHue?: (slug: string) => string | undefined;
   defaultOpen?: string[];
+  searchable?: boolean;
 }) => {
   const intl = getIntl(DEFAULT_LOCALE);
+
+  /* Pass server-rendered groups through the search boundary as children. */
+  const groups = (
+    <Accordion type="multiple" className="my-8" defaultValue={defaultOpen}>
+      {list.map((item) => {
+        const fieldSlug = item[listSlugField] as string;
+        const postCount = groupedPostsBySlug[fieldSlug]?.length ?? 0;
+        const hue = getItemHue?.(fieldSlug);
+
+        return (
+          <AccordionItem
+            value={fieldSlug}
+            key={fieldSlug}
+            style={
+              hue
+                ? ({
+                    borderBottomColor: `color-mix(in srgb, ${hue} 35%, transparent)`,
+                    "--shelf": hue,
+                  } as React.CSSProperties)
+                : undefined
+            }
+          >
+            <AccordionTrigger>
+              <span className="flex flex-1 items-baseline justify-between gap-4">
+                <span
+                  className={hue ? "font-semibold" : undefined}
+                  style={hue ? { color: hue } : undefined}
+                >
+                  {item.title}
+                </span>
+                <span className="kicker tabular-nums">
+                  {intl.formatMessage(
+                    { id: "postCount" },
+                    { count: postCount }
+                  )}
+                </span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <ul className="post__list">
+                {(groupedPostsBySlug[fieldSlug] ?? []).map((post) => {
+                  return (
+                    <li
+                      className="post__item hover:bg-theme-secondary hover:text-theme-on-secondary mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500"
+                      key={post.slug}
+                    >
+                      <Link
+                        className="link space-x-2 truncate"
+                        href={`/blog/posts/${post.slug}`}
+                        title={post.description}
+                      >
+                        <time
+                          className="font-mono"
+                          dateTime={post.created_at.toISOString()}
+                        >
+                          {format(post.created_at, "dd/MM/yyyy")}
+                        </time>
+                        <span>{post.title}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </AccordionContent>
+          </AccordionItem>
+        );
+      })}
+    </Accordion>
+  );
 
   return (
     <div className="relative mx-auto mb-12 grid max-w-xl grid-cols-[1fr] px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:grid-cols-[1fr_auto] lg:space-x-16 lg:px-8">
@@ -46,71 +118,7 @@ const PostList = <
           the header and the list and the card fall to the row below */}
       <CatalogueHeadpiece room={room} title={title} stat={stat} />
       <section className="w-full max-w-(--breakpoint-sm) lg:w-[640px]">
-        <Accordion type="multiple" className="my-8" defaultValue={defaultOpen}>
-          {list.map((item) => {
-            const fieldSlug = item[listSlugField] as string;
-            const postCount = groupedPostsBySlug[fieldSlug]?.length ?? 0;
-            const hue = getItemHue?.(fieldSlug);
-
-            return (
-              <AccordionItem
-                value={fieldSlug}
-                key={fieldSlug}
-                style={
-                  hue
-                    ? ({
-                        borderBottomColor: `color-mix(in srgb, ${hue} 35%, transparent)`,
-                        "--shelf": hue,
-                      } as React.CSSProperties)
-                    : undefined
-                }
-              >
-                <AccordionTrigger>
-                  <span className="flex flex-1 items-baseline justify-between gap-4">
-                    <span
-                      className={hue ? "font-semibold" : undefined}
-                      style={hue ? { color: hue } : undefined}
-                    >
-                      {item.title}
-                    </span>
-                    <span className="kicker tabular-nums">
-                      {intl.formatMessage(
-                        { id: "postCount" },
-                        { count: postCount }
-                      )}
-                    </span>
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="post__list">
-                    {(groupedPostsBySlug[fieldSlug] ?? []).map((post) => {
-                      return (
-                        <li
-                          className="post__item hover:bg-theme-secondary hover:text-theme-on-secondary mb-2 grid gap-4 truncate rounded-sm p-2 transition duration-500"
-                          key={post.slug}
-                        >
-                          <Link
-                            className="link space-x-2 truncate"
-                            href={`/blog/posts/${post.slug}`}
-                            title={post.description}
-                          >
-                            <time
-                              className="font-mono"
-                              dateTime={post.created_at.toISOString()}
-                            >
-                              {format(post.created_at, "dd/MM/yyyy")}
-                            </time>
-                            <span>{post.title}</span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
-        </Accordion>
+        {searchable ? <LedgerSearch>{groups}</LedgerSearch> : groups}
       </section>
       <BlogInfo className="mt-8 w-full lg:mt-4 lg:max-w-[240px] [&_.author]:mx-4! [&_.author]:flex-col! [&_img]:size-[120px]!" />
     </div>

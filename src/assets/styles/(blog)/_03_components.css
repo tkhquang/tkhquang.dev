@@ -384,6 +384,135 @@
     font-variant-numeric: tabular-nums;
   }
 
+  /* Search controls inherit the site focus frame from _zz_overrides.css. */
+  .ledger-search {
+    display: block;
+    margin-top: 2rem;
+  }
+
+  /* The root head script sets .js before paint. Hide an unusable field without it. */
+  html:not(.js) .ledger-search {
+    display: none;
+  }
+
+  .ledger-search__label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .ledger-search__line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .ledger-search__field {
+    flex: 1;
+    /* Let long queries shrink before they displace the clear control. */
+    min-width: 0;
+    padding: 0.25rem 0;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    color: inherit;
+    /* A 16px floor prevents focus zoom on iOS. */
+    font-size: max(1rem, 16px);
+  }
+
+  /* The custom clear control inherits the active theme. */
+  .ledger-search__field::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .ledger-search__clear {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 0.25rem;
+    color: inherit;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: opacity 200ms;
+  }
+
+  .ledger-search__clear:hover,
+  .ledger-search__clear:focus-visible {
+    opacity: 1;
+  }
+
+  .ledger-search__clear svg {
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .ledger-search__count {
+    display: block;
+    margin-top: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ledger-search__results,
+  .ledger-search__empty {
+    margin: 2rem 0;
+  }
+
+  .ledger-search__empty {
+    opacity: 0.75;
+  }
+
+  .ledger-search__result {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--hairline) 45%, transparent);
+  }
+
+  .ledger-search__result:last-child {
+    border-bottom: 0;
+  }
+
+  .ledger-search__hit {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .ledger-search__hit > time {
+    flex: none;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.75;
+  }
+
+  .ledger-search__hit:hover .ledger-search__title,
+  .ledger-search__hit:focus-visible .ledger-search__title {
+    text-decoration: underline;
+  }
+
+  .ledger-search__snippet {
+    margin: 0.35rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--on-surface);
+    opacity: 0.85;
+  }
+
+  .ledger-search__snippet mark {
+    background: color-mix(in srgb, var(--primary) 18%, transparent);
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 0.1em;
+    font-weight: 600;
+  }
+
   /*
    * The quiet link: a full-width underline band whose ALPHA fades up in
    * place. Nothing wipes and nothing moves; without @property support the

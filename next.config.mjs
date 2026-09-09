@@ -1,10 +1,14 @@
 import path from "path";
+import { getLedgerSearchVersion } from "./src/lib/ledger-search/version.mjs";
 
 const __dirname = path.resolve();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
+  env: {
+    NEXT_PUBLIC_LEDGER_SEARCH_VERSION: getLedgerSearchVersion(__dirname),
+  },
   experimental: {
     swcPlugins: [
       // ["@swc-jotai/debug-label", {}],
@@ -68,6 +72,8 @@ const nextConfig = {
     "/blog{,/**/*}": [
       "./content/**",
       "./src/lib/remark-embed/templates/**",
+      /* The index route reads the module from disk. */
+      "./public/search/*.wasm",
     ],
     "/api/pageviews{,/**/*}": ["./content/posts/**"],
     "/api/pdf{,/**/*}": [
