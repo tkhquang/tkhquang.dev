@@ -55,6 +55,10 @@ ${selectedPosts}
 - [Archive](${BASE_URL}/blog/posts): Every published entry, grouped by year.
 - [Colophon](${BASE_URL}/blog/colophon): How this site is put together.
 
+## Markdown counterparts
+
+Every published entry is also a Markdown file: put \`.md\` on the end of its address, so \`${BASE_URL}/blog/posts/<slug>\` becomes \`${BASE_URL}/blog/posts/<slug>.md\`. It comes out of the same source as the page, so the words are the same words. Diagrams arrive as Mermaid source, and a figure that needs a browser is named where it stands, with the page's address beside it.
+
 ## Citation guidance
 
 Credit ${Site.AUTHOR.alias} (${Site.AUTHOR.name}, online as ${Site.AUTHOR.handle}), use the article's exact title and canonical URL from the links above, and include its published date. Include the updated date when the article shows one. A section link helps when citing a particular test or explanation.

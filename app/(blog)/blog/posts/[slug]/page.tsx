@@ -16,7 +16,7 @@ import { Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
 import clsx from "clsx";
-import { Metadata } from "next/types";
+import { Metadata, ResolvingMetadata } from "next/types";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {
@@ -28,18 +28,26 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const slug = (await params).slug;
 
   const markdownParser = await getMarkdownParser();
   const { cover_image, description, title } =
     await markdownParser.getPostBySlug(slug);
+  const { alternates } = await parent;
 
   return {
+    /* Declaring alternates replaces the segment's rather than merging, so the
+       layout's feed has to be carried across with the counterpart */
+    alternates: {
+      types: {
+        ...alternates?.types,
+        "text/markdown": `/blog/posts/${slug}.md`,
+      },
+    },
     description,
     openGraph: {
       description,

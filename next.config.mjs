@@ -86,6 +86,14 @@ const nextConfig = {
         destination: "/blog/page/1",
         source: "/blog/",
       },
+      /* The handler sits a segment deeper because an App Router segment is
+         either wholly dynamic or wholly literal: a folder named [slug].md is
+         matched as that literal text, not as a parameter, and would answer
+         only to a URL with the brackets still in it. */
+      {
+        destination: "/blog/posts/:slug/index.md",
+        source: "/blog/posts/:slug.md",
+      },
     ];
   },
   async redirects() {
