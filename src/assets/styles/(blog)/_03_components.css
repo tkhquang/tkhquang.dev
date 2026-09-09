@@ -1193,8 +1193,8 @@
      container the player sits in. The ink is the plain surface role rather
      than the extract's shelf-tinted cite, because the well is a neutral
      holder for someone else's panel and not part of the category's voice. */
-  .spotify-embed::after,
-  .youtube-embed::after {
+  .spotify-embed::before,
+  .youtube-embed::before {
     @apply kicker;
 
     content: attr(data-waiting);
@@ -1205,14 +1205,14 @@
     color: var(--on-surface);
   }
 
-  /* The frame paints over the mark on z-index alone, both being positioned.
-     The Youtube template carries its own inline position: absolute, which
-     outranks the relative here and is meant to win; Spotify's frame is
-     static and takes the relative. */
+  /* Lifts every frame into the mark's paint pass, where the ::before ahead
+     of it in tree order leaves it on top. A static frame would paint under
+     the mark instead. Youtube's template positions its own and does not need
+     this, but the rule covers the whole set so a new provider joins by name
+     and nothing else. */
   .spotify-embed iframe,
   .youtube-embed iframe {
     position: relative;
-    z-index: 1;
   }
 
   /*

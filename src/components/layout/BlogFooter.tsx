@@ -16,7 +16,7 @@ const BlogFooter = ({
       className={clsx(
         "footer shadow-box-md mt-auto w-full py-4 text-center",
         "header__background-transparent--blog text-theme-on-surface backdrop-blur-xs",
-        "sticky bottom-0",
+        "sticky bottom-0 z-(--z-fg)",
         className
       )}
     >
