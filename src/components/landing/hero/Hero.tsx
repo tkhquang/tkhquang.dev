@@ -41,8 +41,8 @@ const Hero = () => {
                 !withPortrait && "mx-auto"
               )}
             >
-              Front-end engineer by day, open source and game modding enthusiast
-              by night.
+              I build web interfaces for a living. I also make native tools, mod
+              games, and write about what I learn.
             </p>
             <SocialLinks
               className={classNames(

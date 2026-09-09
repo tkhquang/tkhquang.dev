@@ -1,6 +1,8 @@
 import SocialLinks from "@/components/common/SocialLinks";
 import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
+import { GrowingUnderline } from "@/components/ui/growing-underline";
 import clsx from "clsx";
+import Link from "next/link";
 import React, { Suspense } from "react";
 
 const BlogFooter = ({
@@ -30,10 +32,17 @@ const BlogFooter = ({
             showCover
           />
         </Suspense>
-        <SocialLinks
-          className="flex-center shrink-0 gap-1 text-2xl"
-          entities={["Github"]}
-        />
+        <div className="flex shrink-0 items-center gap-3">
+          <Link href="/blog/colophon" className="kicker group/colophon py-2">
+            <GrowingUnderline className="group-hover/colophon:bg-size-[100%_50%] group-focus-visible/colophon:bg-size-[100%_50%]">
+              Colophon
+            </GrowingUnderline>
+          </Link>
+          <SocialLinks
+            className="flex-center shrink-0 gap-1 text-2xl"
+            entities={["Github"]}
+          />
+        </div>
       </div>
     </footer>
   );

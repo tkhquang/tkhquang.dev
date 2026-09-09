@@ -1,22 +1,18 @@
 "use client";
 
+import {
+  getLanguageShares,
+  type LanguageShare,
+  type LanguageStat,
+} from "@/components/landing/stacks/language-shares";
 import classNames from "classnames";
 import { useState } from "react";
-
-export interface LanguageShare {
-  id: string;
-  name: string;
-  percentage: number;
-  /** GitHub language identity color */
-  color?: string;
-}
 
 type PersonaKey = "all" | "fe" | "re";
 
 /*
- * Personas filter by EXCLUSION: a view drops the other side's specific
- * languages and keeps everything else, so neutral entries (Other, tooling)
- * stay visible in every view instead of vanishing.
+ * Personas exclude the other language set. Languages outside either set
+ * remain in both filtered totals, then group by their share of that total.
  */
 const RE_SPECIFIC = ["C++", "C", "CMake", "Lua", "Rust", "Assembly", "Python"];
 const FE_SPECIFIC = [
@@ -35,18 +31,17 @@ const PERSONAS: Record<
   { label: string; caption: string; exclude?: string[] }
 > = {
   all: {
-    caption:
-      "Based on GitHub commits, share of everything I push. That C++ share is the game modding habit",
+    caption: "The full language mix returned by GitHub.",
     label: "Everything",
   },
   fe: {
-    caption: "Based on GitHub commits, share within my front-end work",
+    caption:
+      "The same repositories, with the native and modding language group left out.",
     exclude: RE_SPECIFIC,
     label: "Front-end",
   },
   re: {
-    caption:
-      "Based on GitHub commits, share within the reverse engineering side. Mostly the game modding habit",
+    caption: "The same repositories, with the web language group left out.",
     exclude: FE_SPECIFIC,
     label: "Reverse engineering",
   },
@@ -67,29 +62,16 @@ function chartColor(language: LanguageShare): string {
 }
 
 /**
- * Language share of GitHub commits, filterable by persona. Percentages are
- * renormalized within the active view so the rows always agree with the
- * composition bar and sum to 100.
+ * Shares use the selected language byte total. An Other row that rounds
+ * to 0.0% is omitted; visible rows keep their original percentages.
  */
-const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
+const StacksViz = ({ languages }: { languages: LanguageStat[] }) => {
   const [persona, setPersona] = useState<PersonaKey>(DEFAULT_PERSONA);
   const [focusedId, setFocusedId] = useState<string | null>(null);
 
-  const excluded = PERSONAS[persona].exclude;
-  const filtered = excluded
-    ? languages.filter((language) => !excluded.includes(language.name))
-    : languages;
-  const personaTotal = filtered.reduce(
-    (acc, language) => acc + language.percentage,
-    0
-  );
-  const active = filtered.map((language) => ({
-    ...language,
-    viewPercentage:
-      personaTotal > 0 ? (language.percentage / personaTotal) * 100 : 0,
-  }));
+  const active = getLanguageShares(languages, PERSONAS[persona].exclude);
   const maxPercentage = Math.max(
-    ...active.map((language) => language.viewPercentage),
+    ...active.map((language) => language.percentage),
     0.1
   );
 
@@ -119,7 +101,8 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
 
   return (
     <div>
-      {/* Filters, not tabs: no tabpanel or arrow-key contract to honor */}
+      {/* Toggle buttons control one result group. Each keeps its normal
+          keyboard activation and exposes the selected state. */}
       <div
         role="group"
         aria-label="Filter the stacks by persona"
@@ -130,6 +113,7 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
             key={key}
             type="button"
             aria-pressed={persona === key}
+            aria-controls="language-shares"
             className={classNames(
               "cursor-pointer rounded-md px-3.5 py-1.5 font-mono text-xs font-semibold transition-colors duration-200",
               persona === key
@@ -150,7 +134,8 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
         key={`bar-${persona}`}
         className="flex h-3.5 gap-px overflow-hidden rounded-full"
         role="img"
-        aria-label={`${PERSONAS[persona].label} share of GitHub commits`}
+        aria-label={`${PERSONAS[persona].label} share of GitHub language bytes`}
+        aria-describedby="language-share-scope"
       >
         {active.map((language, index) => (
           <span
@@ -159,19 +144,25 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
               "animate-grow-bar block h-full cursor-pointer transition-opacity duration-200",
               isDimmed(language.id) && "opacity-30"
             )}
-            title={`${language.name} ${language.viewPercentage.toFixed(1)}%`}
+            title={`${language.name} ${language.percentage.toFixed(1)}%`}
             style={{
               animationDelay: `${index * 60}ms`,
               backgroundColor: chartColor(language),
-              width: `${language.viewPercentage}%`,
+              width: `${language.percentage}%`,
             }}
             {...focusHandlers(language.id)}
           />
         ))}
       </div>
 
+      {/* Keyed like the bar above: switching persona must remount the rows
+          so every grow-bar replays together. Without it React keeps the
+          nodes a persona shares with the last one, and their finished
+          animations leave those bars snapping to the new width while only
+          the newly mounted rows grow. */}
       <div
         key={`rows-${persona}`}
+        id="language-shares"
         className="mt-6 grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2"
       >
         {active.map((language, index) => (
@@ -193,15 +184,20 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
                 style={{
                   animationDelay: `${100 + index * 60}ms`,
                   backgroundColor: chartColor(language),
-                  width: `${(language.viewPercentage / maxPercentage) * 100}%`,
+                  width: `${(language.percentage / maxPercentage) * 100}%`,
                 }}
               />
             </span>
             <span className="text-right font-mono text-xs tabular-nums opacity-65">
-              {language.viewPercentage.toFixed(1)}%
+              {language.percentage.toFixed(1)}%
             </span>
           </div>
         ))}
+        {active.length === 0 && (
+          <p className="m-0 text-sm opacity-75">
+            No language bytes available for this selection.
+          </p>
+        )}
       </div>
 
       <p className="kicker mt-6 normal-case">
@@ -212,6 +208,13 @@ const StacksViz = ({ languages }: { languages: LanguageShare[] }) => {
             <span aria-hidden="true">🎮</span>
           </>
         )}
+      </p>
+      <p className="kicker mt-2 normal-case" id="language-share-scope">
+        GitHub language bytes from up to 100 non-fork repositories, ordered by
+        stars. This includes public and private repositories I own or access
+        through organization membership or collaboration. These are repository
+        sizes, not my contributions or time spent. Filtered views re-total the
+        languages left.
       </p>
     </div>
   );
