@@ -8,8 +8,9 @@ import {
 } from "@/lib/ledger-search/client";
 import type { LedgerAnswer } from "@/lib/ledger-search/engine";
 import { MARK_CLOSE, MARK_OPEN } from "@/lib/ledger-search/protocol";
+import classNames from "classnames";
 import Link from "next/link";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 
 /**
  * `searching` carries the answer already on show, because the answer to the
@@ -121,6 +122,18 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
       : "No entries match";
   })();
 
+  /* An answer is on its way and the one on show belongs to the keystroke
+     before it. */
+  const pending = lookup.status === "searching";
+
+  /* A word the ledger does not hold is answered by the nearest one it does.
+     Naming both is the point: a reader who typed a name deliberately has to be
+     told it was not the name that was searched for. */
+  const repairs =
+    lookup.status === "ready" && lookup.answer.results.length > 0
+      ? lookup.answer.repairs
+      : [];
+
   return (
     <>
       <search className="ledger-search">
@@ -203,16 +216,26 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
         <p className="kicker ledger-search__count" role="status">
           {count}
         </p>
+        <p className="ledger-search__repair">
+          {repairs.map((repair, index) => (
+            <React.Fragment key={repair.typed}>
+              {index > 0 && " "}
+              Nothing holds <q>{repair.typed}</q>. These answer to{" "}
+              <q>{repair.chosen}</q>.
+            </React.Fragment>
+          ))}
+        </p>
       </search>
 
-      {searching &&
-        lookup.status === "ready" &&
-        lookup.answer.results.length === 0 && (
-          <p className="ledger-search__empty">
-            Nothing in any entry matches. Try one word, or a phrase you remember
-            reading.
-          </p>
-        )}
+      {/* Read from the answer on show rather than from the status, the way
+          the results below are. Gating this on a settled lookup unmounts it
+          for the frame each keystroke spends in flight, and a line leaving and
+          returning at twenty times a second moves the page under the reader. */}
+      {searching && answer !== null && answer.results.length === 0 && (
+        <p className="ledger-search__empty">
+          Try one word, or a phrase you remember reading.
+        </p>
+      )}
 
       {searching && unavailable && (
         <p className="ledger-search__empty">
@@ -223,7 +246,11 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
       )}
 
       {answer && answer.results.length > 0 && (
-        <ul className="ledger-search__results">
+        <ul
+          className={classNames("ledger-search__results", {
+            "ledger-search__results--pending": pending,
+          })}
+        >
           {answer.results.map((result) => (
             <li className="ledger-search__result" key={result.slug}>
               <Link

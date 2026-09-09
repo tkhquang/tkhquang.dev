@@ -20,7 +20,14 @@ import remarkEmbed from "@/lib/remark-embed";
 import { PostsCollection } from "@/models/generated/markdown.types";
 import { MarkdownCategory, MarkdownPost } from "@/models/markdown.types";
 import { getProcessedImage } from "@/utils/image";
-import { getPostFiles, postsDirectory } from "@/utils/posts";
+import {
+  categoriesDirectory,
+  getPostFiles,
+  postsDirectory,
+  readPostRecords,
+  readPostSource,
+  selectPublishedPosts,
+} from "@/utils/posts";
 import { slugifyTag } from "@/utils/slug";
 import remarkFigureCaption from "@ljoss/rehype-figure-caption";
 import {
@@ -52,8 +59,6 @@ declare global {
   var markdownParser: MarkdownParser | undefined;
   var __MARKDOWN_PARSER_INITIALIZED__: boolean;
 }
-
-const categoriesDirectory = path.join(process.cwd(), "content", "categories");
 
 function getCategoryFiles() {
   return fs
@@ -215,111 +220,88 @@ class MarkdownParser {
     return vfile as ProcessedVfile;
   }
 
-  async getPostBySlug(fileName: string): Promise<MarkdownPost> {
-    const slug = fileName.replace(/\.md$/, "");
-    const fullPath = path.join(
-      postsDirectory,
-      `${decodeURIComponent(slug)}.md`
-    );
-    try {
-      const { content, data } = matter(
-        await fs.promises.readFile(fullPath, { encoding: "utf8" })
-      ) as unknown as { data: PostsCollection; content: string };
-
-      const [coverData, coverDataExtra] = await (async () => {
-        if (!data.cover_image) {
-          return [
-            {
-              src: "",
-              blurDataURL: undefined,
-              alt: "",
-            },
-            {
-              width: undefined,
-              height: undefined,
-            },
-          ];
-        }
-
-        const {
-          placeholder,
-          output,
-          width = FALLBACK_DIMENSITION.WIDTH,
-          height = FALLBACK_DIMENSITION.HEIGHT,
-        } = await getProcessedImage({
-          cache: true,
-          targetPath: "./public/uploads/remote",
-          source: data.cover_image,
-          shouldStore: true,
-        });
-
-        return [
-          {
-            src: output,
-            blurDataURL: placeholder,
-            alt: data.title,
-            width,
-            height,
-          },
-          {
-            width,
-            height,
-          },
-        ];
-      })();
-
+  /** Processes the cover once, for the record shapes that carry one. */
+  private async getCover(data: PostsCollection): Promise<{
+    coverData: MarkdownPost["coverData"];
+    coverDataExtra: MarkdownPost["coverDataExtra"];
+  }> {
+    if (!data.cover_image) {
       return {
-        ...data,
-        category_title: await this.getCategoryTitle(data.category_slug),
-        content,
-        slug,
-        coverData,
-        coverDataExtra: coverDataExtra,
+        coverData: {
+          src: "",
+          blurDataURL: undefined,
+          alt: "",
+        },
+        coverDataExtra: {
+          width: undefined,
+          height: undefined,
+        },
       };
-    } catch (error) {
-      console.warn(`Missing post file: ${fullPath}`);
-      throw error;
     }
+
+    const {
+      placeholder,
+      output,
+      width = FALLBACK_DIMENSITION.WIDTH,
+      height = FALLBACK_DIMENSITION.HEIGHT,
+    } = await getProcessedImage({
+      cache: true,
+      targetPath: "./public/uploads/remote",
+      source: data.cover_image,
+      shouldStore: true,
+    });
+
+    return {
+      coverData: {
+        src: output,
+        blurDataURL: placeholder,
+        alt: data.title,
+        width,
+        height,
+      },
+      coverDataExtra: {
+        width,
+        height,
+      },
+    };
   }
 
+  async getPostBySlug(fileName: string): Promise<MarkdownPost> {
+    const { content, data, slug } = await readPostSource(fileName);
+
+    return {
+      ...data,
+      category_title: await this.getCategoryTitle(data.category_slug),
+      content,
+      slug,
+      ...(await this.getCover(data)),
+    };
+  }
+
+  /* The roster rules live in `@/utils/posts` because the search index is
+     written outside Next, by a script that cannot load this module: it reaches
+     for the component registry below. Reading the files there and processing
+     covers here is what keeps one set of rules serving both. */
   async getAllPosts({ shouldShowHiddenPosts = false } = {}): Promise<
     MarkdownPost[]
   > {
-    const slugs = getPostFiles();
+    const records = await readPostRecords();
 
     const posts = await Promise.all(
-      slugs.map(async (slug) => {
+      records.map(async (record) => {
         try {
-          return await this.getPostBySlug(slug);
+          return { ...record, ...(await this.getCover(record)) };
         } catch (error) {
-          console.warn(`Failed to load post: ${slug}`, error);
+          console.warn(`Failed to load post: ${record.slug}`, error);
           return null;
         }
       })
     );
 
-    const published = (
-      posts.filter((post) => {
-        if (!post) return false;
-        return post.published || shouldShowHiddenPosts;
-      }) as MarkdownPost[]
-    ).sort((post1, post2) => (post1.created_at > post2.created_at ? -1 : 1));
-
-    /* Serial bookkeeping: every member learns its series' published size,
-       so cards can print "Instalment II of III" without refetching */
-    const seriesSizes = new Map<string, number>();
-    for (const post of published) {
-      if (post.series) {
-        seriesSizes.set(post.series, (seriesSizes.get(post.series) ?? 0) + 1);
-      }
-    }
-    for (const post of published) {
-      if (post.series) {
-        post.series_total = seriesSizes.get(post.series);
-      }
-    }
-
-    return published;
+    return selectPublishedPosts(
+      posts.filter((post) => post !== null),
+      { shouldShowHiddenPosts }
+    );
   }
 
   async getCategoryBySlug(fileName: string): Promise<MarkdownCategory> {

@@ -7,8 +7,12 @@ const archiveURL = `${baseURL}/blog/posts`;
 const field = ".ledger-search__field";
 const count = ".ledger-search__count";
 const results = ".ledger-search__result";
-const indexAsset = (url) =>
-  /\/blog\/search-index\/[a-f0-9]+\.bin(?:$|\?)/.test(url);
+const indexAsset = (url) => /\/search\/[a-f0-9]{64}\.bin(?:$|\?)/.test(url);
+/* Neither the postings nor the reading text is fetched whole, so neither is a
+   warm-up asset: a query reaches the lists of its own terms, and one window of
+   reading text per result it prints. */
+const postingsAsset = (url) => /\/search\/[a-f0-9]{64}\.pst(?:$|\?)/.test(url);
+const bodyAsset = (url) => /\/search\/[a-f0-9]{64}\.pool(?:$|\?)/.test(url);
 const asset = (url) => /\/search\/.*\.wasm/.test(url) || indexAsset(url);
 let browser;
 
@@ -115,6 +119,7 @@ async function openArchive(options = {}) {
       url,
       type: request.resourceType(),
       prefetch: Boolean(request.headers()["next-router-prefetch"]),
+      range: request.headers().range,
     });
     if (
       (holdIndex && indexAsset(url)) ||
@@ -295,6 +300,9 @@ test("the same worker and index serve a field after client navigation", async ()
     await waitForResults(page);
     const worker = page.workers()[0];
     assert.ok(worker);
+
+    /* The archive is the only room that carries a field, so leaving it and
+       coming back remounts the field against the runtime already started. */
     await page.click('.blog-nav__link[href="/blog/categories"]');
     await page.waitForFunction(
       () =>
@@ -305,6 +313,7 @@ test("the same worker and index serve a field after client navigation", async ()
     await page.waitForSelector(field);
     await enterQuery(page, "camera");
     await waitForResults(page);
+
     assert.equal(page.workers()[0], worker);
     assert.equal(await page.evaluate(() => __ledgerWorkerCheck.created), 1);
     assert.equal(
@@ -717,6 +726,250 @@ test("without JavaScript, the archive remains visible and the search stays hidde
     assert.equal(
       run.requests.filter((request) => asset(request.url)).length,
       0
+    );
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a quoted line is fetched as one small range of the reading text", async () => {
+  const run = await openArchive();
+  const { page, requests } = run;
+  try {
+    await enterQuery(page, "vtable");
+    await waitForResults(page);
+
+    const windows = requests.filter((request) => bodyAsset(request.url));
+    assert.ok(windows.length > 0, "the reading text was never reached");
+
+    for (const request of windows) {
+      assert.match(request.range ?? "", /^bytes=\d+-\d+$/);
+      const [from, to] = request.range.slice(6).split("-").map(Number);
+      assert.ok(to - from < 4096, `a window of ${to - from + 1} bytes`);
+    }
+
+    /* The windows are what the marks are cut from, so their arrival is
+       visible on the page rather than only in the network log. */
+    const marked = await page.$$eval(
+      ".ledger-search__snippet mark",
+      (nodes) => nodes.map((node) => node.textContent)
+    );
+    assert.ok(marked.length > 0);
+    assert.ok(marked.every((text) => /vtable/i.test(text)));
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("growing a word does not fetch a window already in hand", async () => {
+  const run = await openArchive();
+  const { page, requests } = run;
+  const windows = () => requests.filter((request) => bodyAsset(request.url));
+  try {
+    await enterQuery(page, "vta");
+    await waitForResults(page);
+
+    const opened = windows().length;
+    assert.ok(opened > 0, "the reading text was never reached");
+
+    /* Every prefix below reaches the same entries at the same matches, so the
+       windows are the windows already held and nothing goes back out. */
+    for (const query of ["vtab", "vtabl", "vtable"]) {
+      await enterQuery(page, query);
+      await waitForResults(page);
+    }
+
+    const asked = windows().map((request) => request.range);
+    assert.equal(asked.length, opened, "a held window was fetched again");
+    assert.deepEqual(asked, [...new Set(asked)], "a window was asked for twice");
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a prefix reads one range of the postings and its extensions read none", async () => {
+  const run = await openArchive();
+  const { page, requests } = run;
+  const lists = () => requests.filter((request) => postingsAsset(request.url));
+  try {
+    await enterQuery(page, "vt");
+    await waitForResults(page);
+
+    /* Terms sit in dictionary order and their lists were written in that same
+       order, so every term beginning with a prefix is one stretch of the file. */
+    assert.equal(lists().length, 1, "a prefix cost more than one range");
+
+    for (const query of ["vta", "vtab", "vtabl", "vtable"]) {
+      await enterQuery(page, query);
+      await waitForResults(page);
+    }
+
+    /* That stretch covers every extension of the prefix, so growing the word
+       reads nothing further. */
+    assert.equal(lists().length, 1, "an extension of a prefix read again");
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a slip is answered as it is typed and the swap is named", async () => {
+  const run = await openArchive();
+  const { page } = run;
+  const note = ".ledger-search__repair";
+  try {
+    /* A prefix of a real word needs no repair: it reaches every ending of
+       itself, so the expansion answers and the note says nothing. */
+    await enterQuery(page, "chromiu");
+    await waitForResults(page);
+    assert.equal(await page.$eval(note, (node) => node.textContent.trim()), "");
+
+    /* A prefix of nothing has no expansion to fight, so the nearest word the
+       ledger holds answers for it without waiting for a space, and both words
+       are named so a deliberate spelling is not silently overruled. */
+    await enterQuery(page, "chromiun");
+    await waitForResults(page);
+    await page.waitForSelector(note);
+
+    const said = await page.$eval(note, (node) =>
+      node.textContent.replace(/\s+/g, " ").trim()
+    );
+    assert.match(said, /chromiun/);
+    assert.match(said, /chromium/);
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("two characters the wrong way round are still one edit", async () => {
+  const run = await openArchive();
+  const { page } = run;
+  try {
+    /* At six characters the budget is one edit, so this only answers because
+       a swap costs one rather than two. */
+    await enterQuery(page, "vtabel");
+    await waitForResults(page);
+
+    const said = await page.$eval(".ledger-search__repair", (node) =>
+      node.textContent.replace(/\s+/g, " ").trim()
+    );
+    assert.match(said, /vtabel/);
+    assert.match(said, /vtable/);
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a word that matches nothing settles and then holds still", async () => {
+  const run = await openArchive();
+  const { page } = run;
+  try {
+    await enterQuery(page, "ds");
+    await page.waitForFunction(
+      (selector) =>
+        document.querySelector(selector).textContent === "No entries match",
+      {},
+      count
+    );
+
+    /* Sample every frame while the rest of the word is typed. What used to
+       happen here is that the guidance under the count was mounted on a
+       settled lookup, so it left and returned for the frame each keystroke
+       spent in flight, and everything below it moved twice per character. */
+    const layouts = await page.evaluate(async () => {
+      const field = document.querySelector(".ledger-search__field");
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value"
+      ).set;
+      const seen = new Set();
+      let watching = true;
+
+      const sample = () => {
+        if (!watching) return;
+        const empty = document.querySelector(".ledger-search__empty");
+        const author = document.querySelector(".author");
+        seen.add(
+          [
+            empty ? Math.round(empty.getBoundingClientRect().top) : "gone",
+            author ? Math.round(author.getBoundingClientRect().top) : "gone",
+            Math.round(document.body.scrollHeight),
+          ].join("/")
+        );
+        requestAnimationFrame(sample);
+      };
+      requestAnimationFrame(sample);
+
+      let typed = "ds";
+      for (const letter of "dsdsdsdsds") {
+        typed += letter;
+        setter.call(field, typed);
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        for (let frame = 0; frame < 4; frame += 1) {
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+        }
+      }
+
+      watching = false;
+      return [...seen];
+    });
+
+    assert.deepEqual(
+      layouts,
+      [layouts[0]],
+      `the page moved while a dead query was typed: ${layouts.join(" | ")}`
+    );
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a new row fades in and nothing moves to make room for it", async () => {
+  const run = await openArchive();
+  const { page } = run;
+  try {
+    await enterQuery(page, "camera");
+    await waitForResults(page);
+
+    /* Widening the query brings rows that were not there before. Each one is
+       laid out at its full size from the first frame and only its opacity
+       moves, so the rows around it stay where the reader last saw them. */
+    const opening = await page.evaluate(async () => {
+      const field = document.querySelector(".ledger-search__field");
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value"
+      ).set;
+      setter.call(field, "c");
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+
+      const settled = () =>
+        document.querySelectorAll(".ledger-search__result").length > 6;
+      for (let waited = 0; waited < 4000 && !settled(); waited += 16) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+
+      const rows = [...document.querySelectorAll(".ledger-search__result")];
+      return rows.map((row) => ({
+        opacity: Number(getComputedStyle(row).opacity),
+        height: Math.round(row.getBoundingClientRect().height),
+      }));
+    });
+
+    assert.ok(opening.length > 6, "the query did not widen");
+    assert.ok(
+      opening.some((row) => row.opacity < 1),
+      "no row was still fading in"
+    );
+    assert.ok(
+      opening.every((row) => row.height > 0),
+      "a fading row was holding no space"
     );
     assert.deepEqual(run.errors, []);
   } finally {

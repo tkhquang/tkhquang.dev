@@ -1,5 +1,19 @@
-import type { LedgerAnswer } from "@/lib/ledger-search/engine";
+/* Written by the prebuild step, which is what puts the digest of this build's
+   index into the bundle that fetches it. Relative because the file is generated
+   and the module graph is the whole point: change the artifacts and every page
+   that reads them is rebuilt against their new addresses. */
+import {
+  BODY_URL,
+  INDEX_URL,
+  POSTINGS_URL,
+} from "../../generated/ledger-search.mjs";
 import type {
+  LedgerAnswer,
+  LedgerRange,
+  LedgerSection,
+} from "@/lib/ledger-search/engine";
+import type {
+  LedgerWindow,
   SearchWorkerRequest,
   SearchWorkerResponse,
 } from "@/lib/ledger-search/protocol";
@@ -10,17 +24,20 @@ export const MAX_QUERY_LENGTH = 512;
 /**
  * Rejects a query whose artifacts are gone from the server.
  *
- * The artifact URL carries the fingerprint of the build that rendered the page,
- * and the index route publishes exactly one version, so a 404 means a newer
- * build has replaced this one. Editing the query cannot reach the new address,
- * because the old one is compiled into the script the page is already running.
- * Only a fresh document does.
+ * The artifact URL carries a digest of the index bytes, and a build keeps only
+ * the artifacts it wrote, so a 404 means a newer build has replaced this one.
+ * Editing the query cannot reach the new address, because the old one is
+ * compiled into the script the page is already running. Only a fresh document
+ * does.
  */
 export class SearchIndexReplaced extends Error {}
 
 interface PendingQuery {
   id: number;
   query: string;
+  /* Aborted when the field supersedes this query, which also abandons any
+     reading text still in flight for it. */
+  windows: AbortController;
   finish: (answer: LedgerAnswer | null, error?: Error) => void;
 }
 
@@ -75,18 +92,43 @@ function createRuntime(): SearchRuntime {
 
   const timeout = setTimeout(fail, 30_000);
 
+  /* Releases a query the page has stopped waiting for, so the next keystroke
+     starts at once instead of behind a round trip nobody wants. The worker
+     keeps no state between passes, so it needs no telling: its reply arrives
+     under an id that is no longer active and is dropped. */
+  const abandon = (pending: PendingQuery, error?: Error) => {
+    pending.finish(null, error);
+
+    if (active === pending) {
+      active = null;
+      run();
+    }
+  };
+
   worker.onmessage = ({ data }: MessageEvent<SearchWorkerResponse>) => {
     if (closed) return;
+
     if (data.type === "ready") {
       clearTimeout(timeout);
       ready = true;
       run();
-    } else if (data.type === "answer" && active?.id === data.id) {
+      return;
+    }
+
+    if (data.type === "error") {
+      fail();
+      return;
+    }
+
+    /* A reply for a query the page has moved on from is stale, not a fault. */
+    if (active?.id !== data.id) return;
+
+    if (data.type === "request") {
+      void supply(active, data.section, data.ranges);
+    } else {
       active.finish(data.answer);
       active = null;
       run();
-    } else {
-      fail();
     }
   };
   worker.onerror = (event) => {
@@ -95,23 +137,102 @@ function createRuntime(): SearchRuntime {
   };
   worker.onmessageerror = fail;
 
-  const fetchAsset = async (url: string) => {
-    const response = await fetch(url, { signal: download.signal });
+  const fetchAsset = async (
+    url: string,
+    options: { headers?: HeadersInit; signal?: AbortSignal } = {}
+  ) => {
+    const response = await fetch(url, {
+      headers: options.headers,
+      signal: options.signal ?? download.signal,
+    });
     if (response.status === 404) {
       throw new SearchIndexReplaced("The search index has been replaced.");
     }
     if (!response.ok) throw new Error("The search asset did not load.");
-    return response.arrayBuffer();
+    return response;
+  };
+
+  /**
+   * Fetches the bytes one query asked for and hands them back.
+   *
+   * The two artifacts fail differently, and the difference is the reader's.
+   * Without a window of reading text a row loses its quoted line and keeps
+   * everything else, so what arrived goes back and the worker prints from it.
+   * Without a posting list nothing can be ranked at all, and an answer built
+   * from what arrived would read as "no entries match" when the truth is that
+   * the lookup could not be done: that query is abandoned and reported.
+   *
+   * A host that ignores the header answers 200 with the whole artifact, which
+   * is correct and self-healing: supplied at offset zero it covers every later
+   * range, so the file is read once rather than never being reachable.
+   */
+  const supply = async (
+    pending: PendingQuery,
+    section: LedgerSection,
+    ranges: LedgerRange[]
+  ) => {
+    const url = section === "postings" ? POSTINGS_URL : BODY_URL;
+    const settled = await Promise.allSettled(
+      ranges.map(async ({ start, length }) => {
+        const response = await fetchAsset(url, {
+          headers: { Range: `bytes=${start}-${start + length - 1}` },
+          signal: pending.windows.signal,
+        });
+
+        return {
+          bytes: await response.arrayBuffer(),
+          start: response.status === 206 ? start : 0,
+        };
+      })
+    );
+
+    /* A replaced artifact retires the whole runtime, because every address
+       this page holds was compiled into the script it is running. */
+    const replaced = settled.find(
+      (window) =>
+        window.status === "rejected" &&
+        window.reason instanceof SearchIndexReplaced
+    );
+    if (replaced?.status === "rejected") return fail(replaced.reason);
+
+    if (closed || active !== pending) return;
+
+    const windows: LedgerWindow[] = settled.flatMap((window) =>
+      window.status === "fulfilled" ? [window.value] : []
+    );
+
+    if (pending.windows.signal.aborted) {
+      abandon(pending);
+      return;
+    }
+
+    if (section === "postings" && windows.length < ranges.length) {
+      abandon(pending, new Error("The search asset did not load."));
+      return;
+    }
+
+    send(
+      {
+        type: "supply",
+        id: pending.id,
+        query: pending.query,
+        section,
+        windows,
+        /* The reading text is the last thing a query asks for, so once it has
+           been supplied the worker is told to print with what it has. */
+        more: section === "postings",
+      },
+      windows.map((window) => window.bytes)
+    );
   };
 
   /* Downloads overlap worker startup. Transfer ownership so the page retains
      no copy of the corpus after initialization. */
-  Promise.all([
-    fetchAsset("/search/ljoss-search.wasm"),
-    fetchAsset(
-      `/blog/search-index/${process.env.NEXT_PUBLIC_LEDGER_SEARCH_VERSION}.bin`
-    ),
-  ])
+  Promise.all(
+    ["/search/ljoss-search.wasm", INDEX_URL].map((url) =>
+      fetchAsset(url).then((response) => response.arrayBuffer())
+    )
+  )
     .then(([module, index]) => {
       if (!closed) send({ type: "initialize", module, index }, [module, index]);
     })
@@ -128,6 +249,7 @@ function createRuntime(): SearchRuntime {
         const pending: PendingQuery = {
           id: ++nextId,
           query,
+          windows: new AbortController(),
           finish(answer, error) {
             if (settled) return;
             settled = true;
@@ -139,11 +261,13 @@ function createRuntime(): SearchRuntime {
         const cancel = () => {
           const at = queue.indexOf(pending);
           if (at >= 0) queue.splice(at, 1);
-          pending.finish(null);
+          /* Bytes still arriving for this query are no longer wanted, and the
+             next keystroke should not queue behind their round trip. */
+          pending.windows.abort();
+          abandon(pending);
         };
 
-        /* A field cancels its previous request before it submits another.
-           An active query finishes in the worker, but its answer is discarded. */
+        /* A field cancels its previous request before it submits another. */
         signal?.addEventListener("abort", cancel, { once: true });
         queue.push(pending);
         run();
