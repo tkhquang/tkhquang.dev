@@ -11,6 +11,7 @@
     "test:hex-diff": "node --experimental-strip-types --test src/components/blog/hex-diff/*.test.mjs",
     "test:hex-diff:browser": "node --test src/components/blog/hex-diff/browser-check.mjs",
     "test:hex-diff:hydration": "node --test src/components/blog/hex-diff/hydration-check.mjs",
+    "test:markdown-export": "node --experimental-strip-types --test src/lib/markdown-export/*.test.mjs",
     "test:notes": "node --experimental-strip-types --test src/lib/rehype-notes/*.test.mjs",
     "test:stacks": "node --experimental-strip-types --test src/components/landing/stacks/*.test.mjs",
     "fix:style": "npx stylelint src/**/*.css --fix",
