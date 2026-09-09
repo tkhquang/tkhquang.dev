@@ -1,5 +1,6 @@
 import SectionHeading from "@/components/common/SectionHeading";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
+import { Site } from "@/constants/meta";
 import { fetchGitHubProjects } from "@/services/github";
 import Link from "next/link";
 import { GoRepo, GoRepoForked, GoStar } from "react-icons/go";
@@ -34,9 +35,13 @@ const FEATURED: FeaturedProject[] = [
   },
   {
     blurb:
-      "A collection of mods for Crimson Desert that enhance gameplay and add new features to the game.",
-    name: "CrimsonDesertTools",
-    source: "https://github.com/tkhquang/CrimsonDesertTools",
+      "This site, and the resume PDF it prints. That file looked perfect until I found its letters were drawings. Following the font files led from Next.js down to Chromium and Skia.",
+    devlog: {
+      href: "/blog/posts/every-letter-in-this-pdf-is-a-drawing",
+      label: "Read the investigation",
+    },
+    name: "tkhquang.dev",
+    source: Site.REPOSITORY.url,
   },
 ];
 

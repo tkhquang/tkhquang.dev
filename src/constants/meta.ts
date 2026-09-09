@@ -1,15 +1,26 @@
 import { getYearsOfExperience } from "@/utils/date";
 
 export namespace Site {
+  export const AUTHOR = {
+    alias: "Aleks",
+    handle: "tkhquang",
+    name: "Quang Trinh Khac",
+  };
+
   export const METADATA = {
     coverImageUrl: "/uploads/images/default.jpg",
+  };
+
+  export const REPOSITORY = {
+    branch: "master",
+    url: `https://github.com/${AUTHOR.handle}/tkhquang.dev`,
   };
 }
 
 export namespace Portfolio {
   export const METADATA = {
     about: `
-<p>Hi, I'm Quang Trinh Khac (or just Aleks). I'm an engineer with a genuine curiosity for technology, open source, and the little things that make software work. By day, I build user interfaces with React and modern web tools. By night, I explore how things work under the hood: modding games, reverse engineering, and sharing what I learn along the way.</p>
+<p>Hi, I'm ${Site.AUTHOR.name} (or just ${Site.AUTHOR.alias}). I'm a software engineer with a genuine curiosity for technology, open source, and the little things that make software work. By day, I build user interfaces with React and modern web tools. By night, I explore how things work under the hood: modding games, reverse engineering, and sharing what I learn along the way.</p>
 
 <p>
 I studied in the Advanced Education Program (AEP) in Information Systems at Ho Chi Minh City University of Information Technology (UIT), where I found a real passion for learning, both inside and outside the classroom. While my path hasn't been the most traditional, hands-on experience and continuous improvement have shaped my journey.
@@ -23,8 +34,8 @@ I'm grateful for the open source community, where I've learned a lot and enjoy g
 I enjoy working with teams who care about quality and learning. If you'd like to collaborate or just talk shop, feel free to reach out!
 </p>
 `,
-    description: `Engineer with ${getYearsOfExperience("2019-01-01")}+ years of experience: front-end by day, open source and modding enthusiast by night.`,
-    title: "Aleks's Portfolio",
+    description: `Software engineer with ${getYearsOfExperience("2019-01-01")}+ years building web interfaces. Outside work, native tools and game mods.`,
+    title: `${Site.AUTHOR.alias}'s Portfolio`,
   };
 
   /** Hero composition: "portrait" shows the photo column, "text" centers the copy */
@@ -43,15 +54,37 @@ I enjoy working with teams who care about quality and learning. If you'd like to
 
 export namespace Blog {
   export const METADATA = {
-    author: "Aleks",
-    description:
-      "Hi, I'm Aleks, a software engineer into open source and micro startups. This blog is where I write up the things I take apart: game engines, the web platform, and the ideas that survived contact with production.",
+    author: Site.AUTHOR.alias,
+    description: `Hi, I'm ${Site.AUTHOR.alias}, a software engineer into open source and micro startups. This blog is where I write up the things I take apart: game engines, the web platform, and the ideas that survived contact with production.`,
     title: {
       default: "Ljóss - The Portal To A Nobody's Inner World",
       template: "%s | Ljóss - The Portal To A Nobody's Inner World",
     },
   };
   export const POSTS_PER_PAGE = 15;
+
+  /* The landing page's three writing cards, in this order. Whatever is not
+     listed follows by date, so a slug removed here demotes its post rather
+     than hiding it */
+  export const SELECTED_WRITING_SLUGS = [
+    "every-letter-in-this-pdf-is-a-drawing",
+    "the-object-already-knows-its-own-name",
+    "use-server-is-an-export-not-an-annotation",
+  ] as const;
+
+  /* The entry points llms.txt offers, balanced across the web and native
+     sides rather than ranked by traffic. A slug that stops resolving drops
+     out of the index quietly, so the file never links a dead route */
+  export const CURATED_READING_SLUGS = [
+    "the-object-already-knows-its-own-name",
+    "hot-reload-in-a-live-process-the-two-binary-architecture",
+    "devlog-kingdom-come-deliverance-ii-building-a-proper-third-person-camera",
+    "every-letter-in-this-pdf-is-a-drawing",
+    "the-silent-failures-of-react-compiler",
+    "use-server-is-an-export-not-an-annotation",
+    "deleting-sw-js-does-not-remove-a-service-worker",
+    "wiring-the-spotify-web-api-into-this-blog",
+  ] as const;
 
   /* One source for the four rooms: the header nav and the phone Index
      drawer both read from here */

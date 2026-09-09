@@ -1,4 +1,3 @@
-import HeroRolesContent from "@/components/landing/hero/HeroRolesContent";
 import classNames from "classnames";
 
 interface HeroRolesProps extends React.ComponentProps<"div"> {
@@ -12,10 +11,16 @@ const HeroRoles = ({
 }: HeroRolesProps) => {
   return (
     <div
-      className={classNames("roles text-xl font-medium lg:text-3xl", className)}
+      className={classNames(
+        "roles flex min-h-10 items-center text-xl font-medium lg:text-3xl",
+        align === "center" ? "justify-center" : "justify-start",
+        className
+      )}
       {...props}
     >
-      <HeroRolesContent align={align} />
+      <span>
+        Software Engineer <span aria-hidden="true">💻</span>
+      </span>
     </div>
   );
 };

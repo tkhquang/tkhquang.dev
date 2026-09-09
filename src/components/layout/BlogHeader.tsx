@@ -125,9 +125,12 @@ const BlogHeader = ({
 
   /* The index rooms (every running head but Posts) open on the catalogue
      headpiece's band; with the feed masthead they are the pages that
-     carry a sky for the header to stay transparent over */
+     carry a sky for the header to stay transparent over. The colophon
+     wears the same headpiece without claiming a running head, so it is
+     named here rather than derived from activeHref */
   const isIndexRoom = activeHref !== undefined && activeHref !== "/blog";
-  const hasSky = isHomeBlog || isIndexRoom;
+  const hasSky =
+    isHomeBlog || isIndexRoom || matchSegments(["blog", "colophon"]);
 
   /* Any feed page counts: pagination links land readers on /blog/page/N
      (page 1 included), and losing the restoration for having paged would

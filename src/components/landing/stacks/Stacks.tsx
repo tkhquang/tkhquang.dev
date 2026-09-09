@@ -1,5 +1,6 @@
 import Image from "@/components/common/NextImage";
 import SectionHeading from "@/components/common/SectionHeading";
+import type { LanguageStat } from "@/components/landing/stacks/language-shares";
 import StacksViz from "@/components/landing/stacks/StacksViz";
 import { fetchGitHubCommitStats } from "@/services/github";
 
@@ -56,75 +57,29 @@ const TOOLKIT = [
   },
 ];
 
-interface LanguageStat {
-  id: string;
-  name: string;
-  size: number;
-  percentage: number;
-  color?: string;
-}
-
-/**
- * Language share of GitHub commits, aggregated across repositories; shares
- * under 1% roll up into "Other".
- */
+/** Language bytes aggregated across the queried non-fork repositories. */
 async function getLanguageStats(): Promise<LanguageStat[]> {
   const data = await fetchGitHubCommitStats();
   const repositories = data.viewer.repositories.edges;
 
-  const stats: Record<string, Omit<LanguageStat, "percentage">> = {};
-  let total = 0;
+  const stats: Record<string, LanguageStat> = {};
 
-  repositories
-    .filter(({ node: { primaryLanguage } }) => primaryLanguage !== null)
-    .forEach(({ node: { languages } }) => {
-      languages.edges.forEach(({ node, size }) => {
-        total += size;
+  repositories.forEach(({ node: { languages } }) => {
+    languages.edges.forEach(({ node, size }) => {
+      if (!stats[node.id]) {
+        stats[node.id] = {
+          color: node.color,
+          id: node.id,
+          name: node.name,
+          size: 0,
+        };
+      }
 
-        if (!stats[node.id]) {
-          stats[node.id] = {
-            color: node.color,
-            id: node.id,
-            name: node.name,
-            size: 0,
-          };
-        }
-
-        stats[node.id].size += size;
-      });
+      stats[node.id].size += size;
     });
+  });
 
-  if (total === 0) {
-    return [];
-  }
-
-  const significant = Object.values(stats)
-    .map((stat) => ({
-      ...stat,
-      percentage: (stat.size * 100) / total,
-    }))
-    .filter((stat) => stat.percentage >= 1)
-    .sort((a, b) => b.percentage - a.percentage);
-
-  const significantShare = significant.reduce(
-    (acc, { percentage }) => acc + percentage,
-    0
-  );
-
-  const otherShare = Math.max(0, 100 - significantShare);
-  if (otherShare < 0.05) {
-    return significant;
-  }
-
-  return [
-    ...significant,
-    {
-      id: "other",
-      name: "Other",
-      percentage: otherShare,
-      size: 0,
-    },
-  ];
+  return Object.values(stats);
 }
 
 const Stacks = async () => {
@@ -136,14 +91,7 @@ const Stacks = async () => {
         <SectionHeading kicker="What I work with" title="Stacks" emoji="📚" />
 
         <div>
-          <StacksViz
-            languages={languages.map(({ color, id, name, percentage }) => ({
-              color,
-              id,
-              name,
-              percentage,
-            }))}
-          />
+          <StacksViz languages={languages} />
         </div>
       </div>
 
