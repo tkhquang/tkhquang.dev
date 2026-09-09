@@ -122,6 +122,10 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
       : "No entries match";
   })();
 
+  /* An answer is on its way and the one on show belongs to the keystroke
+     before it. */
+  const pending = lookup.status === "searching";
+
   /* A word the ledger does not hold is answered by the nearest one it does.
      Naming both is the point: a reader who typed a name deliberately has to be
      told it was not the name that was searched for. */
@@ -132,15 +136,7 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
 
   return (
     <>
-      {/* The furniture keeps its height for as long as a query exists, so a
-          count arriving, a repair appearing, or either one going away never
-          moves the results underneath them. Reserving it only while searching
-          keeps the archive's own layout as it was. */}
-      <search
-        className={classNames("ledger-search", {
-          "ledger-search--searching": searching,
-        })}
-      >
+      <search className="ledger-search">
         <label className="kicker ledger-search__label" htmlFor={fieldId}>
           Search the ledger
         </label>
@@ -231,14 +227,15 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
         </p>
       </search>
 
-      {searching &&
-        lookup.status === "ready" &&
-        lookup.answer.results.length === 0 && (
-          <p className="ledger-search__empty">
-            Nothing in any entry matches. Try one word, or a phrase you remember
-            reading.
-          </p>
-        )}
+      {/* Read from the answer on show rather than from the status, the way
+          the results below are. Gating this on a settled lookup unmounts it
+          for the frame each keystroke spends in flight, and a line leaving and
+          returning at twenty times a second moves the page under the reader. */}
+      {searching && answer !== null && answer.results.length === 0 && (
+        <p className="ledger-search__empty">
+          Try one word, or a phrase you remember reading.
+        </p>
+      )}
 
       {searching && unavailable && (
         <p className="ledger-search__empty">
@@ -249,7 +246,11 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
       )}
 
       {answer && answer.results.length > 0 && (
-        <ul className="ledger-search__results">
+        <ul
+          className={classNames("ledger-search__results", {
+            "ledger-search__results--pending": pending,
+          })}
+        >
           {answer.results.map((result) => (
             <li className="ledger-search__result" key={result.slug}>
               <Link

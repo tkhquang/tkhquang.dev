@@ -457,31 +457,20 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Both status lines hold their space for as long as a query exists. Without
-     this the count arrives on the first keystroke and the repair comes and
-     goes between them, and each one shifts every result underneath it. Two
-     lines are reserved for the repair because it wraps on a narrow column. */
-  .ledger-search--searching .ledger-search__count {
-    min-height: 1lh;
-  }
-
-  .ledger-search--searching .ledger-search__repair {
-    min-height: 2lh;
-  }
-
-  @media (width >= 40rem) {
-    .ledger-search--searching .ledger-search__repair {
-      min-height: 1lh;
-    }
-  }
-
-  /* The repair note sits under the count, in the same quiet register. */
+  /* The repair note sits under the count, in the same quiet register. It
+     fades rather than appearing, because its line is already reserved and the
+     only thing left to change is whether it is saying anything. */
   .ledger-search__repair {
     margin: 0.35rem 0 0;
     font-size: 0.875rem;
     line-height: 1.6;
     color: var(--on-surface);
     opacity: 0.75;
+    transition: opacity 220ms ease;
+  }
+
+  .ledger-search__repair:empty {
+    opacity: 0;
   }
 
   .ledger-search__repair q {
@@ -492,6 +481,33 @@
   .ledger-search__results,
   .ledger-search__empty {
     margin: 2rem 0;
+  }
+
+  /* The answer on show belongs to the keystroke before this one. Dimming it
+     says so, and the delay means only a query slow enough to be noticed is
+     ever marked: a fast one is answered before the dim would begin. Coming
+     back carries no delay, so the new answer arrives at full strength. */
+  .ledger-search__results {
+    transition: opacity 200ms ease;
+  }
+
+  .ledger-search__results--pending {
+    opacity: 0.55;
+    transition-delay: 180ms;
+  }
+
+  /* Rows that survive a keystroke are reused, so only genuinely new ones
+     fade. Nothing moves: the row occupies its space from the first frame. */
+  @supports (transition-behavior: allow-discrete) {
+    .ledger-search__result {
+      transition: opacity 220ms ease;
+    }
+
+    @starting-style {
+      .ledger-search__result {
+        opacity: 0;
+      }
+    }
   }
 
   .ledger-search__empty {

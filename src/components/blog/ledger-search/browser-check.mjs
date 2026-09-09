@@ -822,16 +822,10 @@ test("a slip is answered as it is typed and the swap is named", async () => {
   const note = ".ledger-search__repair";
   try {
     /* A prefix of a real word needs no repair: it reaches every ending of
-       itself, so the expansion answers and the note says nothing. It keeps its
-       place in the layout either way, so the results below never move. */
+       itself, so the expansion answers and the note says nothing. */
     await enterQuery(page, "chromiu");
     await waitForResults(page);
-    const quiet = await page.$eval(note, (node) => ({
-      text: node.textContent.trim(),
-      height: Math.round(node.getBoundingClientRect().height),
-    }));
-    assert.equal(quiet.text, "");
-    assert.ok(quiet.height > 0, "the note gave up its space");
+    assert.equal(await page.$eval(note, (node) => node.textContent.trim()), "");
 
     /* A prefix of nothing has no expansion to fight, so the nearest word the
        ledger holds answers for it without waiting for a space, and both words
@@ -840,16 +834,11 @@ test("a slip is answered as it is typed and the swap is named", async () => {
     await waitForResults(page);
     await page.waitForSelector(note);
 
-    const said = await page.$eval(note, (node) => ({
-      text: node.textContent.replace(/\s+/g, " ").trim(),
-      height: Math.round(node.getBoundingClientRect().height),
-    }));
-    assert.match(said.text, /chromiun/);
-    assert.match(said.text, /chromium/);
-
-    /* The whole point of reserving the line: saying something costs no space
-       that saying nothing did not already hold. */
-    assert.equal(said.height, quiet.height);
+    const said = await page.$eval(note, (node) =>
+      node.textContent.replace(/\s+/g, " ").trim()
+    );
+    assert.match(said, /chromiun/);
+    assert.match(said, /chromium/);
     assert.deepEqual(run.errors, []);
   } finally {
     await run.context.close();
@@ -876,48 +865,112 @@ test("two characters the wrong way round are still one edit", async () => {
   }
 });
 
-test("the field furniture holds its height through a whole word", async () => {
+test("a word that matches nothing settles and then holds still", async () => {
   const run = await openArchive();
   const { page } = run;
-  const measure = () =>
-    page.evaluate(() => {
-      const results = document.querySelector(".ledger-search__results");
-      return {
-        furniture: Math.round(
-          document.querySelector("search.ledger-search").getBoundingClientRect()
-            .height
-        ),
-        resultsTop: results
-          ? Math.round(results.getBoundingClientRect().top)
-          : null,
-      };
-    });
   try {
-    /* This word passes through prefixes that match nothing, so the repair note
-       comes and goes while it is being typed. Nothing above the results may
-       move when it does: a line arriving under a reader's cursor pushes what
-       they are reading down the page. */
-    const seen = [];
-    for (const query of ["0x", "0xC", "0xC0", "0xC00", "0xC000", "0xC0000005"]) {
-      await enterQuery(page, query);
-      await page.waitForFunction(
-        (selector) =>
-          /\d+ of \d+ entries|No entries match/.test(
-            document.querySelector(selector).textContent
-          ),
-        {},
-        count
-      );
-      seen.push(await measure());
-    }
+    await enterQuery(page, "ds");
+    await page.waitForFunction(
+      (selector) =>
+        document.querySelector(selector).textContent === "No entries match",
+      {},
+      count
+    );
 
-    const heights = [...new Set(seen.map((state) => state.furniture))];
-    assert.deepEqual(heights, [heights[0]], "the furniture changed height");
+    /* Sample every frame while the rest of the word is typed. What used to
+       happen here is that the guidance under the count was mounted on a
+       settled lookup, so it left and returned for the frame each keystroke
+       spent in flight, and everything below it moved twice per character. */
+    const layouts = await page.evaluate(async () => {
+      const field = document.querySelector(".ledger-search__field");
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value"
+      ).set;
+      const seen = new Set();
+      let watching = true;
 
-    const tops = [
-      ...new Set(seen.map((state) => state.resultsTop).filter(Boolean)),
-    ];
-    assert.deepEqual(tops, [tops[0]], "the results moved under the reader");
+      const sample = () => {
+        if (!watching) return;
+        const empty = document.querySelector(".ledger-search__empty");
+        const author = document.querySelector(".author");
+        seen.add(
+          [
+            empty ? Math.round(empty.getBoundingClientRect().top) : "gone",
+            author ? Math.round(author.getBoundingClientRect().top) : "gone",
+            Math.round(document.body.scrollHeight),
+          ].join("/")
+        );
+        requestAnimationFrame(sample);
+      };
+      requestAnimationFrame(sample);
+
+      let typed = "ds";
+      for (const letter of "dsdsdsdsds") {
+        typed += letter;
+        setter.call(field, typed);
+        field.dispatchEvent(new Event("input", { bubbles: true }));
+        for (let frame = 0; frame < 4; frame += 1) {
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+        }
+      }
+
+      watching = false;
+      return [...seen];
+    });
+
+    assert.deepEqual(
+      layouts,
+      [layouts[0]],
+      `the page moved while a dead query was typed: ${layouts.join(" | ")}`
+    );
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a new row fades in and nothing moves to make room for it", async () => {
+  const run = await openArchive();
+  const { page } = run;
+  try {
+    await enterQuery(page, "camera");
+    await waitForResults(page);
+
+    /* Widening the query brings rows that were not there before. Each one is
+       laid out at its full size from the first frame and only its opacity
+       moves, so the rows around it stay where the reader last saw them. */
+    const opening = await page.evaluate(async () => {
+      const field = document.querySelector(".ledger-search__field");
+      const setter = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value"
+      ).set;
+      setter.call(field, "c");
+      field.dispatchEvent(new Event("input", { bubbles: true }));
+
+      const settled = () =>
+        document.querySelectorAll(".ledger-search__result").length > 6;
+      for (let waited = 0; waited < 4000 && !settled(); waited += 16) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+
+      const rows = [...document.querySelectorAll(".ledger-search__result")];
+      return rows.map((row) => ({
+        opacity: Number(getComputedStyle(row).opacity),
+        height: Math.round(row.getBoundingClientRect().height),
+      }));
+    });
+
+    assert.ok(opening.length > 6, "the query did not widen");
+    assert.ok(
+      opening.some((row) => row.opacity < 1),
+      "no row was still fading in"
+    );
+    assert.ok(
+      opening.every((row) => row.height > 0),
+      "a fading row was holding no space"
+    );
     assert.deepEqual(run.errors, []);
   } finally {
     await run.context.close();
