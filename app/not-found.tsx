@@ -2,15 +2,24 @@ import "@/assets/styles/index.css";
 import Image from "@/components/common/NextImage";
 import ClientSideTracking from "@/components/container/ClientSideTracking";
 import { Footer, Header, Main } from "@/components/layout";
+import { Portfolio } from "@/constants/meta";
 import { DEFAULT_LOCALE, getMessages } from "@/lib/i18n";
 import AppProvider from "@/providers/AppProvider";
+import { pageMetadata } from "@/utils/metadata";
 import Link from "next/link";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
-export const metadata: Metadata = {
+/* Stated in full, with no url: without a card of its own a dead link unfurls
+   as the landing page and reads as though it worked, and every unmatched URL
+   on the site renders this same boundary, so there is no one address for it
+   to claim. */
+export const metadata: Metadata = pageMetadata({
+  description:
+    "Nothing lives at this address. Whatever you were after may have moved, and the post archive is one click away.",
+  siteName: Portfolio.METADATA.title,
   title: "404 | Not Found",
-};
+});
 
 /*
  * The one 404 for the whole site: every unmatched URL lands here with a

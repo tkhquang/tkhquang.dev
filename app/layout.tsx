@@ -100,6 +100,12 @@ const { description, title } = Portfolio.METADATA;
 export const metadata: Metadata = {
   description,
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || ""),
+  /* The card for the landing page, and the fallback for any route that
+     declares none. No `title.template` here, on either the document title or
+     the card: the (blog) segment's own title carries a `default`, and a
+     stashed parent template is applied to a child's `default` too, so one
+     here would print the blog's full masthead title with the portfolio's name
+     appended behind it. */
   openGraph: {
     description,
     images: [
@@ -107,7 +113,10 @@ export const metadata: Metadata = {
         url: Site.METADATA.coverImageUrl,
       },
     ],
+    siteName: title,
     title,
+    type: "website",
+    url: "/",
   },
   other: {
     version: Date.now(),

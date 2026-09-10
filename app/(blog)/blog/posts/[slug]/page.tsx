@@ -12,9 +12,10 @@ import TableOfContent from "@/components/blog/TableOfContent";
 import NextImage, { ImageProps } from "@/components/common/NextImage";
 import ReportView from "@/components/common/ReportView";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
-import { Site } from "@/constants/meta";
+import { Blog, Site } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownCategory } from "@/models/markdown.types";
+import { pageMetadata } from "@/utils/metadata";
 import clsx from "clsx";
 import { Metadata, ResolvingMetadata } from "next/types";
 import { Suspense } from "react";
@@ -35,8 +36,15 @@ export async function generateMetadata(
   const slug = (await params).slug;
 
   const markdownParser = await getMarkdownParser();
-  const { cover_image, description, title } =
-    await markdownParser.getPostBySlug(slug);
+  const {
+    category_title,
+    cover_image,
+    created_at,
+    description,
+    tags,
+    title,
+    updated_at,
+  } = await markdownParser.getPostBySlug(slug);
   const { alternates } = await parent;
 
   return {
@@ -48,17 +56,30 @@ export async function generateMetadata(
         "text/markdown": `/blog/posts/${slug}.md`,
       },
     },
-    description,
-    openGraph: {
+    ...pageMetadata({
+      /* The only page on the site that is an article rather than a room, so
+         the card carries what the byline and the tag chips already print:
+         when it was written, when it was last touched, whose it is, which
+         shelf it sits on and what it is about */
+      article: {
+        authors: [Blog.METADATA.author],
+        /* Same normalisation the feed does: a post with no revision carries
+           `updated_at: ""` in its frontmatter, which is a string the declared
+           Date type does not describe, so optional chaining alone walks
+           straight into calling toISOString on it */
+        modifiedTime: updated_at
+          ? new Date(updated_at).toISOString()
+          : undefined,
+        publishedTime: new Date(created_at).toISOString(),
+        section: category_title,
+        tags,
+      },
       description,
-      images: [
-        {
-          url: cover_image || Site.METADATA.coverImageUrl,
-        },
-      ],
+      image: cover_image || Site.METADATA.coverImageUrl,
+      siteName: Blog.METADATA.siteName,
       title,
-    },
-    title,
+      url: `/blog/posts/${slug}`,
+    }),
   };
 }
 

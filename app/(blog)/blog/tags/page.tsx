@@ -1,7 +1,9 @@
 import BlogInfo from "@/components/blog/BlogInfo";
 import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
+import { Blog } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
+import { pageMetadata } from "@/utils/metadata";
 import classNames from "classnames";
 import Link from "next/link";
 import { Metadata } from "next/types";
@@ -9,9 +11,13 @@ import { Metadata } from "next/types";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  description:
+    "Every subject the entries touch, ranked by how many carry it. Pick one to read just those.",
+  siteName: Blog.METADATA.siteName,
   title: "Tags",
-};
+  url: "/blog/tags",
+});
 
 export default async function TagsPage() {
   const markdownParser = await getMarkdownParser();
