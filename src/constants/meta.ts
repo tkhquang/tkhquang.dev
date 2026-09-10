@@ -56,6 +56,10 @@ export namespace Blog {
   export const METADATA = {
     author: Site.AUTHOR.alias,
     description: `Hi, I'm ${Site.AUTHOR.alias}, a software engineer into open source and micro startups. This blog is where I write up the things I take apart: game engines, the web platform, and the ideas that survived contact with production.`,
+    /* The house name alone, for og:site_name and the card's own suffix: a
+       share card has far less room than a tab, so it takes the masthead
+       word rather than the full printed title */
+    siteName: "Ljóss",
     title: {
       default: "Ljóss - The Portal To A Nobody's Inner World",
       template: "%s | Ljóss - The Portal To A Nobody's Inner World",

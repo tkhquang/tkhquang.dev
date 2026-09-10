@@ -22,7 +22,12 @@ export const metadata: Metadata = {
   },
   description: Blog.METADATA.description,
   /* Without this block the segment inherits the root's whole openGraph
-     object, so /blog and every index page unfurled as the portfolio card */
+     object, so /blog and every index page unfurled as the portfolio card.
+     The `template` is the counterpart of the document title's: a page under
+     here names itself once and both suffixes are added for it, the tab taking
+     the full printed title and the card taking the masthead word. Next stashes
+     each template as the tree resolves and applies it to the child's own
+     openGraph, so a page replacing this block wholesale still gets it. */
   openGraph: {
     description: Blog.METADATA.description,
     images: [
@@ -30,8 +35,13 @@ export const metadata: Metadata = {
         url: Site.METADATA.coverImageUrl,
       },
     ],
-    title: Blog.METADATA.title.default,
+    siteName: Blog.METADATA.siteName,
+    title: {
+      default: Blog.METADATA.title.default,
+      template: `%s · ${Blog.METADATA.siteName}`,
+    },
     type: "website",
+    url: "/blog",
   },
   title: Blog.METADATA.title,
 };

@@ -1,5 +1,6 @@
 import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
-import { Site } from "@/constants/meta";
+import { Blog, Site } from "@/constants/meta";
+import { pageMetadata } from "@/utils/metadata";
 import classNames from "classnames";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -100,17 +101,12 @@ export async function generateMetadata(
       canonical: "/blog/colophon",
       types: alternates?.types ?? undefined,
     },
-    description: DESCRIPTION,
-    /* Same reason the (blog) layout carries one: a page that only set
-       `description` would still unfurl with the segment's card copy */
-    openGraph: {
+    ...pageMetadata({
       description: DESCRIPTION,
-      images: [{ url: Site.METADATA.coverImageUrl }],
+      siteName: Blog.METADATA.siteName,
       title: "Colophon",
-      type: "website",
       url: "/blog/colophon",
-    },
-    title: "Colophon",
+    }),
   };
 }
 
@@ -268,8 +264,9 @@ export default function ColophonPage() {
             <div className="typography">
               <h2 id="the-lookup">The Lookup</h2>
               <p>
-                The archive carries a field that reads every published entry. There is no search server behind it: the matching happens
-                in the browser, and the words typed are never sent anywhere. The{" "}
+                The archive carries a field that reads every published entry.
+                There is no search server behind it: the matching happens in the
+                browser, and the words typed are never sent anywhere. The{" "}
                 <ExternalLink href={sourceUrl("/search-engine/src/query.rs")}>
                   engine
                 </ExternalLink>{" "}
@@ -304,8 +301,8 @@ export default function ColophonPage() {
                   <strong>A word the ledger does not hold</strong> is answered
                   by the nearest one it does, counting two characters the wrong
                   way round as a single slip. Both words are named under the
-                  count, because a name typed deliberately should not be
-                  quietly overruled.
+                  count, because a name typed deliberately should not be quietly
+                  overruled.
                 </li>
               </ul>
               <p>

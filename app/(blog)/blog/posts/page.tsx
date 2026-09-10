@@ -1,6 +1,8 @@
 import PostList from "@/components/blog/PostList";
+import { Blog } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
+import { pageMetadata } from "@/utils/metadata";
 import { toRoman } from "@/utils/roman";
 import { getVolume } from "@/utils/volume";
 import { Metadata } from "next/types";
@@ -8,9 +10,13 @@ import { Metadata } from "next/types";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
+  description:
+    "The whole run in one ledger, grouped by year and searchable in full text.",
+  siteName: Blog.METADATA.siteName,
   title: "Archive",
-};
+  url: "/blog/posts",
+});
 
 export default async function ArchivePage() {
   const markdownParser = await getMarkdownParser();

@@ -1,8 +1,10 @@
 import NewsFeed from "@/components/blog/NewsFeed";
 import ClientSideGetPageViews from "@/components/container/ClientSideGetPageViews";
+import { Blog } from "@/constants/meta";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getIntl } from "@/lib/intl";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { pageMetadata } from "@/utils/metadata";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
@@ -24,11 +26,24 @@ export async function generateMetadata({
 
   const markdownParser = await getMarkdownParser();
   const tags = await markdownParser.getAllTags();
+  const posts = await markdownParser.getAllPosts();
   const currentTag = tags.find((tag) => tag.slug === slug)!;
 
-  return {
-    title: currentTag.title,
-  };
+  /* The same count the headpiece prints, so the card cannot promise a
+     different pile than the page shows. Both parser reads are served from
+     the build's one instance, so asking twice costs nothing. */
+  const tagged = posts.filter((post) => post.tags.includes(currentTag.title));
+  const intl = getIntl(DEFAULT_LOCALE);
+
+  return pageMetadata({
+    description: `Entries tagged ${currentTag.title}: ${intl.formatMessage(
+      { id: "postCount" },
+      { count: tagged.length }
+    )} in the run, newest first.`,
+    siteName: Blog.METADATA.siteName,
+    title: `Entries tagged ${currentTag.title}`,
+    url: `/blog/tags/${slug}`,
+  });
 }
 
 export const dynamic = "force-static";

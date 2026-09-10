@@ -4,6 +4,7 @@ import { Blog } from "@/constants/meta";
 import { DEFAULT_LOCALE } from "@/lib/i18n";
 import { getIntl } from "@/lib/intl";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
+import { pageMetadata } from "@/utils/metadata";
 import { Metadata } from "next/types";
 import { Suspense } from "react";
 
@@ -16,6 +17,12 @@ export async function generateStaticParams() {
   }));
 }
 
+/* The article is the title's, not the room label's: the shelf file for
+   the-inner-crisis is titled "The Inner Crisis". The headpiece and the card
+   print the same room name, so the formula lives here once. */
+const shelfRoom = (title: string) =>
+  `The ${title.replace(/^The\s+/i, "")} Shelf`;
+
 export async function generateMetadata({
   params,
 }: {
@@ -25,10 +32,24 @@ export async function generateMetadata({
 
   const markdownParser = await getMarkdownParser();
   const category = await markdownParser.getCategoryBySlug(slug);
+  const posts = await markdownParser.getAllPosts();
 
-  return {
-    title: category.title,
-  };
+  /* The count the headpiece prints, from the same filter, so the card cannot
+     promise a fuller shelf than the page opens on */
+  const shelved = posts.filter((post) => post.category_slug === slug);
+  const intl = getIntl(DEFAULT_LOCALE);
+
+  const room = shelfRoom(category.title);
+
+  return pageMetadata({
+    description: `${intl.formatMessage(
+      { id: "postCount" },
+      { count: shelved.length }
+    )} on ${room.replace(/^The /, "the ")}, newest first: everything here filed under ${category.title}.`,
+    siteName: Blog.METADATA.siteName,
+    title: room,
+    url: `/blog/categories/${slug}`,
+  });
 }
 
 export const dynamic = "force-static";
@@ -53,9 +74,7 @@ export default async function CategoryPage({
       <NewsFeed
         posts={filteredPost}
         headpiece={{
-          /* The article is the title's, not the room label's: the shelf
-             file for the-inner-crisis is titled "The Inner Crisis" */
-          room: `The ${category.title.replace(/^The\s+/i, "")} Shelf`,
+          room: shelfRoom(category.title),
           title: category.title,
           stat: intl.formatMessage(
             { id: "postCount" },
