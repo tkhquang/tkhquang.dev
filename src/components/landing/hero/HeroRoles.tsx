@@ -18,9 +18,7 @@ const HeroRoles = ({
       )}
       {...props}
     >
-      <span>
-        Software Engineer <span aria-hidden="true">💻</span>
-      </span>
+      <span>Building things. Taking them apart.</span>
     </div>
   );
 };

@@ -46,8 +46,8 @@ interface WorkExperience {
 const INFO: Info = {
   firstName: "Quang",
   lastName: "Trinh Khac",
-  title: "Senior Frontend Engineer",
-  summary: `Senior Frontend Engineer with ${getYearsOfExperience("2019-01-01")}+ years building and scaling web applications in React and Vue, and comfortable working down the stack in Elixir/Phoenix and Node.js. Owns frontend architecture end-to-end, from design systems and monorepo strategy to shipped product features, sets technical direction, mentors engineers, and uses AI-assisted tooling to move faster, shipping products that drive business outcomes. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
+  title: "Senior Software Engineer",
+  summary: `Senior Software Engineer with ${getYearsOfExperience("2019-01-01")}+ years building and scaling web applications in React and Vue, comfortable working on backend services in Elixir/Phoenix and Node.js. Leads feature development from technical design through delivery, with a focus on frontend architecture, design systems, and monorepo strategy. Sets technical direction, mentors engineers, and uses AI-assisted tooling to move faster, shipping products that drive business outcomes. Shares technical notes on a <a href="https://tkhquang.dev/blog/categories/technical" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">personal blog</a>.`,
 };
 
 const SKILLS: Skill[] = [
@@ -68,6 +68,10 @@ const SKILLS: Skill[] = [
       "Jest",
       "Cypress",
     ],
+  },
+  {
+    name: "Backend & Databases",
+    subskills: ["Elixir/Phoenix", "Node.js", "PostgreSQL"],
   },
   {
     name: "Styling & UI",
@@ -98,10 +102,6 @@ const SKILLS: Skill[] = [
   {
     name: "API Integration",
     subskills: ["GraphQL", "REST APIs", "Google Maps API"],
-  },
-  {
-    name: "Backend & Databases",
-    subskills: ["Elixir/Phoenix", "Node.js", "PostgreSQL"],
   },
   {
     name: "Tooling & DevOps",
@@ -175,7 +175,7 @@ const CERTIFICATIONS: CertificateGroup[] = [
 
 const WORK_EXPERIENCE: WorkExperience[] = [
   {
-    title: "Senior Frontend Engineer",
+    title: "Senior Software Engineer",
     company: "Trucker Path",
     note: "North America's #1 truck navigation (Truck GPS) · Moatable Inc. · Employer of Record: PERSOL Vietnam",
     url: "https://truckerpath.com/",
@@ -204,6 +204,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
           "React Hook Form",
           "Zod",
           "Google Maps API",
+          "Node.js",
         ],
       },
       {
@@ -234,7 +235,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
     ],
   },
   {
-    title: "Senior Frontend Engineer",
+    title: "Senior Software Engineer",
     company: "Care",
     note: "Singapore digital health and employee wellness platform · Employer of Record: Talent Matrix VN -> Remote.com",
     url: "https://www.wearecare.sg/",
@@ -262,6 +263,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
           "TypeScript",
           "Tailwind CSS",
           "Docker",
+          "Node.js",
         ],
       },
       {
@@ -320,7 +322,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
       {
         name: "Multi-tenant Restaurant Cloud Platform",
         summary:
-          "Transitioned from frontend to full-stack engineer, leading the architecture of a new POS system and a company-wide UI library.",
+          "Delivered a full-stack restaurant POS system, leading its architecture from data modeling to frontend state management, and created a company-wide React UI library.",
         teamSize: 8,
         url: null,
         tasks: [
@@ -336,6 +338,7 @@ const WORK_EXPERIENCE: WorkExperience[] = [
           "TypeScript",
           "Recoil",
           "Next.js",
+          "Node.js",
           "GraphQL",
           "PostgreSQL",
           "styled-components",
