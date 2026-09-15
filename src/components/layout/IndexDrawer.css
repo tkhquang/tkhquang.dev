@@ -46,11 +46,11 @@
   opacity: 0.85;
 }
 
-/* The plain two-line X in a 32px box, dimmed on hover; nothing moves.
+/* The small two-line X keeps a full 44px touch target; nothing moves.
    Unlayered, so it beats the dismiss button's utility classes */
 .drawer.index-drawer .drawer__header > button {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
