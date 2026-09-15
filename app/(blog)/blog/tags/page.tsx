@@ -4,7 +4,7 @@ import { Blog } from "@/constants/meta";
 import { getMarkdownParser } from "@/lib/MarkdownParser";
 import { MarkdownPost } from "@/models/markdown.types";
 import { pageMetadata } from "@/utils/metadata";
-import classNames from "classnames";
+import clsx from "clsx";
 import Link from "next/link";
 import { Metadata } from "next/types";
 
@@ -62,7 +62,7 @@ export default async function TagsPage() {
             <Link
               key={tag.slug}
               href={`/blog/tags/${tag.slug}`}
-              className={classNames(
+              className={clsx(
                 "border-theme-hairline-soft bg-theme-raised text-theme-primary hover:border-theme-primary/40 hover:bg-theme-primary/10 rounded-md border px-2.5 py-1 font-mono font-semibold no-underline transition-colors",
                 tag.count >= 3 ? "text-sm" : "text-xs"
               )}

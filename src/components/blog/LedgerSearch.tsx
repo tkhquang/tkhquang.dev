@@ -10,7 +10,7 @@ import {
 } from "@/lib/ledger-search/client";
 import type { LedgerAnswer } from "@/lib/ledger-search/engine";
 import { MARK_CLOSE, MARK_OPEN } from "@/lib/ledger-search/protocol";
-import classNames from "classnames";
+import clsx from "clsx";
 import Link from "next/link";
 import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 
@@ -162,7 +162,7 @@ const LedgerSearch = ({
   return (
     <>
       <search
-        className={classNames("ledger-search", {
+        className={clsx("ledger-search", {
           "ledger-search--dialog": inDialog,
         })}
       >
@@ -225,7 +225,7 @@ const LedgerSearch = ({
           {(hasText || inDialog) && (
             <button
               type="button"
-              className={classNames("ledger-search__clear", {
+              className={clsx("ledger-search__clear", {
                 "ledger-search__clear--empty": !hasText,
               })}
               disabled={!hasText}
@@ -276,7 +276,7 @@ const LedgerSearch = ({
 
         {answer && answer.results.length > 0 && (
           <ul
-            className={classNames("ledger-search__results", {
+            className={clsx("ledger-search__results", {
               "ledger-search__results--pending": pending,
             })}
           >

@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 
 interface HeroRolesProps extends React.ComponentProps<"div"> {
   align?: "start" | "center";
@@ -11,7 +11,7 @@ const HeroRoles = ({
 }: HeroRolesProps) => {
   return (
     <div
-      className={classNames(
+      className={clsx(
         "roles flex min-h-10 items-center text-xl font-medium lg:text-3xl",
         align === "center" ? "justify-center" : "justify-start",
         className

@@ -4,7 +4,7 @@ import {
   FRAGMENT_SHADER,
   VERTEX_SHADER,
 } from "@/components/blog/AuroraCanvas.glsl";
-import classNames from "classnames";
+import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 
 /* Northern lights over the dusk lakeshore; sunlight over the lapis day sky */
@@ -420,7 +420,7 @@ const AuroraCanvas = () => {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className={classNames(
+      className={clsx(
         "pointer-events-none absolute inset-0 size-full",
         "transition-opacity duration-1000",
         ready ? "opacity-100" : "opacity-0"

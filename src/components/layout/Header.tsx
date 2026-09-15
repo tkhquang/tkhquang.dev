@@ -4,7 +4,7 @@ import GlobalSearch from "@/components/layout/GlobalSearch";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import { ScrollManager } from "@/utils/dom";
-import classNames from "classnames";
+import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -53,7 +53,7 @@ const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
 
   return (
     <header
-      className={classNames(
+      className={clsx(
         "site-header--fixed h-header-height fixed inset-x-0 top-0 z-(--z-header) m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
         scrolled
           ? "text-theme-on-background bg-theme-background/80 shadow-[inset_0_-1px_0_var(--hairline-soft)] backdrop-blur-xs"

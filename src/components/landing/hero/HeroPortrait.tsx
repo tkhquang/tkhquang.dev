@@ -1,7 +1,7 @@
 import "./HeroPortrait.css";
 import Image from "@/components/common/NextImage";
 import { getProcessedImage } from "@/utils/image";
-import classNames from "classnames";
+import clsx from "clsx";
 
 const PORTRAIT_IMAGE = "/assets/resources/images/Aleks-2.jpg";
 
@@ -16,7 +16,7 @@ const HeroPortrait = async ({
   });
 
   return (
-    <div className={classNames("hero-portrait", className)} {...props}>
+    <div className={clsx("hero-portrait", className)} {...props}>
       <div className="relative w-full pb-[100%]">
         <Image
           fill

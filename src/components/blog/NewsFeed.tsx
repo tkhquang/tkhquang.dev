@@ -2,7 +2,7 @@ import BlogInfo from "@/components/blog/BlogInfo";
 import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
 import FeedList from "@/components/blog/FeedList";
 import { MarkdownPost } from "@/models/markdown.types";
-import classNames from "classnames";
+import clsx from "clsx";
 
 const NewsFeed = ({
   posts,
@@ -25,7 +25,7 @@ const NewsFeed = ({
 }) => {
   return (
     <div
-      className={classNames(
+      className={clsx(
         "relative mx-auto flex max-w-xl flex-wrap px-4 sm:px-6 lg:max-w-(--breakpoint-xl) lg:space-x-16 lg:px-8",
         /* Filtered rooms open on the headpiece band, flush with the header;
            the unfiltered feed keeps its gap under the masthead */

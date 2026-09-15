@@ -1,7 +1,7 @@
 import { SerialInstalment, SerialStar } from "@/components/blog/SeriesPlate";
 import ViewCount from "@/components/common/ViewCount";
 import { MarkdownPost } from "@/models/markdown.types";
-import classNames from "classnames";
+import clsx from "clsx";
 import { format, isValid } from "date-fns";
 import Link from "next/link";
 import React from "react";
@@ -34,10 +34,7 @@ const PostMeta = ({ className, post }: PostDatesProps) => {
 
   return (
     <div
-      className={classNames(
-        "grid grid-cols-[1fr_auto] items-end gap-2",
-        className
-      )}
+      className={clsx("grid grid-cols-[1fr_auto] items-end gap-2", className)}
     >
       <div className="kicker flex flex-wrap items-center gap-x-1.5 gap-y-1">
         <time className="align-middle" dateTime={post.created_at.toISOString()}>

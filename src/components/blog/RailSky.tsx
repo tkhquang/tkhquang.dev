@@ -1,5 +1,5 @@
 import "./RailSky.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 
 /*
@@ -143,10 +143,7 @@ const RailSky = () => {
                   the idle twinkle owns this one, so the two opacities
                   multiply instead of fighting over a single element */}
               <g
-                className={classNames(
-                  "rail-twinkle",
-                  star.mag === 1 && "rail-glint"
-                )}
+                className={clsx("rail-twinkle", star.mag === 1 && "rail-glint")}
                 style={
                   {
                     "--rail-twinkle-delay": `${star.delay}s`,

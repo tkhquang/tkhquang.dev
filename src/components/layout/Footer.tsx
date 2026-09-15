@@ -1,5 +1,5 @@
 import SocialLinks from "@/components/common/SocialLinks";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 
 const Footer = ({
@@ -10,7 +10,7 @@ const Footer = ({
   return (
     <footer
       {...props}
-      className={classNames(
+      className={clsx(
         "footer bg-theme-darken border-theme-hairline-soft mt-auto border-t py-6",
         className
       )}

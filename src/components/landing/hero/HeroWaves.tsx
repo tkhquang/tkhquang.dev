@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 
 interface LandingWavesProps extends React.ComponentProps<"svg"> {
   /**
@@ -30,7 +30,7 @@ const LandingWaves = ({
       xmlns="http://www.w3.org/2000/svg"
       height="70"
       aria-hidden="true"
-      className={classNames(
+      className={clsx(
         "waves w-full transition-[opacity_0.5s_linear]",
         className
       )}
