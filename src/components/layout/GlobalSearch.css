@@ -1,29 +1,10 @@
 @layer components {
-  .global-search__close {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    transition: opacity 150ms;
-  }
-
-  .global-search__close:hover {
-    opacity: 0.7;
-  }
-
   html:not(.js) .global-search__trigger {
     display: none;
   }
 
-  /* The installed Ariakit reserves the removed scrollbar with body padding.
-     The landing header is fixed to the viewport, so it needs the same inset. */
+  /* Ariakit compensates the body for its removed scrollbar; the fixed
+     portfolio header needs the same inset to keep its controls still. */
   .site-header--fixed {
     padding-right: var(--scrollbar-width, 0px);
   }
@@ -32,35 +13,41 @@
     position: fixed;
     inset: 0;
     z-index: calc(var(--z-header) + 10);
-    background: rgb(0 0 0 / 45%);
+    background: color-mix(in srgb, var(--background-dark) 72%, transparent);
+    backdrop-filter: blur(5px);
   }
 
   .global-search {
-    --search-inset: clamp(12px, 3vh, 32px);
+    /* Blog inks also need to exist when the portal opens on the portfolio. */
+    --search-gilt: var(--gilt-ink, hsl(42deg 60% 70%));
+    --search-inset: clamp(16px, 6vh, 64px);
 
     position: fixed;
     inset: var(--search-inset) 0 auto;
     z-index: calc(var(--z-header) + 11);
     display: flex;
     flex-direction: column;
-    width: min(1120px, calc(100% - 64px));
-    height: calc(
-      var(--dialog-viewport-height, 100dvh) - 2 * var(--search-inset)
+    width: min(1000px, calc(100% - 64px));
+    height: min(
+      740px,
+      calc(var(--dialog-viewport-height, 100dvh) - 2 * var(--search-inset))
     );
-    /* Ariakit tracks the visible viewport, including the mobile keyboard.
-       Query the resulting sheet height to leave room for results. */
     container: search-sheet / size;
     margin: 0 auto;
     overflow: hidden;
     border: 1px solid var(--hairline-soft);
+    border-top: 2px solid var(--search-gilt);
     border-radius: 3px;
     background: var(--background);
     color: var(--on-background);
-    box-shadow: 0 24px 80px -24px rgb(0 0 0 / 45%);
+    box-shadow: 0 28px 100px -24px rgb(0 0 0 / 50%);
   }
 
-  /* Ariakit holds both layers through the exit transition. Only the ink and
-     scrim fade, keeping the sheet and the page in their original positions. */
+  html[data-theme="light"] .global-search {
+    --search-gilt: var(--gilt-ink, hsl(40deg 65% 38%));
+  }
+
+  /* Keep the page and reading position still through both transitions. */
   .global-search,
   .global-search__backdrop {
     opacity: 0;
@@ -80,54 +67,182 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin: 0 2rem;
-    padding: 0.65rem 0;
+    padding: 0.65rem 1.75rem;
     border-bottom: 1px solid var(--hairline-soft);
     color: var(--primary);
   }
 
-  .global-search__close {
-    gap: 0.65rem;
+  .global-search__identity {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
   }
 
-  .global-search__escape {
+  .global-search__identity > .kicker {
+    margin: 0;
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--hairline-soft);
+    color: var(--on-background);
+  }
+
+  .global-search__wordmark {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    font-optical-sizing: auto;
+  }
+
+  .global-search__close {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.4rem;
+    border: 0;
+    border-radius: 2px;
+    background: transparent;
+    color: var(--on-background);
+    cursor: pointer;
+    transition: background-color 150ms;
+  }
+
+  .global-search__close:hover {
+    background: var(--surface);
+  }
+
+  .global-search :where(kbd) {
+    display: inline-block;
+    padding: 0.1em 0.4em;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 3px;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: max(0.7rem, 11px);
+    line-height: 1.5;
+  }
+
+  .global-search__spread {
+    display: grid;
+    flex: 1;
+    grid-template-columns: 260px minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .global-search__index {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 2rem 1.75rem 1.25rem;
+    overflow-y: auto;
+    border-right: 1px solid var(--hairline-soft);
+    background:
+      radial-gradient(
+        ellipse at 0 0,
+        color-mix(in srgb, var(--primary) 9%, transparent),
+        transparent 70%
+      ),
+      color-mix(in srgb, var(--surface) 55%, var(--background));
+    scrollbar-width: thin;
+  }
+
+  .global-search__lede {
+    margin: 0 0 2rem;
+    font-family: var(--font-serif);
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.9;
+  }
+
+  .global-search__browse > .kicker {
+    margin: 0 0 0.7rem;
+  }
+
+  .global-search__browse ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .global-search__browse li {
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .global-search__browse a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 44px;
+    padding: 0.85rem 0;
+    color: var(--on-background);
+    text-decoration: none;
+  }
+
+  .global-search__browse-label {
+    color: var(--primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-underline-offset: 0.25em;
+  }
+
+  .global-search__browse-description {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: max(0.7rem, 11px);
+    line-height: 1.6;
+  }
+
+  .global-search__browse svg {
+    flex: none;
+    color: var(--primary);
+    opacity: 0.55;
+  }
+
+  .global-search__browse a:hover .global-search__browse-label {
+    text-decoration: underline;
+  }
+
+  .global-search__browse a:hover svg {
+    opacity: 1;
+  }
+
+  .global-search__imprint {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    text-align: center;
+  }
+
+  .global-search__plate {
+    width: 100%;
+    max-width: 220px;
+    height: 115px;
+    color: var(--primary);
+  }
+
+  .global-search__plate-stars {
+    color: var(--search-gilt);
+  }
+
+  .global-search__imprint > .kicker {
+    font-size: 0.6rem;
   }
 
   .global-search__content {
     display: flex;
-    flex: 1;
     flex-direction: column;
-    width: 100%;
-    max-width: 800px;
+    min-width: 0;
     min-height: 0;
-    margin: 0 auto;
-    padding: clamp(1rem, 4vh, 3rem) 2rem 0;
-  }
-
-  .global-search__heading {
-    flex: none;
-  }
-
-  .global-search__title {
-    margin: 0;
-    color: var(--primary);
-    font-family: var(--font-display);
-    font-size: clamp(1.8rem, 4vw, 2.75rem);
-    font-weight: 600;
-    line-height: 1.15;
-  }
-
-  .global-search__description {
-    margin: 0.85rem 0 0;
-    font-size: 0.875rem;
-    line-height: 1.6;
+    padding: 1.25rem 1.5rem 0;
   }
 
   .global-search .ledger-search {
     flex: none;
-    margin-top: 1.75rem;
+    margin-top: 0;
   }
 
   .ledger-search--dialog .ledger-search__label {
@@ -139,9 +254,40 @@
     white-space: nowrap;
   }
 
+  .global-search .ledger-search__line {
+    gap: 0.65rem;
+    padding: 0 0.25rem 0 0.75rem;
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--surface) 50%, var(--background));
+    transition:
+      border-color 150ms,
+      background-color 150ms;
+  }
+
+  .global-search .ledger-search__line:focus-within {
+    border-color: var(--primary);
+    background: var(--background);
+    outline: 1px solid var(--search-gilt);
+    outline-offset: 3px;
+  }
+
+  .global-search .ledger-search__search-icon {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    color: var(--primary);
+  }
+
   .global-search .ledger-search__field {
-    padding: 0.5rem 0;
-    font-size: max(1.125rem, 16px);
+    padding: 0.35rem 0;
+    font-size: max(1rem, 16px);
+    line-height: 1.5;
+  }
+
+  .global-search .ledger-search__field::placeholder {
+    color: var(--on-background);
+    opacity: 0.7;
   }
 
   .global-search .ledger-search__clear {
@@ -155,13 +301,15 @@
 
   .global-search .ledger-search__count {
     min-height: 1.5em;
+    margin-top: 0.65rem;
+    font-size: 0.65rem;
   }
 
   .global-search .ledger-search__body {
     flex: 1;
     min-height: 0;
     margin: 0 -0.5rem;
-    padding: 0 0.5rem 1rem;
+    padding: 0 0.5rem 1.5rem;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-gutter: stable;
@@ -169,67 +317,218 @@
     scrollbar-width: thin;
   }
 
-  .global-search .ledger-search__results,
-  .global-search .ledger-search__empty {
+  .global-search .ledger-search__suggestions {
     margin-top: 1rem;
   }
 
+  .global-search .ledger-search__empty h3 {
+    margin: 0;
+    color: var(--primary);
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .global-search .ledger-search__suggestions-title {
+    margin: 0;
+    color: var(--primary);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .global-search .ledger-search__suggestions-description {
+    margin: 0.35rem 0 0.75rem;
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+
+  .global-search .ledger-search__suggestion {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 52px;
+    padding: 0.65rem 0.5rem;
+    border: 0;
+    border-top: 1px solid var(--hairline-soft);
+    background: transparent;
+    color: var(--on-background);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 150ms;
+  }
+
+  .global-search .ledger-search__suggestion-query {
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .global-search .ledger-search__suggestion-description {
+    font-size: max(0.75rem, 12px);
+    line-height: 1.7;
+  }
+
+  .global-search .ledger-search__suggestion svg {
+    color: var(--primary);
+  }
+
+  .global-search .ledger-search__suggestion:hover {
+    background: color-mix(in srgb, var(--primary) 7%, transparent);
+  }
+
+  .global-search .ledger-search__results {
+    margin: 0.85rem 0 0;
+  }
+
   .global-search .ledger-search__result {
-    padding: 1.1rem 0;
+    padding: 0;
+    border-color: var(--hairline-soft);
   }
 
   .global-search .ledger-search__hit {
-    flex-wrap: wrap;
-    column-gap: 1rem;
-    row-gap: 0.35rem;
+    position: relative;
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.2rem 1.6rem 1.2rem 0.65rem;
+    border-radius: 2px;
+    transition: background-color 150ms;
+  }
+
+  .global-search .ledger-search__hit:hover,
+  .global-search .ledger-search__hit:focus-visible {
+    background: color-mix(in srgb, var(--primary) 7%, transparent);
+  }
+
+  .global-search .ledger-search__hit > time {
+    color: var(--on-background);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    opacity: 1;
+  }
+
+  .global-search .ledger-search__title {
+    font-size: 1rem;
+    line-height: 1.55;
+    text-underline-offset: 0.2em;
   }
 
   .global-search .ledger-search__snippet {
+    display: block;
+    margin: 0;
+    color: var(--on-background);
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.8;
     overflow-wrap: anywhere;
+    opacity: 1;
   }
 
-  .global-search__browse {
-    padding: 2rem 0;
+  .global-search .ledger-search__snippet mark {
+    background: color-mix(in srgb, var(--search-gilt) 22%, transparent);
+    color: var(--on-surface);
   }
 
-  .global-search__browse nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.75rem;
-    margin-top: 0.5rem;
-  }
-
-  .global-search__browse a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
+  .global-search .ledger-search__result-arrow {
+    position: absolute;
+    top: 1.2rem;
+    right: 0.2rem;
     color: var(--primary);
-    text-underline-offset: 0.25em;
   }
 
-  .global-search__browse a:hover {
+  .global-search .ledger-search__empty {
+    margin: 2rem 0 0;
+    padding: 1.5rem;
+    border: 1px solid var(--hairline-soft);
+    border-top: 2px solid var(--search-gilt);
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--surface) 55%, var(--background));
+    font-size: 0.875rem;
+    line-height: 1.8;
+    opacity: 1;
+  }
+
+  .global-search .ledger-search__empty p {
+    margin: 0.75rem 0 0;
+  }
+
+  .global-search .ledger-search__reset {
+    min-height: 44px;
+    margin-top: 1rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
     text-decoration: underline;
+    text-underline-offset: 0.3em;
+    cursor: pointer;
+  }
+
+  .global-search__mobile-index {
+    display: none;
   }
 
   .global-search__foot {
     display: flex;
     flex: none;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin: 0 2rem;
-    padding: 1rem 0;
+    padding: 0.8rem 1.75rem;
     border-top: 1px solid var(--hairline-soft);
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
-  /* The blog focus frame has local tokens; fall back to the common palette
-     when the same sheet is opened from the portfolio. */
-  .global-search :is(a, button, input):focus-visible {
-    outline: 1px solid var(--cartouche-outer, var(--primary));
-    outline-offset: 3px;
-    box-shadow: 0 0 0 1px var(--cartouche-inner, var(--background));
+  .global-search__keyboard-hint {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .global-search :is(a, button):focus-visible {
+    outline: 1px solid var(--search-gilt);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 1px var(--background);
     transition: none;
+  }
+
+  @media (width < 800px) {
+    .global-search {
+      --search-inset: 12px;
+
+      width: calc(100% - 24px);
+      height: calc(
+        var(--dialog-viewport-height, 100dvh) - 2 * var(--search-inset)
+      );
+    }
+
+    .global-search__spread {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .global-search__index {
+      display: none;
+    }
+
+    .global-search__mobile-index {
+      display: block;
+      margin-top: 2rem;
+    }
+
+    .global-search__mobile-index ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 1.5rem;
+    }
   }
 
   @media (width < 640px) {
@@ -239,19 +538,28 @@
       width: calc(100% - 16px);
     }
 
-    .global-search__masthead,
-    .global-search__foot {
-      margin-right: 1.25rem;
-      margin-left: 1.25rem;
-    }
-
-    .global-search__content {
+    .global-search__masthead {
       padding-right: 1.25rem;
       padding-left: 1.25rem;
     }
 
+    .global-search__content {
+      padding: 1rem 1.25rem 0;
+    }
+
+    .global-search .ledger-search__line {
+      gap: 0.5rem;
+      padding-right: 0.2rem;
+      padding-left: 0.65rem;
+    }
+
+    .global-search .ledger-search__suggestion {
+      grid-template-columns: 4.25rem minmax(0, 1fr) auto;
+      gap: 0.5rem;
+    }
+
     .global-search__foot {
-      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      padding: 1rem 1.25rem max(1rem, env(safe-area-inset-bottom));
     }
 
     .global-search__escape,
@@ -260,10 +568,16 @@
     }
   }
 
+  /* Ariakit follows visualViewport, including the phone keyboard. Keep the
+     input and a useful result viewport when the available height shrinks. */
   @container search-sheet (height < 500px) {
-    .global-search__heading,
+    .global-search__index,
     .global-search__foot {
       display: none;
+    }
+
+    .global-search__spread {
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .global-search__content {
@@ -273,5 +587,24 @@
     .global-search .ledger-search {
       margin-top: 0.75rem;
     }
+
+    .global-search .ledger-search__suggestions,
+    .global-search .ledger-search__empty {
+      margin-top: 1rem;
+    }
+
+    .global-search__mobile-index {
+      display: block;
+      margin-top: 1.5rem;
+    }
+  }
+}
+
+@layer overrides {
+  /* The blog draws a focus frame on every input in this layer. The lookup
+     already frames the entire field, including its icon and clear control. */
+  .global-search .ledger-search__field:focus-visible {
+    outline: none;
+    box-shadow: none;
   }
 }

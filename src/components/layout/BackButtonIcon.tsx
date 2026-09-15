@@ -46,9 +46,10 @@ const BackButtonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
       // Cleanup
       return () => {
         scrollManager.destroy();
+        gsap.killTweensOf(circle);
       };
     },
-    { dependencies: [isInBlogPost] }
+    { dependencies: [isInBlogPost], revertOnUpdate: true }
   );
 
   return (
@@ -71,20 +72,22 @@ const BackButtonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
         stroke="currentColor"
         className={isInBlogPost ? "opacity-20" : "opacity-100"}
       />
-      <circle
-        className="back-button-icon__ring"
-        cx="12"
-        cy="12"
-        r="10"
-        transform="rotate(-90 12 12)"
-        stroke="transparent"
-        ref={circleRef}
-        style={{
-          stroke: "currentColor",
-          strokeDasharray: dashArray,
-          strokeDashoffset: circumference,
-        }}
-      />
+      {isInBlogPost && (
+        <circle
+          className="back-button-icon__ring"
+          cx="12"
+          cy="12"
+          r="10"
+          transform="rotate(-90 12 12)"
+          stroke="transparent"
+          ref={circleRef}
+          style={{
+            stroke: "currentColor",
+            strokeDasharray: dashArray,
+            strokeDashoffset: circumference,
+          }}
+        />
+      )}
       <polyline points="12 8 8 12 12 16" />
       <line x1="16" y1="12" x2="8" y2="12" />
     </svg>

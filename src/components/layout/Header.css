@@ -1,0 +1,326 @@
+@layer components {
+  .site-header--settled {
+    background: color-mix(in srgb, var(--background) 88%, transparent);
+    box-shadow: inset 0 -1px 0 var(--hairline-soft);
+    backdrop-filter: blur(8px);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 100%;
+  }
+
+  .site-header__identity,
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    min-width: 0;
+    height: 100%;
+  }
+
+  .site-header__identity {
+    gap: 0.5rem;
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-decoration: none;
+    white-space: nowrap;
+    font-optical-sizing: auto;
+    cursor: pointer;
+    transition: opacity 150ms;
+  }
+
+  .site-header__brand:hover {
+    opacity: 0.8;
+  }
+
+  .site-header__brand--mark {
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+  }
+
+  .site-header__brand--mark:hover,
+  .site-header__brand--blog:hover {
+    opacity: 1;
+  }
+
+  .site-header__signature {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .personal-mark {
+    --mark-spell: var(--primary-dark);
+
+    display: block;
+    flex: none;
+    overflow: visible;
+    color: var(--on-band);
+    transition: color 250ms;
+  }
+
+  .personal-mark__cloak {
+    transition: fill-opacity 250ms;
+  }
+
+  /* Use the site's blue ink, rather than body-text grey, on settled surfaces. */
+  .site-header--settled .personal-mark,
+  html[data-theme="light"] .site-header.band--day .personal-mark {
+    --mark-spell: var(--primary);
+
+    color: var(--primary);
+  }
+
+  /* Trace the existing contour on interaction; the mark itself stays still. */
+  .personal-mark__trace {
+    color: var(--mark-spell);
+    opacity: 0;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 180ms;
+  }
+
+  .personal-mark__eyes {
+    color: var(--mark-spell);
+    transition:
+      color 250ms,
+      filter 250ms;
+  }
+
+  .site-header__brand:is(:hover, :focus-visible) .personal-mark__trace {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+
+  .site-header__brand:is(:hover, :focus-visible) .personal-mark__cloak {
+    fill-opacity: 0.18;
+  }
+
+  .site-header__brand:is(:hover, :focus-visible) .personal-mark__eyes {
+    filter: drop-shadow(0 0 2px currentColor);
+  }
+
+  html[data-theme="light"]
+    :is(.site-header--settled, .site-header.band--day)
+    .site-header__brand:is(:hover, :focus-visible)
+    .personal-mark__eyes {
+    filter: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .personal-mark,
+    .personal-mark__cloak,
+    .personal-mark__trace,
+    .personal-mark__eyes {
+      transition: none;
+    }
+  }
+
+  .site-header__back {
+    flex: none;
+    width: 32px;
+    height: 32px;
+  }
+
+  .site-header__byline {
+    display: none;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 44px;
+    margin-top: 0.1875rem;
+    color: inherit;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.8;
+  }
+
+  a.site-header__byline:hover {
+    opacity: 1;
+  }
+
+  .site-header__nav {
+    display: none;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .site-header__nav-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-family: var(--font-mono);
+    font-size: max(0.75rem, 12px);
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .site-header__nav-link > span {
+    padding: 0.1em 0;
+    background: linear-gradient(
+        color-mix(in srgb, currentColor 26%, transparent),
+        color-mix(in srgb, currentColor 26%, transparent)
+      )
+      no-repeat left bottom / 0% 45%;
+    transition: background-size 180ms;
+  }
+
+  .site-header__nav-link:hover > span,
+  .site-header__nav-link:focus-visible > span,
+  .site-header__nav-link[aria-current] > span {
+    background-size: 100% 45%;
+  }
+
+  .site-header__nav-link[aria-current] > span {
+    box-shadow: inset 0 -1px 0 currentColor;
+  }
+
+  /* Navigation is primary ink on paper and full band ink over the blue sky. */
+  .site-header--settled :is(.site-header__nav-link, .global-search__trigger),
+  html[data-theme="light"]
+    .site-header.band--day
+    :is(.site-header__nav-link, .global-search__trigger) {
+    color: var(--primary);
+  }
+
+  .site-header__tools {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 2px;
+    padding-left: 0.75rem;
+  }
+
+  .site-header__tools::before {
+    position: absolute;
+    top: 12px;
+    bottom: 12px;
+    left: 0;
+    width: 1px;
+    background: color-mix(in srgb, currentColor 22%, transparent);
+    content: "";
+  }
+
+  /* Small glyphs, with the original 44px pointer and keyboard targets. */
+  .site-header .header-icon-button {
+    position: relative;
+    isolation: isolate;
+    min-width: 44px;
+    opacity: 0.85;
+  }
+
+  .site-header .header-icon-button::before {
+    position: absolute;
+    z-index: -1;
+    inset: 5px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    content: "";
+    transition:
+      background-color 150ms,
+      border-color 150ms;
+  }
+
+  .site-header .header-icon-button:hover,
+  .site-header .header-icon-button[aria-expanded="true"] {
+    opacity: 1;
+  }
+
+  .site-header .header-icon-button:hover::before,
+  .site-header .header-icon-button[aria-expanded="true"]::before {
+    border-color: color-mix(in srgb, currentColor 12%, transparent);
+    background: color-mix(in srgb, currentColor 6%, transparent);
+  }
+
+  .site-header .global-search__trigger {
+    flex-basis: auto;
+    gap: 0.4rem;
+    width: auto;
+    padding: 0 0.6rem;
+    opacity: 1;
+  }
+
+  .site-header__search-label {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: max(0.75rem, 12px);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .site-header :is(a, button):focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  @media (width >= 448px) {
+    a.site-header__byline {
+      display: inline-flex;
+    }
+  }
+
+  @media (width >= 768px) {
+    .site-header__nav {
+      display: flex;
+    }
+
+    .site-header__index-trigger {
+      display: none;
+    }
+  }
+
+  @media (width >= 1024px) {
+    .site-header__search-label {
+      display: inline;
+    }
+  }
+
+  @media (width < 640px) {
+    .site-header__actions {
+      gap: 0.6rem;
+    }
+
+    .site-header__tools {
+      padding-left: 0.4rem;
+    }
+  }
+}

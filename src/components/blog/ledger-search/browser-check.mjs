@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import puppeteer from "puppeteer";
 
-const baseURL = process.env.LEDGER_SEARCH_BASE_URL ?? "http://127.0.0.1:3107";
+// Next's development origin check accepts localhost without extra configuration.
+const baseURL = process.env.LEDGER_SEARCH_BASE_URL ?? "http://localhost:3107";
 const archiveURL = `${baseURL}/blog/posts`;
 const field = ".ledger-search__field";
 const count = ".ledger-search__count";
@@ -303,13 +304,13 @@ test("the same worker and index serve a field after client navigation", async ()
 
     /* The archive is the only room that carries a field, so leaving it and
        coming back remounts the field against the runtime already started. */
-    await page.click('.blog-nav__link[href="/blog/categories"]');
+    await page.click('.site-header__nav a[href="/blog/categories"]');
     await page.waitForFunction(
       () =>
         location.pathname === "/blog/categories" &&
         !document.querySelector(".ledger-search__field")
     );
-    await page.click('.blog-nav__link[href="/blog/posts"]');
+    await page.click('.site-header__nav a[href="/blog/posts"]');
     await page.waitForSelector(field);
     await enterQuery(page, "camera");
     await waitForResults(page);

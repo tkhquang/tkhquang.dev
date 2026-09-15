@@ -11,6 +11,7 @@ import {
 import type { LedgerAnswer } from "@/lib/ledger-search/engine";
 import { MARK_CLOSE, MARK_OPEN } from "@/lib/ledger-search/protocol";
 import clsx from "clsx";
+import { ArrowUpRight, Search } from "lucide-react";
 import Link from "next/link";
 import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 
@@ -43,11 +44,13 @@ const LedgerSearch = ({
   inputRef,
   onNavigate,
   inDialog = false,
+  suggestions,
 }: {
   children?: React.ReactNode;
   inputRef?: React.Ref<HTMLInputElement>;
   onNavigate?: () => void;
   inDialog?: boolean;
+  suggestions?: readonly { query: string; description: string }[];
 }) => {
   const fieldId = useId();
   const fieldRef = useRef<HTMLInputElement>(null);
@@ -112,6 +115,12 @@ const LedgerSearch = ({
     updateQuery("");
   };
 
+  const followThread = (value: string) => {
+    if (fieldRef.current) fieldRef.current.value = value;
+    updateQuery(value);
+    fieldRef.current?.focus();
+  };
+
   const hasText = query.length > 0;
   const searching = query.trim().length > 0;
 
@@ -126,7 +135,9 @@ const LedgerSearch = ({
   /* The count reports the state of the query in hand, not of the results still
      on show, so a stale total is never printed as though it answered. */
   const count = (() => {
-    if (!searching) return "";
+    if (!searching) {
+      return inDialog ? "Search across titles, code & passages" : "";
+    }
     if (unavailable) return "The lookup is unavailable";
     if (lookup.status === "loading") return "Opening the index";
     if (lookup.status === "searching") return "Searching the ledger";
@@ -159,6 +170,23 @@ const LedgerSearch = ({
     </p>
   );
 
+  const emptyState = (message: string, heading?: string, reload = false) =>
+    inDialog ? (
+      <div className="ledger-search__empty">
+        {heading && <h3>{heading}</h3>}
+        <p>{message}</p>
+        <button
+          type="button"
+          className="ledger-search__reset"
+          onClick={reload ? () => window.location.reload() : clear}
+        >
+          {reload ? "Reload the ledger" : "Try another search"}
+        </button>
+      </div>
+    ) : (
+      <p className="ledger-search__empty">{message}</p>
+    );
+
   return (
     <>
       <search
@@ -170,13 +198,25 @@ const LedgerSearch = ({
           Search the ledger
         </label>
         <div className="ledger-search__line">
+          {inDialog && (
+            <Search
+              className="ledger-search__search-icon"
+              size={22}
+              strokeWidth={1.75}
+              aria-hidden
+            />
+          )}
           <input
             ref={mergedFieldRef}
             id={fieldId}
             className="ledger-search__field"
             type="search"
             maxLength={MAX_QUERY_LENGTH}
-            placeholder="A word from anywhere in an entry"
+            placeholder={
+              inDialog
+                ? "A word or phrase…"
+                : "A word from anywhere in an entry"
+            }
             autoComplete="off"
             spellCheck={false}
             onFocus={warmLedger}
@@ -256,23 +296,53 @@ const LedgerSearch = ({
         {/* A correction can wrap to several lines. In the sheet it scrolls
             with the answer, leaving the field and result viewport in place. */}
         {inDialog && repairNote}
+        {inDialog && !searching && suggestions && suggestions.length > 0 && (
+          <section className="ledger-search__suggestions">
+            <h3 className="ledger-search__suggestions-title">
+              Follow a thread
+            </h3>
+            <p className="ledger-search__suggestions-description">
+              A few starting points from the ledger.
+            </p>
+            {suggestions.map((suggestion) => (
+              <button
+                type="button"
+                className="ledger-search__suggestion"
+                key={suggestion.query}
+                onClick={() => followThread(suggestion.query)}
+              >
+                <span className="ledger-search__suggestion-query">
+                  {suggestion.query}
+                </span>
+                <span className="ledger-search__suggestion-description">
+                  {suggestion.description}
+                </span>
+                <ArrowUpRight size={18} strokeWidth={1.75} aria-hidden />
+              </button>
+            ))}
+          </section>
+        )}
         {/* Read from the answer on show rather than from the status, the way
           the results below are. Gating this on a settled lookup unmounts it
           for the frame each keystroke spends in flight, and a line leaving and
           returning at twenty times a second moves the page under the reader. */}
-        {searching && answer !== null && answer.results.length === 0 && (
-          <p className="ledger-search__empty">
-            Try one word, or a phrase you remember reading.
-          </p>
-        )}
+        {searching &&
+          answer !== null &&
+          answer.results.length === 0 &&
+          emptyState(
+            "Try one word, or a phrase you remember reading.",
+            "No matching entries."
+          )}
 
-        {searching && unavailable && (
-          <p className="ledger-search__empty">
-            {unavailable.replaced
+        {searching &&
+          unavailable &&
+          emptyState(
+            unavailable.replaced
               ? "The ledger has been reprinted since this page opened. Reload it to search the current entries."
-              : "The search index did not load. Edit the search to try again."}
-          </p>
-        )}
+              : "The search index did not load. Edit the search to try again.",
+            "The lookup is unavailable.",
+            unavailable.replaced
+          )}
 
         {answer && answer.results.length > 0 && (
           <ul
@@ -292,10 +362,25 @@ const LedgerSearch = ({
                     {result.dateLabel}
                   </time>
                   <span className="ledger-search__title">{result.title}</span>
+                  {inDialog && (
+                    <>
+                      <span className="ledger-search__snippet">
+                        {marked(result.snippet)}
+                      </span>
+                      <ArrowUpRight
+                        className="ledger-search__result-arrow"
+                        size={18}
+                        strokeWidth={1.75}
+                        aria-hidden
+                      />
+                    </>
+                  )}
                 </Link>
-                <p className="ledger-search__snippet">
-                  {marked(result.snippet)}
-                </p>
+                {!inDialog && (
+                  <p className="ledger-search__snippet">
+                    {marked(result.snippet)}
+                  </p>
+                )}
               </li>
             ))}
           </ul>

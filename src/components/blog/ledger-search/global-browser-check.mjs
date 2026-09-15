@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import puppeteer from "puppeteer";
 
-const baseURL = process.env.LEDGER_SEARCH_BASE_URL ?? "http://127.0.0.1:3107";
+// Next's development origin check accepts localhost without extra configuration.
+const baseURL = process.env.LEDGER_SEARCH_BASE_URL ?? "http://localhost:3107";
 const trigger = ".global-search__trigger";
 const dialog = '.global-search[role="dialog"]';
 const field = `${dialog} .ledger-search__field`;
@@ -408,7 +409,56 @@ test("the global shortcut leaves an archive edit and another dialog alone", asyn
   }
 });
 
-test("a no-match query can be cleared and a result closes the persistent blog header dialog", async () => {
+test("suggested threads search by keyboard and pointer, then restore after clearing", async () => {
+  const run = await openPage("/", { width: 390, theme: "dark" });
+  const { page } = run;
+  const suggestion = `${dialog} .ledger-search__suggestion`;
+  try {
+    await openSearch(page);
+    const queries = await page.$$eval(
+      `${suggestion} .ledger-search__suggestion-query`,
+      (nodes) => nodes.map((node) => node.textContent.trim())
+    );
+    assert.ok(queries.length > 0, "the empty search offers starting points");
+
+    for (const [index, query] of queries.entries()) {
+      const buttons = await page.$$(suggestion);
+      if (index === 0) {
+        await buttons[index].focus();
+        await page.keyboard.press("Enter");
+      } else {
+        await buttons[index].click();
+      }
+      await waitForResults(page);
+      assert.equal(await page.$eval(field, (node) => node.value), query);
+      assert.equal(
+        await page.$eval(field, (node) => document.activeElement === node),
+        true,
+        "choosing a thread leaves the query ready to edit"
+      );
+      assert.equal(await page.$(suggestion), null);
+
+      if (index === 0) {
+        await page.click(`${dialog} .ledger-search__clear`);
+      } else {
+        // A programmatic suggestion must not break React's next native edit.
+        await enterQuery(page, "");
+      }
+      await page.waitForSelector(suggestion, { visible: true });
+      assert.equal(await page.$eval(field, (node) => node.value), "");
+      assert.equal(await page.$$eval(results, (rows) => rows.length), 0);
+      assert.equal(
+        await page.$eval(field, (node) => document.activeElement === node),
+        true
+      );
+    }
+    assert.deepEqual(run.errors, []);
+  } finally {
+    await run.context.close();
+  }
+});
+
+test("a no-match query offers recovery and clicking a result passage closes the persistent blog header dialog", async () => {
   const run = await openPage("/blog/posts");
   const { page } = run;
   try {
@@ -422,19 +472,22 @@ test("a no-match query can be cleared and a result closes the persistent blog he
     );
     assert.equal(await page.$$eval(results, (rows) => rows.length), 0);
     assert.ok(await page.$(`${dialog} .ledger-search__empty`));
-    await page.click(`${dialog} .ledger-search__clear`);
+    await page.click(`${dialog} .ledger-search__reset`);
     assert.equal(await page.$eval(field, (node) => node.value), "");
     assert.equal(
       await page.$eval(field, (node) => document.activeElement === node),
       true
     );
+    await page.waitForSelector(`${dialog} .ledger-search__suggestion`, {
+      visible: true,
+    });
     await enterQuery(page, "vtable");
     await waitForResults(page);
     const destination = await page.$eval(
       hit,
       (node) => new URL(node.href).pathname
     );
-    await page.click(hit);
+    await page.click(`${hit} .ledger-search__snippet`);
     await page.waitForFunction(
       (path) => location.pathname === path,
       { timeout: 120000 },

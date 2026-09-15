@@ -2,7 +2,7 @@ import { ThemeMode, useThemeValue } from "@/store/theme";
 import { prefersReducedMotion } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef } from "react";
+import { useId, useRef, useState } from "react";
 
 // Register the hook to avoid React version discrepancies
 gsap.registerPlugin(useGSAP);
@@ -25,7 +25,9 @@ const properties = {
 };
 
 const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
-  const initialProperties = properties[mode];
+  // Keep the mount geometry stable so React does not jump to GSAP's target.
+  const [initialProperties] = useState(() => properties[mode]);
+  const maskId = useId();
 
   // Create refs for animated elements
   const svgRef = useRef(null);
@@ -67,12 +69,13 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
   return (
     <svg
       ref={svgRef}
+      aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
+      width="18"
+      height="18"
       viewBox="0 0 24 24"
       fill="none"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       stroke="currentColor"
@@ -81,7 +84,7 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
         transform: `rotate(${initialProperties.rotation}deg)`,
       }}
     >
-      <mask id="animated-icon-mask-1">
+      <mask id={maskId}>
         <rect x="0" y="0" width="100%" height="100%" fill="white" />
         <circle
           ref={maskedCircleRef}
@@ -97,8 +100,8 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
         cx="12"
         cy="12"
         r={initialProperties.r}
-        fill="white"
-        mask="url(#animated-icon-mask-1)"
+        fill="currentColor"
+        mask={`url(#${maskId})`}
       />
 
       <g
@@ -121,6 +124,8 @@ const AnimatedIcon = ({ mode }: { mode: ThemeMode }) => {
 
 const ThemeToggle = () => {
   const theme = useThemeValue();
+  const label =
+    theme.mode === "dark" ? "Switch to light theme" : "Switch to dark theme";
 
   const switchTheme = () => {
     window.__setPreferredTheme(theme.mode === "light" ? "dark" : "light");
@@ -129,9 +134,8 @@ const ThemeToggle = () => {
   return (
     <button
       type="button"
-      aria-label={
-        theme.mode === "dark" ? "Switch to light theme" : "Switch to dark theme"
-      }
+      aria-label={label}
+      title={label}
       className="toggle-theme header-icon-button"
       onClick={switchTheme}
     >
