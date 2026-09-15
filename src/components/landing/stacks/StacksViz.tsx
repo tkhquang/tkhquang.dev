@@ -8,14 +8,14 @@ import {
 import classNames from "classnames";
 import { useState } from "react";
 
-type PersonaKey = "all" | "fe" | "re";
+type PersonaKey = "all" | "web" | "re";
 
 /*
  * Personas exclude the other language set. Languages outside either set
  * remain in both filtered totals, then group by their share of that total.
  */
 const RE_SPECIFIC = ["C++", "C", "CMake", "Lua", "Rust", "Assembly", "Python"];
-const FE_SPECIFIC = [
+const WEB_SPECIFIC = [
   "JavaScript",
   "TypeScript",
   "CSS",
@@ -34,15 +34,15 @@ const PERSONAS: Record<
     caption: "The full language mix returned by GitHub.",
     label: "Everything",
   },
-  fe: {
+  web: {
     caption:
       "The same repositories, with the native and modding language group left out.",
     exclude: RE_SPECIFIC,
-    label: "Front-end",
+    label: "Web",
   },
   re: {
     caption: "The same repositories, with the web language group left out.",
-    exclude: FE_SPECIFIC,
+    exclude: WEB_SPECIFIC,
     label: "Reverse engineering",
   },
 };
@@ -202,7 +202,7 @@ const StacksViz = ({ languages }: { languages: LanguageStat[] }) => {
 
       <p className="kicker mt-6 normal-case">
         {PERSONAS[persona].caption}
-        {persona !== "fe" && (
+        {persona !== "web" && (
           <>
             {" "}
             <span aria-hidden="true">🎮</span>

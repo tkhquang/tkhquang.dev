@@ -20,7 +20,7 @@ export namespace Site {
 export namespace Portfolio {
   export const METADATA = {
     about: `
-<p>Hi, I'm ${Site.AUTHOR.name} (or just ${Site.AUTHOR.alias}). I'm a software engineer with a genuine curiosity for technology, open source, and the little things that make software work. By day, I build user interfaces with React and modern web tools. By night, I explore how things work under the hood: modding games, reverse engineering, and sharing what I learn along the way.</p>
+<p>Hi, I'm ${Site.AUTHOR.name} (or just ${Site.AUTHOR.alias}). I'm a software engineer with a genuine curiosity for technology, open source, and the little things that make software work. By day, I build web applications, from React interfaces to the APIs and databases behind them. By night, I explore how things work under the hood: modding games, reverse engineering, and sharing what I learn along the way.</p>
 
 <p>
 I studied in the Advanced Education Program (AEP) in Information Systems at Ho Chi Minh City University of Information Technology (UIT), where I found a real passion for learning, both inside and outside the classroom. While my path hasn't been the most traditional, hands-on experience and continuous improvement have shaped my journey.
@@ -34,7 +34,7 @@ I'm grateful for the open source community, where I've learned a lot and enjoy g
 I enjoy working with teams who care about quality and learning. If you'd like to collaborate or just talk shop, feel free to reach out!
 </p>
 `,
-    description: `Software engineer with ${getYearsOfExperience("2019-01-01")}+ years building web interfaces. Outside work, native tools and game mods.`,
+    description: `Software engineer with ${getYearsOfExperience("2019-01-01")}+ years building web applications. Outside work, native tools and game mods.`,
     title: `${Site.AUTHOR.alias}'s Portfolio`,
   };
 

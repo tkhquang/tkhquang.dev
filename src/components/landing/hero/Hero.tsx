@@ -41,8 +41,8 @@ const Hero = () => {
                 !withPortrait && "mx-auto"
               )}
             >
-              I build web interfaces for a living. I also make native tools, mod
-              games, and write about what I learn.
+              I build web applications for a living. I also make native tools,
+              mod games, and write about what I learn.
             </p>
             <SocialLinks
               className={classNames(
