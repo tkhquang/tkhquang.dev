@@ -69,7 +69,8 @@
     gap: 1rem;
     padding: 0.65rem 1.75rem;
     border-bottom: 1px solid var(--hairline-soft);
-    color: var(--primary);
+    background: color-mix(in srgb, var(--surface) 42%, var(--background));
+    color: var(--on-background);
   }
 
   .global-search__identity {

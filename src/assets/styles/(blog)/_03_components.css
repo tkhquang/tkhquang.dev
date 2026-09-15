@@ -116,7 +116,17 @@
 
     .logo:hover .logo__text::before {
       display: block;
-      color: var(--error);
+      color: inherit;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo:hover .logo__text {
+      transform: none;
+    }
+
+    .logo:hover .logo__text::before {
+      display: none;
     }
   }
 
