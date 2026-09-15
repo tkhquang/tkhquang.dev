@@ -16,6 +16,7 @@
     "test:notes": "node --experimental-strip-types --test src/lib/rehype-notes/*.test.mjs",
     "test:ledger-search": "pnpm run build:search-index && node --experimental-strip-types --conditions=react-server --test src/lib/ledger-search/*.test.mjs",
     "test:ledger-search:browser": "node --test src/components/blog/ledger-search/browser-check.mjs",
+    "test:global-search:browser": "node --test src/components/blog/ledger-search/global-browser-check.mjs",
     "test:stacks": "node --experimental-strip-types --test src/components/landing/stacks/*.test.mjs",
     "build:search-index": "node --experimental-strip-types --conditions=react-server --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON src/lib/ledger-search/build-artifacts.mjs",
     "build:search-engine": "cargo build --release --manifest-path search-engine/Cargo.toml --target wasm32-unknown-unknown && node -e \"require('node:fs').copyFileSync('search-engine/target/wasm32-unknown-unknown/release/ljoss_search.wasm', 'public/search/ljoss-search.wasm')\"",

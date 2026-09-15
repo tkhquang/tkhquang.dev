@@ -32,19 +32,34 @@ const BODY_SUFFIX = ".pool";
 const SUFFIXES = [INDEX_SUFFIX, POSTINGS_SUFFIX, BODY_SUFFIX];
 
 /* Imported by the client, so the addresses reach the bundle through the module
-   graph rather than through the build config. They carry the digest, which is
-   what makes a page that outlives its build find a 404 on its next window of
-   reading text rather than text whose offsets belong to another index. */
+   graph rather than through the build config. The shared digest keeps an old
+   page's cached ranges within its own generation. A range missing after a
+   deploy returns 404 rather than bytes whose offsets belong to another index. */
 const ADDRESS_PATH = "src/generated/ledger-search.mjs";
+
+/**
+ * Addresses the complete logical generation, before transport compression.
+ * The tag versions the hash framing. Fixed-width byte lengths keep artifact
+ * boundaries unambiguous; the order is index, postings, then reading text.
+ */
+export function generationDigest({ index, postings, body }) {
+  const hash = createHash("sha256").update("ljoss-search-generation-v1\0");
+  const length = Buffer.alloc(8);
+
+  for (const artifact of [index, postings, body]) {
+    length.writeBigUInt64LE(BigInt(artifact.byteLength));
+    hash.update(length).update(artifact);
+  }
+
+  return hash.digest("hex");
+}
 
 /**
  * Writes the search artifacts and the manifest that addresses them.
  *
- * The address carries a digest of the index bytes themselves. Nothing can
- * change the index without moving its URL, and nothing that leaves the index
- * alone can move it, which is what a hand-maintained list of build inputs
- * could not promise in either direction: a new input was silently missed, and
- * an unrelated one silently reprinted the archive.
+ * Every address carries a digest of all three artifacts. A change to any one
+ * moves every URL, even if the dictionary and offsets in the index stay the
+ * same. An unchanged generation keeps its addresses regardless of build inputs.
  */
 export async function buildLedgerArtifacts({ log = () => {} } = {}) {
   const root = process.cwd();
@@ -56,18 +71,19 @@ export async function buildLedgerArtifacts({ log = () => {} } = {}) {
     toLedgerEntries(posts)
   );
 
-  /* One digest addresses all three. The other two are written by the same pass
-     that writes the index and are only meaningful against its offsets, so they
-     can never be allowed to move apart. */
-  const digest = createHash("sha256").update(index).digest("hex");
+  /* The index does not determine the other two: a case-only edit can change
+     the reading text alone, and reordered words can change posting ordinals
+     without changing the dictionary or offsets. Hash every artifact so cached
+     ranges always belong to the generation their addresses name. */
+  const digest = generationDigest({ index, postings, body });
   const encoded = gzipSync(index, { level: 9 });
 
   const directory = path.join(root, ARTIFACT_DIRECTORY);
   await fs.mkdir(directory, { recursive: true });
 
-  /* One build's artifacts at a time. A reader holding the previous address
-     receives a 404 and is told to reload, which is the only correct answer:
-     the address it holds was compiled into the page it is already running. */
+  /* One build's artifacts at a time. A reader holding a previous address can
+     keep using cached bytes. If a range is no longer available, a 404 tells it
+     to reload: its artifact addresses were compiled into the existing page. */
   for (const stale of await fs.readdir(directory)) {
     const generated = SUFFIXES.some((suffix) => stale.endsWith(suffix));
 
@@ -77,7 +93,10 @@ export async function buildLedgerArtifacts({ log = () => {} } = {}) {
   }
 
   await fs.writeFile(path.join(directory, `${digest}${INDEX_SUFFIX}`), encoded);
-  await fs.writeFile(path.join(directory, `${digest}${POSTINGS_SUFFIX}`), postings);
+  await fs.writeFile(
+    path.join(directory, `${digest}${POSTINGS_SUFFIX}`),
+    postings
+  );
   await fs.writeFile(path.join(directory, `${digest}${BODY_SUFFIX}`), body);
 
   const manifest = {

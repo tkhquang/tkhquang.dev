@@ -1,7 +1,7 @@
 /* Written by the prebuild step, which is what puts the digest of this build's
-   index into the bundle that fetches it. Relative because the file is generated
-   and the module graph is the whole point: change the artifacts and every page
-   that reads them is rebuilt against their new addresses. */
+   three artifacts into the bundle that fetches them. Relative because the file
+   is generated and the module graph is the whole point: change the artifacts
+   and every page that reads them is rebuilt against their new addresses. */
 import {
   BODY_URL,
   INDEX_URL,
@@ -24,9 +24,9 @@ export const MAX_QUERY_LENGTH = 512;
 /**
  * Rejects a query whose artifacts are gone from the server.
  *
- * The artifact URL carries a digest of the index bytes, and a build keeps only
- * the artifacts it wrote, so a 404 means a newer build has replaced this one.
- * Editing the query cannot reach the new address, because the old one is
+ * Each artifact URL carries a digest of all three artifacts, and a build keeps
+ * only the artifacts it wrote, so a 404 means a newer build has replaced this
+ * one. Editing the query cannot reach the new address, because the old one is
  * compiled into the script the page is already running. Only a fresh document
  * does.
  */

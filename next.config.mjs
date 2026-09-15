@@ -38,8 +38,8 @@ const nextConfig = {
         source: "/assets/resources/pdf/:path*",
       },
       /* The search index is written gzipped and addressed by a digest of the
-         bytes inside it, so the encoding is stated rather than negotiated and
-         the URL can be cached for as long as the browser likes. */
+         complete generation. The encoding is stated rather than negotiated,
+         and the URL can be cached for as long as the browser likes. */
       {
         headers: [
           {
@@ -91,10 +91,7 @@ const nextConfig = {
     },
   },
   outputFileTracingIncludes: {
-    "/blog{,/**/*}": [
-      "./content/**",
-      "./src/lib/remark-embed/templates/**",
-    ],
+    "/blog{,/**/*}": ["./content/**", "./src/lib/remark-embed/templates/**"],
     "/api/pageviews{,/**/*}": ["./content/posts/**"],
     "/api/pdf{,/**/*}": [
       "node_modules/@sparticuz/chromium/**/*",

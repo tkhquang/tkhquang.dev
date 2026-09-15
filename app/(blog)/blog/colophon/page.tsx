@@ -308,10 +308,11 @@ export default function ColophonPage() {
               <p>
                 Two failures are worth stating. Without JavaScript the field is
                 hidden and the archive list stands on its own. And the addresses
-                of all three files carry a digest of the index, so a page left
-                open across a deploy finds its next range missing and says the
-                ledger has been reprinted, rather than quoting text whose
-                offsets belong to another build.
+                of all three files share a digest covering the index, the
+                posting lists, and the reading text. A page left open across a
+                deploy either keeps reading its own edition or finds a missing
+                range and says the ledger has been reprinted, rather than
+                quoting text whose offsets belong to another build.
               </p>
             </div>
           </section>

@@ -1,0 +1,277 @@
+@layer components {
+  .global-search__close {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 150ms;
+  }
+
+  .global-search__close:hover {
+    opacity: 0.7;
+  }
+
+  html:not(.js) .global-search__trigger {
+    display: none;
+  }
+
+  /* The installed Ariakit reserves the removed scrollbar with body padding.
+     The landing header is fixed to the viewport, so it needs the same inset. */
+  .site-header--fixed {
+    padding-right: var(--scrollbar-width, 0px);
+  }
+
+  .global-search__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-header) + 10);
+    background: rgb(0 0 0 / 45%);
+  }
+
+  .global-search {
+    --search-inset: clamp(12px, 3vh, 32px);
+
+    position: fixed;
+    inset: var(--search-inset) 0 auto;
+    z-index: calc(var(--z-header) + 11);
+    display: flex;
+    flex-direction: column;
+    width: min(1120px, calc(100% - 64px));
+    height: calc(
+      var(--dialog-viewport-height, 100dvh) - 2 * var(--search-inset)
+    );
+    /* Ariakit tracks the visible viewport, including the mobile keyboard.
+       Query the resulting sheet height to leave room for results. */
+    container: search-sheet / size;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid var(--hairline-soft);
+    border-radius: 3px;
+    background: var(--background);
+    color: var(--on-background);
+    box-shadow: 0 24px 80px -24px rgb(0 0 0 / 45%);
+  }
+
+  /* Ariakit holds both layers through the exit transition. Only the ink and
+     scrim fade, keeping the sheet and the page in their original positions. */
+  .global-search,
+  .global-search__backdrop {
+    opacity: 0;
+    transition: opacity 160ms ease-in;
+  }
+
+  .global-search[data-enter],
+  .global-search__backdrop[data-enter] {
+    opacity: 1;
+    transition-duration: 220ms;
+    transition-timing-function: ease-out;
+  }
+
+  .global-search__masthead {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 2rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--hairline-soft);
+    color: var(--primary);
+  }
+
+  .global-search__close {
+    gap: 0.65rem;
+  }
+
+  .global-search__escape {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .global-search__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    min-height: 0;
+    margin: 0 auto;
+    padding: clamp(1rem, 4vh, 3rem) 2rem 0;
+  }
+
+  .global-search__heading {
+    flex: none;
+  }
+
+  .global-search__title {
+    margin: 0;
+    color: var(--primary);
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .global-search__description {
+    margin: 0.85rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .global-search .ledger-search {
+    flex: none;
+    margin-top: 1.75rem;
+  }
+
+  .ledger-search--dialog .ledger-search__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .global-search .ledger-search__field {
+    padding: 0.5rem 0;
+    font-size: max(1.125rem, 16px);
+  }
+
+  .global-search .ledger-search__clear {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .global-search .ledger-search__clear--empty {
+    visibility: hidden;
+  }
+
+  .global-search .ledger-search__count {
+    min-height: 1.5em;
+  }
+
+  .global-search .ledger-search__body {
+    flex: 1;
+    min-height: 0;
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem 1rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    scrollbar-color: var(--primary) var(--surface);
+    scrollbar-width: thin;
+  }
+
+  .global-search .ledger-search__results,
+  .global-search .ledger-search__empty {
+    margin-top: 1rem;
+  }
+
+  .global-search .ledger-search__result {
+    padding: 1.1rem 0;
+  }
+
+  .global-search .ledger-search__hit {
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    row-gap: 0.35rem;
+  }
+
+  .global-search .ledger-search__snippet {
+    overflow-wrap: anywhere;
+  }
+
+  .global-search__browse {
+    padding: 2rem 0;
+  }
+
+  .global-search__browse nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .global-search__browse a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--primary);
+    text-underline-offset: 0.25em;
+  }
+
+  .global-search__browse a:hover {
+    text-decoration: underline;
+  }
+
+  .global-search__foot {
+    display: flex;
+    flex: none;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--hairline-soft);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  /* The blog focus frame has local tokens; fall back to the common palette
+     when the same sheet is opened from the portfolio. */
+  .global-search :is(a, button, input):focus-visible {
+    outline: 1px solid var(--cartouche-outer, var(--primary));
+    outline-offset: 3px;
+    box-shadow: 0 0 0 1px var(--cartouche-inner, var(--background));
+    transition: none;
+  }
+
+  @media (width < 640px) {
+    .global-search {
+      --search-inset: 8px;
+
+      width: calc(100% - 16px);
+    }
+
+    .global-search__masthead,
+    .global-search__foot {
+      margin-right: 1.25rem;
+      margin-left: 1.25rem;
+    }
+
+    .global-search__content {
+      padding-right: 1.25rem;
+      padding-left: 1.25rem;
+    }
+
+    .global-search__foot {
+      padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+
+    .global-search__escape,
+    .global-search__keyboard-hint {
+      display: none;
+    }
+  }
+
+  @container search-sheet (height < 500px) {
+    .global-search__heading,
+    .global-search__foot {
+      display: none;
+    }
+
+    .global-search__content {
+      padding-top: 0;
+    }
+
+    .global-search .ledger-search {
+      margin-top: 0.75rem;
+    }
+  }
+}
