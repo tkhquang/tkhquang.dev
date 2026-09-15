@@ -14,5 +14,11 @@
     html {
       scroll-behavior: auto !important;
     }
+
+    /* Ariakit's scrollbar compensation must apply in the same frame. Even
+       a 0.01ms transition on body padding briefly changes the page width. */
+    body {
+      transition-duration: 0s !important;
+    }
   }
 }

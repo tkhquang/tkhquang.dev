@@ -6,6 +6,7 @@ import Drawer, {
   useDrawerContext,
 } from "@/components/common/Drawer";
 import BackButtonIcon from "@/components/layout/BackButtonIcon";
+import GlobalSearch from "@/components/layout/GlobalSearch";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { Blog } from "@/constants/meta";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
@@ -287,7 +288,7 @@ const BlogHeader = ({
                 wordmark's suffix, not another destination */}
             <Link
               href="/"
-              className="mt-0.75 inline-flex items-center gap-1 font-mono text-[0.65rem] font-semibold tracking-[0.2em] uppercase opacity-80 transition-opacity hover:opacity-100"
+              className="mt-0.75 hidden items-center gap-1 font-mono text-[0.65rem] font-semibold tracking-[0.2em] uppercase opacity-80 transition-opacity hover:opacity-100 min-[400px]:inline-flex"
             >
               · By Aleks
               <FiArrowUpRight aria-hidden className="size-3" />
@@ -365,7 +366,8 @@ const BlogHeader = ({
                 </p>
               </div>
             </Drawer>
-            <div className="ml-4 flex flex-col">
+            <div className="ml-2 flex items-center gap-2 md:ml-3">
+              <GlobalSearch />
               <ThemeToggle />
             </div>
           </div>

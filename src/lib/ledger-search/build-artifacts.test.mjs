@@ -59,7 +59,9 @@ process.on("exit", () => {
   rmSync(root, { force: true, recursive: true });
 });
 
-const { buildLedgerArtifacts } = await import("./build-artifacts.mjs");
+const { buildLedgerArtifacts, generationDigest } = await import(
+  "./build-artifacts.mjs"
+);
 const { createEngine } = await import("./engine.ts");
 
 const artifacts = () =>
@@ -71,6 +73,12 @@ const written = (built) =>
   [built.index, built.postings, built.body]
     .map((url) => path.basename(url))
     .sort();
+
+const generation = (built) => ({
+  index: gunzipSync(readFileSync(path.join(root, "public", built.index))),
+  postings: readFileSync(path.join(root, "public", built.postings)),
+  body: readFileSync(path.join(root, "public", built.body)),
+});
 
 /* The module the client imports, read as text: it is generated, so a test that
    imported it would be reading whichever build ran last. */
@@ -99,6 +107,42 @@ async function loadIndex(built) {
   };
 }
 
+test("the generation digest changes with each artifact independently", () => {
+  const original = {
+    index: Buffer.from("a"),
+    postings: Buffer.from("bc"),
+    body: Buffer.from("d"),
+  };
+  const digest = generationDigest(original);
+
+  for (const [section, bytes] of [
+    ["index", "b"],
+    ["postings", "cb"],
+    ["body", "e"],
+  ]) {
+    assert.notEqual(
+      generationDigest({ ...original, [section]: Buffer.from(bytes) }),
+      digest,
+      section
+    );
+  }
+});
+
+test("the generation digest distinguishes artifact boundaries", () => {
+  const digest = (index, postings, body) =>
+    generationDigest({
+      index: Buffer.from(index),
+      postings: Buffer.from(postings),
+      body: Buffer.from(body),
+    });
+
+  /* Every arrangement concatenates to the same bytes; the boundaries are
+     part of the generation as well as the contents. */
+  const original = digest("a", "bc", "d");
+  assert.notEqual(digest("ab", "c", "d"), original);
+  assert.notEqual(digest("a", "b", "cd"), original);
+});
+
 test("the manifest addresses the bytes it reports", async () => {
   const built = await buildLedgerArtifacts();
 
@@ -114,6 +158,8 @@ test("the manifest addresses the bytes it reports", async () => {
   assert.match(built.index, /^\/search\/[a-f0-9]{64}\.bin$/);
   assert.match(built.postings, /^\/search\/[a-f0-9]{64}\.pst$/);
   assert.match(built.body, /^\/search\/[a-f0-9]{64}\.pool$/);
+  assert.equal(built.postings, built.index.replace(/\.bin$/, ".pst"));
+  assert.equal(built.body, built.index.replace(/\.bin$/, ".pool"));
   assert.deepEqual(artifacts(), written(built));
 
   const source = readFileSync(path.join(root, "public", built.index));
@@ -155,6 +201,50 @@ test("an edit that changes the index moves the URL and clears the old file", asy
   const after = await buildLedgerArtifacts();
 
   assert.notEqual(after.index, before.index);
+  assert.deepEqual(artifacts(), written(after));
+});
+
+test("a case-only edit moves every URL even when the index and postings stay identical", async () => {
+  writePost("first", { body: "Camera" });
+  const before = await buildLedgerArtifacts();
+  const original = generation(before);
+  const searchBefore = await loadIndex(before);
+
+  writePost("first", { body: "camera" });
+  const after = await buildLedgerArtifacts();
+  const updated = generation(after);
+  const searchAfter = await loadIndex(after);
+
+  assert.deepEqual(updated.index, original.index);
+  assert.deepEqual(updated.postings, original.postings);
+  assert.notDeepEqual(updated.body, original.body);
+  assert.match(searchBefore("camera ").results[0].snippet, /Camera/);
+  assert.match(searchAfter("camera ").results[0].snippet, /camera/);
+  for (const section of ["index", "postings", "body"]) {
+    assert.notEqual(after[section], before[section], section);
+  }
+  assert.deepEqual(artifacts(), written(after));
+});
+
+test("reordering words moves every URL even when the index stays identical", async () => {
+  writePost("first", { body: "alpha beta" });
+  const before = await buildLedgerArtifacts();
+  const original = generation(before);
+  const searchBefore = await loadIndex(before);
+
+  writePost("first", { body: "beta alpha" });
+  const after = await buildLedgerArtifacts();
+  const updated = generation(after);
+  const searchAfter = await loadIndex(after);
+
+  assert.deepEqual(updated.index, original.index);
+  assert.notDeepEqual(updated.postings, original.postings);
+  assert.notDeepEqual(updated.body, original.body);
+  assert.match(searchBefore("alpha ").results[0].snippet, /alpha.*beta/);
+  assert.match(searchAfter("alpha ").results[0].snippet, /beta.*alpha/);
+  for (const section of ["index", "postings", "body"]) {
+    assert.notEqual(after[section], before[section], section);
+  }
   assert.deepEqual(artifacts(), written(after));
 });
 

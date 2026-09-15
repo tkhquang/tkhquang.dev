@@ -1,5 +1,6 @@
 "use client";
 
+import GlobalSearch from "@/components/layout/GlobalSearch";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import { GrowingUnderline } from "@/components/ui/growing-underline";
 import { ScrollManager } from "@/utils/dom";
@@ -53,7 +54,7 @@ const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
   return (
     <header
       className={classNames(
-        "h-header-height fixed inset-x-0 top-0 z-(--z-header) m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
+        "site-header--fixed h-header-height fixed inset-x-0 top-0 z-(--z-header) m-0 flex w-full items-center transition-[background-color,color,box-shadow] duration-300",
         scrolled
           ? "text-theme-on-background bg-theme-background/80 shadow-[inset_0_-1px_0_var(--hairline-soft)] backdrop-blur-xs"
           : "text-theme-on-band bg-transparent",
@@ -92,7 +93,10 @@ const Header = ({ className, useScroll = true, ...props }: HeaderProps) => {
             <GrowingUnderline>Blog</GrowingUnderline>
           </Link>
 
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <GlobalSearch />
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>

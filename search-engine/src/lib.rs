@@ -14,7 +14,9 @@ use query::Workspace;
 pub use query::{search, Answer, Hit, Need, Repair, Request, MARK_CLOSE, MARK_OPEN};
 pub use segments::Segments;
 
+use std::alloc::{handle_alloc_error, Layout};
 use std::cell::RefCell;
+use std::ptr::NonNull;
 
 #[derive(Default)]
 struct Loaded {
@@ -32,23 +34,44 @@ thread_local! {
     static RETURNED: RefCell<Vec<u8>> = const { RefCell::new(Vec::new()) };
 }
 
-/// Reserves `len` bytes for the caller to write into.
+/// Reserves `len` uninitialized bytes for the caller to write into.
 ///
-/// # Safety
-/// The result must be released with `dealloc` and the same length.
+/// The result is non-null, including for an empty buffer. Release it with
+/// `dealloc` and the same length after the last borrow. Allocation failure
+/// invokes Rust's allocation error handler instead of returning a null pointer.
 #[no_mangle]
 pub extern "C" fn alloc(len: u32) -> *mut u8 {
-    let mut buffer = Vec::<u8>::with_capacity(len as usize);
-    let pointer = buffer.as_mut_ptr();
-    std::mem::forget(buffer);
+    if len == 0 {
+        // Empty slices still require a non-null, aligned pointer. No allocation
+        // is made, since the global allocator requires a nonzero layout size.
+        return NonNull::<u8>::dangling().as_ptr();
+    }
+
+    // The ABI carries only the requested length, so use it to define both
+    // allocation and deallocation layouts without a Vec capacity to recover.
+    let layout = Layout::array::<u8>(len as usize).expect("buffer length exceeds isize::MAX");
+    // SAFETY: `layout` is valid and nonzero; the caller owns the returned bytes.
+    let pointer = unsafe { std::alloc::alloc(layout) };
+    if pointer.is_null() {
+        handle_alloc_error(layout);
+    }
     pointer
 }
 
 /// # Safety
-/// `pointer` and `len` must be a pair returned by `alloc`.
+/// `pointer` must come from `alloc(len)` and must not have been released.
+/// All borrows must have ended, and the caller must not use it again afterward.
+/// The bytes need not have been initialized.
 #[no_mangle]
 pub unsafe extern "C" fn dealloc(pointer: *mut u8, len: u32) {
-    drop(Vec::from_raw_parts(pointer, 0, len as usize));
+    if len == 0 {
+        return;
+    }
+
+    let layout = Layout::array::<u8>(len as usize).expect("buffer length exceeds isize::MAX");
+    // SAFETY: The caller supplies a live allocation and its original length,
+    // which reconstructs precisely the size and alignment passed to `alloc`.
+    unsafe { std::alloc::dealloc(pointer, layout) };
 }
 
 /// # Safety
@@ -301,6 +324,37 @@ mod tests {
 
     fn supply(section: u32, start: u32, bytes: &[u8]) {
         unsafe { section_supply(section, start, bytes.as_ptr(), bytes.len() as u32) }
+    }
+
+    #[test]
+    fn caller_buffers_remain_valid_until_released_with_the_requested_length() {
+        // Empty fields and queries use the same ABI as bytes that span a WASM
+        // page. Keep several allocations alive and release them out of order.
+        let mut buffers = Vec::new();
+        for len in [0, 1, 3, 31, 1025, 65_537] {
+            let pointer = alloc(len);
+            assert!(!pointer.is_null());
+            unsafe {
+                pointer.write_bytes(b'a', len as usize);
+                assert_eq!(borrow(pointer, len), "a".repeat(len as usize));
+            }
+            buffers.push((pointer, len));
+        }
+
+        for (pointer, len) in buffers.into_iter().rev() {
+            unsafe {
+                assert_eq!(borrow(pointer, len), "a".repeat(len as usize));
+                dealloc(pointer, len);
+            }
+        }
+    }
+
+    #[test]
+    fn caller_buffers_can_be_released_without_initializing_the_bytes() {
+        for len in [0, 1, 17, 1025] {
+            let pointer = alloc(len);
+            unsafe { dealloc(pointer, len) };
+        }
     }
 
     #[test]

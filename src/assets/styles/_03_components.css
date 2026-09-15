@@ -6,6 +6,33 @@
     @apply flex items-center justify-center;
   }
 
+  /* Shared header controls: the glyph stays small, the whole square taps. */
+  .header-icon-button {
+    display: inline-flex;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: opacity 150ms;
+  }
+
+  .header-icon-button:hover {
+    opacity: 0.75;
+  }
+
+  .header-icon-button:focus-visible {
+    outline: 1px solid var(--cartouche-outer, currentColor);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 1px var(--cartouche-inner, var(--background));
+    transition: none;
+  }
+
   /*
    * Full-bleed gradient band (hero, contact outro). One recipe per theme via
    * the --band-a/--band-b role tokens; text uses --on-band. The grain overlay

@@ -1,5 +1,7 @@
 "use client";
 
+import "./LedgerSearch.css";
+import useForkRef from "@/hooks/useForkRef";
 import {
   MAX_QUERY_LENGTH,
   SearchIndexReplaced,
@@ -36,9 +38,20 @@ const marked = (snippet: string) =>
   });
 
 /** Optional browse content stays mounted so its state survives a search. */
-const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
+const LedgerSearch = ({
+  children,
+  inputRef,
+  onNavigate,
+  inDialog = false,
+}: {
+  children?: React.ReactNode;
+  inputRef?: React.Ref<HTMLInputElement>;
+  onNavigate?: () => void;
+  inDialog?: boolean;
+}) => {
   const fieldId = useId();
   const fieldRef = useRef<HTMLInputElement>(null);
+  const mergedFieldRef = useForkRef(fieldRef, inputRef);
   const [query, setQuery] = useState("");
   const [lookup, setLookup] = useState<Lookup>({ status: "idle" });
   const request = useRef<AbortController | null>(null);
@@ -134,15 +147,31 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
       ? lookup.answer.repairs
       : [];
 
+  const repairNote = (
+    <p className="ledger-search__repair">
+      {repairs.map((repair, index) => (
+        <React.Fragment key={repair.typed}>
+          {index > 0 && " "}
+          Nothing holds <q>{repair.typed}</q>. These answer to{" "}
+          <q>{repair.chosen}</q>.
+        </React.Fragment>
+      ))}
+    </p>
+  );
+
   return (
     <>
-      <search className="ledger-search">
+      <search
+        className={classNames("ledger-search", {
+          "ledger-search--dialog": inDialog,
+        })}
+      >
         <label className="kicker ledger-search__label" htmlFor={fieldId}>
           Search the ledger
         </label>
         <div className="ledger-search__line">
           <input
-            ref={fieldRef}
+            ref={mergedFieldRef}
             id={fieldId}
             className="ledger-search__field"
             type="search"
@@ -184,6 +213,7 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
             onKeyDown={(event) => {
               if (
                 event.key === "Escape" &&
+                !inDialog &&
                 !event.nativeEvent.isComposing &&
                 fieldRef.current?.value
               ) {
@@ -192,10 +222,13 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
               }
             }}
           />
-          {hasText && (
+          {(hasText || inDialog) && (
             <button
               type="button"
-              className="ledger-search__clear"
+              className={classNames("ledger-search__clear", {
+                "ledger-search__clear--empty": !hasText,
+              })}
+              disabled={!hasText}
               onClick={clear}
               aria-label="Clear the search"
             >
@@ -216,60 +249,60 @@ const LedgerSearch = ({ children }: { children?: React.ReactNode }) => {
         <p className="kicker ledger-search__count" role="status">
           {count}
         </p>
-        <p className="ledger-search__repair">
-          {repairs.map((repair, index) => (
-            <React.Fragment key={repair.typed}>
-              {index > 0 && " "}
-              Nothing holds <q>{repair.typed}</q>. These answer to{" "}
-              <q>{repair.chosen}</q>.
-            </React.Fragment>
-          ))}
-        </p>
+        {!inDialog && repairNote}
       </search>
 
-      {/* Read from the answer on show rather than from the status, the way
+      <div className="ledger-search__body">
+        {/* A correction can wrap to several lines. In the sheet it scrolls
+            with the answer, leaving the field and result viewport in place. */}
+        {inDialog && repairNote}
+        {/* Read from the answer on show rather than from the status, the way
           the results below are. Gating this on a settled lookup unmounts it
           for the frame each keystroke spends in flight, and a line leaving and
           returning at twenty times a second moves the page under the reader. */}
-      {searching && answer !== null && answer.results.length === 0 && (
-        <p className="ledger-search__empty">
-          Try one word, or a phrase you remember reading.
-        </p>
-      )}
+        {searching && answer !== null && answer.results.length === 0 && (
+          <p className="ledger-search__empty">
+            Try one word, or a phrase you remember reading.
+          </p>
+        )}
 
-      {searching && unavailable && (
-        <p className="ledger-search__empty">
-          {unavailable.replaced
-            ? "The ledger has been reprinted since this page opened. Reload it to search the current entries."
-            : "The search index did not load. Edit the search to try again."}
-        </p>
-      )}
+        {searching && unavailable && (
+          <p className="ledger-search__empty">
+            {unavailable.replaced
+              ? "The ledger has been reprinted since this page opened. Reload it to search the current entries."
+              : "The search index did not load. Edit the search to try again."}
+          </p>
+        )}
 
-      {answer && answer.results.length > 0 && (
-        <ul
-          className={classNames("ledger-search__results", {
-            "ledger-search__results--pending": pending,
-          })}
-        >
-          {answer.results.map((result) => (
-            <li className="ledger-search__result" key={result.slug}>
-              <Link
-                className="ledger-search__hit"
-                href={`/blog/posts/${result.slug}`}
-                prefetch={false}
-              >
-                <time className="font-mono" dateTime={result.date}>
-                  {result.dateLabel}
-                </time>
-                <span className="ledger-search__title">{result.title}</span>
-              </Link>
-              <p className="ledger-search__snippet">{marked(result.snippet)}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+        {answer && answer.results.length > 0 && (
+          <ul
+            className={classNames("ledger-search__results", {
+              "ledger-search__results--pending": pending,
+            })}
+          >
+            {answer.results.map((result) => (
+              <li className="ledger-search__result" key={result.slug}>
+                <Link
+                  className="ledger-search__hit"
+                  href={`/blog/posts/${result.slug}`}
+                  prefetch={false}
+                  onNavigate={onNavigate}
+                >
+                  <time className="font-mono" dateTime={result.date}>
+                    {result.dateLabel}
+                  </time>
+                  <span className="ledger-search__title">{result.title}</span>
+                </Link>
+                <p className="ledger-search__snippet">
+                  {marked(result.snippet)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {children && <div hidden={hideBrowse}>{children}</div>}
+        {children && <div hidden={hideBrowse}>{children}</div>}
+      </div>
     </>
   );
 };

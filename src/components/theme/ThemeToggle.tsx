@@ -132,7 +132,7 @@ const ThemeToggle = () => {
       aria-label={
         theme.mode === "dark" ? "Switch to light theme" : "Switch to dark theme"
       }
-      className="toggle-theme cursor-pointer border-none bg-transparent transition-opacity hover:opacity-75 focus:outline-hidden"
+      className="toggle-theme header-icon-button"
       onClick={switchTheme}
     >
       <AnimatedIcon mode={theme.mode} />
