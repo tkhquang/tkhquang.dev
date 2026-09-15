@@ -7,6 +7,7 @@
     "build": "pnpm run build:search-index && next build",
     "start": "next start",
     "lint": "eslint .",
+    "test:contact:browser": "node --test src/components/contact/browser-check.mjs",
     "test:camera": "node --experimental-strip-types --test src/components/blog/camera-explorable/*.test.mjs",
     "test:hex-diff": "node --experimental-strip-types --test src/components/blog/hex-diff/*.test.mjs",
     "test:hex-diff:browser": "node --test src/components/blog/hex-diff/browser-check.mjs",
