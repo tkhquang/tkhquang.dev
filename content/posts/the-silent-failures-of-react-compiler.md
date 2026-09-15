@@ -75,7 +75,7 @@ After a bit of digging, I realized we weren't flying completely blind. There's a
 
 So, how do we catch these skipped optimizations automatically in our build process? It involves setting up two key ESLint rules from two different plugins.
 
-First, you need to install and configure `eslint-plugin-react-compiler` and `eslint-plugin-react-hooks`. Here’s a trimmed-down example of what the relevant parts of a modern `eslint.config.js` (flat config) might look like:
+First, you need to install and configure `eslint-plugin-react-compiler` and `eslint-plugin-react-hooks`. Here's a trimmed-down example of what the relevant parts of a modern `eslint.config.js` (flat config) might look like:
 
 ```js title="eslint.config.js (Relevant Parts)" showLineNumbers
 import reactHooks from 'eslint-plugin-react-hooks';

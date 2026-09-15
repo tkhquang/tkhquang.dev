@@ -13,7 +13,7 @@ description: With Crysis 4 paused and staff affected, questions arise about CryE
 
 Just came across this article from IGN: [Crysis 4 on Hold as Developer Crytek Announces Layoffs Affecting Up to 60 Staff](https://www.ign.com/articles/crysis-4-on-hold-as-developer-crytek-announces-layoffs-affecting-up-to-60-staff).
 
-It's a tough read. The immediate headline for many will be *Crysis 4* being put on hold. As a long-time observer (and occasional code-digger) of what Crytek pulls off visually, especially with the *Crysis* lineage as their flagship tech demonstrator, that’s a significant pause button on what many of us anticipate as the next leap in their graphical showcase.
+It's a tough read. The immediate headline for many will be *Crysis 4* being put on hold. As a long-time observer (and occasional code-digger) of what Crytek pulls off visually, especially with the *Crysis* lineage as their flagship tech demonstrator, that's a significant pause button on what many of us anticipate as the next leap in their graphical showcase.
 
 But my concern, and I imagine that of many fellow developers and modders who have worked with or followed CryEngine, extends beyond a single game title. An engine, particularly one with the legacy and potential of CryEngine, is a living entity. It thrives on consistent development, innovation, and the dedicated teams that push its boundaries, refine its tools, and support its users.
 
