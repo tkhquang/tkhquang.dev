@@ -20,7 +20,7 @@ const Footer = ({
           © {new Date().getFullYear()} · Built by day, tinkered by night{" "}
           <span aria-hidden="true">☕</span>
         </div>
-        <SocialLinks className="flex-center gap-1 text-2xl" />
+        <SocialLinks className="flex-center gap-2 text-2xl" />
       </div>
     </footer>
   );

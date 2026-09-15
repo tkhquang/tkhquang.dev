@@ -273,45 +273,6 @@
     transition: opacity 200ms;
   }
 
-  /*
-   * Running heads: the colophon bar's underline-fill grammar one level
-   * up. The tint is the primary ink on both header states, transparent
-   * sky and blurred band alike; only the text colour follows the state.
-   * The fill keys on aria-current's presence: the head is current as the
-   * page itself or as the section a post, shelf or tag belongs to.
-   * Overrides layer, or the Link's utility classes out-cascade the
-   * fill's transition, the active opacity and the kicker's line box.
-   */
-  .blog-nav__link {
-    padding-bottom: 2px;
-    line-height: 1.5;
-    background: linear-gradient(
-        to right,
-        color-mix(in srgb, var(--primary) 30%, transparent),
-        color-mix(in srgb, var(--primary) 18%, transparent)
-      )
-      no-repeat left bottom / 0% 45%;
-    transition:
-      background-size 300ms,
-      color 150ms,
-      opacity 150ms;
-  }
-
-  .blog-nav__link:hover,
-  .blog-nav__link[aria-current] {
-    background-size: 100% 45%;
-  }
-
-  .blog-nav__link[aria-current] {
-    opacity: 1;
-  }
-
-  /* Over the solid band the active head takes the primary ink; over the
-     sky it stays in the band's own ink */
-  .header__background-transparent--blog .blog-nav__link[aria-current] {
-    color: var(--primary);
-  }
-
   /* The catalogue headpiece's kickers sit on a 1.5 line box; the kicker
      utility's text-xs line box would otherwise win from the utilities
      layer and shave 4px off the band */
@@ -331,14 +292,6 @@
 
   .post-aside__serial-head {
     opacity: 1;
-  }
-
-  /* A soft two-layer shadow for the solid header, in place of the heavier
-     house shadow-box-md halo */
-  .blog-header-shadow {
-    box-shadow:
-      0 4px 6px -1px rgb(0 0 0 / 12%),
-      0 2px 4px -2px rgb(0 0 0 / 12%);
   }
 
   /*

@@ -39,7 +39,7 @@ const BlogFooter = ({
             </GrowingUnderline>
           </Link>
           <SocialLinks
-            className="flex-center shrink-0 gap-1 text-2xl"
+            className="flex-center shrink-0 gap-2 text-2xl"
             entities={["Github"]}
           />
         </div>
