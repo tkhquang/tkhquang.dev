@@ -3,7 +3,7 @@
 import SectionHeading from "@/components/common/SectionHeading";
 import SocialLinks from "@/components/common/SocialLinks";
 import HeroWaves from "@/components/landing/hero/HeroWaves";
-import classNames from "classnames";
+import { cn } from "@/utils/css";
 import React, { useRef } from "react";
 import { flushSync } from "react-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -172,7 +172,7 @@ const Contact = () => {
               </label>
               <input
                 id="name"
-                className={classNames(INPUT_CLASS, {
+                className={cn(INPUT_CLASS, {
                   "border-theme-error": errors.name,
                 })}
                 type="text"
@@ -194,7 +194,7 @@ const Contact = () => {
               </label>
               <input
                 id="email"
-                className={classNames(INPUT_CLASS, {
+                className={cn(INPUT_CLASS, {
                   "border-theme-error": errors.email,
                 })}
                 type="email"
@@ -222,7 +222,7 @@ const Contact = () => {
               </label>
               <textarea
                 id="message"
-                className={classNames(INPUT_CLASS, "resize-y", {
+                className={cn(INPUT_CLASS, "resize-y", {
                   "border-theme-error": errors.message,
                 })}
                 rows={5}

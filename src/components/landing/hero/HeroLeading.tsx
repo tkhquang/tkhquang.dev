@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import clsx from "clsx";
 
 const TYPED = ", I'm Aleks!";
 const TYPE_START_S = 0.6;
@@ -7,7 +7,7 @@ const TYPE_TOTAL_S = 0.5;
 const HeroLeading = ({ className, ...props }: React.ComponentProps<"h1">) => {
   return (
     <h1
-      className={classNames(
+      className={clsx(
         "animate-hero-leading text-display my-0 font-extrabold tracking-tight whitespace-nowrap",
         className
       )}

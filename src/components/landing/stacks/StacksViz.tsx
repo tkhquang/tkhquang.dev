@@ -5,7 +5,7 @@ import {
   type LanguageShare,
   type LanguageStat,
 } from "@/components/landing/stacks/language-shares";
-import classNames from "classnames";
+import clsx from "clsx";
 import { useState } from "react";
 
 type PersonaKey = "all" | "web" | "re";
@@ -114,7 +114,7 @@ const StacksViz = ({ languages }: { languages: LanguageStat[] }) => {
             type="button"
             aria-pressed={persona === key}
             aria-controls="language-shares"
-            className={classNames(
+            className={clsx(
               "cursor-pointer rounded-md px-3.5 py-1.5 font-mono text-xs font-semibold transition-colors duration-200",
               persona === key
                 ? "bg-theme-primary text-theme-on-primary shadow-sm"
@@ -140,7 +140,7 @@ const StacksViz = ({ languages }: { languages: LanguageStat[] }) => {
         {active.map((language, index) => (
           <span
             key={language.id}
-            className={classNames(
+            className={clsx(
               "animate-grow-bar block h-full cursor-pointer transition-opacity duration-200",
               isDimmed(language.id) && "opacity-30"
             )}
@@ -168,7 +168,7 @@ const StacksViz = ({ languages }: { languages: LanguageStat[] }) => {
         {active.map((language, index) => (
           <div
             key={language.id}
-            className={classNames(
+            className={clsx(
               "grid cursor-default grid-cols-[6.5rem_minmax(0,1fr)_3.5rem] items-center gap-3 rounded-md px-2 py-1 transition-[background-color,opacity] duration-200",
               isDimmed(language.id) && "opacity-40",
               focusedId === language.id && "bg-theme-on-surface/8"

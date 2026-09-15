@@ -1,7 +1,7 @@
 import LocalTime from "@/components/landing/about-me/LocalTime";
 import SpotifyNowPlaying from "@/components/spotify/NowPlaying";
 import { Portfolio } from "@/constants/meta";
-import classNames from "classnames";
+import clsx from "clsx";
 
 /*
  * Every first line in the plate is a 24px line box (the Spotify cover is
@@ -24,7 +24,7 @@ const RightNow = ({ className, ...props }: React.ComponentProps<"div">) => {
 
   return (
     <div
-      className={classNames(
+      className={clsx(
         "bg-theme-raised border-theme-hairline-soft rounded-xl border p-5 shadow-sm",
         className
       )}
@@ -36,7 +36,7 @@ const RightNow = ({ className, ...props }: React.ComponentProps<"div">) => {
       <dl className="mt-4 grid grid-cols-[5rem_minmax(0,1fr)] items-start gap-x-3 gap-y-3 text-xs">
         <dt className={ROW_LABEL_CLASS}>Listening</dt>
         <dd
-          className={classNames(
+          className={clsx(
             ROW_VALUE_CLASS,
             "[--artist-color:var(--on-surface)] [--song-color:var(--on-surface)]"
           )}

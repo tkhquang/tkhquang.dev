@@ -1,5 +1,4 @@
 import { getFormattedDuration, getYearsOfExperience } from "@/utils/date";
-import clsx from "clsx";
 
 interface Info {
   firstName: string;
@@ -433,7 +432,7 @@ const Section: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ title, children, className = "" }) => (
-  <section className={clsx("", className)}>
+  <section className={className}>
     <h2 className="mb-2 border-b border-slate-300 pb-1 text-sm font-bold tracking-wide text-slate-800 uppercase">
       {title}
     </h2>
@@ -672,17 +671,8 @@ export const revalidate = 86400;
 
 export default function ResumePage() {
   return (
-    <div
-      className={clsx(
-        "min-h-screen bg-slate-100 antialiased",
-        "font-sans-inter"
-      )}
-    >
-      <div
-        className={clsx(
-          "mx-auto max-w-3xl bg-white px-8 pt-10 pb-10 shadow-xl print:shadow-none"
-        )}
-      >
+    <div className="font-sans-inter min-h-screen bg-slate-100 antialiased">
+      <div className="mx-auto max-w-3xl bg-white px-8 pt-10 pb-10 shadow-xl print:shadow-none">
         <ResumeHeader />
 
         <main className="space-y-6">

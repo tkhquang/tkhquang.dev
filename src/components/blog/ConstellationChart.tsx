@@ -1,5 +1,5 @@
 import "./ConstellationChart.css";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 
 /*
@@ -332,7 +332,7 @@ const trimLink = (a: ChartStar, b: ChartStar) => {
 const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
   <g
     transform={`translate(${star.x} ${star.y})`}
-    className={classNames(
+    className={clsx(
       "chart-star",
       star.twinkle && "chart-twinkle",
       star.glint && "chart-glint"
@@ -347,7 +347,7 @@ const StarGlyph = ({ index, star }: { index: number; star: ChartStar }) => (
     {star.mag < 3 && (
       <circle
         r={RING_RADIUS[star.mag as 1 | 2]}
-        className={classNames(
+        className={clsx(
           "chart-star-ring",
           star.mag === 1 && "chart-star-ring--mag1"
         )}
@@ -444,7 +444,7 @@ const ChartSky = ({ plate }: { plate?: boolean }) => {
       {ECLIPTIC.map((segment) => (
         <path
           key={segment.d}
-          className={classNames(
+          className={clsx(
             "chart-ecliptic",
             segment.quiet && "chart-ecliptic--quiet"
           )}
@@ -464,10 +464,7 @@ const ChartSky = ({ plate }: { plate?: boolean }) => {
               transform={
                 label.rotate ? `rotate(90 ${label.x} ${label.y})` : undefined
               }
-              className={classNames(
-                "chart-label",
-                label.ink && "chart-label--ink"
-              )}
+              className={clsx("chart-label", label.ink && "chart-label--ink")}
             >
               {label.text}
             </text>
@@ -846,7 +843,7 @@ const LandSky = () => (
     {ECLIPTIC_LAND.map((segment) => (
       <path
         key={segment.d}
-        className={classNames(
+        className={clsx(
           "chart-ecliptic",
           segment.quiet && "chart-ecliptic--quiet"
         )}
@@ -945,7 +942,7 @@ const ConstellationChart = ({
   return (
     <>
       <svg
-        className={classNames("constellation-chart chart--wide", className)}
+        className={clsx("constellation-chart chart--wide", className)}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 320 640"
         preserveAspectRatio="xMidYMin slice"
@@ -957,7 +954,7 @@ const ConstellationChart = ({
         <ChartSky />
       </svg>
       <svg
-        className={classNames("constellation-chart chart--land", className)}
+        className={clsx("constellation-chart chart--land", className)}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 720 240"
         preserveAspectRatio="xMidYMid slice"
@@ -969,7 +966,7 @@ const ConstellationChart = ({
         <LandSky />
       </svg>
       <svg
-        className={classNames("constellation-chart chart--plate", className)}
+        className={clsx("constellation-chart chart--plate", className)}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 320 640"
         preserveAspectRatio="xMidYMid meet"

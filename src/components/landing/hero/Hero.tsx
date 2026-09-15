@@ -5,7 +5,7 @@ import HeroPortrait from "@/components/landing/hero/HeroPortrait";
 import HeroRoles from "@/components/landing/hero/HeroRoles";
 import HeroWaves from "@/components/landing/hero/HeroWaves";
 import { Portfolio } from "@/constants/meta";
-import classNames from "classnames";
+import clsx from "clsx";
 
 /*
  * Deliberately no CTAs: the page is a narrative meant to be scrolled and
@@ -20,15 +20,13 @@ const Hero = () => {
     <section className="band hero-entrance flex min-h-[78svh] items-center overflow-hidden">
       <div className="pt-header-height relative z-2 container pb-28">
         <div
-          className={classNames(
+          className={clsx(
             "grid grid-cols-1 items-center gap-12",
             withPortrait && "lg:grid-cols-[1.15fr_auto]"
           )}
         >
           <div
-            className={classNames(
-              !withPortrait && "mx-auto max-w-2xl text-center"
-            )}
+            className={clsx(!withPortrait && "mx-auto max-w-2xl text-center")}
           >
             <HeroLeading />
             <HeroRoles
@@ -36,7 +34,7 @@ const Hero = () => {
               className="text-theme-on-band-dim animate-rise-in mt-3 [animation-delay:1.2s]"
             />
             <p
-              className={classNames(
+              className={clsx(
                 "animate-rise-in text-theme-on-band-dim mt-6 max-w-xl font-serif text-lg italic [animation-delay:1.35s]",
                 !withPortrait && "mx-auto"
               )}
@@ -45,7 +43,7 @@ const Hero = () => {
               mod games, and write about what I learn.
             </p>
             <SocialLinks
-              className={classNames(
+              className={clsx(
                 "animate-rise-in mt-8 flex items-center gap-4 text-3xl [animation-delay:1.5s]",
                 !withPortrait && "justify-center"
               )}

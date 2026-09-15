@@ -2,7 +2,6 @@
 
 import { ScrollManager } from "@/utils/dom";
 import { useGSAP } from "@gsap/react";
-import clsx from "clsx";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
@@ -70,7 +69,7 @@ const BackButtonIcon = (props: React.SVGAttributes<SVGSVGElement>) => {
         cy="12"
         r="10"
         stroke="currentColor"
-        className={clsx(isInBlogPost ? "opacity-20" : "opacity-100")}
+        className={isInBlogPost ? "opacity-20" : "opacity-100"}
       />
       <circle
         className="back-button-icon__ring"

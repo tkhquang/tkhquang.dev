@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@/utils/css";
 import React from "react";
 
 const HorizontalLine = ({
@@ -7,10 +7,7 @@ const HorizontalLine = ({
 }: React.ComponentProps<"div">) => {
   return (
     <div
-      className={classNames(
-        "horizontal-line mx-0 h-px w-full border-0",
-        className
-      )}
+      className={cn("horizontal-line mx-0 h-px w-full border-0", className)}
       aria-hidden="true"
       {...props}
     />

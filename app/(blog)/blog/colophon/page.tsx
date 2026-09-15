@@ -1,7 +1,7 @@
 import CatalogueHeadpiece from "@/components/blog/CatalogueHeadpiece";
 import { Blog, Site } from "@/constants/meta";
 import { pageMetadata } from "@/utils/metadata";
-import classNames from "classnames";
+import clsx from "clsx";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Metadata, ResolvingMetadata } from "next/types";
@@ -161,7 +161,7 @@ export default function ColophonPage() {
                     </span>
                   </dt>
                   <dd
-                    className={classNames(
+                    className={clsx(
                       "m-0 min-w-0 leading-relaxed",
                       typeface.className
                     )}

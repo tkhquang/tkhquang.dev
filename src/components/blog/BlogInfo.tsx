@@ -2,7 +2,7 @@ import Author from "@/components/blog/Author";
 import ConstellationChart from "@/components/blog/ConstellationChart";
 import Subscribe from "@/components/blog/Subscribe";
 import HorizontalLine from "@/components/common/HorizontalLine";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 
 interface BlogInfoProps extends React.ComponentProps<"section"> {
@@ -17,9 +17,9 @@ interface BlogInfoProps extends React.ComponentProps<"section"> {
 
 const BlogInfo = ({ className, variant = "rail" }: BlogInfoProps) => {
   return (
-    <section className={classNames("blog-info relative text-sm", className)}>
+    <section className={clsx("blog-info relative text-sm", className)}>
       <div
-        className={classNames(
+        className={clsx(
           "blog-info__content text-theme-on-surface sticky rounded-sm px-4 py-8 shadow-md",
           variant === "rail"
             ? "blog-info__content--rail"

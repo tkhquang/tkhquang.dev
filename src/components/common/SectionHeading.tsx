@@ -1,4 +1,5 @@
-import classNames from "classnames";
+import { cn } from "@/utils/css";
+import clsx from "clsx";
 
 interface SectionHeadingProps
   extends Omit<React.ComponentProps<"div">, "title"> {
@@ -34,10 +35,10 @@ const SectionHeading = ({
   const onBand = tone === "band";
 
   return (
-    <div className={classNames("mb-10", className)} {...props}>
+    <div className={cn("mb-10", className)} {...props}>
       {kicker && (
         <span
-          className={classNames(
+          className={clsx(
             "kicker mb-2 block",
             onBand ? "text-theme-on-band" : "text-theme-primary"
           )}
@@ -46,7 +47,7 @@ const SectionHeading = ({
         </span>
       )}
       <Heading
-        className={classNames(
+        className={clsx(
           "relative leading-tight font-bold tracking-tight",
           size === "section" ? "text-section" : "text-subsection",
           onBand ? "text-theme-on-band" : "text-theme-primary"
@@ -61,7 +62,7 @@ const SectionHeading = ({
         )}
       </Heading>
       <span
-        className={classNames(
+        className={clsx(
           "mt-3 block rounded",
           rule === "full" ? "h-px w-full" : "h-0.5 w-16",
           onBand

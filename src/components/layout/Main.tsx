@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@/utils/css";
 
 const Main = ({
   children,
@@ -6,10 +6,7 @@ const Main = ({
   ...props
 }: React.ComponentProps<"main">) => {
   return (
-    <main
-      {...props}
-      className={classNames("relative flex flex-col", className)}
-    >
+    <main {...props} className={cn("relative flex flex-col", className)}>
       {children}
     </main>
   );

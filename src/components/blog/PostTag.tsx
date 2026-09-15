@@ -1,6 +1,6 @@
 import { MarkdownPost } from "@/models/markdown.types";
 import { slugifyTag } from "@/utils/slug";
-import classNames from "classnames";
+import clsx from "clsx";
 import Link from "next/link";
 import React from "react";
 
@@ -10,7 +10,7 @@ interface TagListProps extends React.ComponentProps<"div"> {
 
 const TagList = ({ className, post }: TagListProps) => {
   return (
-    <ul className={classNames("tag-list inline-flex flex-wrap", className)}>
+    <ul className={clsx("tag-list inline-flex flex-wrap", className)}>
       {post.tags.map((tag) => (
         <li key={tag} className="tag-list__item my-2 flex">
           <Link

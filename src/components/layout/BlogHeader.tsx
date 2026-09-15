@@ -14,7 +14,7 @@ import { useAsPathValue } from "@/store/router";
 import { useThemeValue } from "@/store/theme";
 import { prefersReducedMotion, ScrollManager } from "@/utils/dom";
 import { toRoman } from "@/utils/roman";
-import classNames from "classnames";
+import clsx from "clsx";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -251,7 +251,7 @@ const BlogHeader = ({
   return (
     <header
       {...props}
-      className={classNames(
+      className={clsx(
         "band--day h-header-height sticky inset-0 z-(--z-header) m-0 w-full flex-wrap p-0 transition-[background-color,color,box-shadow] duration-300",
         transparent
           ? "text-theme-on-band bg-transparent"
@@ -263,7 +263,7 @@ const BlogHeader = ({
         <div className="container mx-auto flex h-full items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* inert keeps the held-back pair out of the tab order */}
           <div
-            className={classNames(
+            className={clsx(
               "header__left flex h-full items-center gap-2 transition-opacity duration-300",
               holdBack ? "pointer-events-none opacity-0" : "opacity-100"
             )}
