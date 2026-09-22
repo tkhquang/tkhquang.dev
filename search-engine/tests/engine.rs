@@ -1,3 +1,6 @@
+/* The fixtures here write an index, and only the feature supplies the writer. */
+#![cfg(feature = "builder")]
+
 use ljoss_search::tokenize::{token_len_at, tokenize};
 use ljoss_search::{search, Builder, Index, Need, Segments, MARK_CLOSE, MARK_OPEN};
 

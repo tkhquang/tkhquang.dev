@@ -1,21 +1,34 @@
-/* These tests exercise the committed module through the browser interface. */
+/* These tests exercise the shipped module through the browser interface. */
 
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { createEngine, FORMAT_VERSION } from "./engine.ts";
+import { createBuilder, createEngine, FORMAT_VERSION } from "./engine.ts";
 import { MARK_CLOSE, MARK_OPEN } from "./protocol.ts";
 import { toLedgerEntries } from "./reading-text.ts";
 
-const source = readFileSync(
+const readerSource = readFileSync(
   new URL("../../../public/search/ljoss-search.wasm", import.meta.url)
 );
 
+/* The shipped module cannot write an index, so the fixtures come from the build
+   module. Only the writing is borrowed: every load and every query below runs
+   through the module a reader downloads. */
+const writerSource = readFileSync(
+  new URL("../../../search-engine/ljoss-search-builder.wasm", import.meta.url)
+);
+
 async function engine() {
-  const { instance } = await WebAssembly.instantiate(source, {});
+  const { instance } = await WebAssembly.instantiate(readerSource, {});
   return createEngine(instance);
 }
+
+/* One writer serves every case. Each build resets the module's state, and the
+   three artifacts are copied out of its memory before they are handed back,
+   so nothing an earlier case wrote survives into a later one. */
+const { instance: writer } = await WebAssembly.instantiate(writerSource, {});
+const { build } = createBuilder(writer);
 
 const entry = (fields) => ({
   body: "",
@@ -51,7 +64,7 @@ const ENTRIES = [
 
 async function loaded() {
   const built = await engine();
-  const { body, index, postings } = built.build(ENTRIES);
+  const { body, index, postings } = build(ENTRIES);
   assert.equal(built.load(index), true);
   built.supply("postings", 0, postings);
   built.supply("body", 0, body);
@@ -72,15 +85,29 @@ const slugs = (answer) => answer.results.map((result) => result.slug);
 
 /* Loads a one-off corpus with both range-read artifacts already supplied. */
 const loadWith = (built, entries) => {
-  const { body, index, postings } = built.build(entries);
+  const { body, index, postings } = build(entries);
   assert.equal(built.load(index), true);
   built.supply("postings", 0, postings);
   built.supply("body", 0, body);
 };
 
-test("the committed module speaks the format this build expects", async () => {
+test("the shipped module speaks the format this build expects", async () => {
   const built = await engine();
   assert.ok(built, `module did not report format ${FORMAT_VERSION}`);
+});
+
+/* The writer is compiled out of the shipped module rather than left unused in
+   it, and nothing else would notice if a build put it back: the page would go
+   on working, and only the bytes every reader downloads would grow. */
+test("the shipped module carries no index writer", async () => {
+  const { instance } = await WebAssembly.instantiate(readerSource, {});
+
+  for (const name of ["build_reset", "build_add", "build_finish"]) {
+    assert.equal(instance.exports[name], undefined, name);
+  }
+
+  /* Without this the case would pass on a module that exports neither half. */
+  assert.equal(typeof instance.exports.search_query, "function");
 });
 
 test("an index written here is read back here", async () => {
@@ -105,11 +132,8 @@ test("a replacement index discards the ranges held for the previous one", async 
 
   assert.deepEqual(slugs(answer(built, "skia ", 10)), ["pdf"]);
 
-  const writer = await engine();
   const text = "An überlong preface. The vtable reaches a different location.";
-  const replacement = writer.build([
-    entry({ body: text, slug: "replacement" }),
-  ]);
+  const replacement = build([entry({ body: text, slug: "replacement" })]);
 
   assert.equal(built.load(replacement.index), true);
 
@@ -158,7 +182,7 @@ test("a replacement index discards the ranges held for the previous one", async 
 
 test("a file the module cannot read is refused rather than trusted", async () => {
   const built = await engine();
-  const { index } = built.build(ENTRIES);
+  const { index } = build(ENTRIES);
 
   const wrongMagic = Uint8Array.from(index);
   wrongMagic[0] = 0x58;
@@ -472,7 +496,7 @@ test("an ordinary link keeps its text, which the page does print", async () => {
 
 test("a row prints without its quoted line when the text cannot be reached", async () => {
   const built = await engine();
-  const { index, postings } = built.build(ENTRIES);
+  const { index, postings } = build(ENTRIES);
   assert.equal(built.load(index), true);
   built.supply("postings", 0, postings);
 
@@ -489,7 +513,7 @@ test("a row prints without its quoted line when the text cannot be reached", asy
 
 test("the postings are asked for even when the page has stopped fetching", async () => {
   const built = await engine();
-  const { body, index } = built.build(ENTRIES);
+  const { body, index } = build(ENTRIES);
   assert.equal(built.load(index), true);
   built.supply("body", 0, body);
 
@@ -504,7 +528,7 @@ test("the postings are asked for even when the page has stopped fetching", async
 test("a query reaches each artifact in turn and matches the resident answer", async () => {
   const resident = await loaded();
   const built = await engine();
-  const { body, index, postings } = built.build(ENTRIES);
+  const { body, index, postings } = build(ENTRIES);
   assert.equal(built.load(index), true);
 
   const artifacts = { body, postings };
@@ -541,7 +565,7 @@ test("a query reaches each artifact in turn and matches the resident answer", as
 
 test("a prefix is one range that answers every extension of itself", async () => {
   const built = await engine();
-  const { index, postings } = built.build(ENTRIES);
+  const { index, postings } = build(ENTRIES);
   assert.equal(built.load(index), true);
 
   const wanted = built.search("vt", 10);

@@ -931,7 +931,7 @@ fn one_line(text: &str) -> String {
     out.trim_end().to_string()
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "builder"))]
 mod tests {
     use super::*;
     use crate::Builder;

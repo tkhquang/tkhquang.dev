@@ -4,8 +4,18 @@ version = "1.0.0"
 edition = "2021"
 publish = false
 
+[features]
+# The index is written once, in Node, at build time, and only ever read in the
+# browser, so the writer is gated rather than compiled into every build. The
+# gate stays open by default so that `cargo test`, `cargo check` and the editor
+# all see the whole crate; the one build that produces the module a reader
+# downloads passes `--no-default-features` and leaves the writer out of it.
+default = ["builder"]
+builder = []
+
 [lib]
-# Both targets share the builder, tokenizer, and query implementation.
+# Both crate types share the tokenizer and query implementation, and the
+# builder when its feature is on.
 crate-type = ["cdylib", "rlib"]
 
 [profile.release]
