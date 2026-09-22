@@ -54,20 +54,6 @@ interface Exports {
   alloc: (len: number) => number;
   dealloc: (pointer: number, len: number) => void;
   format_version: () => number;
-  build_reset: () => void;
-  build_add: (
-    slug: number,
-    slugLen: number,
-    title: number,
-    titleLen: number,
-    date: number,
-    dateLen: number,
-    label: number,
-    labelLen: number,
-    body: number,
-    bodyLen: number
-  ) => void;
-  build_finish: () => number;
   index_load: (pointer: number, len: number) => number;
   section_supply: (
     section: number,
@@ -84,17 +70,25 @@ interface Exports {
   ) => number;
 }
 
+/** The three the `builder` feature adds. A module built without it has none. */
+interface BuilderExports extends Exports {
+  build_reset: () => void;
+  build_add: (
+    slug: number,
+    slugLen: number,
+    title: number,
+    titleLen: number,
+    date: number,
+    dateLen: number,
+    label: number,
+    labelLen: number,
+    body: number,
+    bodyLen: number
+  ) => void;
+  build_finish: () => number;
+}
+
 export interface LedgerEngine {
-  /** Writes all three artifacts from entries given newest first. */
-  build: (
-    entries: {
-      slug: string;
-      title: string;
-      date: string;
-      dateLabel: string;
-      body: string;
-    }[]
-  ) => { index: Uint8Array; postings: Uint8Array; body: Uint8Array };
   /** Copies the index into WASM. Returns false if the header is incompatible. */
   load: (index: Uint8Array) => boolean;
   /** Hands over one fetched range of an artifact, at its offset there. */
@@ -114,13 +108,32 @@ export interface LedgerEngine {
   ) => LedgerLookup;
 }
 
+export interface LedgerBuilder {
+  /** Writes all three artifacts from entries given newest first. */
+  build: (
+    entries: {
+      slug: string;
+      title: string;
+      date: string;
+      dateLabel: string;
+      body: string;
+    }[]
+  ) => { index: Uint8Array; postings: Uint8Array; body: Uint8Array };
+}
+
 /* The order the ABI codes them in. */
 const SECTIONS: LedgerSection[] = ["postings", "body"];
 
-export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
-  const engine = instance.exports as unknown as Exports;
+/**
+ * Refuses a module that speaks another format, then hands back what every call
+ * across the ABI needs: the exports, refreshed views of WASM memory, and one
+ * borrowed UTF-8 allocation.
+ */
+function bridge<Module extends Exports = Exports>(
+  instance: WebAssembly.Instance
+) {
+  const engine = instance.exports as unknown as Module;
   const encoder = new TextEncoder();
-  const decoder = new TextDecoder();
 
   if (engine.format_version() !== FORMAT_VERSION) {
     throw new Error(
@@ -140,40 +153,12 @@ export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
     return [pointer, encoded.length];
   };
 
-  const build: LedgerEngine["build"] = (entries) => {
-    engine.build_reset();
+  return { bytes, engine, numbers, write };
+}
 
-    for (const entry of entries) {
-      const fields = [
-        entry.slug,
-        entry.title,
-        entry.date,
-        entry.dateLabel,
-        entry.body,
-      ].map(write);
-      engine.build_add(...(fields.flat() as Parameters<Exports["build_add"]>));
-      for (const [pointer, len] of fields) {
-        engine.dealloc(pointer, len);
-      }
-    }
-
-    /* Each artifact is written length first. Copied out, because the next call
-       into the module can move all of them. */
-    const at = engine.build_finish();
-    const view = numbers();
-    const memory = bytes();
-    const written: Uint8Array[] = [];
-    let cursor = at;
-
-    for (let artifact = 0; artifact < 3; artifact += 1) {
-      const length = view.getUint32(cursor, true);
-      written.push(memory.slice(cursor + 4, cursor + 4 + length));
-      cursor += 4 + length;
-    }
-
-    const [index, postings, body] = written;
-    return { body, index, postings };
-  };
+export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
+  const { bytes, engine, numbers, write } = bridge(instance);
+  const decoder = new TextDecoder();
 
   const load: LedgerEngine["load"] = (index) => {
     const pointer = engine.alloc(index.length);
@@ -271,10 +256,58 @@ export function createEngine(instance: WebAssembly.Instance): LedgerEngine {
   };
 
   return {
-    build,
     held: (section) => engine.section_held(SECTIONS.indexOf(section)),
     load,
     search,
     supply,
   };
+}
+
+/**
+ * Writes an index, which happens once per build and never in a browser.
+ *
+ * Separate from `createEngine` so a page that imports only that one does not
+ * carry this.
+ */
+export function createBuilder(instance: WebAssembly.Instance): LedgerBuilder {
+  const { bytes, engine, numbers, write } = bridge<BuilderExports>(instance);
+
+  const build: LedgerBuilder["build"] = (entries) => {
+    engine.build_reset();
+
+    for (const entry of entries) {
+      const fields = [
+        entry.slug,
+        entry.title,
+        entry.date,
+        entry.dateLabel,
+        entry.body,
+      ].map(write);
+      engine.build_add(
+        ...(fields.flat() as Parameters<BuilderExports["build_add"]>)
+      );
+      for (const [pointer, len] of fields) {
+        engine.dealloc(pointer, len);
+      }
+    }
+
+    /* Each artifact is written length first. Copied out, because the next call
+       into the module can move all of them. */
+    const at = engine.build_finish();
+    const view = numbers();
+    const memory = bytes();
+    const written: Uint8Array[] = [];
+    let cursor = at;
+
+    for (let artifact = 0; artifact < 3; artifact += 1) {
+      const length = view.getUint32(cursor, true);
+      written.push(memory.slice(cursor + 4, cursor + 4 + length));
+      cursor += 4 + length;
+    }
+
+    const [index, postings, body] = written;
+    return { body, index, postings };
+  };
+
+  return { build };
 }

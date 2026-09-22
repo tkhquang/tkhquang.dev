@@ -16,15 +16,22 @@ pub const DOC_ENTRY_LEN: usize = DOC_FIELDS * 4;
 /// index does not carry: a query reads the lists of its own terms and no others.
 pub const TERM_ENTRY_LEN: usize = 8;
 
+/* What the writer needs and a reader does not. The stride is stamped into the
+   header rather than agreed in advance, so a reader takes it from the file it
+   was handed and never consults the constant the writer used. */
+
 /// Ordinals between checkpoints. Four bytes buys the byte offset of every 64th
 /// ordinal, which costs `tokens / 16` over the corpus, and turns rendering a
 /// snippet from a walk of the whole entry into a walk of at most this many words.
+#[cfg(feature = "builder")]
 pub const CHECKPOINT_STRIDE: u32 = 64;
 
+#[cfg(feature = "builder")]
 pub fn write_u32(out: &mut Vec<u8>, value: u32) {
     out.extend_from_slice(&value.to_le_bytes());
 }
 
+#[cfg(feature = "builder")]
 pub fn write_varint(out: &mut Vec<u8>, mut value: u32) {
     while value >= 0x80 {
         out.push((value as u8) | 0x80);
@@ -277,7 +284,7 @@ impl<'a> Index<'a> {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, feature = "builder"))]
 mod tests {
     use super::*;
     use crate::tokenize::word_starts;

@@ -18,9 +18,14 @@ import { gunzipSync } from "node:zlib";
 
 /* The fixture states the layout it builds rather than importing it, so a move
    fails here instead of following the builder wherever it went. */
-const MODULE_PATH = "public/search/ljoss-search.wasm";
+const MODULE_PATH = "search-engine/ljoss-search-builder.wasm";
 const ARTIFACT_DIRECTORY = "public/search";
 const ADDRESS_PATH = "src/generated/ledger-search.mjs";
+
+/* The artifacts are read back through the module a page downloads, not the one
+   that wrote them: the two are compiled apart. Read from the repository, since
+   the build never names this path. */
+const READER_PATH = "public/search/ljoss-search.wasm";
 
 const repository = path.join(import.meta.dirname, "..", "..", "..");
 const root = mkdtempSync(path.join(tmpdir(), "ljoss-search-artifacts-"));
@@ -29,6 +34,7 @@ for (const directory of [
   "content/categories",
   "content/posts",
   "public/search",
+  "search-engine",
   "src/generated",
 ]) {
   mkdirSync(path.join(root, directory), { recursive: true });
@@ -89,7 +95,7 @@ const addresses = () => readFileSync(path.join(root, ADDRESS_PATH), "utf8");
 async function loadIndex(built) {
   const source = readFileSync(path.join(root, "public", built.index));
   const { instance } = await WebAssembly.instantiate(
-    readFileSync(path.join(root, MODULE_PATH)),
+    readFileSync(path.join(repository, READER_PATH)),
     {}
   );
   const engine = createEngine(instance);

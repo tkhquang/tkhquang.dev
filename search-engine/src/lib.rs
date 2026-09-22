@@ -1,5 +1,11 @@
-//! Shared index writer and query engine with an integer ABI over WebAssembly memory.
+//! Index writer and query engine with an integer ABI over WebAssembly memory.
+//!
+//! The writer sits behind the `builder` feature. It runs once per build, in
+//! Node, to write the three artifacts a deploy publishes, and nothing in the
+//! browser ever calls it, so the module a reader downloads is compiled without
+//! it and carries only the query engine.
 
+#[cfg(feature = "builder")]
 mod build;
 mod fold;
 mod format;
@@ -8,6 +14,7 @@ mod query;
 mod segments;
 pub mod tokenize;
 
+#[cfg(feature = "builder")]
 pub use build::Builder;
 pub use format::{Index, VERSION};
 use query::Workspace;
@@ -28,6 +35,7 @@ struct Loaded {
 }
 
 thread_local! {
+    #[cfg(feature = "builder")]
     static BUILDER: RefCell<Builder> = RefCell::new(Builder::default());
     static LOADED: RefCell<Loaded> = RefCell::new(Loaded::default());
     /// Returned pointers remain valid until `build_finish` or `search_query` replaces this buffer.
@@ -95,6 +103,7 @@ pub extern "C" fn format_version() -> u32 {
     VERSION
 }
 
+#[cfg(feature = "builder")]
 #[no_mangle]
 pub extern "C" fn build_reset() {
     BUILDER.with(|slot| *slot.borrow_mut() = Builder::default());
@@ -104,6 +113,7 @@ pub extern "C" fn build_reset() {
 ///
 /// # Safety
 /// Every pointer and length pair must describe UTF-8 the caller still owns.
+#[cfg(feature = "builder")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub unsafe extern "C" fn build_add(
@@ -129,6 +139,7 @@ pub unsafe extern "C" fn build_add(
 
 /// Writes all three artifacts and returns a pointer to them, each length first
 /// as a `u32`: the index, the postings, then the reading text.
+#[cfg(feature = "builder")]
 #[no_mangle]
 pub extern "C" fn build_finish() -> *const u8 {
     let (index, postings, body) =
@@ -305,7 +316,8 @@ pub unsafe extern "C" fn search_query(
     hand_back(packed)
 }
 
-#[cfg(test)]
+/* The fixtures below write an index, and only the feature supplies the writer. */
+#[cfg(all(test, feature = "builder"))]
 mod tests {
     use super::*;
 

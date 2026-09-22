@@ -4,13 +4,16 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
 
-import { createEngine } from "./engine.ts";
+import { createBuilder } from "./engine.ts";
 import { toLedgerEntries } from "./reading-text.ts";
 import { readPostRecords, selectPublishedPosts } from "../../utils/posts.ts";
 
 /* Deploys use the committed module and require no Rust toolchain.
-   Rebuild it with `pnpm build:search-engine` after engine changes. */
-const MODULE_PATH = "public/search/ljoss-search.wasm";
+   Rebuild it with `pnpm build:search-engine` after engine changes.
+
+   Not the module under `public`: that one is compiled without the writer, and
+   nothing under `public` escapes being served. */
+const MODULE_PATH = "search-engine/ljoss-search-builder.wasm";
 
 /** Served straight from the CDN, so the artifacts are files rather than routes. */
 const ARTIFACT_DIRECTORY = "public/search";
@@ -67,7 +70,7 @@ export async function buildLedgerArtifacts({ log = () => {} } = {}) {
   const { instance } = await WebAssembly.instantiate(compiled, {});
 
   const posts = selectPublishedPosts(await readPostRecords());
-  const { body, index, postings } = createEngine(instance).build(
+  const { body, index, postings } = createBuilder(instance).build(
     toLedgerEntries(posts)
   );
 
