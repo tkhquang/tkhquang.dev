@@ -112,4 +112,5 @@ the access token (~hourly), because Next keys the fetch cache on the
 `Authorization` header. The now-playing hero is client-side against
 `/api/spotify/current-playing`. It advances the progress bar locally, refetches
 just after the expected end of the current track, and polls once a minute while
-idle.
+idle. When no track is loaded, the route answers with the newest play from
+`recently-played` instead, which the footer strip shows as the last song.
