@@ -155,6 +155,14 @@ export interface PlayHistoryItem {
   track: SpotifyTrack;
 }
 
+/**
+ * What `/api/spotify/current-playing` answers: the player state while a track
+ * is loaded, otherwise the newest play.
+ */
+export type CurrentPlayingRouteResponse =
+  | CurrentPlayingResponse
+  | { lastPlayed: PlayHistoryItem | null };
+
 export interface RecentlyPlayedResponse {
   cursors: { after: string; before: string };
   href: string;

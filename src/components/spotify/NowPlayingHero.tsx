@@ -56,8 +56,9 @@ export default function NowPlayingHero({
           return;
         }
 
-        // The route answers `false` when the endpoint returns 204 or the item
-        // is not a track (a podcast episode, say).
+        // When the endpoint returns 204 or the item is not a track (a podcast
+        // episode, say), the route answers with the newest play instead. The
+        // server already passed that in as `lastPlayed`, so it is ignored.
         const json = await response.json();
         const playing = json?.item ? (json as CurrentPlayingResponse) : null;
 
