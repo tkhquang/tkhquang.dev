@@ -8,6 +8,7 @@ tags:
   - CryEngine
   - Game Development
   - "Kingdom Come: Deliverance II"
+  - Licensing
 cover_image: /uploads/images/KCD2.jpg
 description: "Kingdom Come: Deliverance 2 runs on a forked CryEngine, built with licensed source access. A look at what the engine can still do."
 ---
