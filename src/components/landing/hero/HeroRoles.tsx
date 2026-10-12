@@ -18,7 +18,7 @@ const HeroRoles = ({
       )}
       {...props}
     >
-      <span>Building things. Taking them apart.</span>
+      <span>Pixel Crafter, Binary Decoder</span>
     </div>
   );
 };
